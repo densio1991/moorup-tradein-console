@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { LoginPage, DashboardPage } from './pages';
+import { LoginPage, DashboardPage, ProductManagementPage, OrderManagementPage, UserManagementPage, PromotionsPage, PaymentsPage } from './pages';
 import { PrivateRoute, PublicRoute, NotFound } from '@tradein-admin/libs';
 
 export function App() {
@@ -9,6 +9,11 @@ export function App() {
         {/* Will redirect unauthenticated users to /login */}
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard/" element={<DashboardPage />} />
+          <Route path="/dashboard/product" element={<ProductManagementPage />} />
+          <Route path="/dashboard/order" element={<OrderManagementPage />} />
+          <Route path="/dashboard/user" element={<UserManagementPage />} />
+          <Route path="/dashboard/promotion" element={<PromotionsPage />} />
+          <Route path="/dashboard/payment" element={<PaymentsPage />} />
         </Route>
 
         {/* Will redirect authenticated users to /dashboard */}

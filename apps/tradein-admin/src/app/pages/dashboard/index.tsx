@@ -7,7 +7,7 @@ const ChartContainer = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
-const exampleChartData = [5, 10, 15, 7, 20];
+const exampleChartData = [5, 10, 15, 7, 20, 11, 22, 1, 19];
 
 interface BarChartProps {
   data: number[];
@@ -24,12 +24,9 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
 };
 export function DashboardPage() {
   return (
-    <>
-      <span>Hello!</span>
-      <ChartContainer>
-        <h2>Product Sales Chart</h2>
-        <BarChart data={exampleChartData} />
-      </ChartContainer>
-    </>
+    <ChartContainer>
+      <h2>Product Sales Chart</h2>
+      <BarChart data={exampleChartData} />
+    </ChartContainer>
   );
 };

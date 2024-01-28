@@ -130,9 +130,9 @@ export function TopNavBar(): JSX.Element {
             </DropdownButton>
             <DropdownMenu isVisible={isExpanded} ref={dropdownRef}>
               {
-                userDetails?.platforms?.map((option: any) => {
+                userDetails?.platforms?.map((option: any, index: number) => {
                   return (
-                    <DropdownItem onClick={() => {
+                    <DropdownItem key={index} onClick={() => {
                       setActivePlatform(option);
                       setIsExpanded(false);
                     }}>
