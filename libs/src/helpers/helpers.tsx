@@ -66,3 +66,16 @@ export const decodeJWT = (token: string): TokenPayload | null => {
         return null;
     }
 };
+
+export function getInitials(text: string) {
+  const words = text.trim().split(' ');
+
+  if (words.length === 0) {
+    return '';
+  }
+
+  const firstInitial = words[0].charAt(0).toUpperCase();
+  const lastInitial = words[words.length - 1].charAt(0).toUpperCase();
+
+  return `${firstInitial}${lastInitial}`;
+}

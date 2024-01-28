@@ -11,6 +11,7 @@ const Container = styled.div`
   background-color: white;
   padding: 20px;
   margin: 20px;
+  flex-direction: column;
 `;
 
 const CardContainer: React.FC<ContainerProps> = ({ children }) => {
