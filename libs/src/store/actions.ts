@@ -66,3 +66,10 @@ export const getUserDetailsById = (payload: any) => (dispatch: any) => {
       });
     });
 };
+
+export const setActivePlatform = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_ACTIVE_PLATFORM,
+    payload,
+  });
+};

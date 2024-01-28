@@ -18,10 +18,15 @@ export const useAppContext = () => {
     actions.getUserDetailsById(payload)(dispatch);
   }
 
+  const setActivePlatform = (payload: any) => {
+    actions.setActivePlatform(payload)(dispatch);
+  }
+
   return {
     state,
     loginUser,
     logoutUser,
     getUserDetailsById,
+    setActivePlatform,
   };
 };

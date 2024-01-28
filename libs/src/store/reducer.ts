@@ -11,6 +11,7 @@ const globalState = {
   isLoggingOut: false,
   userDetails: {},
   isFetchingUserDetails: false,
+  activePlatform: "",
 };
 
 const globalReducer = (state: any, action: any) => {
@@ -26,17 +27,18 @@ const globalReducer = (state: any, action: any) => {
       };
     }
     case types.LOGIN_USER.SUCCESS: {
-      const decodedToken = decodeJWT(action.payload?.data?.access_token?.token);
+      const accessToken = action.payload?.data?.access_token?.token;
+      const decodedToken = decodeJWT(accessToken);
 
       if (decodedToken) {
-        localStorage.setItem('FTK', action.payload?.data?.access_token?.token);
+        localStorage.setItem('FTK', accessToken);
         localStorage.setItem('FTKX', decodedToken.exp.toString());
       }
 
       return {
         ...state,
         isAuthenticating: false,
-        token: action.payload.result,
+        token: accessToken,
         expiry: decodedToken?.exp.toString(),
         authenticationError: null,
       };
@@ -84,7 +86,8 @@ const globalReducer = (state: any, action: any) => {
       return {
         ...state,
         isFetchingUserDetails: false,
-        userDetails: action.payload,
+        userDetails: action.payload.data,
+        activePlatform: action.payload?.data?.platforms[0] || "",
       };
     }
     case types.GET_USER_DETAILS.FAILED: {
@@ -94,6 +97,12 @@ const globalReducer = (state: any, action: any) => {
         userDetails: {},
       };
     }
+
+    case types.SET_ACTIVE_PLATFORM:
+      return {
+        ...state,
+        activePlatform: action.payload,
+      };
 
     default:
       return state;
