@@ -1,6 +1,5 @@
-import React from 'react';
 import styled from 'styled-components';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SIDENAV_ITEMS } from '../../constants';
 
 interface NavLinkProps {
@@ -47,6 +46,7 @@ const NavLink = styled.a<NavLinkProps>`
   margin-bottom: 0.5rem;
   font-weight: 600;
   font-size: 14px;
+  cursor: pointer;
 
   &:hover {
     background-color: #01463a;
@@ -56,13 +56,14 @@ const NavLink = styled.a<NavLinkProps>`
 
 export function SideBar(): JSX.Element {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   return (
     <SidebarContainer>
       <SidebarWrapper>
         <SidebarList>
           {SIDENAV_ITEMS.map((item) => (
-            <NavLink href={item.url} key={item.url} isActive={pathname === item.url}>
+            <NavLink key={item.url} isActive={pathname === item.url} onClick={() => navigate(item.url)}>
               <Icon
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
