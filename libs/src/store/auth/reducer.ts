@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import * as types from './action-types';
-import { decodeJWT } from '../helpers';
+import { decodeJWT } from '../../helpers';
 
-const globalState = {
+const authState = {
   token: localStorage.getItem('FTK') || null,
   expiry: localStorage.getItem('FTKX') || null,
   isAuthenticating: false,
@@ -14,7 +13,7 @@ const globalState = {
   activePlatform: "",
 };
 
-const globalReducer = (state: any, action: any) => {
+const authReducer = (state: any, action: any) => {
   console.log('\x1b[33m action: ', action);
 
   switch (action.type) {
@@ -109,4 +108,4 @@ const globalReducer = (state: any, action: any) => {
   }
 };
 
-export { globalReducer, globalState };
+export { authReducer, authState };

@@ -5,9 +5,9 @@
 import {
   ReactNode,
   createContext,
-  useReducer,
 } from 'react';
-import { globalReducer, globalState } from './reducer';
+
+import { useAppReducer } from './globalReducer';
 
 interface RootContextProps {
   state: any;
@@ -15,7 +15,7 @@ interface RootContextProps {
 }
 
 export const RootContext = createContext<RootContextProps>({
-  state: globalState,
+  state: {},
   dispatch: () => {
     // Placeholder function; it will be replaced by the actual dispatch function
   },
@@ -27,8 +27,8 @@ interface RootProviderProps {
 
 export function RootProvider({ children }: RootProviderProps) {
   // @ts-ignore
-  const [state, dispatch] = useReducer(globalReducer, globalState);
-  
+  const [state, dispatch] = useAppReducer();
+
   return (
     <RootContext.Provider
       value={{

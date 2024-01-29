@@ -8,7 +8,13 @@ import { useAuth } from '../../store';
 interface PublicRouteProps {}
 
 export function PublicRoute(props: PublicRouteProps): JSX.Element {
-  const { expiry } = useAuth();
+  const {
+    state,
+  } = useAuth();
+
+  const {
+    expiry,
+  } = state.auth
 
   if (validateExpiry(expiry)) {
     return <Navigate to="/dashboard" />;

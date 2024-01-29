@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as types from "./action-types";
-import axiosInstance from "./axios";
+import axiosInstance from "../axios";
 
 export const loginUser = (payload: any) => (dispatch: any) => {
   dispatch({

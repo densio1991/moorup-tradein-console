@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import { isEmpty } from 'lodash';
 import { decodeJWT, validateExpiry } from "../../helpers";
-import { useAppContext, useAuth } from "../../store";
+import { useAuth } from '../../store';
 
 interface ComponentWrapperProps {
   children: ReactNode;
@@ -18,12 +18,16 @@ const StyledApp = styled.div`
 
 export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Element {
   const navigate = useNavigate();
-  const { token, expiry } = useAuth();
-  const { state, getUserDetailsById } = useAppContext();
+  const { 
+    state, 
+    getUserDetailsById,
+  } = useAuth();
+
   const {
-    token: authToken,
+    expiry,
+    token,
     userDetails,
-  } = state;
+  } = state.auth;
 
   const shouldRun = useRef(false);
 
@@ -59,13 +63,13 @@ export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Eleme
   }, [token, validateToken, userDetails]);
 
   useEffect(() => {
-    if ((authToken && isEmpty(userDetails) && !shouldRun.current)) {
-      const decodedToken = decodeJWT(authToken);
+    if ((token && isEmpty(userDetails) && !shouldRun.current)) {
+      const decodedToken = decodeJWT(token);
       getUserDetailsById(decodedToken?.id);
       shouldRun.current = true;
     }
 
-  }, [authToken]);
+  }, [token]);
 
   return (
     <StyledApp>

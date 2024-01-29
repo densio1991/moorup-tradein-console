@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext } from 'react';
 import * as actions from './actions';
-import { RootContext } from './provider';
+import { RootContext } from '../provider';
 
-export const useAppContext = () => {
+export const useAuth = () => {
   const { state, dispatch } = useContext(RootContext);
 
   const loginUser = (payload: any) => {

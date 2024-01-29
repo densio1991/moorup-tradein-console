@@ -11,7 +11,13 @@ import CardContainer from './card-container';
 interface PrivateRouteProps {}
 
 export function PrivateRoute(props: PrivateRouteProps): JSX.Element {
-  const { expiry } = useAuth();
+  const {
+    state,
+  } = useAuth();
+
+  const {
+    expiry,
+  } = state.auth
 
   if (!validateExpiry(expiry)) {
     return <Navigate to="/" />;

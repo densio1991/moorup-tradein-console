@@ -1,4 +1,4 @@
-import { useAppContext } from '@tradein-admin/libs';
+import { useAuth } from '@tradein-admin/libs';
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -52,16 +52,15 @@ const FormButton = styled.button<FormButtonProps>`
   cursor: ${(props) => (props.isLoading ? 'not-allowed' : 'pointer')};
 `;
 
-
 export function LoginPage(){
   const {
     state,
     loginUser,
-  } = useAppContext();
+  } = useAuth();
 
   const {
     isAuthenticating,
-  } = state;
+  } = state.auth;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

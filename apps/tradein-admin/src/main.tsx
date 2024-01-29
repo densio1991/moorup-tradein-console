@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { RootProvider, AuthProvider } from '@tradein-admin/libs';
+import { RootProvider } from '@tradein-admin/libs';
 import "./global.css";
 
 import App from './app/app';
@@ -11,9 +11,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <StrictMode>
     <RootProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
+      <App />
     </RootProvider>
   </StrictMode>
 );

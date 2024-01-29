@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { capitalizeFirstLetter, getInitials } from '../../helpers';
-import { useAppContext } from '../../store';
+import { useAuth } from '../../store';
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { Avatar } from '../avatar';
@@ -93,12 +93,12 @@ export function TopNavBar(): JSX.Element {
   const {
     state,
     setActivePlatform,
-  } = useAppContext();
+  } = useAuth();
 
   const {
     activePlatform,
     userDetails,
-  } = state;
+  } = state.auth;
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
