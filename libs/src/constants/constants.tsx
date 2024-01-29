@@ -148,26 +148,31 @@ export const PROMOTIONS_MANAGEMENT_COLUMNS = [
     label: 'Name',
     order: 2,
     enableSort: true,
+    keyName: 'name',
   },
   {
     label: 'Products',
     order: 3,
-    enableSort: true,
+    enableSort: false,
+    keyName: 'products',
   },
   {
     label: 'Start Date',
     order: 4,
     enableSort: true,
+    keyName: 'start_date',
   },
   {
     label: 'End Date',
     order: 5,
     enableSort: true,
+    keyName: 'end_date',
   },
   {
     label: 'Status',
     order: 5,
     enableSort: true,
+    keyName: 'status',
   },
 ]
 
