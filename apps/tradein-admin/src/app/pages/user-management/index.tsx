@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-
 import {
   AppButton,
   DEFAULT_COLUMN,
@@ -12,9 +11,7 @@ import { useEffect, useRef } from 'react';
 
 export function UserManagementPage() {
   const { state, getUsers, clearUsers } = useUser();
-
   const { users, isFetchingUsers } = state.user;
-
   const shouldRun = useRef(true);
 
   const headers = [...DEFAULT_COLUMN, ...USER_MANAGEMENT_COLUMNS];

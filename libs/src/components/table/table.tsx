@@ -145,7 +145,7 @@ const Td = styled.td`
 const LoaderText = styled.div`
   margin: 15px 0;
   text-align: center;
-  letter-spacing: 4px;
+  letter-spacing: 2px;
   border-top: 0;
   border-radius: 0;
   padding-top: 0;
@@ -323,6 +323,26 @@ export function Table({
         return capitalizeFirstLetter(row['status']);
       }
 
+      case 'Display Name': {
+        if (isEmpty(row['display_name'])) return '--';
+        return row['display_name'];
+      }
+
+      case 'Brand': {
+        if (isEmpty(row['brand'])) return '--';
+        return capitalizeFirstLetter(row['brand']);
+      }
+
+      case 'Model': {
+        if (isEmpty(row['model'])) return '--';
+        return capitalizeFirstLetter(row['model']);
+      }
+
+      case 'Year': {
+        if (isEmpty(row['year'])) return '--';
+        return row['year'];
+      }
+
       default:
         if (isEmpty(row[header])) return '--';
         return capitalizeFirstLetter(row[header]);
@@ -338,11 +358,15 @@ export function Table({
 
   const filteredRows = searchTerm
     ? sortedRows.filter((row) =>
-      Object.values(row).some((value) =>
-        typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
+        Object.values(row).some((value) =>
+          typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
+        )
       )
-    )
     : sortedRows;
+
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
+  const itemsToDisplay = filteredRows.slice(startIndex, endIndex);
 
   return (
     <>
@@ -391,7 +415,7 @@ export function Table({
             </Tr>
           </Thead>
           <Tbody>
-            {filteredRows?.map((row: any, index: any) => (
+            {itemsToDisplay?.map((row: any, index: any) => (
               <Tr key={index}>
                 {sortedHeaders?.map((header) => (
                   <Td key={`${index}-${header.label}`}>
@@ -403,7 +427,7 @@ export function Table({
           </Tbody>
         </TableStyled>
         {isLoading && <LinearLoader />}
-        {!isLoading && isEmpty(rows) && <span>No data to display</span>}
+        {!isLoading && isEmpty(rows) && <LoaderText>No data to display</LoaderText>}
       </TableWrapper>
       <Pagination
         currentPage={currentPage}

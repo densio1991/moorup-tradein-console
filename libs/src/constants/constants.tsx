@@ -56,21 +56,25 @@ export const PRODUCT_MANAGEMENT_COLUMNS = [
     label: 'Display Name',
     order: 2,
     enableSort: true,
+    keyName: 'display_name',
   },
   {
     label: 'Brand',
     order: 3,
     enableSort: true,
+    keyName: 'brand',
   },
   {
     label: 'Model',
     order: 4,
     enableSort: true,
+    keyName: 'model',
   },
   {
     label: 'Year',
     order: 5,
     enableSort: true,
+    keyName: 'year',
   },
 ]
 

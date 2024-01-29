@@ -7,6 +7,7 @@ export const loginUser = (payload: any) => (dispatch: any) => {
     type: types.LOGIN_USER.baseType,
     payload,
   });
+  
   axiosInstance()
     .post('/api/auth/omc-login', payload)
     .then((response: { data: any; }) => {
