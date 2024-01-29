@@ -6,7 +6,7 @@ import { SIDENAV_ITEMS } from '../../constants'
 import { useAuth } from '../../store'
 
 interface NavLinkProps {
-  isActive?: boolean
+  active?: boolean
 }
 
 const SidebarContainer = styled.div`
@@ -33,7 +33,7 @@ const SidebarList = styled.ul`
   border-bottom: 1px solid #e0e0e0;
 `
 
-const StyledIcon = styled(FontAwesomeIcon)<NavLinkProps>`
+const StyledIcon = styled(FontAwesomeIcon)`
   color: #01463a;
   width: 14px;
   height: 14px;
@@ -45,8 +45,8 @@ const NavLink = styled.a<NavLinkProps>`
   align-items: center;
   padding: 0.6rem 1rem;
   border-radius: 0.5rem;
-  color: ${(props) => (props.isActive ? 'white' : '#01463a')};
-  background-color: ${(props) => (props.isActive ? '#01463a' : 'transparent')};
+  color: ${(props) => (props.active ? 'white' : '#01463a')};
+  background-color: ${(props) => (props.active ? '#01463a' : 'transparent')};
   text-decoration: none;
   margin-bottom: 0.5rem;
   font-weight: 600;
@@ -64,7 +64,7 @@ const NavLink = styled.a<NavLinkProps>`
   }
   svg {
     margin-right: 8px;
-    color: ${(props) => (props.isActive ? 'white' : '#01463a')};
+    color: ${(props) => (props.active ? 'white' : '#01463a')};
   }
 `
 
@@ -81,11 +81,11 @@ export function SideBar(): JSX.Element {
           {SIDENAV_ITEMS.map((item) => (
             <NavLink
               key={item.url}
-              isActive={pathname === item.url}
+              active={pathname === item.url}
               onClick={() => navigate(item.url)}
             >
               <span>
-                <StyledIcon icon={item.icon} isActive={pathname === item.url} />
+                <StyledIcon icon={item.icon} />
               </span>
               <span className="font-semibold text-sm flex">{item.title}</span>
             </NavLink>
