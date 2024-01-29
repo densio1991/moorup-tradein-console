@@ -1,4 +1,4 @@
-import { createActionTypes } from "../../helpers";
+import { createActionTypes } from '../../helpers';
 
 export const FETCH_USERS = createActionTypes('FETCH_USERS');
 

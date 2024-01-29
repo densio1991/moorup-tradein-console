@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axiosInstance from "../axios";
-import * as types from "./action-types";
+import axiosInstance from '../axios';
+import * as types from './action-types';
 
 export const getUsers = (payload: any) => (dispatch: any) => {
   dispatch({
@@ -9,7 +9,7 @@ export const getUsers = (payload: any) => (dispatch: any) => {
   });
 
   axiosInstance()
-    .get(`/api/admins`)
+    .get('/api/admins')
     .then((response) => {
       dispatch({
         type: types.FETCH_USERS.SUCCESS,

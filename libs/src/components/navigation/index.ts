@@ -1,2 +1,3 @@
-export * from "./side-navigation";
-export * from "./top-navigation";
+export * from './side-navigation'
+export * from './top-navigation'
+

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext } from 'react';
-import * as actions from './actions';
 import { RootContext } from '../provider';
+import * as actions from './actions';
 
 export const useUser = () => {
   const { state, dispatch } = useContext(RootContext);

@@ -1,67 +1,199 @@
-export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
+import {
+  faBullhorn,
+  faCreditCard,
+  faCube,
+  faFileInvoice,
+  faHouse,
+  faUsers,
+} from '@fortawesome/free-solid-svg-icons'
+
+export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
 
 export const SIDENAV_ITEMS = [
   {
     title: 'Home',
     url: '/dashboard',
-    icon: (
-      <>
-        <path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z"></path>
-        <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z"></path>
-      </>
-    ),
+    icon: faHouse,
   },
   {
     title: 'Product Management',
     url: '/dashboard/product',
-    icon: (
-      <path d="M12.378 1.602a.75.75 0 00-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03zM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 00.372-.648V7.93zM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 00.372.648l8.628 5.033z"></path>
-    ),
+    icon: faCube,
   },
   {
     title: 'Order Management',
     url: '/dashboard/order',
-    icon: (
-      <path
-        fillRule="evenodd"
-        d="M2.625 6.75a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0A.75.75 0 018.25 6h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75zM2.625 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zM7.5 12a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12A.75.75 0 017.5 12zm-4.875 5.25a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875 0a.75.75 0 01.75-.75h12a.75.75 0 010 1.5h-12a.75.75 0 01-.75-.75z"
-        clipRule="evenodd"
-      ></path>
-    ),
+    icon: faFileInvoice,
   },
   {
     title: 'User Management',
     url: '/dashboard/user',
-    icon: (
-      <>
-        <path
-          fillRule="evenodd"
-          d="M8.25 6.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM15.75 9.75a3 3 0 116 0 3 3 0 01-6 0zM2.25 9.75a3 3 0 116 0 3 3 0 01-6 0zM6.31 15.117A6.745 6.745 0 0112 12a6.745 6.745 0 016.709 7.498.75.75 0 01-.372.568A12.696 12.696 0 0112 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 01-.372-.568 6.787 6.787 0 011.019-4.38z"
-          clipRule="evenodd"
-        ></path>
-        <path d="M5.082 14.254a8.287 8.287 0 00-1.308 5.135 9.687 9.687 0 01-1.764-.44l-.115-.04a.563.563 0 01-.373-.487l-.01-.121a3.75 3.75 0 013.57-4.047zM20.226 19.389a8.287 8.287 0 00-1.308-5.135 3.75 3.75 0 013.57 4.047l-.01.121a.563.563 0 01-.373.486l-.115.04c-.567.2-1.156.349-1.764.441z"></path>
-      </>
-    ),
+    icon: faUsers,
   },
   {
     title: 'Promotions',
     url: '/dashboard/promotion',
-    icon: (
-      <path d="M16.881 4.346A23.112 23.112 0 018.25 6H7.5a5.25 5.25 0 00-.88 10.427 21.593 21.593 0 001.378 3.94c.464 1.004 1.674 1.32 2.582.796l.657-.379c.88-.508 1.165-1.592.772-2.468a17.116 17.116 0 01-.628-1.607c1.918.258 3.76.75 5.5 1.446A21.727 21.727 0 0018 11.25c0-2.413-.393-4.735-1.119-6.904zM18.26 3.74a23.22 23.22 0 011.24 7.51 23.22 23.22 0 01-1.24 7.51c-.055.161-.111.322-.17.482a.75.75 0 101.409.516 24.555 24.555 0 001.415-6.43 2.992 2.992 0 00.836-2.078c0-.806-.319-1.54-.836-2.078a24.65 24.65 0 00-1.415-6.43.75.75 0 10-1.409.516c.059.16.116.321.17.483z"></path>
-    ),
+    icon: faBullhorn,
   },
   {
     title: 'Payment',
     url: '/dashboard/payment',
-    icon: (
-      <>
-        <path d="M4.5 3.75a3 3 0 00-3 3v.75h21v-.75a3 3 0 00-3-3h-15z"></path>
-        <path
-          fillRule="evenodd"
-          d="M22.5 9.75h-21v7.5a3 3 0 003 3h15a3 3 0 003-3v-7.5zm-18 3.75a.75.75 0 01.75-.75h6a.75.75 0 010 1.5h-6a.75.75 0 01-.75-.75zm.75 2.25a.75.75 0 000 1.5h3a.75.75 0 000-1.5h-3z"
-          clipRule="evenodd"
-        ></path>
-      </>
-    ),
+    icon: faCreditCard,
   },
-];
+]
+
+export const DEFAULT_COLUMN = [
+  {
+    label: 'ID',
+    order: 1,
+    enableSort: true,
+    keyName: '_id',
+  },
+]
+
+export const PRODUCT_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Display Name',
+    order: 2,
+    enableSort: true,
+  },
+  {
+    label: 'Brand',
+    order: 3,
+    enableSort: true,
+  },
+  {
+    label: 'Model',
+    order: 4,
+    enableSort: true,
+  },
+  {
+    label: 'Year',
+    order: 5,
+    enableSort: true,
+  },
+]
+
+export const ORDER_MANAGEMENT_COLUMNS = [
+  {
+    label: 'First Name',
+    order: 2,
+    enableSort: true,
+  },
+  {
+    label: 'Last Name',
+    order: 3,
+    enableSort: true,
+  },
+  {
+    label: 'Status',
+    order: 4,
+    enableSort: true,
+  },
+  {
+    label: 'Payment Status',
+    order: 5,
+    enableSort: true,
+  },
+  {
+    label: 'Order Count',
+    order: 6,
+    enableSort: true,
+  },
+  {
+    label: 'Created',
+    order: 7,
+    enableSort: true,
+  },
+  {
+    label: 'Updated',
+    order: 8,
+    enableSort: true,
+  },
+]
+
+export const USER_MANAGEMENT_COLUMNS = [
+  {
+    label: 'First Name',
+    order: 2,
+    enableSort: true,
+    keyName: 'first_name',
+  },
+  {
+    label: 'Last Name',
+    order: 3,
+    enableSort: true,
+    keyName: 'last_name',
+  },
+  {
+    label: 'Email',
+    order: 4,
+    enableSort: true,
+    keyName: 'email',
+  },
+  {
+    label: 'Status',
+    order: 5,
+    enableSort: true,
+    keyName: 'status',
+  },
+]
+
+export const PROMOTIONS_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Name',
+    order: 2,
+    enableSort: true,
+  },
+  {
+    label: 'Products',
+    order: 3,
+    enableSort: true,
+  },
+  {
+    label: 'Start Date',
+    order: 4,
+    enableSort: true,
+  },
+  {
+    label: 'End Date',
+    order: 5,
+    enableSort: true,
+  },
+  {
+    label: 'Status',
+    order: 5,
+    enableSort: true,
+  },
+]
+
+export const PAYMENTS_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Order Number',
+    order: 2,
+    enableSort: true,
+  },
+  {
+    label: 'Name',
+    order: 3,
+    enableSort: true,
+  },
+  {
+    label: 'Address',
+    order: 4,
+    enableSort: true,
+  },
+  {
+    label: 'Contact',
+    order: 5,
+    enableSort: true,
+  },
+]
+
+export const ACTIONS_COLUMN = [
+  {
+    label: 'Actions',
+    order: 99,
+    enableSort: false,
+  },
+]

@@ -17,7 +17,16 @@ const BarChart: React.FC<BarChartProps> = ({ data }) => {
   return (
     <div>
       {data.map((value, index) => (
-        <div key={index} style={{ height: `${value * 10}px`, background: '#3498db', margin: '5px', width: '40px', display: 'inline-block' }}></div>
+        <div
+          key={index}
+          style={{
+            height: `${value * 10}px`,
+            background: '#3498db',
+            margin: '5px',
+            width: '40px',
+            display: 'inline-block',
+          }}
+        ></div>
       ))}
     </div>
   );
@@ -29,4 +38,4 @@ export function DashboardPage() {
       <BarChart data={exampleChartData} />
     </ChartContainer>
   );
-};
+}

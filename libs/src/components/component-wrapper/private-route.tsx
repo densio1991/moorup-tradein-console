@@ -1,12 +1,10 @@
-/* eslint-disable react/react-in-jsx-scope */
-/* eslint-disable import/order */
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../../store';
 import { validateExpiry } from '../../helpers';
-import { ComponentWrapper } from './wrapper';
+import { useAuth } from '../../store';
 import { SideBar, TopNavBar } from '../navigation';
-import PageContainer from './page-container';
 import CardContainer from './card-container';
+import PageContainer from './page-container';
+import { ComponentWrapper } from './wrapper';
 
 interface PrivateRouteProps {}
 

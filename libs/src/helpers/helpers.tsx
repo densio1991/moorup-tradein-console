@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from 'jwt-decode';
 
 export function createActionTypes(baseType: string) {
   return {
@@ -9,15 +9,15 @@ export function createActionTypes(baseType: string) {
   };
 }
 
-export const amountFormatter = (amount: any, currency = "PHP") => {
-  const formattedAmount = new Intl.NumberFormat("en-US", {
-    style: "currency",
+export const amountFormatter = (amount: any, currency = 'PHP') => {
+  const formattedAmount = new Intl.NumberFormat('en-US', {
+    style: 'currency',
     currency,
-    currencyDisplay: "code",
+    currencyDisplay: 'code',
   });
 
   return formattedAmount.format(Number(amount || 0))
-    .replace(currency, "")
+    .replace(currency, '')
     .trim();
 };
 
@@ -26,7 +26,7 @@ export const capitalizeFirstLetter = (string: string) => {
 };
 
 export const validateExpiry = (date: any) => {
-  if (date && date !== "") {
+  if (date && date !== '') {
     const currentTime = Date.now() / 1000; // Convert to seconds
     return date >= currentTime;
   }

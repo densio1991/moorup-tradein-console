@@ -52,21 +52,16 @@ const FormButton = styled.button<FormButtonProps>`
   cursor: ${(props) => (props.isLoading ? 'not-allowed' : 'pointer')};
 `;
 
-export function LoginPage(){
-  const {
-    state,
-    loginUser,
-  } = useAuth();
+export function LoginPage() {
+  const { state, loginUser } = useAuth();
 
-  const {
-    isAuthenticating,
-  } = state.auth;
+  const { isAuthenticating } = state.auth;
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async (e: { preventDefault: () => void; }) => {
+  const handleLogin = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setIsLoading(true);
     try {
@@ -100,4 +95,4 @@ export function LoginPage(){
       </LoginForm>
     </LoginContainer>
   );
-};
+}

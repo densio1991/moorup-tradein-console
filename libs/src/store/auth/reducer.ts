@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as types from './action-types';
 import { decodeJWT } from '../../helpers';
+import * as types from './action-types';
 
 const authState = {
   token: localStorage.getItem('FTK') || null,
@@ -10,7 +10,7 @@ const authState = {
   isLoggingOut: false,
   userDetails: {},
   isFetchingUserDetails: false,
-  activePlatform: "",
+  activePlatform: '',
 };
 
 const authReducer = (state: any, action: any) => {
@@ -86,7 +86,7 @@ const authReducer = (state: any, action: any) => {
         ...state,
         isFetchingUserDetails: false,
         userDetails: action.payload.data,
-        activePlatform: action.payload?.data?.platforms[0] || "",
+        activePlatform: action.payload?.data?.platforms[0] || '',
       };
     }
     case types.GET_USER_DETAILS.FAILED: {

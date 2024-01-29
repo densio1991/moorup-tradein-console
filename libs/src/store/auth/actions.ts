@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as types from "./action-types";
-import axiosInstance from "../axios";
+import axiosInstance from '../axios';
+import * as types from './action-types';
 
 export const loginUser = (payload: any) => (dispatch: any) => {
   dispatch({
@@ -8,7 +8,7 @@ export const loginUser = (payload: any) => (dispatch: any) => {
     payload,
   });
   axiosInstance()
-    .post(`/api/auth/omc-login`, payload)
+    .post('/api/auth/omc-login', payload)
     .then((response: { data: any; }) => {
       dispatch({
         type: types.LOGIN_USER.SUCCESS,
@@ -30,8 +30,8 @@ export const logoutUser = (payload: any) => (dispatch: any) => {
   });
 
   try {
-    localStorage.removeItem("FTK");
-    localStorage.removeItem("FTKX");
+    localStorage.removeItem('FTK');
+    localStorage.removeItem('FTKX');
   
     dispatch({
       type: types.LOGOUT_USER.SUCCESS,

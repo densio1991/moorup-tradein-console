@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { ReactNode, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from 'styled-components';
 import { isEmpty } from 'lodash';
-import { decodeJWT, validateExpiry } from "../../helpers";
+import { ReactNode, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { decodeJWT, validateExpiry } from '../../helpers';
 import { useAuth } from '../../store';
 
 interface ComponentWrapperProps {
@@ -32,8 +32,8 @@ export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Eleme
   const shouldRun = useRef(false);
 
   const clearStorage = () => {
-    localStorage.removeItem("FTK");
-    localStorage.removeItem("FTKX");
+    localStorage.removeItem('FTK');
+    localStorage.removeItem('FTKX');
   };
 
   // Token validation function
@@ -42,7 +42,7 @@ export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Eleme
     try {
       if (!validateExpiry(expiry)) {
         clearStorage();
-        navigate("/login");
+        navigate('/login');
       }
     } catch (error) {
       clearStorage();

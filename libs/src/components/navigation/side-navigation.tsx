@@ -1,9 +1,12 @@
-import styled from 'styled-components';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { SIDENAV_ITEMS } from '../../constants';
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useLocation, useNavigate } from 'react-router-dom'
+import styled from 'styled-components'
+import { SIDENAV_ITEMS } from '../../constants'
+import { useAuth } from '../../store'
 
 interface NavLinkProps {
-  isActive: boolean;
+  isActive?: boolean
 }
 
 const SidebarContainer = styled.div`
@@ -12,27 +15,29 @@ const SidebarContainer = styled.div`
   background-color: rgb(251, 251, 255);
   position: sticky;
   top: 50px;
+  min-width: 270px;
   max-width: 270px;
   width: 100%;
   margin-top: 1px;
-  border-top: 1px solid #F4F4F5;
-`;
+  border-top: 1px solid #f4f4f5;
+`
+
 const SidebarWrapper = styled.div`
   padding: 0 20px;
   color: #555;
-`;
+`
+
 const SidebarList = styled.ul`
   list-style: none;
   padding: 0px;
-  border-bottom: 1px solid #E0E0E0;
-`;
+  border-bottom: 1px solid #e0e0e0;
+`
 
-const Icon = styled.svg`
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
-  margin-right: 1rem;
-`;
+const StyledIcon = styled(FontAwesomeIcon)<NavLinkProps>`
+  color: #01463a;
+  width: 14px;
+  height: 14px;
+`
 
 const NavLink = styled.a<NavLinkProps>`
   display: flex;
@@ -40,43 +45,59 @@ const NavLink = styled.a<NavLinkProps>`
   align-items: center;
   padding: 0.6rem 1rem;
   border-radius: 0.5rem;
-  color: ${(props) => (props.isActive ? '#ffffff' : '#01463a')};
+  color: ${(props) => (props.isActive ? 'white' : '#01463a')};
   background-color: ${(props) => (props.isActive ? '#01463a' : 'transparent')};
   text-decoration: none;
   margin-bottom: 0.5rem;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
+  justify-content: start;
 
   &:hover {
     background-color: #01463a;
-    color: #ffffff;
+    color: white;
+
+    svg {
+      color: white;
+    }
   }
-`;
+  svg {
+    margin-right: 8px;
+    color: ${(props) => (props.isActive ? 'white' : '#01463a')};
+  }
+`
 
 export function SideBar(): JSX.Element {
-  const { pathname } = useLocation();
-  const navigate = useNavigate();
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+
+  const { logoutUser } = useAuth()
 
   return (
     <SidebarContainer>
       <SidebarWrapper>
         <SidebarList>
           {SIDENAV_ITEMS.map((item) => (
-            <NavLink key={item.url} isActive={pathname === item.url} onClick={() => navigate(item.url)}>
-              <Icon
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                {item.icon}
-              </Icon>
+            <NavLink
+              key={item.url}
+              isActive={pathname === item.url}
+              onClick={() => navigate(item.url)}
+            >
+              <span>
+                <StyledIcon icon={item.icon} isActive={pathname === item.url} />
+              </span>
               <span className="font-semibold text-sm flex">{item.title}</span>
             </NavLink>
           ))}
         </SidebarList>
+        <NavLink onClick={() => logoutUser()}>
+          <span>
+            <StyledIcon icon={faRightFromBracket} />
+          </span>
+          <span className="font-semibold text-sm flex">Logout</span>
+        </NavLink>
       </SidebarWrapper>
     </SidebarContainer>
-  );
+  )
 }

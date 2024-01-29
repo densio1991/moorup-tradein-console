@@ -1,4 +1,4 @@
-import { createActionTypes } from "../../helpers";
+import { createActionTypes } from '../../helpers';
 
 export const LOGIN_USER = createActionTypes('LOGIN_USER');
 export const LOGOUT_USER = createActionTypes('LOGOUT_USER');
