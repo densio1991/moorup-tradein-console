@@ -31,6 +31,10 @@ const StyledButton = styled.button<CustomButtonProps>`
     border-color: #ccc;
   }
 
+  &:hover {
+    opacity: 90%;
+  }
+
   svg {
     margin-right: 8px; 
   }

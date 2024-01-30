@@ -70,6 +70,10 @@ const TableStyled = styled.table`
     &:nth-child(2) {
       padding-left: 15px !important;
     }
+
+    &:last-child {
+      padding-right: 15px !important;
+    }
   }
 
   @media (max-width: 768px) {
@@ -95,6 +99,10 @@ const Thead = styled.thead`
 
     &:nth-child(2) {
       padding-left: 15px !important;
+    }
+
+    &:last-child {
+      padding-right: 15px !important;
     }
 
     &.enableSort {
