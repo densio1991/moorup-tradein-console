@@ -9,21 +9,19 @@ import {
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 export function PromotionsPage() {
   const { state, getPromotions, clearPromotions } = usePromotion();
   const { state: authState } = useAuth();
   const { promotions, isFetchingPromotions } = state.promotion;
   const { activePlatform } = authState.auth;
-  const shouldRun = useRef(true);
 
   const headers = [...DEFAULT_COLUMN, ...PROMOTIONS_MANAGEMENT_COLUMNS];
 
   useEffect(() => {
-    if (shouldRun.current && !isEmpty(activePlatform)) {
+    if (!isEmpty(activePlatform)) {
       getPromotions({});
-      shouldRun.current = false;
     }
 
     return () => {
