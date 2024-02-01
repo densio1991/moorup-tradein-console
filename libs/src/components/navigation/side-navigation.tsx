@@ -46,7 +46,7 @@ const NavLink = styled.a<NavLinkProps>`
   padding: 0.6rem 1rem;
   border-radius: 0.5rem;
   color: ${(props) => (props.active ? 'white' : '#01463a')};
-  background-color: ${(props) => (props.active ? '#01463a' : 'transparent')};
+  background: ${(props) => (props.active ? 'linear-gradient(to right, #216A4C, #01463A)' : 'transparent')};
   text-decoration: none;
   margin-bottom: 0.5rem;
   font-weight: 600;
@@ -55,7 +55,7 @@ const NavLink = styled.a<NavLinkProps>`
   justify-content: start;
 
   &:hover {
-    background-color: #01463a;
+    background: linear-gradient(to right, #216A4C, #01463A);
     color: white;
 
     svg {
