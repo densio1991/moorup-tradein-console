@@ -6,11 +6,9 @@ interface ContainerProps {
 }
 
 const Container = styled.div`
-  display: flex;
+display: flex;
 `;
 
-const PageContainer: React.FC<ContainerProps> = ({ children }) => {
+export const PageContainer: React.FC<ContainerProps> = ({ children }) => {
   return <Container>{children}</Container>;
 };
-
-export default PageContainer;

@@ -14,8 +14,8 @@ import { useEffect } from 'react';
 export function PromotionsPage() {
   const { state, getPromotions, clearPromotions } = usePromotion();
   const { state: authState } = useAuth();
-  const { promotions, isFetchingPromotions } = state.promotion;
-  const { activePlatform } = authState.auth;
+  const { promotions, isFetchingPromotions } = state;
+  const { activePlatform } = authState;
 
   const headers = [...DEFAULT_COLUMN, ...PROMOTIONS_MANAGEMENT_COLUMNS];
 

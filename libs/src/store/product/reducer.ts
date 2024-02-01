@@ -8,8 +8,6 @@ const productState = {
 };
 
 const productReducer = (state: any, action: any) => {
-  console.log('\x1b[33m product action: ', action);
-
   switch (action.type) {
     case types.FETCH_PRODUCTS.baseType: {
       return {

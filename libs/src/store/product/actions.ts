@@ -2,14 +2,14 @@
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
-export const getProducts = (payload: any, platform: string) => (dispatch: any) => {
+export const getProducts = (platform: string, includeVariants?: boolean) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_PRODUCTS.baseType,
-    payload,
+    payload: platform,
   });
 
   axiosInstance()
-    .get(`/api/products?platform=${platform}`)
+    .get(`/api/products?platform=${platform}${includeVariants ? `&include_variants=${includeVariants}` : ''}`)
     .then((response) => {
       dispatch({
         type: types.FETCH_PRODUCTS.SUCCESS,

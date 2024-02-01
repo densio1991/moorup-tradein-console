@@ -18,7 +18,7 @@ export const usePromotion = () => {
   }
 
   return {
-    state,
+    state: state.promotion,
     getPromotions,
     clearPromotions,
   };

@@ -18,14 +18,14 @@ import { useEffect } from 'react';
 export function ProductManagementPage() {
   const { state, getProducts, clearProducts } = useProduct();
   const { state: authState } = useAuth();
-  const { products, isFetchingProducts } = state.product;
-  const { activePlatform } = authState.auth;
+  const { products, isFetchingProducts } = state;
+  const { activePlatform } = authState;
 
   const headers = [...DEFAULT_COLUMN, ...PRODUCT_MANAGEMENT_COLUMNS];
 
   useEffect(() => {
     if (!isEmpty(activePlatform)) {
-      getProducts({});
+      getProducts(true);
     }
 
     return () => {

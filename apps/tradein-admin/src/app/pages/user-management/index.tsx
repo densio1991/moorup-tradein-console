@@ -5,13 +5,17 @@ import {
   DEFAULT_COLUMN,
   Table,
   USER_MANAGEMENT_COLUMNS,
+  useCommon,
   useUser,
 } from '@tradein-admin/libs';
 import { useEffect, useRef } from 'react';
 
 export function UserManagementPage() {
   const { state, getUsers, clearUsers } = useUser();
-  const { users, isFetchingUsers } = state.user;
+  const { users, isFetchingUsers } = state;
+  const { state: commonState, setSideModalState } = useCommon();
+  const { sideModalState } = commonState;
+
   const shouldRun = useRef(true);
 
   const headers = [...DEFAULT_COLUMN, ...USER_MANAGEMENT_COLUMNS];
@@ -35,7 +39,11 @@ export function UserManagementPage() {
       headers={headers}
       rows={users || []}
       rightControls={
-        <AppButton width="fit-content" icon={faPlus}>
+        <AppButton
+          width="fit-content"
+          icon={faPlus}
+          onClick={() => setSideModalState({ ...sideModalState, open: true })}
+        >
           Add
         </AppButton>
       }

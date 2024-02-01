@@ -1,0 +1,1 @@
+export const SET_SIDE_MODAL_STATE = 'SET_SIDE_MODAL_STATE';

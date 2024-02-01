@@ -23,7 +23,7 @@ export const useAuth = () => {
   }
 
   return {
-    state,
+    state: state.auth,
     loginUser,
     logoutUser,
     getUserDetailsById,

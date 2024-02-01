@@ -3,20 +3,15 @@ import { useContext } from 'react';
 import { RootContext } from '../provider';
 import * as actions from './actions';
 
-export const useUser = () => {
+export const useCommon = () => {
   const { state, dispatch } = useContext(RootContext);
 
-  const getUsers = (payload: any) => {
-    actions.getUsers(payload)(dispatch);
-  }
-
-  const clearUsers = (payload: any) => {
-    actions.clearUsers(payload)(dispatch);
+  const setSideModalState = (payload: any) => {
+    actions.setSideModalState(payload)(dispatch);
   }
 
   return {
-    state: state.user,
-    getUsers,
-    clearUsers,
+    state: state.common,
+    setSideModalState,
   };
 };

@@ -23,7 +23,7 @@ const NavbarContainer = styled.div`
   background-color: white;
   position: sticky;
   top: 0;
-  z-index: 999;
+  z-index: 998;
 `
 const NavbarWrapper = styled.div`
   height: 100%;
@@ -93,8 +93,7 @@ const DropdownItem = styled.div`
 
 export function TopNavBar(): JSX.Element {
   const { state, setActivePlatform } = useAuth()
-
-  const { activePlatform, userDetails } = state.auth
+  const { activePlatform, userDetails } = state
 
   const dropdownRef = useRef<HTMLDivElement | null>(null)
   const [isExpanded, setIsExpanded] = useState(false)

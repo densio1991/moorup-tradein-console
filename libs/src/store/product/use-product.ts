@@ -10,7 +10,7 @@ export const useProduct = () => {
   } = state.auth;
 
   const getProducts = (payload: any) => {
-    actions.getProducts(payload, activePlatform)(dispatch);
+    actions.getProducts(activePlatform, payload)(dispatch);
   }
 
   const clearProducts = (payload: any) => {
@@ -18,7 +18,7 @@ export const useProduct = () => {
   }
 
   return {
-    state,
+    state: state.product,
     getProducts,
     clearProducts,
   };

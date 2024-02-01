@@ -11,7 +11,7 @@ export function PublicRoute(props: PublicRouteProps): JSX.Element {
 
   const {
     expiry,
-  } = state.auth
+  } = state
 
   if (validateExpiry(expiry)) {
     return <Navigate to="/dashboard" />;
