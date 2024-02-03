@@ -5,6 +5,7 @@ import * as types from './action-types';
 const commonState = {
   sideModalState: {
     open: false,
+    view: null,
   },
 };
 

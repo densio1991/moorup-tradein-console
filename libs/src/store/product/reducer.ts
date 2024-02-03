@@ -1,10 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { ADD_PRODUCT_PAYLOAD } from '../../constants';
 import * as types from './action-types';
 
 const productState = {
   products: [],
   isFetchingProducts: true,
+  productBrands: [],
+  isFetchingProductBrands: true,
+  productTypes: [],
+  isFetchingProductTypes: true,
+  productCategories: [],
+  isFetchingProductCategories: true,
+  productStatuses: [],
+  isFetchingProductStatuses: true,
+  addProductPayload: ADD_PRODUCT_PAYLOAD,
 };
 
 const productReducer = (state: any, action: any) => {
@@ -35,6 +45,100 @@ const productReducer = (state: any, action: any) => {
       return {
         ...state,
         products: [],
+      };
+
+    case types.FETCH_PRODUCT_TYPES.baseType: {
+      return {
+        ...state,
+        isFetchingProductTypes: true,
+        productTypes: [],
+      };
+    }
+    case types.FETCH_PRODUCT_TYPES.SUCCESS: {
+      return {
+        ...state,
+        isFetchingProductTypes: false,
+        productTypes: action.payload?.data,
+      };
+    }
+    case types.FETCH_PRODUCT_TYPES.FAILED: {
+      return {
+        ...state,
+        isFetchingProductTypes: false,
+        productTypes: [],
+      };
+    }
+
+    case types.FETCH_PRODUCT_CATEGORIES.baseType: {
+      return {
+        ...state,
+        isFetchingProductCategories: true,
+        productCategories: [],
+      };
+    }
+    case types.FETCH_PRODUCT_CATEGORIES.SUCCESS: {
+      return {
+        ...state,
+        isFetchingProductCategories: false,
+        productCategories: action.payload?.data,
+      };
+    }
+    case types.FETCH_PRODUCT_CATEGORIES.FAILED: {
+      return {
+        ...state,
+        isFetchingProductCategories: false,
+        productCategories: [],
+      };
+    }
+
+    case types.FETCH_PRODUCT_BRANDS.baseType: {
+      return {
+        ...state,
+        isFetchingProductBrands: true,
+        productBrands: [],
+      };
+    }
+    case types.FETCH_PRODUCT_BRANDS.SUCCESS: {
+      return {
+        ...state,
+        isFetchingProductBrands: false,
+        productBrands: action.payload?.data,
+      };
+    }
+    case types.FETCH_PRODUCT_BRANDS.FAILED: {
+      return {
+        ...state,
+        isFetchingProductBrands: false,
+        productBrands: [],
+      };
+    }
+
+    case types.FETCH_PRODUCT_STATUSES.baseType: {
+      return {
+        ...state,
+        isFetchingProductStatuses: true,
+        productStatuses: [],
+      };
+    }
+    case types.FETCH_PRODUCT_STATUSES.SUCCESS: {
+      return {
+        ...state,
+        isFetchingProductStatuses: false,
+        productStatuses: action.payload?.data,
+      };
+    }
+    case types.FETCH_PRODUCT_STATUSES.FAILED: {
+      return {
+        ...state,
+        isFetchingProductStatuses: false,
+        productStatuses: [],
+      };
+    }
+
+    case types.SET_ADD_PRODUCT_PAYLOAD:
+      return {
+        ...state,
+        addProductPayload: action.payload,
       };
 
     default:

@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { jwtDecode } from 'jwt-decode';
+import { isEmpty } from 'lodash';
 
 export function createActionTypes(baseType: string) {
   return {
@@ -118,3 +119,18 @@ export function parseDateString(inputDateString: string) {
   
   return formattedDateString;
 }
+
+export function hasEmptyValue(obj: any): boolean {
+  return Object.values(obj).some((value) => {
+    if (typeof value === 'boolean') {
+      return false;
+    }
+
+    if (Array.isArray(value)) {
+      return isEmpty(value);
+    }
+
+    return isEmpty(value);
+  });
+}
+

@@ -206,3 +206,17 @@ export const ACTIONS_COLUMN = [
     enableSort: false,
   },
 ]
+
+export const ADD_PRODUCT_PAYLOAD = {
+  name: '',
+  brand: '',
+  model: '',
+  year: '',
+  display_name: '',
+  category: '',
+  type: '',
+  image_url: '',
+  site_url: '',
+  status: '',
+  platforms: [],
+}

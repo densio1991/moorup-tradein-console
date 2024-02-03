@@ -17,9 +17,34 @@ export const useProduct = () => {
     actions.clearProducts(payload)(dispatch);
   }
 
+  const getProductTypes = () => {
+    actions.getProductTypes()(dispatch);
+  }
+
+  const getProductCategories = (payload: any) => {
+    actions.getProductCategories(activePlatform, payload)(dispatch);
+  }
+
+  const getProductBrands = (payload: any) => {
+    actions.getProductBrands(activePlatform, payload)(dispatch);
+  }
+
+  const getProductStatuses = () => {
+    actions.getProductStatuses()(dispatch);
+  }
+
+  const setAddProductPayload = (payload: any) => {
+    actions.setAddProductPayload(payload)(dispatch);
+  }
+
   return {
     state: state.product,
     getProducts,
     clearProducts,
+    getProductTypes,
+    getProductCategories,
+    getProductBrands,
+    getProductStatuses,
+    setAddProductPayload,
   };
 };
