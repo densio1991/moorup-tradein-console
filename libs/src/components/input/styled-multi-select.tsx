@@ -48,6 +48,18 @@ const customStyles = (error: boolean = false) => ({
     },
     fontSize: '14px',
   }),
+  option: (provided: any, state: any) => ({
+    ...provided,
+    background: state.isFocused ? 'rgba(1, 70, 58, 0.8)' : state.isSelected ? '#01463A' : undefined,
+    color: state.isFocused ? '#fff' : state.isSelected ? '#fff' : 'inherit',
+    zIndex: 1,
+    ':hover': {
+      color: '#fff',
+    },
+    ':active': {
+      color: '#fff',
+    },
+  }),
   multiValue: (provided: any) => ({
     ...provided,
     backgroundColor: '#01463a',
