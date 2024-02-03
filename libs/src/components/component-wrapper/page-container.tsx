@@ -1,14 +1,14 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-interface ContainerProps {
+interface PageContainerProps {
   children: ReactNode;
 }
 
-const Container = styled.div`
-display: flex;
+const PageContainerWrapper = styled.div`
+  display: flex;
 `;
 
-export const PageContainer: React.FC<ContainerProps> = ({ children }) => {
-  return <Container>{children}</Container>;
-};
+export function PageContainer({ children }: PageContainerProps): JSX.Element {
+  return <PageContainerWrapper>{children}</PageContainerWrapper>;
+}

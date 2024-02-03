@@ -11,15 +11,22 @@ interface CustomButtonProps {
   disabled?: boolean;
   type?: any;
   onClick?: () => void;
+  variant?: 'outlined' | 'fill' | 'text';
   children: React.ReactNode;
 }
 
 const StyledButton = styled.button<CustomButtonProps>`
   width: ${(props) => (props.width ? props.width : '100%')};
   padding: 8px 20px;
-  background: ${(props) => (props.isLoading ? '#ccc' : 'linear-gradient(to right, #216A4C, #01463A)')};
-  color: #fff;
-  border: 1px solid #01463a;
+  color: ${(props) =>
+    props.variant === 'text' ? '#01463A' : props.variant === 'outlined' ? '#01463A' : '#fff'};
+  background: ${(props) => {
+    if (props.variant === 'outlined' || props.variant === 'text') return 'transparent';
+    if (props.isLoading) return '#ccc';
+    return 'linear-gradient(to right, #216A4C, #01463A)';
+  }};
+  border: ${(props) =>
+    props.variant === 'text' ? 'none' : '1px solid #01463A'};
   border-radius: 4px;
   cursor: ${(props) => (props.isLoading ? 'not-allowed' : 'pointer')};
   display: flex;
@@ -29,16 +36,15 @@ const StyledButton = styled.button<CustomButtonProps>`
 
   &:disabled {
     cursor: not-allowed;
-    background-color: #ccc;
-    border-color: #ccc;
+    opacity: 50%;
   }
 
   &:hover {
-    opacity: 90%;
+    opacity: ${(props) => (props.disabled ? '50%' : '90%')}
   }
 
   svg {
-    margin-right: 8px; 
+    margin-right: 8px;
   }
 `;
 
@@ -51,8 +57,12 @@ const LoadingSpinner = styled(FontAwesomeIcon)`
   animation: spin 1s linear infinite;
 
   @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 `;
 
@@ -63,6 +73,7 @@ export function AppButton({
   disabled,
   type,
   onClick,
+  variant = 'fill',
   children,
 }: CustomButtonProps) {
   return (
@@ -72,11 +83,10 @@ export function AppButton({
       onClick={onClick}
       disabled={disabled || isLoading}
       type={type}
+      variant={variant}
     >
       {isLoading && <LoadingSpinner icon={faSpinner} />}
-      {icon && !isLoading && (
-        <StyledIcon icon={icon} />
-      )}
+      {icon && !isLoading && <StyledIcon icon={icon} />}
       {children}
     </StyledButton>
   );

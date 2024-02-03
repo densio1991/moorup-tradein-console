@@ -4,8 +4,7 @@ import { ReactNode, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { decodeJWT, validateExpiry } from '../../helpers';
-import { useAuth, useCommon } from '../../store';
-import SideModal from '../modal/side-modal';
+import { useAuth } from '../../store';
 
 interface ComponentWrapperProps {
   children: ReactNode;
@@ -29,15 +28,6 @@ export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Eleme
     token,
     userDetails,
   } = state;
-
-  const { 
-    state: commonState,
-    setSideModalState,
-  } = useCommon();
-
-  const {
-    sideModalState,
-  } = commonState;
 
   const shouldRun = useRef(false);
 
@@ -82,13 +72,8 @@ export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Eleme
   }, [token]);
 
   return (
-    <>
-      <StyledApp>
-        {children}
-      </StyledApp>
-      <SideModal isOpen={sideModalState?.open} onClose={() => setSideModalState({ ...sideModalState, open: false })}>
-        Hello!
-      </SideModal>
-    </>
+    <StyledApp>
+      {children}
+    </StyledApp>
   );
 }

@@ -1,22 +1,22 @@
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-interface ContainerProps {
+interface CardContainerProps {
   children: ReactNode;
 }
 
-const Container = styled.div`
-display: flex;
-flex: 1;
-background-color: white;
-padding: 20px;
-margin: 20px;
-flex-direction: column;
-display: block;
-width: 100%;
-overflow-x: auto;
+const CardContainerWrapper = styled.div`
+  display: flex;
+  flex: 1;
+  background-color: white;
+  padding: 20px;
+  margin: 20px;
+  flex-direction: column;
+  display: block;
+  width: 100%;
+  overflow-x: auto;
 `;
 
-export const CardContainer: React.FC<ContainerProps> = ({ children }) => {
-  return <Container>{children}</Container>;
-};
+export function CardContainer({ children }: CardContainerProps): JSX.Element {
+  return <CardContainerWrapper>{children}</CardContainerWrapper>;
+}
