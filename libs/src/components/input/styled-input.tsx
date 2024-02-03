@@ -1,26 +1,27 @@
-import React, { InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 interface StyledInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   error?: boolean;
   errorMessage?: string;
-  name: string; // Formik field name
+  name: string;
 }
 
-const InputContainer = styled.div`
+const StyledInputContainer = styled.div<{ error?: boolean; }>`
   display: flex;
   flex-direction: column;
-  margin-bottom: 15px;
+  margin-bottom: ${(props) => (props.error ? '0px' : '20px')};
+  width: 100%;
 `;
 
-const InputLabel = styled.label`
+const StyledInputLabel = styled.label`
   margin-bottom: 5px;
   font-size: 14px;
   color: inherit;
 `;
 
-const InputField = styled.input<{ error?: boolean }>`
+const StyledInputField = styled.input<{ error?: boolean }>`
   padding: 10px;
   border: 1px solid ${(props) => (props.error ? '#f44336' : '#ccc')};
   border-radius: 4px;
@@ -42,26 +43,27 @@ const ErrorMessage = styled.div`
   margin-top: 5px;
 `;
 
-export const StyledInput: React.FC<StyledInputProps> = ({
+export function StyledInput({
   label,
   type,
   placeholder,
   error,
   errorMessage,
   name,
+  onBlur,
   ...inputProps
-}) => {
-
+}: StyledInputProps): JSX.Element {
   return (
-    <InputContainer>
-      <InputLabel>{label}</InputLabel>
-      <InputField
+    <StyledInputContainer error={error}>
+      <StyledInputLabel>{label}</StyledInputLabel>
+      <StyledInputField
         type={type}
         placeholder={placeholder}
+        onBlur={onBlur}
         error={error}
         {...inputProps}
       />
-      {error && <ErrorMessage>{error}</ErrorMessage>}
-    </InputContainer>
+      {error && <ErrorMessage>{errorMessage}</ErrorMessage>}
+    </StyledInputContainer>
   );
-};
+}
