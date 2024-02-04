@@ -134,3 +134,87 @@ export function hasEmptyValue(obj: any): boolean {
   });
 }
 
+export function hasEmptyValueInArray(objArray: any[]): boolean {
+  return objArray.some((obj) =>
+    Object.values(obj).some((value) => {
+      if (typeof value === 'boolean') {
+        return false;
+      }
+
+      if (Array.isArray(value)) {
+        return hasEmptyValueInArray(value);
+      }
+
+      return isEmpty(value);
+    })
+  );
+}
+
+const productHeaders = [
+  { label: 'ID', key: '_id' },
+  { label: 'Brand', key: 'brand' },
+  { label: 'Model', key: 'model' },
+  { label: 'Year', key: 'year' },
+  { label: 'Display Name', key: 'display_name' },
+  { label: 'Image URL', key: 'image_url' },
+  { label: 'Type', key: 'type' },
+  { label: 'Category', key: 'category' },
+  { label: 'Site URL', key: 'site_url' },
+  { label: 'Name', key: 'name' },
+  { label: 'Status', key: 'status' },
+];
+
+const pricingHeaders = [
+  { label: 'Platform', key: 'platform' },
+  { label: 'Currency', key: 'currency' },
+  { label: 'Amount', key: 'amount' },
+  { label: 'Working', key: 'working' },
+  { label: 'Working Damaged', key: 'working_damaged' },
+  { label: 'Not Working Damaged', key: 'not_working_damaged' },
+  { label: 'Not Working', key: 'not_working' },
+];
+
+export function exportToCSV(data: any) {
+  const csvData = data.flatMap(
+    (item: any) =>
+      item.variants?.map((variant: any) => [
+        ...productHeaders.map((header) => item[header.key]),
+        ...pricingHeaders.map(
+          (header) => variant.pricing[0]?.[header.key] || ''
+        ),
+        variant.name || '',
+      ]) || [
+        [
+          ...productHeaders.map((header) => item[header.key]),
+          ...pricingHeaders.map(() => ''),
+          '',
+        ],
+      ]
+  );
+
+  const csvContent = [
+    [
+      ...productHeaders.map((header) => header.label),
+      ...pricingHeaders.map((header) => header.label),
+      'Variant Name',
+    ],
+    ...csvData,
+  ]
+    .map((row) => row.join(','))
+    .join('\n');
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const filename = 'products_data.csv';
+
+  const link = document.createElement('a');
+  if (link.download !== undefined) {
+    // Browsers that support HTML5 download attribute
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+};
