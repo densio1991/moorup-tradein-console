@@ -37,6 +37,14 @@ export const useProduct = () => {
     actions.setAddProductPayload(payload)(dispatch);
   }
 
+  const setIncludeProductVariant = (payload: any) => {
+    actions.setIncludeProductVariant(payload)(dispatch);
+  }
+
+  const addProduct = (payload: any) => {
+    actions.addProduct(payload, activePlatform)(dispatch);
+  }
+
   return {
     state: state.product,
     getProducts,
@@ -46,5 +54,7 @@ export const useProduct = () => {
     getProductBrands,
     getProductStatuses,
     setAddProductPayload,
+    setIncludeProductVariant,
+    addProduct,
   };
 };

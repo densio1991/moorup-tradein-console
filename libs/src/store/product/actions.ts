@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { toast } from 'react-toastify';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
@@ -124,4 +125,39 @@ export const setAddProductPayload = (payload: any) => (dispatch: any) => {
     type: types.SET_ADD_PRODUCT_PAYLOAD,
     payload,
   });
+};
+
+export const setIncludeProductVariant = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_INCLUDE_PRODUCT_VARIANT,
+    payload,
+  });
+};
+
+export const addProduct = (payload: any, activePlatform: any) => (dispatch: any) => {
+  dispatch({
+    type: types.ADD_PRODUCT.baseType,
+    payload: payload,
+  });
+
+  axiosInstance()
+    .post('/api/products', payload)
+    .then((response) => {
+      dispatch({
+        type: types.ADD_PRODUCT.SUCCESS,
+        payload: response?.data,
+      });
+
+      getProducts(activePlatform)(dispatch);
+      toast.success('Product successfully added!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.ADD_PRODUCT.FAILED,
+        payload: error,
+      });
+
+      getProducts(activePlatform)(dispatch);
+      toast.success('Failed to add product!');
+    });
 };

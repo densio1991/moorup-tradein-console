@@ -7,6 +7,8 @@ import {
   createContext,
 } from 'react';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useAppReducer } from './globalReducer';
 
 interface RootContextProps {
@@ -36,6 +38,17 @@ export function RootProvider({ children }: RootProviderProps) {
         dispatch,
       }}
     >
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       {children}
     </RootContext.Provider>
   );

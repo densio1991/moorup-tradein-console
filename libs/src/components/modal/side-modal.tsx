@@ -29,6 +29,7 @@ const SideModalWrapper = styled.div<{ isOpen: boolean }>`
   z-index: 999;
   padding: 20px;
   transition: right 0.3s ease-in-out;
+  overflow-y: auto;
 `;
 
 export function SideModal({ isOpen, onClose, children }: SideModalProps): JSX.Element {

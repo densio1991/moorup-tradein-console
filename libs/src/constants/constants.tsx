@@ -220,3 +220,21 @@ export const ADD_PRODUCT_PAYLOAD = {
   status: '',
   platforms: [],
 }
+
+export const ADD_PRODUCT_VARIANT_PAYLOAD = {
+  name: '',
+  sku: '',
+  type: '',
+  image_url: '',
+  site_url: '',
+  status: '',
+}
+
+export const ADD_PRODUCT_VARIANT_PRICING_PAYLOAD = {
+  currency: '',
+  amount: 0.00,
+  working: 0.00,
+  working_damaged: 0.00,
+  not_working_damaged: 0.00,
+  not_working: 0.00
+}
