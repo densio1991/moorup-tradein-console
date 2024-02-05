@@ -137,7 +137,7 @@ export function hasEmptyValue(obj: any): boolean {
 export function hasEmptyValueInArray(objArray: any[]): boolean {
   return objArray.some((obj) =>
     Object.values(obj).some((value) => {
-      if (typeof value === 'boolean') {
+      if (typeof value === 'boolean' || typeof value === 'number') {
         return false;
       }
 

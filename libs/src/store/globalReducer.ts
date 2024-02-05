@@ -7,8 +7,6 @@ import { promotionReducer, promotionState } from './promotion';
 import { userReducer, userState } from './user';
 
 const rootReducer = (state: any, action: any) => {
-  console.log('\x1b[33m action: ', action);
-
   return {
     auth: authReducer(state.auth, action),
     user: userReducer(state.user, action),

@@ -148,7 +148,7 @@ export const addProduct = (payload: any, activePlatform: any) => (dispatch: any)
         payload: response?.data,
       });
 
-      getProducts(activePlatform)(dispatch);
+      getProducts(activePlatform, true)(dispatch);
       toast.success('Product successfully added!');
     })
     .catch((error) => {
@@ -157,7 +157,7 @@ export const addProduct = (payload: any, activePlatform: any) => (dispatch: any)
         payload: error,
       });
 
-      getProducts(activePlatform)(dispatch);
-      toast.success('Failed to add product!');
+      getProducts(activePlatform, true)(dispatch);
+      toast.error('Failed to add product!');
     });
 };

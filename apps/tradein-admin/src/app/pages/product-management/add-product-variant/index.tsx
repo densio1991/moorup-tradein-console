@@ -9,7 +9,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   ADD_PRODUCT_PAYLOAD,
   ADD_PRODUCT_VARIANT_PAYLOAD,
+  ADD_PRODUCT_VARIANT_PRICING_PAYLOAD,
   AppButton,
+  CURRENCIES,
+  ProductVariant,
+  ProductVariantPricing,
   StyledInput,
   StyledReactSelect,
   capitalizeFirstLetter,
@@ -102,15 +106,11 @@ const StyledIcon = styled(FontAwesomeIcon)<{
   }
 `;
 
-interface FormValues {
-  name: string;
-  sku: string;
-  type: string;
-  status: string;
-  image_url: string;
-  site_url: string;
-  [key: string]: any; // Index signature to allow dynamic access
-}
+const PricingContainer = styled.div`
+  box-shadow: 0px 1px 0px 0px #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+`;
 
 export function AddProductVariantForm() {
   const {
@@ -137,7 +137,7 @@ export function AddProductVariantForm() {
     setSideModalState({ ...sideModalState, view: null, open: false });
   };
 
-  const formik = useFormik<FormValues[]>({
+  const formik = useFormik({
     initialValues: [ADD_PRODUCT_VARIANT_PAYLOAD],
     onSubmit,
   });
@@ -159,6 +159,10 @@ export function AddProductVariantForm() {
     .sort((a: { label: string }, b: { label: any }) =>
       a.label.localeCompare(b.label),
     );
+
+  const currencies = CURRENCIES?.sort(
+    (a: { label: string }, b: { label: any }) => a.label.localeCompare(b.label),
+  );
 
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
@@ -189,6 +193,47 @@ export function AddProductVariantForm() {
     }
   };
 
+  const addPricingToVariant = (variantIndex: number, pricingPayload: any) => {
+    formik.setValues((prevValues: any) => {
+      const updatedVariants = prevValues.map((variant: any, index: number) => {
+        if (index === variantIndex) {
+          return {
+            ...variant,
+            pricing: variant?.pricing
+              ? [...variant.pricing, pricingPayload]
+              : [pricingPayload],
+          };
+        }
+        return variant;
+      });
+
+      return updatedVariants;
+    });
+  };
+
+  const handlePricingChange = (
+    variantIndex: number,
+    priceIndex: number,
+    field: string,
+    value: any,
+  ) => {
+    formik.setFieldValue(
+      `[${variantIndex}].pricing[${priceIndex}].${field}`,
+      value,
+    );
+  };
+
+  const handlePricingOnBlur = (
+    variantIndex: number,
+    priceIndex: number,
+    field: string,
+  ) => {
+    formik.setFieldTouched(
+      `[${variantIndex}].pricing[${priceIndex}].${field}`,
+      true,
+    );
+  };
+
   return (
     <FormWrapper>
       <FormTitle>Add Product Variant</FormTitle>
@@ -206,7 +251,7 @@ export function AddProductVariantForm() {
       <FormContainer onSubmit={formik.handleSubmit}>
         <FormGroup>
           <AccordionContainer>
-            {formik.values.map((item, index) => (
+            {formik.values.map((item: ProductVariant, index: number) => (
               <AccordionInnerContainer key={index}>
                 <AccordionHeaderContainer>
                   <AccordionHeader
@@ -341,6 +386,270 @@ export function AddProductVariantForm() {
                       errorMessage="Site URL is required."
                     />
                   </FormGroup>
+                  <FormGroup>
+                    <span />
+                    <AppButton
+                      type="button"
+                      width="fit-content"
+                      onClick={() =>
+                        addPricingToVariant(
+                          index,
+                          ADD_PRODUCT_VARIANT_PRICING_PAYLOAD,
+                        )
+                      }
+                      disabled={
+                        item?.pricing?.length > 0 &&
+                        hasEmptyValueInArray(item?.pricing)
+                      }
+                    >
+                      Add Prices
+                    </AppButton>
+                  </FormGroup>
+                  {item?.pricing.map(
+                    (price: ProductVariantPricing, priceIndex: any) => {
+                      const pricingTouched = formik.touched[index]?.pricing;
+
+                      return (
+                        <PricingContainer key={priceIndex}>
+                          <FormGroup>
+                            <StyledReactSelect
+                              label={'Currency'}
+                              name={`pricing[${index}][${priceIndex}].currency`}
+                              isMulti={false}
+                              options={currencies}
+                              placeholder={'Select currency'}
+                              value={price.currency}
+                              onChange={(selected) =>
+                                handlePricingChange(
+                                  index,
+                                  priceIndex,
+                                  'currency',
+                                  selected.value,
+                                )
+                              }
+                              onBlur={() =>
+                                handlePricingOnBlur(
+                                  index,
+                                  priceIndex,
+                                  'currency',
+                                )
+                              }
+                              error={Boolean(
+                                pricingTouched &&
+                                  pricingTouched[priceIndex]?.currency &&
+                                  isEmpty(price.currency),
+                              )}
+                              errorMessage="Currency is required."
+                            />
+                          </FormGroup>
+                          <FormGroup>
+                            <StyledInput
+                              type="text"
+                              id={`pricing[${index}][${priceIndex}].working`}
+                              label={'Working'}
+                              name={`pricing[${index}][${priceIndex}].working`}
+                              placeholder={'0.00'}
+                              onChange={(e) => {
+                                let inputValue = e.target.value;
+                                inputValue = inputValue.replace(/[^0-9.]/g, '');
+
+                                const dotCount =
+                                  inputValue.split('.').length - 1;
+                                if (dotCount > 1) {
+                                  inputValue = inputValue.substring(
+                                    0,
+                                    inputValue.lastIndexOf('.'),
+                                  );
+                                }
+
+                                if (inputValue.includes('.')) {
+                                  const parts = inputValue.split('.');
+                                  inputValue = `${parts[0]}.${parts[1].slice(0, 2)}`;
+                                }
+
+                                handlePricingChange(
+                                  index,
+                                  priceIndex,
+                                  'working',
+                                  inputValue === '' ? '' : inputValue,
+                                );
+                              }}
+                              onBlur={(e) => {
+                                let inputValue = e.target.value;
+                                if (inputValue !== '') {
+                                  if (inputValue.startsWith('.')) {
+                                    inputValue = `0${inputValue}`;
+                                  }
+
+                                  const numericValue = parseFloat(inputValue);
+
+                                  handlePricingChange(
+                                    index,
+                                    priceIndex,
+                                    'working',
+                                    isNaN(numericValue) ? '' : numericValue,
+                                  );
+                                }
+                              }}
+                              value={price.working}
+                            />
+                            <StyledInput
+                              type="text"
+                              id={`pricing[${index}][${priceIndex}].working_damaged`}
+                              label={'Damaged but Working'}
+                              name={`pricing[${index}][${priceIndex}].working_damaged`}
+                              placeholder={'0.00'}
+                              onChange={(e) => {
+                                let inputValue = e.target.value;
+                                inputValue = inputValue.replace(/[^0-9.]/g, '');
+
+                                const dotCount =
+                                  inputValue.split('.').length - 1;
+                                if (dotCount > 1) {
+                                  inputValue = inputValue.substring(
+                                    0,
+                                    inputValue.lastIndexOf('.'),
+                                  );
+                                }
+
+                                if (inputValue.includes('.')) {
+                                  const parts = inputValue.split('.');
+                                  inputValue = `${parts[0]}.${parts[1].slice(0, 2)}`;
+                                }
+
+                                handlePricingChange(
+                                  index,
+                                  priceIndex,
+                                  'working_damaged',
+                                  inputValue === '' ? '' : inputValue,
+                                );
+                              }}
+                              onBlur={(e) => {
+                                let inputValue = e.target.value;
+                                if (inputValue !== '') {
+                                  if (inputValue.startsWith('.')) {
+                                    inputValue = `0${inputValue}`;
+                                  }
+
+                                  const numericValue = parseFloat(inputValue);
+
+                                  handlePricingChange(
+                                    index,
+                                    priceIndex,
+                                    'working_damaged',
+                                    isNaN(numericValue) ? '' : numericValue,
+                                  );
+                                }
+                              }}
+                              value={price.working_damaged}
+                            />
+                          </FormGroup>
+                          <FormGroup>
+                            <StyledInput
+                              type="text"
+                              id={`pricing[${index}][${priceIndex}].not_working`}
+                              label={'Not Working'}
+                              name={`pricing[${index}][${priceIndex}].not_working`}
+                              placeholder={'0.00'}
+                              onChange={(e) => {
+                                let inputValue = e.target.value;
+                                inputValue = inputValue.replace(/[^0-9.]/g, '');
+
+                                const dotCount =
+                                  inputValue.split('.').length - 1;
+                                if (dotCount > 1) {
+                                  inputValue = inputValue.substring(
+                                    0,
+                                    inputValue.lastIndexOf('.'),
+                                  );
+                                }
+
+                                if (inputValue.includes('.')) {
+                                  const parts = inputValue.split('.');
+                                  inputValue = `${parts[0]}.${parts[1].slice(0, 2)}`;
+                                }
+
+                                handlePricingChange(
+                                  index,
+                                  priceIndex,
+                                  'not_working',
+                                  inputValue === '' ? '' : inputValue,
+                                );
+                              }}
+                              onBlur={(e) => {
+                                let inputValue = e.target.value;
+                                if (inputValue !== '') {
+                                  if (inputValue.startsWith('.')) {
+                                    inputValue = `0${inputValue}`;
+                                  }
+
+                                  const numericValue = parseFloat(inputValue);
+
+                                  handlePricingChange(
+                                    index,
+                                    priceIndex,
+                                    'not_working',
+                                    isNaN(numericValue) ? '' : numericValue,
+                                  );
+                                }
+                              }}
+                              value={price.not_working}
+                            />
+                            <StyledInput
+                              type="text"
+                              id={`pricing[${index}][${priceIndex}].not_working_damaged`}
+                              label={'Damaged and Not Working'}
+                              name={`pricing[${index}][${priceIndex}].not_working_damaged`}
+                              placeholder={'0.00'}
+                              onChange={(e) => {
+                                let inputValue = e.target.value;
+                                inputValue = inputValue.replace(/[^0-9.]/g, '');
+
+                                const dotCount =
+                                  inputValue.split('.').length - 1;
+                                if (dotCount > 1) {
+                                  inputValue = inputValue.substring(
+                                    0,
+                                    inputValue.lastIndexOf('.'),
+                                  );
+                                }
+
+                                if (inputValue.includes('.')) {
+                                  const parts = inputValue.split('.');
+                                  inputValue = `${parts[0]}.${parts[1].slice(0, 2)}`;
+                                }
+
+                                handlePricingChange(
+                                  index,
+                                  priceIndex,
+                                  'not_working_damaged',
+                                  inputValue === '' ? '' : inputValue,
+                                );
+                              }}
+                              onBlur={(e) => {
+                                let inputValue = e.target.value;
+                                if (inputValue !== '') {
+                                  if (inputValue.startsWith('.')) {
+                                    inputValue = `0${inputValue}`;
+                                  }
+
+                                  const numericValue = parseFloat(inputValue);
+
+                                  handlePricingChange(
+                                    index,
+                                    priceIndex,
+                                    'not_working_damaged',
+                                    isNaN(numericValue) ? '' : numericValue,
+                                  );
+                                }
+                              }}
+                              value={price.not_working_damaged}
+                            />
+                          </FormGroup>
+                        </PricingContainer>
+                      );
+                    },
+                  )}
                 </AccordionContent>
               </AccordionInnerContainer>
             ))}
