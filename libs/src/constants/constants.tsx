@@ -230,6 +230,11 @@ export const ADD_PRODUCT_VARIANT_PRICING_PAYLOAD = {
   not_working: 0
 }
 
+export const ADD_PRODUCT_VARIANT_ATTRIBUTES_PAYLOAD = {
+  id: '',
+  name: '',
+}
+
 export interface ProductVariant {
   name: string;
   sku: string;
@@ -238,17 +243,8 @@ export interface ProductVariant {
   site_url: string;
   status: string;
   pricing: ProductVariantPricing[];
+  attributes: ProductVariantAttributes[];
 }
-
-export const ADD_PRODUCT_VARIANT_PAYLOAD: ProductVariant = {
-  name: '',
-  sku: '',
-  type: '',
-  image_url: '',
-  site_url: '',
-  status: '',
-  pricing: [ADD_PRODUCT_VARIANT_PRICING_PAYLOAD],
-};
 
 export interface ProductVariantPricing {
   currency: string;
@@ -257,6 +253,11 @@ export interface ProductVariantPricing {
   working_damaged: number;
   not_working_damaged: number;
   not_working: number;
+}
+
+export interface ProductVariantAttributes {
+  id: string;
+  name: string;
 }
 
 export const CURRENCIES = [
@@ -421,4 +422,10 @@ export const CURRENCIES = [
   { value: 'ZAR', label: 'South African Rand (ZAR)' },
   { value: 'ZMW', label: 'Zambian Kwacha (ZMW)' },
   { value: 'ZWL', label: 'Zimbabwean Dollar (ZWL)' }
+]
+
+export const ATTRIBUTES = [
+  { value: 'processor', label: 'CPU' },
+  { value: 'case-size', label: 'Screen Size' },
+  { value: 'size', label: 'Storage' },
 ]
