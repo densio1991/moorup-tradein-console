@@ -8,7 +8,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   ADD_PRODUCT_PAYLOAD,
-  ADD_PRODUCT_VARIANT_PAYLOAD,
   ADD_PRODUCT_VARIANT_PRICING_PAYLOAD,
   AppButton,
   CURRENCIES,
@@ -16,7 +15,6 @@ import {
   ProductVariantPricing,
   StyledInput,
   StyledReactSelect,
-  capitalizeFirstLetter,
   hasEmptyValueInArray,
   useCommon,
   useProduct,
@@ -43,7 +41,7 @@ const FormContainer = styled.form`
 
 const FormGroup = styled.div`
   display: flex;
-  align-items: top;
+  align-items: center;
   justify-content: space-between;
   gap: 10px;
   margin-bottom: 10px;
@@ -119,7 +117,7 @@ export function AddProductVariantForm() {
     setIncludeProductVariant,
     addProduct,
   } = useProduct();
-  const { productTypes, productStatuses, addProductPayload } = productState;
+  const { addProductPayload } = productState;
 
   const { state: commonState, setSideModalState } = useCommon();
   const { sideModalState } = commonState;
@@ -137,28 +135,38 @@ export function AddProductVariantForm() {
     setSideModalState({ ...sideModalState, view: null, open: false });
   };
 
+  const PRODUCT_VARIANT_PAYLOAD = {
+    name: '',
+    sku: '',
+    type: addProductPayload.type,
+    image_url: '',
+    site_url: '',
+    status: addProductPayload.status,
+    pricing: [ADD_PRODUCT_VARIANT_PRICING_PAYLOAD],
+  };
+
   const formik = useFormik({
-    initialValues: [ADD_PRODUCT_VARIANT_PAYLOAD],
+    initialValues: [PRODUCT_VARIANT_PAYLOAD],
     onSubmit,
   });
 
-  const types = productTypes
-    ?.map((item: any) => ({
-      value: item,
-      label: capitalizeFirstLetter(item),
-    }))
-    .sort((a: { label: string }, b: { label: any }) =>
-      a.label.localeCompare(b.label),
-    );
+  // const types = productTypes
+  //   ?.map((item: any) => ({
+  //     value: item,
+  //     label: capitalizeFirstLetter(item),
+  //   }))
+  //   .sort((a: { label: string }, b: { label: any }) =>
+  //     a.label.localeCompare(b.label),
+  //   );
 
-  const statuses = productStatuses
-    ?.map((item: any) => ({
-      value: item,
-      label: capitalizeFirstLetter(item),
-    }))
-    .sort((a: { label: string }, b: { label: any }) =>
-      a.label.localeCompare(b.label),
-    );
+  // const statuses = productStatuses
+  //   ?.map((item: any) => ({
+  //     value: item,
+  //     label: capitalizeFirstLetter(item),
+  //   }))
+  //   .sort((a: { label: string }, b: { label: any }) =>
+  //     a.label.localeCompare(b.label),
+  //   );
 
   const currencies = CURRENCIES?.sort(
     (a: { label: string }, b: { label: any }) => a.label.localeCompare(b.label),
@@ -179,10 +187,7 @@ export function AddProductVariantForm() {
   };
 
   const handleAddNewVariantForm = () => {
-    formik.setValues((prevValues) => [
-      ...prevValues,
-      ADD_PRODUCT_VARIANT_PAYLOAD,
-    ]);
+    formik.setValues((prevValues) => [...prevValues, PRODUCT_VARIANT_PAYLOAD]);
   };
 
   const handleDeleteVariantForm = (indexToDelete: number) => {
@@ -232,6 +237,21 @@ export function AddProductVariantForm() {
       `[${variantIndex}].pricing[${priceIndex}].${field}`,
       true,
     );
+  };
+
+  const handlePricingDelete = (variantIndex: number, priceIndex: number) => {
+    const variantPricing = formik.values[variantIndex].pricing;
+
+    if (variantPricing.length > 1) {
+      if (Array.isArray(variantPricing) && variantPricing.length > priceIndex) {
+        const updatedPricing = [
+          ...variantPricing.slice(0, priceIndex),
+          ...variantPricing.slice(priceIndex + 1),
+        ];
+
+        formik.setFieldValue(`[${variantIndex}].pricing`, updatedPricing);
+      }
+    }
   };
 
   return (
@@ -312,7 +332,7 @@ export function AddProductVariantForm() {
                       errorMessage="SKU is required."
                     />
                   </FormGroup>
-                  <FormGroup>
+                  {/* <FormGroup>
                     <StyledReactSelect
                       label={'Type'}
                       name={`type[${index}]`}
@@ -347,7 +367,7 @@ export function AddProductVariantForm() {
                       )}
                       errorMessage="Status is required."
                     />
-                  </FormGroup>
+                  </FormGroup> */}
                   <FormGroup>
                     <StyledInput
                       type="text"
@@ -408,7 +428,6 @@ export function AddProductVariantForm() {
                   {item?.pricing.map(
                     (price: ProductVariantPricing, priceIndex: any) => {
                       const pricingTouched = formik.touched[index]?.pricing;
-
                       return (
                         <PricingContainer key={priceIndex}>
                           <FormGroup>
@@ -440,6 +459,15 @@ export function AddProductVariantForm() {
                                   isEmpty(price.currency),
                               )}
                               errorMessage="Currency is required."
+                            />
+                            <StyledIcon
+                              icon={faTrash}
+                              color="#ccc"
+                              hovercolor="#f44336"
+                              disabled={item?.pricing.length <= 1}
+                              onClick={() =>
+                                handlePricingDelete(index, priceIndex)
+                              }
                             />
                           </FormGroup>
                           <FormGroup>

@@ -221,6 +221,15 @@ export const ADD_PRODUCT_PAYLOAD = {
   platforms: [],
 }
 
+export const ADD_PRODUCT_VARIANT_PRICING_PAYLOAD = {
+  currency: '',
+  amount: 0,
+  working: 0,
+  working_damaged: 0,
+  not_working_damaged: 0,
+  not_working: 0
+}
+
 export interface ProductVariant {
   name: string;
   sku: string;
@@ -238,7 +247,7 @@ export const ADD_PRODUCT_VARIANT_PAYLOAD: ProductVariant = {
   image_url: '',
   site_url: '',
   status: '',
-  pricing: [],
+  pricing: [ADD_PRODUCT_VARIANT_PRICING_PAYLOAD],
 };
 
 export interface ProductVariantPricing {
@@ -248,15 +257,6 @@ export interface ProductVariantPricing {
   working_damaged: number;
   not_working_damaged: number;
   not_working: number;
-}
-
-export const ADD_PRODUCT_VARIANT_PRICING_PAYLOAD = {
-  currency: '',
-  amount: 0,
-  working: 0,
-  working_damaged: 0,
-  not_working_damaged: 0,
-  not_working: 0
 }
 
 export const CURRENCIES = [
