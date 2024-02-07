@@ -1,14 +1,11 @@
-import { InputHTMLAttributes } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { isEmpty } from 'lodash';
+import { InputHTMLAttributes, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { isImageUrl } from '../../helpers';
 
-interface StyledInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-  error?: boolean;
-  errorMessage?: string;
-  name: string;
-}
-
-const StyledInputContainer = styled.div<{ error?: boolean; }>`
+const StyledInputContainer = styled.div<{ error?: boolean }>`
+  position: relative;
   display: flex;
   flex-direction: column;
   margin-bottom: ${(props) => (props.error ? '0px' : '20px')};
@@ -43,6 +40,24 @@ const ErrorMessage = styled.div`
   margin-top: 5px;
 `;
 
+const HoverImage = styled.img<{ positionX: number; positionY: number }>`
+  position: fixed;
+  top: ${(props) => props.positionY}px;
+  left: ${(props) => props.positionX}px;
+  z-index: 1;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+`;
+
+interface StyledInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+  error?: boolean;
+  errorMessage?: string;
+  name: string;
+  enableHoverImage?: boolean;
+  value: any;
+}
+
 export function StyledInput({
   label,
   type,
@@ -50,9 +65,41 @@ export function StyledInput({
   error,
   errorMessage,
   name,
+  enableHoverImage,
+  value,
   onBlur,
   ...inputProps
 }: StyledInputProps): JSX.Element {
+  const [isHovered, setIsHovered] = useState<boolean>(false);
+  const [positionX, setPositionX] = useState<number>(0);
+  const [positionY, setPositionY] = useState<number>(0);
+  const [isValidImage, setIsValidImage] = useState<boolean>(true);
+
+  const handleHover = (e: React.MouseEvent<HTMLInputElement>) => {
+    setIsHovered(true);
+    setPositionX(e.clientX);
+    setPositionY(e.clientY);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  const handleImageError = () => {
+    setIsValidImage(false);
+  };
+
+  // Validate image URL
+  useEffect(() => {
+    const validateImageUrl = async () => {
+      if (enableHoverImage && value) {
+        const isValid = await isImageUrl(value);
+        setIsValidImage(isValid);
+      }
+    };
+    validateImageUrl();
+  }, [enableHoverImage, value]);
+
   return (
     <StyledInputContainer error={error}>
       <StyledInputLabel>{label}</StyledInputLabel>
@@ -61,9 +108,31 @@ export function StyledInput({
         placeholder={placeholder}
         onBlur={onBlur}
         error={error}
+        onMouseEnter={enableHoverImage ? handleHover : undefined}
+        onMouseMove={enableHoverImage ? handleHover : undefined}
+        onMouseLeave={enableHoverImage ? handleMouseLeave : undefined}
+        value={value}
         {...inputProps}
       />
-      {error && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      {(error || (enableHoverImage && isHovered && !isValidImage)) && (
+        <ErrorMessage>
+          {(enableHoverImage &&
+            isHovered &&
+            !isValidImage &&
+            !isEmpty(value) &&
+            'Invalid image url.') ||
+            errorMessage}
+        </ErrorMessage>
+      )}
+      {enableHoverImage && isHovered && isValidImage && !isEmpty(value) && (
+        <HoverImage
+          src={value}
+          alt="Hovered Image"
+          positionX={positionX}
+          positionY={positionY}
+          onError={handleImageError}
+        />
+      )}
     </StyledInputContainer>
   );
 }

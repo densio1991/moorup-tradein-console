@@ -218,3 +218,24 @@ export function exportToCSV(data: any) {
     document.body.removeChild(link);
   }
 };
+
+export async function isImageUrl(url: string): Promise<boolean> {
+  return new Promise<boolean>((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = url;
+    
+    // Set a timeout to handle the case when the request takes too long to load
+    const timeout = setTimeout(() => {
+      img.src = '';
+      resolve(false);
+    }, 500);
+
+    // Clear the timeout if the image loads successfully
+    img.onload = () => {
+      clearTimeout(timeout);
+      resolve(true);
+    };
+  });
+}

@@ -338,6 +338,7 @@ export function AddProductForm() {
             onBlur={formik.handleBlur}
             error={Boolean(formik.touched.image_url && formik.errors.image_url)}
             errorMessage={formik.errors.image_url}
+            enableHoverImage={true}
           />
         </FormGroup>
         <FormGroup>
