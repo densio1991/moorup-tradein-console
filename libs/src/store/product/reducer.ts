@@ -17,6 +17,9 @@ const productState = {
   addProductPayload: ADD_PRODUCT_PAYLOAD,
   includeProductVariant: false,
   isAddingProduct: false,
+  product: {},
+  isFetchingProduct: false,
+  isUpdatingProduct: false,
 };
 
 const productReducer = (state: any, action: any) => {
@@ -169,6 +172,57 @@ const productReducer = (state: any, action: any) => {
         isAddingProduct: false,
         products: [],
         isFetchingProducts: true,
+      };
+    }
+
+    case types.FETCH_PRODUCT.baseType: {
+      return {
+        ...state,
+        isFetchingProduct: true,
+        product: {},
+      };
+    }
+    case types.FETCH_PRODUCT.SUCCESS: {
+      return {
+        ...state,
+        isFetchingProduct: false,
+        product: action.payload?.data,
+      };
+    }
+    case types.FETCH_PRODUCT.FAILED: {
+      return {
+        ...state,
+        isFetchingProduct: false,
+        product: {},
+      };
+    }
+
+    case types.CLEAR_PRODUCT:
+      return {
+        ...state,
+        product: {},
+      };
+
+    case types.UPDATE_PRODUCT.baseType: {
+      return {
+        ...state,
+        isUpdatingProduct: true,
+      };
+    }
+    case types.UPDATE_PRODUCT.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingProduct: false,
+        product: {},
+        isFetchingProduct: true,
+      };
+    }
+    case types.UPDATE_PRODUCT.FAILED: {
+      return {
+        ...state,
+        isUpdatingProduct: false,
+        product: {},
+        isFetchingProduct: true,
       };
     }
 

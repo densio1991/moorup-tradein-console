@@ -9,6 +9,7 @@ import {
   PromotionsPage,
   UserManagementPage,
 } from './pages';
+import { EditProductPage } from './pages/product-management/edit-product';
 
 export function App() {
   return (
@@ -21,6 +22,7 @@ export function App() {
             path="/dashboard/product"
             element={<ProductManagementPage />}
           />
+          <Route path="/dashboard/product/:id" element={<EditProductPage />} />
           <Route path="/dashboard/order" element={<OrderManagementPage />} />
           <Route path="/dashboard/user" element={<UserManagementPage />} />
           <Route path="/dashboard/promotion" element={<PromotionsPage />} />

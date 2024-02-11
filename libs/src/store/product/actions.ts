@@ -161,3 +161,60 @@ export const addProduct = (payload: any, activePlatform: any) => (dispatch: any)
       toast.error('Failed to add product!');
     });
 };
+
+export const getProduct = (id: string) => (dispatch: any) => {
+  dispatch({
+    type: types.FETCH_PRODUCT.baseType,
+    payload: id,
+  });
+
+  axiosInstance()
+    .get(`/api/products/${id}`)
+    .then((response) => {
+      dispatch({
+        type: types.FETCH_PRODUCT.SUCCESS,
+        payload: response?.data,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.FETCH_PRODUCT.FAILED,
+        payload: error,
+      });
+    });
+};
+
+export const clearProduct = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CLEAR_PRODUCT,
+    payload,
+  });
+};
+
+export const updateProduct = (id: string, payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.UPDATE_PRODUCT.baseType,
+    payload: payload,
+  });
+
+  axiosInstance()
+    .patch(`/api/products/${id}`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.UPDATE_PRODUCT.SUCCESS,
+        payload: response?.data,
+      });
+
+      getProduct(id)(dispatch);
+      toast.success('Product successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.UPDATE_PRODUCT.FAILED,
+        payload: error,
+      });
+
+      getProduct(id)(dispatch);
+      toast.error('Failed to update product!');
+    });
+};

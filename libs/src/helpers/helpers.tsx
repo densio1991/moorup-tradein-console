@@ -239,3 +239,13 @@ export async function isImageUrl(url: string): Promise<boolean> {
     };
   });
 }
+
+export function compareObjects(currentObject: any, newObject: any) {
+  const currentKeys = Object.keys(currentObject);
+  const newKeys = Object.keys(newObject);
+
+  if (currentKeys.length !== newKeys.length) return false;
+
+  // eslint-disable-next-line max-len
+  return currentKeys.every((key: string) => Object.prototype.hasOwnProperty.call(newObject, key) && currentObject[key] === newObject[key]);
+}

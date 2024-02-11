@@ -113,8 +113,8 @@ export function StyledReactSelect({
         options={options}
         placeholder={placeholder}
         value={isMulti
-          ? options.filter((option) => value?.includes(option.value))
-          : options.find((option) => value === option?.value) || null}     
+          ? options?.filter((option) => value?.includes(option.value))
+          : options?.find((option) => value === option?.value) || null}     
         onChange={onChange}
         onBlur={onBlur}
         blurInputOnSelect={false}

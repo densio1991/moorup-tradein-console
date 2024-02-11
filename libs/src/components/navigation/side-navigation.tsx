@@ -81,7 +81,7 @@ export function SideBar(): JSX.Element {
           {SIDENAV_ITEMS.map((item) => (
             <NavLink
               key={item.url}
-              active={pathname === item.url}
+              active={item.activeUrl?.test(pathname)}
               onClick={() => navigate(item.url)}
             >
               <span>
