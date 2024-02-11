@@ -5,13 +5,12 @@ import { isEmpty } from 'lodash';
 import { ReactNode, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import {
-  capitalizeFirstLetter,
-  parseDateString,
   sortArray,
   sortByKey,
 } from '../../helpers';
 import { StyledMenuIcon } from '../menu';
 import Pagination from './pagination';
+import { useNavigate } from 'react-router-dom';
 
 interface ThProps {
   key: any;
@@ -289,7 +288,7 @@ const PAGE_SIZE = 10;
 export function Table({
   label,
   headers,
-  rows,
+  rows = [],
   isLoading,
   enableCheckbox = false,
   menuItems,
@@ -298,6 +297,7 @@ export function Table({
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const handleSort = (key: string) => {
     let direction = 'asc';
@@ -309,6 +309,13 @@ export function Table({
     setSortConfig({ key, direction });
   };
 
+  const handleRowClick = (row: any) => {
+    if (!isEmpty(row?.viewURL)) {
+      navigate(row?.viewURL);
+    }
+  }
+
+  // TODO: Make the parser a parameter for Table component
   const parseRowValue = (
     header: string | number,
     row: { [x: string]: string },
@@ -320,70 +327,6 @@ export function Table({
         return row['_id'];
       }
 
-      case 'First Name': {
-        if (isEmpty(row['first_name'])) return '--';
-        return row['first_name'];
-      }
-
-      case 'Last Name': {
-        if (isEmpty(row['last_name'])) return '--';
-        return row['last_name'];
-      }
-
-      case 'Email': {
-        if (isEmpty(row['email'])) return '--';
-        return row['email'];
-      }
-
-      case 'Status': {
-        if (isEmpty(row['status'])) return '--';
-        return capitalizeFirstLetter(row['status']);
-      }
-
-      case 'Display Name': {
-        if (isEmpty(row['display_name'])) return '--';
-        return row['display_name'];
-      }
-
-      case 'Brand': {
-        if (isEmpty(row['brand'])) return '--';
-        return capitalizeFirstLetter(row['brand']);
-      }
-
-      case 'Model': {
-        if (isEmpty(row['model'])) return '--';
-        return capitalizeFirstLetter(row['model']);
-      }
-
-      case 'Year': {
-        if (isEmpty(row['year'])) return '--';
-        return row['year'];
-      }
-
-      case 'Name': {
-        if (isEmpty(row['name'])) return '--';
-        return capitalizeFirstLetter(row['name']);
-      }
-
-      case 'Products': {
-        if (isEmpty(row['products'])) return '--';
-        const productNames = Array.isArray(row?.products)
-        ? row.products.map((product: { name: any }) => product.name)
-        : [];
-        const concatenatedNames = productNames.join(', ');
-        return concatenatedNames;
-      }
-
-      case 'Start Date': {
-        if (isEmpty(row['start_date'])) return '--';
-        return parseDateString(row['start_date']);
-      }
-
-      case 'End Date': {
-        if (isEmpty(row['end_date'])) return '--';
-        return parseDateString(row['end_date']);
-      }
-
       case 'Actions': {
         return (
           <StyledMenuIcon menuItems={menuItems} rowData={row} />
@@ -392,7 +335,7 @@ export function Table({
 
       default:
         if (isEmpty(row[header])) return '--';
-        return capitalizeFirstLetter(row[header]);
+        return row[header];
     }
   };
 
@@ -464,7 +407,7 @@ export function Table({
           </Thead>
           <Tbody>
             {itemsToDisplay?.map((row: any, index: any) => (
-              <Tr key={index}>
+              <Tr key={index} onClick={() => handleRowClick(row)}>
                 {sortedHeaders?.map((header) => (
                   <Td key={`${index}-${header.label}`} alignRight={header.label === 'Actions'}>
                     <span>{parseRowValue(header.label, row, index)}</span>
