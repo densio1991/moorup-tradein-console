@@ -10,12 +10,14 @@ import {
   sortArray,
   sortByKey,
 } from '../../helpers';
+import { StyledMenuIcon } from '../menu';
 import Pagination from './pagination';
 
 interface ThProps {
   key: any;
   enableSort?: boolean;
   sorted?: boolean;
+  alignRight?: boolean;
 }
 interface TableProps {
   label: string;
@@ -23,6 +25,7 @@ interface TableProps {
   rows: Array<{ [key: string]: string }>;
   isLoading: boolean;
   enableCheckbox?: boolean;
+  menuItems?: any;
   rightControls?: any;
 }
 
@@ -138,17 +141,21 @@ const Th = styled.th<ThProps>`
     display: inline-block;
     margin-left: 5px;
   }
+
+  ${({ alignRight }) => alignRight && 'text-align-last: right;'}
 `;
 
 const Tr = styled.tr``;
 
-const Td = styled.td`
+const Td = styled.td<{ alignRight: boolean }>`
   padding: 15px 10px;
   border-bottom: 1px solid #e1e4e8;
   color: #333;
   font-size: 12px;
   line-height: 18px;
   white-space: nowrap;
+
+  ${({ alignRight }) => alignRight && 'text-align-last: right;'}
 `;
 
 const LoaderText = styled.div`
@@ -285,6 +292,7 @@ export function Table({
   rows,
   isLoading,
   enableCheckbox = false,
+  menuItems,
   rightControls,
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
@@ -376,6 +384,12 @@ export function Table({
         return parseDateString(row['end_date']);
       }
 
+      case 'Actions': {
+        return (
+          <StyledMenuIcon menuItems={menuItems} rowData={row} />
+        )
+      }
+
       default:
         if (isEmpty(row[header])) return '--';
         return capitalizeFirstLetter(row[header]);
@@ -431,6 +445,7 @@ export function Table({
                   key={header.label}
                   onClick={() => header.enableSort && handleSort(header.keyName)}
                   className={header.enableSort ? 'enableSort' : ''}
+                  alignRight={header.label === 'Actions'}
                 >
                   {header.label}
                   {header.enableSort && (
@@ -451,7 +466,7 @@ export function Table({
             {itemsToDisplay?.map((row: any, index: any) => (
               <Tr key={index}>
                 {sortedHeaders?.map((header) => (
-                  <Td key={`${index}-${header.label}`}>
+                  <Td key={`${index}-${header.label}`} alignRight={header.label === 'Actions'}>
                     <span>{parseRowValue(header.label, row, index)}</span>
                   </Td>
                 ))}

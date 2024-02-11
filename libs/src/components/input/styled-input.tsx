@@ -45,7 +45,6 @@ const HoverImage = styled.img<{ positionX: number; positionY: number }>`
   top: ${(props) => props.positionY}px;
   left: ${(props) => props.positionX}px;
   z-index: 1;
-  border: 1px solid #ccc;
   margin-top: 10px;
 `;
 
