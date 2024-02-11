@@ -13,31 +13,37 @@ export const SIDENAV_ITEMS = [
   {
     title: 'Home',
     url: '/dashboard',
+    activeUrl: /^\/dashboard$/,
     icon: faHouse,
   },
   {
     title: 'Product Management',
     url: '/dashboard/product',
+    activeUrl: /^\/dashboard\/product/,
     icon: faCube,
   },
   {
     title: 'Order Management',
     url: '/dashboard/order',
+    activeUrl: /^\/dashboard\/order/,
     icon: faFileInvoice,
   },
   {
     title: 'User Management',
     url: '/dashboard/user',
+    activeUrl: /^\/dashboard\/user/,
     icon: faUsers,
   },
   {
     title: 'Promotions',
     url: '/dashboard/promotion',
+    activeUrl: /^\/dashboard\/promotion/,
     icon: faBullhorn,
   },
   {
     title: 'Payment',
     url: '/dashboard/payment',
+    activeUrl: /^\/dashboard\/payment/,
     icon: faCreditCard,
   },
 ]
