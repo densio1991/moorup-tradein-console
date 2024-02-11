@@ -9,6 +9,8 @@ import {
   sortByKey
 } from '../../helpers';
 import Pagination from './pagination';
+import { useNavigate } from 'react-router-dom';
+import { StyledMenuIcon } from '../menu';
 
 interface ThProps {
   key: any;
@@ -312,7 +314,7 @@ const PAGE_SIZE = 10;
 export function Table({
   label,
   headers,
-  rows,
+  rows = [],
   isLoading,
   enableCheckbox = false,
   menuItems,
@@ -322,6 +324,7 @@ export function Table({
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const handleSort = (key: string) => {
     let direction = 'asc';
@@ -333,6 +336,13 @@ export function Table({
     setSortConfig({ key, direction });
   };
 
+  const handleRowClick = (row: any) => {
+    if (!isEmpty(row?.viewURL)) {
+      navigate(row?.viewURL);
+    }
+  }
+
+  // TODO: Make the parser a parameter for Table component
   const parseRowValue = (
     header: any,
     row: { [x: string]: any },
@@ -341,6 +351,18 @@ export function Table({
 
     if (parsingFunction) {
       return parsingFunction({ row, menuItems });
+    }
+
+    switch(header.label) {
+      case 'Actions': {
+        return (
+          <StyledMenuIcon menuItems={menuItems} rowData={row} />
+        )
+      }
+
+      default:
+        if (isEmpty(row[header])) return '--';
+        return row[header];
     }
     
     return row[header.keyName] || '--';
@@ -416,7 +438,7 @@ export function Table({
           </Thead>
           <Tbody>
             {itemsToDisplay?.map((row: any, index: any) => (
-              <Tr key={index}>
+              <Tr key={index} onClick={() => handleRowClick(row)}>
                 {sortedHeaders?.map((header) => (
                   <Td key={`${index}-${header.label}`} alignRight={header.label === 'Actions'}>
                     <span>{parseRowValue(header, row)}</span>
