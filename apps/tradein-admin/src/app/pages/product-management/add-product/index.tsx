@@ -306,27 +306,6 @@ export function AddProductForm() {
           />
         </FormGroup>
         <FormGroup>
-          <StyledReactSelect
-            label="Platforms"
-            name="platforms"
-            options={platforms}
-            isMulti
-            placeholder="Select platform"
-            value={formik.values.platforms}
-            onChange={(selectedPlatforms) => {
-              const platformValues = selectedPlatforms.map(
-                (option: any) => option.value,
-              );
-              formik.setFieldValue('platforms', platformValues, true);
-            }}
-            onBlur={() => formik.setFieldTouched('platforms')}
-            error={Boolean(
-              formik.touched.platforms && isEmpty(formik.values.platforms),
-            )}
-            errorMessage="At least one platform is required"
-          />
-        </FormGroup>
-        <FormGroup>
           <StyledInput
             type="text"
             id="image_url"
@@ -353,6 +332,27 @@ export function AddProductForm() {
             onBlur={formik.handleBlur}
             error={Boolean(formik.touched.site_url && formik.errors.site_url)}
             errorMessage={formik.errors.site_url}
+          />
+        </FormGroup>
+        <FormGroup>
+          <StyledReactSelect
+            label="Platforms"
+            name="platforms"
+            options={platforms}
+            isMulti
+            placeholder="Select platform"
+            value={formik.values.platforms}
+            onChange={(selectedPlatforms) => {
+              const platformValues = selectedPlatforms.map(
+                (option: any) => option.value,
+              );
+              formik.setFieldValue('platforms', platformValues, true);
+            }}
+            onBlur={() => formik.setFieldTouched('platforms')}
+            error={Boolean(
+              formik.touched.platforms && isEmpty(formik.values.platforms),
+            )}
+            errorMessage="At least one platform is required"
           />
         </FormGroup>
         <FormGroup>

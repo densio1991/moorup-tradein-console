@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   faDownload,
@@ -5,6 +6,7 @@ import {
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import {
+  ACTIONS_COLUMN,
   ADD_PRODUCT_PAYLOAD,
   AppButton,
   DEFAULT_COLUMN,
@@ -18,10 +20,12 @@ import {
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AddProductForm } from './add-product';
 import { AddProductVariantForm } from './add-product-variant';
 
 export function ProductManagementPage() {
+  const navigate = useNavigate();
   const {
     state,
     getProducts,
@@ -37,7 +41,11 @@ export function ProductManagementPage() {
   const { state: commonState, setSideModalState } = useCommon();
   const { sideModalState } = commonState;
 
-  const headers = [...DEFAULT_COLUMN, ...PRODUCT_MANAGEMENT_COLUMNS];
+  const headers = [
+    ...DEFAULT_COLUMN,
+    ...PRODUCT_MANAGEMENT_COLUMNS,
+    ...ACTIONS_COLUMN,
+  ];
 
   useEffect(() => {
     if (!isEmpty(activePlatform)) {
@@ -72,6 +80,12 @@ export function ProductManagementPage() {
         isLoading={isFetchingProducts}
         headers={headers}
         rows={products || []}
+        menuItems={[
+          {
+            label: 'Edit',
+            action: (value: any) => navigate(`/dashboard/product/${value._id}`),
+          },
+        ]}
         rightControls={
           <>
             <AppButton
