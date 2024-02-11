@@ -45,6 +45,18 @@ export const useProduct = () => {
     actions.addProduct(payload, activePlatform)(dispatch);
   }
 
+  const getProduct = (payload: any) => {
+    actions.getProduct(payload)(dispatch);
+  }
+
+  const clearProduct = (payload: any) => {
+    actions.clearProduct(payload)(dispatch);
+  }
+
+  const updateProduct = (id: string, payload: any) => {
+    actions.updateProduct(id, payload)(dispatch);
+  }
+
   return {
     state: state.product,
     getProducts,
@@ -56,5 +68,8 @@ export const useProduct = () => {
     setAddProductPayload,
     setIncludeProductVariant,
     addProduct,
+    getProduct,
+    clearProduct,
+    updateProduct,
   };
 };
