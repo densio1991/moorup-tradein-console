@@ -4,6 +4,10 @@
 import {
   ADD_PRODUCT_PAYLOAD,
   AppButton,
+  FormContainer,
+  FormGroup,
+  FormWrapper,
+  PageContainer,
   StyledInput,
   StyledReactSelect,
   capitalizeFirstLetter,
@@ -18,48 +22,17 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 
-const PageContainerWrapper = styled.div`
-  display: flex;
-`;
-
-const FormWrapper = styled.div`
-  padding: 20px;
-  width: 100%;
-`;
-
-const FormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  align-items: top;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-`;
-
 const ImageContainer = styled.div`
   max-width: 500px;
   width: 100%;
   overflow: hidden;
-
-  @media (max-width: 639px) {
-    width: 280px;
-    height: 410px;
-  }
-
-  @media (min-width: 640px) {
-    width: 320px;
-    height: 450px;
-  }
 `;
 
 const Image = styled.img`
   width: 100%;
   height: auto;
   display: block;
+  object-fit: cover;
 `;
 
 interface FormValues {
@@ -200,14 +173,14 @@ export function EditProductDetails({ productData }: { productData: any}) {
     );
 
   return (
-    <PageContainerWrapper>
+    <PageContainer>
       <ImageContainer>
         <Image
           src={formik.values?.image_url}
           alt={formik.values?.image_url}
         />
       </ImageContainer>
-      <FormWrapper>
+      <FormWrapper width='100%'>
         <FormContainer onSubmit={formik.handleSubmit}>
           <FormGroup>
             <StyledInput
@@ -406,6 +379,6 @@ export function EditProductDetails({ productData }: { productData: any}) {
           </FormGroup>
         </FormContainer>
       </FormWrapper>
-    </PageContainerWrapper>
+    </PageContainer>
   );
 }

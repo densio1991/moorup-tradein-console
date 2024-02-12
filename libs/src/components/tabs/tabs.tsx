@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-const TabContainer = styled.div`
+const StyledTabContainer = styled.div`
   display: flex;
   margin: 20px 0px;
 `;
 
-const TabButton = styled.button<{ active: boolean }>`
+const StyledTabButton = styled.button<{ active: boolean }>`
   flex: 1;
   padding: 10px 20px;
   background-color: transparent;
@@ -22,7 +22,7 @@ const TabButton = styled.button<{ active: boolean }>`
   }
 `;
 
-const TabContent = styled.div`
+const StyledTabContent = styled.div`
   margin-top: 20px;
 `;
 
@@ -34,31 +34,31 @@ export function Tabs({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <div>
-      <TabContainer>
+    <>
+      <StyledTabContainer>
         {React.Children.map(children, (child, index) => {
           if (React.isValidElement(child)) {
             return (
-              <TabButton
+              <StyledTabButton
                 key={index}
                 active={index === activeTab}
                 onClick={() => handleTabClick(index)}
               >
                 {child.props.label}
-              </TabButton>
+              </StyledTabButton>
             );
           }
           return null;
         })}
-      </TabContainer>
-      <TabContent>
+      </StyledTabContainer>
+      <StyledTabContent>
         {React.Children.map(children, (child, index) => {
           if (React.isValidElement(child) && index === activeTab) {
             return child;
           }
           return null;
         })}
-      </TabContent>
-    </div>
+      </StyledTabContent>
+    </>
   );
 }

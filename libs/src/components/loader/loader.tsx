@@ -2,13 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 import { LoadingSpinner } from './spinner';
 
-const Container = styled.div`
+interface LoaderContainerProps {
+  loading: boolean;
+  color?: string;
+  children: React.ReactNode;
+  title?: string;
+}
+
+const StyledLoaderContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
 `;
 
-const Overlay = styled.div`;
+const StyledOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,16 +23,36 @@ const Overlay = styled.div`;
   height: 100%;
 `;
 
-export function Loader({ loading, color, children }: { loading: boolean; color?: string; children: React.ReactNode }) {
+const StyledContainerTitle = styled.div`
+  font-weight: 600;
+  font-size: 1.5rem;
+  color: #000;
+`;
+
+const StyledPrimaryText = styled.span`
+  color: #01463a;
+  font-weight: bold;
+`;
+
+export function LoaderContainer({ loading, color, children, title }: LoaderContainerProps) {
   return (
-    <Container>
+    <StyledLoaderContainer>
       {loading ? (
-        <Overlay>
+        <StyledOverlay>
           <LoadingSpinner color={color} />
-        </Overlay>
+        </StyledOverlay>
       ) : (
-        children
+        <>
+          {title && (
+            <StyledContainerTitle>
+              <StyledPrimaryText>
+                {title}
+              </StyledPrimaryText>
+            </StyledContainerTitle>
+          )}
+          {children}
+        </>
       )}
-    </Container>
+    </StyledLoaderContainer>
   );
 }

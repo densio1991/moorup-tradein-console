@@ -4,6 +4,9 @@ import {
   ADD_PRODUCT_PAYLOAD,
   AppButton,
   Checkbox,
+  FormContainer,
+  FormGroup,
+  FormWrapper,
   StyledInput,
   StyledReactSelect,
   capitalizeFirstLetter,
@@ -15,31 +18,7 @@ import {
 import { useFormik } from 'formik';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
-import styled from 'styled-components';
 import * as Yup from 'yup';
-
-const FormWrapper = styled.div`
-  padding: 20px;
-`;
-
-const FormTitle = styled.h2`
-  text-align: left;
-  margin-top: auto;
-  color: #01463a;
-`;
-
-const FormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  align-items: top;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-`;
 
 interface FormValues {
   name: string;
@@ -176,8 +155,7 @@ export function AddProductForm() {
     );
 
   return (
-    <FormWrapper>
-      <FormTitle>Add Product</FormTitle>
+    <FormWrapper formTitle="Add Product">
       <FormContainer onSubmit={formik.handleSubmit}>
         <FormGroup>
           <StyledInput
