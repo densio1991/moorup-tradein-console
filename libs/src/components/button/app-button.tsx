@@ -22,7 +22,6 @@ const StyledButton = styled.button<CustomButtonProps>`
     props.variant === 'text' ? '#01463A' : props.variant === 'outlined' ? '#01463A' : '#fff'};
   background: ${(props) => {
     if (props.variant === 'outlined' || props.variant === 'text') return 'transparent';
-    if (props.isLoading) return '#ccc';
     return 'linear-gradient(to right, #216A4C, #01463A)';
   }};
   border: ${(props) =>
@@ -33,6 +32,8 @@ const StyledButton = styled.button<CustomButtonProps>`
   justify-content: center;
   align-items: center;
   position: relative;
+  white-space: nowrap;
+  opacity: ${(props) => (props.isLoading ? '50%' : '100%')};
 
   &:disabled {
     cursor: not-allowed;

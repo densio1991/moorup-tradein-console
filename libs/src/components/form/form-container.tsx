@@ -1,9 +1,9 @@
-import { ReactNode } from 'react';
+import { FormEvent, ReactNode } from 'react';
 import styled from 'styled-components';
 
 interface FormContainerProps {
   children: ReactNode;
-  onSubmit: () => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }
 
 const StyledFormContainer = styled.form`

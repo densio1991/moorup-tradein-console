@@ -5,7 +5,7 @@ import {
   faFileInvoice,
   faHouse,
   faUsers,
-} from '@fortawesome/free-solid-svg-icons'
+} from '@fortawesome/free-solid-svg-icons';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
 
@@ -214,7 +214,6 @@ export const ACTIONS_COLUMN = [
 ]
 
 export const ADD_PRODUCT_PAYLOAD = {
-  name: '',
   brand: '',
   model: '',
   year: '',
@@ -430,8 +429,31 @@ export const CURRENCIES = [
   { value: 'ZWL', label: 'Zimbabwean Dollar (ZWL)' }
 ]
 
-export const ATTRIBUTES = [
-  { value: 'processor', label: 'CPU' },
-  { value: 'case-size', label: 'Screen Size' },
-  { value: 'size', label: 'Storage' },
-]
+interface Attribute {
+  value: string;
+  label: string;
+}
+
+interface Attributes {
+  [key: string]: Attribute[];
+}
+
+export const ATTRIBUTES: Attributes = {
+  laptops: [
+    { value: 'processor', label: 'Processor' },
+    { value: 'screen-size', label: 'Screen Size' },
+    { value: 'storage', label: 'Storage' },
+    { value: 'memory', label: 'Memory' },
+  ],
+  watches: [
+    { value: 'case-size', label: 'Case Size' },
+    { value: 'case-material', label: 'Material' }
+  ],
+  tablets: [
+    { value: 'screen-size', label: 'Screen Size' },
+    { value: 'storage', label: 'Storage' },
+  ],
+  phones: [
+    { value: 'storage', label: 'Storage' },
+  ]
+}

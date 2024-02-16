@@ -13,7 +13,7 @@ interface StyledReactSelectProps {
   disabled?: boolean;
   value: string | string[] | undefined;
   onChange: (value: any) => void;
-  onBlur: (value: any) => void;
+  onBlur?: (value: any) => void;
 }
 
 const StyledSelectContainer = styled.div<{ error?: boolean; }>`

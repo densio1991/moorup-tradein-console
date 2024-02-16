@@ -121,22 +121,28 @@ export function parseDateString(inputDateString: string) {
 }
 
 export function hasEmptyValue(obj: any): boolean {
-  return Object.values(obj).some((value) => {
-    if (typeof value === 'boolean') {
-      return false;
+  const isEmpty = (value: any): boolean => {
+    if ((typeof value === 'object' || typeof value === 'number') && value !== null) {
+      return hasEmptyValue(value);
     }
+    return value === '' || value === null;
+  };
 
-    if (Array.isArray(value)) {
+  if (Array.isArray(obj)) {
+    return obj.some((element) => isEmpty(element));
+  } else {
+    return Object.values(obj).some((value) => {
+      if (typeof value === 'boolean') {
+        return false;
+      }
       return isEmpty(value);
-    }
-
-    return isEmpty(value);
-  });
+    });
+  }
 }
 
 export function hasEmptyValueInArray(objArray: any[]): boolean {
-  return objArray.some((obj) =>
-    Object.values(obj).some((value) => {
+  return objArray?.some((obj) =>
+    Object.values(obj)?.some((value) => {
       if (typeof value === 'boolean' || typeof value === 'number') {
         return false;
       }
@@ -248,4 +254,59 @@ export function compareObjects(currentObject: any, newObject: any) {
 
   // eslint-disable-next-line max-len
   return currentKeys.every((key: string) => Object.prototype.hasOwnProperty.call(newObject, key) && currentObject[key] === newObject[key]);
+}
+
+export function compareArrays(currentArray: any[], newArray: any[]): boolean {
+  if (currentArray.length !== newArray.length) return false;
+
+  return currentArray.every((currentValue, index) => {
+    const newValue = newArray[index];
+    if (typeof currentValue === 'object' && typeof newValue === 'object') {
+      return compareObjects(currentValue, newValue);
+    }
+    return currentValue === newValue;
+  });
+}
+
+export function compareJSON(obj1: any, obj2: any): boolean {
+  // Check if both arguments are objects
+  if (typeof obj1 !== 'object' || typeof obj2 !== 'object' || obj1 === null || obj2 === null) {
+    return obj1 === obj2;
+  }
+
+  const keys1 = Object.keys(obj1);
+  const keys2 = Object.keys(obj2);
+
+  // Check if both objects have the same number of keys
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  // Check if all keys in obj1 are present in obj2 and have the same values
+  for (const key of keys1) {
+    if (!keys2.includes(key)) {
+      return false;
+    }
+    if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object') {
+      // If both values are objects or arrays, recursively compare them
+      if (!compareJSON(obj1[key], obj2[key])) {
+        return false;
+      }
+    } else if (Array.isArray(obj1[key]) && Array.isArray(obj2[key])) {
+      // If both values are arrays, compare them element by element
+      if (obj1[key].length !== obj2[key].length) {
+        return false;
+      }
+      for (let i = 0; i < obj1[key].length; i++) {
+        if (!compareJSON(obj1[key][i], obj2[key][i])) {
+          return false;
+        }
+      }
+    } else if (obj1[key] !== obj2[key]) {
+      // If values are not objects or arrays, compare them directly
+      return false;
+    }
+  }
+
+  return true;
 }
