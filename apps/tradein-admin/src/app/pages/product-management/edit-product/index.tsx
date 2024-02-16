@@ -13,7 +13,13 @@ export function EditProductPage() {
     getProductStatuses,
     clearProduct,
   } = useProduct();
-  const { product, isFetchingProduct, isUpdatingProduct } = state;
+  const {
+    product,
+    isFetchingProduct,
+    isUpdatingProduct,
+    isAddingProductVariant,
+    isUpdatingProductVariant,
+  } = state;
 
   const location = useLocation();
   const parts = location.pathname.split('/');
@@ -37,7 +43,12 @@ export function EditProductPage() {
   return (
     <LoaderContainer
       color="#01463a"
-      loading={isFetchingProduct || isUpdatingProduct}
+      loading={
+        isFetchingProduct ||
+        isUpdatingProduct ||
+        isAddingProductVariant ||
+        isUpdatingProductVariant
+      }
       title="Edit Product"
     >
       <Tabs>

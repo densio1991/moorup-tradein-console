@@ -139,7 +139,7 @@ export function AddProductVariantForm() {
     (a: { label: string }, b: { label: any }) => a.label.localeCompare(b.label),
   );
 
-  const attributes = ATTRIBUTES?.sort(
+  const attributes = ATTRIBUTES[addProductPayload.type]?.sort(
     (a: { label: string }, b: { label: any }) => a.label.localeCompare(b.label),
   );
 
