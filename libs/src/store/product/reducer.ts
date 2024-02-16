@@ -20,6 +20,8 @@ const productState = {
   product: {},
   isFetchingProduct: false,
   isUpdatingProduct: false,
+  isAddingProductVariant: false,
+  isUpdatingProductVariant: false,
 };
 
 const productReducer = (state: any, action: any) => {
@@ -221,6 +223,52 @@ const productReducer = (state: any, action: any) => {
       return {
         ...state,
         isUpdatingProduct: false,
+        product: {},
+        isFetchingProduct: true,
+      };
+    }
+
+    case types.ADD_PRODUCT_VARIANT.baseType: {
+      return {
+        ...state,
+        isAddingProductVariant: true,
+      };
+    }
+    case types.ADD_PRODUCT_VARIANT.SUCCESS: {
+      return {
+        ...state,
+        isAddingProductVariant: false,
+        product: {},
+        isFetchingProduct: true,
+      };
+    }
+    case types.ADD_PRODUCT_VARIANT.FAILED: {
+      return {
+        ...state,
+        isAddingProductVariant: false,
+        product: {},
+        isFetchingProduct: true,
+      };
+    }
+
+    case types.UPDATE_PRODUCT_VARIANT.baseType: {
+      return {
+        ...state,
+        isUpdatingProductVariant: true,
+      };
+    }
+    case types.UPDATE_PRODUCT_VARIANT.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingProductVariant: false,
+        product: {},
+        isFetchingProduct: true,
+      };
+    }
+    case types.UPDATE_PRODUCT_VARIANT.FAILED: {
+      return {
+        ...state,
+        isUpdatingProductVariant: false,
         product: {},
         isFetchingProduct: true,
       };
