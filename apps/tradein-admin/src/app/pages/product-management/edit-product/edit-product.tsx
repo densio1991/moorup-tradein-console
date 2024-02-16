@@ -36,7 +36,6 @@ const Image = styled.img`
 `;
 
 interface FormValues {
-  name: string;
   brand: string;
   model: string;
   year: string;
@@ -51,7 +50,6 @@ interface FormValues {
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required.'),
   display_name: Yup.string().required('Display Name is required'),
   model: Yup.string().required('Model is required'),
   year: Yup.string().required('Year is required'),
@@ -94,6 +92,7 @@ export function EditProductDetails({ productData }: { productData: any}) {
   };
 
   const onSubmit = (values: any) => {
+    values.name = values.display_name;
     updateProduct(productData._id, values);
   };
 
@@ -106,7 +105,6 @@ export function EditProductDetails({ productData }: { productData: any}) {
   useEffect(() => {
     if (!isEmpty(productData)) {
       const PRODUCT_VARIANT_PAYLOAD = {
-        name: productData?.name,
         display_name: productData?.display_name,
         type: productData?.type,
         category: productData?.category,
@@ -181,20 +179,9 @@ export function EditProductDetails({ productData }: { productData: any}) {
         />
       </ImageContainer>
       <FormWrapper width='100%'>
+        
         <FormContainer onSubmit={formik.handleSubmit}>
           <FormGroup>
-            <StyledInput
-              type="text"
-              id="name"
-              label="Name"
-              name="name"
-              placeholder="Name"
-              onChange={formik.handleChange}
-              value={formik.values.name}
-              onBlur={formik.handleBlur}
-              error={Boolean(formik.touched.name && formik.errors.name)}
-              errorMessage={formik.errors.name}
-            />
             <StyledInput
               type="text"
               id="display_name"

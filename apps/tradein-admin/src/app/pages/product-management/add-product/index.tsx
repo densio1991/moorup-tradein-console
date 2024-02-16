@@ -21,7 +21,6 @@ import { useEffect } from 'react';
 import * as Yup from 'yup';
 
 interface FormValues {
-  name: string;
   brand: string;
   model: string;
   year: string;
@@ -36,16 +35,13 @@ interface FormValues {
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required.'),
   display_name: Yup.string().required('Display Name is required'),
   model: Yup.string().required('Model is required'),
   year: Yup.string().required('Year is required'),
   image_url: Yup.string()
     .required('Image URL is required.')
     .url('Enter a valid URL'),
-  site_url: Yup.string()
-    .required('Site URL is required.')
-    .url('Enter a valid URL'),
+  site_url: Yup.string().required('Site URL is required.'),
 });
 
 export function AddProductForm() {
@@ -86,6 +82,7 @@ export function AddProductForm() {
   };
 
   const onSubmit = (values: any) => {
+    values.name = values.display_name;
     values.is_archived = false;
 
     if (includeProductVariant) {
@@ -158,18 +155,6 @@ export function AddProductForm() {
     <FormWrapper formTitle="Add Product">
       <FormContainer onSubmit={formik.handleSubmit}>
         <FormGroup>
-          <StyledInput
-            type="text"
-            id="name"
-            label="Name"
-            name="name"
-            placeholder="Name"
-            onChange={formik.handleChange}
-            value={formik.values.name}
-            onBlur={formik.handleBlur}
-            error={Boolean(formik.touched.name && formik.errors.name)}
-            errorMessage={formik.errors.name}
-          />
           <StyledInput
             type="text"
             id="display_name"
