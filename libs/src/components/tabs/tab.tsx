@@ -1,14 +1,15 @@
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
 interface TabProps {
   label: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const TabWrapper = styled.div`
+const StyledTab = styled.div`
   display: inline;
 `;
 
 export function Tab({ children }: TabProps) {
-  return <TabWrapper>{children}</TabWrapper>;
+  return <StyledTab>{children}</StyledTab>;
 }

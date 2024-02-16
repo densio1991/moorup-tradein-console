@@ -14,6 +14,9 @@ import {
   ATTRIBUTES,
   AppButton,
   CURRENCIES,
+  FormContainer,
+  FormGroup,
+  FormWrapper,
   ProductVariant,
   ProductVariantAttributes,
   ProductVariantPricing,
@@ -27,29 +30,6 @@ import { useFormik } from 'formik';
 import { isEmpty } from 'lodash';
 import { useState } from 'react';
 import styled from 'styled-components';
-
-const FormWrapper = styled.div`
-  padding: 20px;
-`;
-
-const FormTitle = styled.h2`
-  text-align: left;
-  margin-top: auto;
-  color: #01463a;
-`;
-
-const FormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-`;
 
 const AccordionContainer = styled.div`
   display: flex;
@@ -159,7 +139,7 @@ export function AddProductVariantForm() {
     (a: { label: string }, b: { label: any }) => a.label.localeCompare(b.label),
   );
 
-  const attributes = ATTRIBUTES?.sort(
+  const attributes = ATTRIBUTES[addProductPayload.type]?.sort(
     (a: { label: string }, b: { label: any }) => a.label.localeCompare(b.label),
   );
 
@@ -280,8 +260,7 @@ export function AddProductVariantForm() {
   };
 
   return (
-    <FormWrapper>
-      <FormTitle>Add Product Variant</FormTitle>
+    <FormWrapper formTitle="Add Product Variant">
       <FormGroup>
         <span />
         <AppButton

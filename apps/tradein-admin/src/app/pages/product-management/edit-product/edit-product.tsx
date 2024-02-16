@@ -4,6 +4,10 @@
 import {
   ADD_PRODUCT_PAYLOAD,
   AppButton,
+  FormContainer,
+  FormGroup,
+  FormWrapper,
+  PageContainer,
   StyledInput,
   StyledReactSelect,
   capitalizeFirstLetter,
@@ -18,52 +22,20 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import * as Yup from 'yup';
 
-const PageContainerWrapper = styled.div`
-  display: flex;
-`;
-
-const FormWrapper = styled.div`
-  padding: 20px;
-  width: 100%;
-`;
-
-const FormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  align-items: top;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-`;
-
 const ImageContainer = styled.div`
   max-width: 500px;
   width: 100%;
   overflow: hidden;
-
-  @media (max-width: 639px) {
-    width: 280px;
-    height: 410px;
-  }
-
-  @media (min-width: 640px) {
-    width: 320px;
-    height: 450px;
-  }
 `;
 
 const Image = styled.img`
   width: 100%;
   height: auto;
   display: block;
+  object-fit: cover;
 `;
 
 interface FormValues {
-  name: string;
   brand: string;
   model: string;
   year: string;
@@ -78,7 +50,6 @@ interface FormValues {
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required.'),
   display_name: Yup.string().required('Display Name is required'),
   model: Yup.string().required('Model is required'),
   year: Yup.string().required('Year is required'),
@@ -121,6 +92,7 @@ export function EditProductDetails({ productData }: { productData: any}) {
   };
 
   const onSubmit = (values: any) => {
+    values.name = values.display_name;
     updateProduct(productData._id, values);
   };
 
@@ -133,7 +105,6 @@ export function EditProductDetails({ productData }: { productData: any}) {
   useEffect(() => {
     if (!isEmpty(productData)) {
       const PRODUCT_VARIANT_PAYLOAD = {
-        name: productData?.name,
         display_name: productData?.display_name,
         type: productData?.type,
         category: productData?.category,
@@ -200,28 +171,17 @@ export function EditProductDetails({ productData }: { productData: any}) {
     );
 
   return (
-    <PageContainerWrapper>
+    <PageContainer>
       <ImageContainer>
         <Image
           src={formik.values?.image_url}
           alt={formik.values?.image_url}
         />
       </ImageContainer>
-      <FormWrapper>
+      <FormWrapper width='100%'>
+        
         <FormContainer onSubmit={formik.handleSubmit}>
           <FormGroup>
-            <StyledInput
-              type="text"
-              id="name"
-              label="Name"
-              name="name"
-              placeholder="Name"
-              onChange={formik.handleChange}
-              value={formik.values.name}
-              onBlur={formik.handleBlur}
-              error={Boolean(formik.touched.name && formik.errors.name)}
-              errorMessage={formik.errors.name}
-            />
             <StyledInput
               type="text"
               id="display_name"
@@ -406,6 +366,6 @@ export function EditProductDetails({ productData }: { productData: any}) {
           </FormGroup>
         </FormContainer>
       </FormWrapper>
-    </PageContainerWrapper>
+    </PageContainer>
   );
 }

@@ -57,6 +57,14 @@ export const useProduct = () => {
     actions.updateProduct(id, payload)(dispatch);
   }
 
+  const addProductVariant = (id: string, payload: any) => {
+    actions.addProductVariant(id, payload)(dispatch);
+  }
+
+  const updateProductVariant = (id: string, productId: string, payload: any) => {
+    actions.updateProductVariant(id, productId, payload)(dispatch);
+  }
+
   return {
     state: state.product,
     getProducts,
@@ -71,5 +79,7 @@ export const useProduct = () => {
     getProduct,
     clearProduct,
     updateProduct,
+    addProductVariant,
+    updateProductVariant,
   };
 };

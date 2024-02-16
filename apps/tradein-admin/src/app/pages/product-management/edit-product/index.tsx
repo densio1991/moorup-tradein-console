@@ -1,20 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Loader, Tab, Tabs, useProduct } from '@tradein-admin/libs';
+import { LoaderContainer, Tab, Tabs, useProduct } from '@tradein-admin/libs';
 import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import styled from 'styled-components';
 import { EditProductDetails } from './edit-product';
-
-const TitleContainer = styled.div`
-  font-weight: 600;
-  font-size: 1.5rem;
-  color: #000;
-`;
-
-const PrimaryText = styled.span`
-  color: #01463a;
-  font-weight: bold;
-`;
+import { EditProductVariant } from './edit-product-variant';
 
 export function EditProductPage() {
   const {
@@ -24,7 +13,13 @@ export function EditProductPage() {
     getProductStatuses,
     clearProduct,
   } = useProduct();
-  const { product, isFetchingProduct, isUpdatingProduct } = state;
+  const {
+    product,
+    isFetchingProduct,
+    isUpdatingProduct,
+    isAddingProductVariant,
+    isUpdatingProductVariant,
+  } = state;
 
   const location = useLocation();
   const parts = location.pathname.split('/');
@@ -46,16 +41,24 @@ export function EditProductPage() {
   }, []);
 
   return (
-    <Loader color="#01463a" loading={isFetchingProduct || isUpdatingProduct}>
-      <TitleContainer>
-        <PrimaryText>Edit Product</PrimaryText>
-      </TitleContainer>
+    <LoaderContainer
+      color="#01463a"
+      loading={
+        isFetchingProduct ||
+        isUpdatingProduct ||
+        isAddingProductVariant ||
+        isUpdatingProductVariant
+      }
+      title="Edit Product"
+    >
       <Tabs>
         <Tab label="Details">
           <EditProductDetails productData={product} />
         </Tab>
-        <Tab label="Variants">{JSON.stringify(product?.variants)}</Tab>
+        <Tab label="Variants">
+          <EditProductVariant productData={product} />
+        </Tab>
       </Tabs>
-    </Loader>
+    </LoaderContainer>
   );
 }

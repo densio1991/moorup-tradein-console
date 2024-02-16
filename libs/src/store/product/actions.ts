@@ -218,3 +218,59 @@ export const updateProduct = (id: string, payload: any) => (dispatch: any) => {
       toast.error('Failed to update product!');
     });
 };
+
+export const addProductVariant = (id: string, payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.ADD_PRODUCT_VARIANT.baseType,
+    payload: payload,
+  });
+
+  axiosInstance()
+    .post(`/api/products/${id}/variants`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.ADD_PRODUCT_VARIANT.SUCCESS,
+        payload: response?.data,
+      });
+
+      getProduct(id)(dispatch);
+      toast.success('Product variant successfully added!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.ADD_PRODUCT_VARIANT.FAILED,
+        payload: error,
+      });
+
+      getProduct(id)(dispatch);
+      toast.error('Failed to add product variant!');
+    });
+};
+
+export const updateProductVariant = (id: string, productId: string, payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.UPDATE_PRODUCT_VARIANT.baseType,
+    payload: payload,
+  });
+
+  axiosInstance()
+    .patch(`/api/products/variants/${id}`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.UPDATE_PRODUCT_VARIANT.SUCCESS,
+        payload: response?.data,
+      });
+
+      getProduct(productId)(dispatch);
+      toast.success('Product variant successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.UPDATE_PRODUCT_VARIANT.FAILED,
+        payload: error,
+      });
+
+      getProduct(productId)(dispatch);
+      toast.error('Failed to update product variant!');
+    });
+};
