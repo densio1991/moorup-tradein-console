@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { LoaderContainer, Tab, Tabs, useProduct } from '@tradein-admin/libs';
 import { useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { EditProductDetails } from './edit-product';
 import { EditProductVariant } from './edit-product-variant';
 
@@ -21,15 +21,12 @@ export function EditProductPage() {
     isUpdatingProductVariant,
   } = state;
 
-  const location = useLocation();
-  const parts = location.pathname.split('/');
-  const productId = parts[parts.length - 1];
-
+  const { id } = useParams();
   const shouldRun = useRef(true);
 
   useEffect(() => {
     if (shouldRun.current) {
-      getProduct(productId);
+      getProduct(id);
       getProductTypes();
       getProductStatuses();
       shouldRun.current = false;
