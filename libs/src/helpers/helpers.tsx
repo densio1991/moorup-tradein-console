@@ -97,13 +97,13 @@ export function sortByKey(array: any[], key: string | number) {
 
 export function sortArray<T>(array: T[], key: string, direction: string): T[] {
   const compare = (a: T, b: T) => {
-    const aValue = ((a as any)[key]).toLowerCase();
-    const bValue = ((b as any)[key]).toLowerCase();
+    const aValue = ((a as any)[key])?.toLowerCase();
+    const bValue = ((b as any)[key])?.toLowerCase();
 
     if (direction === 'asc') {
-      return aValue.localeCompare(bValue);
+      return aValue?.localeCompare(bValue);
     } else {
-      return bValue.localeCompare(aValue);
+      return bValue?.localeCompare(aValue);
     }
   };
 

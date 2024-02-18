@@ -361,11 +361,9 @@ export function Table({
       }
 
       default:
-        if (isEmpty(row[header])) return '--';
-        return row[header];
+        if (isEmpty(row[header.keyName])) return '--';
+        return row[header.keyName];
     }
-    
-    return row[header.keyName] || '--';
   };
 
   const sortedHeaders = sortByKey(headers, 'order');

@@ -969,3 +969,40 @@ export const ADD_PROMOTION_ELIGIBILITY_AND_FAQS_PAYLOAD = {
   faq: [ADD_PROMOTION_FAQ_ITEM]
 }
 
+export interface Product {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [x: string]: any;
+  _id: string;
+  name: string;
+  brand: string;
+  model: string;
+  year: string;
+  display_name: string;
+  category: string;
+  type: string;
+  image_url: string;
+  site_url: string;
+  status: string;
+  is_archived: string;
+  createdAt: string;
+  updatedAt: string;
+  platform: string;
+}
+
+export interface Promotion {
+  // product: String
+  // amount: Number
+  // dateClaimSubmitted: Date
+  // transactionNumber: String
+  // dateClaimPaid: Date
+  _id: string;
+  name: string;
+  description: string;
+  platform: string;
+  status: string;
+  start_date: string;
+  end_date: string;
+  products: Product[];
+  price: number;
+  image_url: string;
+}
