@@ -476,13 +476,13 @@ export function Table({
         </TableStyled>
         {isLoading && <LinearLoader />}
         {!isLoading && isEmpty(rows) && <LoaderText>No data to display</LoaderText>}
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(filteredRows.length / PAGE_SIZE)}
+          totalRows={filteredRows.length}
+          paginate={paginate}
+        />
       </TableWrapper>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={Math.ceil(filteredRows.length / PAGE_SIZE)}
-        totalRows={filteredRows.length}
-        paginate={paginate}
-      />
     </>
   );
 }
