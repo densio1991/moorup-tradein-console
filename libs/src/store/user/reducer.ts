@@ -5,6 +5,8 @@ import * as types from './action-types';
 const userState = {
   users: [],
   isFetchingUsers: false,
+  isCreatingUser: false,
+  isUpdatingUser: false,
 };
 
 const userReducer = (state: any, action: any) => {
@@ -36,6 +38,44 @@ const userReducer = (state: any, action: any) => {
         ...state,
         users: [],
       };
+
+    case types.CREATE_USER.baseType: {
+      return {
+        ...state,
+        isCreatingUser: true,
+      };
+    }
+    case types.CREATE_USER.SUCCESS: {
+      return {
+        ...state,
+        isCreatingUser: false,
+      };
+    }
+    case types.CREATE_USER.FAILED: {
+      return {
+        ...state,
+        isCreatingUser: false,
+      };
+    }
+
+    case types.UPDATE_USER.baseType: {
+      return {
+        ...state,
+        isUpdatingUser: true,
+      };
+    }
+    case types.UPDATE_USER.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingUser: false,
+      };
+    }
+    case types.UPDATE_USER.FAILED: {
+      return {
+        ...state,
+        isUpdatingUser: false,
+      };
+    }
 
     default:
       return state;
