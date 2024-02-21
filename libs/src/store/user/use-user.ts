@@ -14,9 +14,19 @@ export const useUser = () => {
     actions.clearUsers(payload)(dispatch);
   }
 
+  const createUser = (payload: any) => {
+    actions.createUser(payload)(dispatch);
+  }
+
+  const updateUser = (id: string, payload: any) => {
+    actions.updateUser(id, payload)(dispatch);
+  }
+
   return {
     state: state.user,
     getUsers,
     clearUsers,
+    createUser,
+    updateUser,
   };
 };

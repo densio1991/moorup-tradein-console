@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { toast } from 'react-toastify';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
@@ -29,4 +30,58 @@ export const clearUsers = (payload: any) => (dispatch: any) => {
     type: types.CLEAR_USERS,
     payload,
   });
+};
+
+export const createUser = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CREATE_USER.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .post('/api/admins', payload)
+    .then((response) => {
+      dispatch({
+        type: types.CREATE_USER.SUCCESS,
+        payload: response?.data,
+      });
+
+      getUsers({})(dispatch);
+      toast.success('User successfully added!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.CREATE_USER.FAILED,
+        payload: error,
+      });
+
+      toast.error('Failed to add user!');
+    });
+};
+
+export const updateUser = (id: string, payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.UPDATE_USER.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .patch(`/api/admins/${id}`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.UPDATE_USER.SUCCESS,
+        payload: response?.data,
+      });
+
+      getUsers({})(dispatch);
+      toast.success('User successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.UPDATE_USER.FAILED,
+        payload: error,
+      });
+
+      toast.error('Failed to update user!');
+    });
 };

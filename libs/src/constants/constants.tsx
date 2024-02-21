@@ -457,3 +457,9 @@ export const ATTRIBUTES: Attributes = {
     { value: 'storage', label: 'Storage' },
   ]
 }
+
+export const ROLES = [
+  { value: 'superadmin', label: 'Super Admin' },
+  { value: 'admin', label: 'Admin' },
+  { value: 'regular', label: 'Regular' }
+]

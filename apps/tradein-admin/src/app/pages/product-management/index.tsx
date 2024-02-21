@@ -16,10 +16,10 @@ import {
   exportToCSV,
   useAuth,
   useCommon,
+  useCustomEffect,
   useProduct,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AddProductForm } from './add-product';
 import { AddProductVariantForm } from './add-product-variant';
@@ -47,7 +47,7 @@ export function ProductManagementPage() {
     ...ACTIONS_COLUMN,
   ];
 
-  useEffect(() => {
+  useCustomEffect(() => {
     if (!isEmpty(activePlatform)) {
       getProducts(true);
       getProductTypes();
