@@ -7,4 +7,4 @@ export { ProductManagementPage } from './product-management';
 export { EditProductPage } from './product-management/edit-product';
 export { PromotionsPage } from './promotions';
 export { UserManagementPage } from './user-management';
-
+export { EditOrderPage } from './order-management/edit-order';

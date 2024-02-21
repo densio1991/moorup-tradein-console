@@ -42,20 +42,20 @@ export const useOrder = () => {
     actions.deleteOrderById(payload, activePlatform)(dispatch);
   }
 
-  const fetchOrderShipments = (id: string) => {
+  const fetchOrderShipments = (id: any) => {
     actions.getOrderShipments(id)(dispatch);
   };
 
-  const resendShipmentLabel = (id: string) => {
+  const resendShipmentLabel = (id: any) => {
     actions.resendShipmentLabel(id)(dispatch);
   };
 
-  const receiveOrderItemById = (id: string) => {
+  const receiveOrderItemById = (id: any) => {
     const orderId = state.order?._id;
     actions.receiveOrderItemById(id, orderId)(dispatch);
   };
 
-  const evaluateOrderItemById = (id: string, payload: any) => {
+  const evaluateOrderItemById = (id: any, payload: any) => {
     const orderId = state.order?._id;
     actions.evaluateOrderItemById(id, orderId, payload)(dispatch);
   };

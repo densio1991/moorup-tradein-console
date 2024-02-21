@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import dayjs from 'dayjs';
 import { jwtDecode } from 'jwt-decode';
 import { isEmpty } from 'lodash';
 import { CURRENCY_SYMBOLS } from '../constants';
@@ -329,4 +330,8 @@ export function formatDateString(inputDateString: string) {
 
 export function getCurrencySymbol(currencyCode: string) {
   return CURRENCY_SYMBOLS[currencyCode] || null;
+}
+
+export const formatDate = (date: Date, format='MM/DD/YYYY') => {
+  return dayjs(date).format(format);
 }
