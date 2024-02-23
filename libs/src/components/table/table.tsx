@@ -60,6 +60,7 @@ const TableStyled = styled.table`
   border-collapse: separate;
   background-color: #fff;
   margin-top: 20px;
+  margin-bottom: 60px;
   border-spacing: 0;
   width: 100%;
 
@@ -476,13 +477,14 @@ export function Table({
         </TableStyled>
         {isLoading && <LinearLoader />}
         {!isLoading && isEmpty(rows) && <LoaderText>No data to display</LoaderText>}
-        <Pagination
-          currentPage={currentPage}
-          totalPages={Math.ceil(filteredRows.length / PAGE_SIZE)}
-          totalRows={filteredRows.length}
-          paginate={paginate}
-        />
       </TableWrapper>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(filteredRows.length / PAGE_SIZE)}
+        totalRows={filteredRows.length}
+        paginate={paginate}
+      />
     </>
   );
 }
+ 
