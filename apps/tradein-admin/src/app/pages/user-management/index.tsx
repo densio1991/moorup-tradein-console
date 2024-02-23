@@ -17,7 +17,7 @@ import { EditUserForm } from './edit-user';
 
 export function UserManagementPage() {
   const { state, getUsers, clearUsers } = useUser();
-  const { users, isFetchingUsers } = state;
+  const { users, isFetchingUsers, isCreatingUser, isUpdatingUser } = state;
   const { state: commonState, setSideModalState } = useCommon();
   const { sideModalState } = commonState;
 
@@ -60,7 +60,7 @@ export function UserManagementPage() {
     <>
       <Table
         label="Users"
-        isLoading={isFetchingUsers}
+        isLoading={isFetchingUsers || isCreatingUser || isUpdatingUser}
         headers={headers}
         rows={users || []}
         menuItems={[

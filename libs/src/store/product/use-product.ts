@@ -45,8 +45,8 @@ export const useProduct = () => {
     actions.addProduct(payload, activePlatform)(dispatch);
   }
 
-  const getProduct = (payload: any) => {
-    actions.getProduct(payload)(dispatch);
+  const getProduct = (payload: any, signal: AbortSignal) => {
+    actions.getProduct(payload, signal)(dispatch);
   }
 
   const clearProduct = (payload: any) => {
