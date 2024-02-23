@@ -6,8 +6,8 @@ import * as actions from './actions';
 export const useUser = () => {
   const { state, dispatch } = useContext(RootContext);
 
-  const getUsers = (payload: any) => {
-    actions.getUsers(payload)(dispatch);
+  const getUsers = (payload: any, signal: AbortSignal) => {
+    actions.getUsers(payload, signal)(dispatch);
   }
 
   const clearUsers = (payload: any) => {

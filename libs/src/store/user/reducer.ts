@@ -4,7 +4,7 @@ import * as types from './action-types';
 
 const userState = {
   users: [],
-  isFetchingUsers: false,
+  isFetchingUsers: true,
   isCreatingUser: false,
   isUpdatingUser: false,
 };
@@ -32,10 +32,18 @@ const userReducer = (state: any, action: any) => {
         users: [],
       };
     }
+    case types.FETCH_USERS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingUsers: true,
+        users: [],
+      };
+    }
 
     case types.CLEAR_USERS:
       return {
         ...state,
+        isFetchingUsers: true,
         users: [],
       };
 

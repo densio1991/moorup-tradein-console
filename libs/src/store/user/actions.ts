@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from 'react-toastify';
+import { CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
-export const getUsers = (payload: any) => (dispatch: any) => {
+export const getUsers = (payload: any, signal?: AbortSignal) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_USERS.baseType,
     payload,
   });
 
   axiosInstance()
-    .get('/api/admins')
+    .get('/api/admins', { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_USERS.SUCCESS,
@@ -18,10 +19,18 @@ export const getUsers = (payload: any) => (dispatch: any) => {
       });
     })
     .catch((error) => {
-      dispatch({
-        type: types.FETCH_USERS.FAILED,
-        payload: error,
-      });
+      console.log('Error: ', error);
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.FETCH_USERS.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_USERS.FAILED,
+          payload: error,
+        });
+      }
     });
 };
 

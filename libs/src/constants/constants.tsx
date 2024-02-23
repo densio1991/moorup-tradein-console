@@ -463,3 +463,5 @@ export const ROLES = [
   { value: 'admin', label: 'Admin' },
   { value: 'regular', label: 'Regular' }
 ]
+
+export const CANCELLED_AXIOS = 'ERR_CANCELED';

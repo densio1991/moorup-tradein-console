@@ -9,8 +9,8 @@ export const usePromotion = () => {
     activePlatform,
   } = state.auth;
 
-  const getPromotions = (payload: any) => {
-    actions.getPromotions(payload, activePlatform)(dispatch);
+  const getPromotions = (payload: any, signal: AbortSignal) => {
+    actions.getPromotions(payload, activePlatform, signal)(dispatch);
   }
 
   const clearPromotions = (payload: any) => {

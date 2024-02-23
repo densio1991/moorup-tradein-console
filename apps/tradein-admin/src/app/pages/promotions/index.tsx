@@ -6,10 +6,10 @@ import {
   PROMOTIONS_MANAGEMENT_COLUMNS,
   Table,
   useAuth,
-  useCustomEffect,
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
+import { useEffect } from 'react';
 
 export function PromotionsPage() {
   const { state, getPromotions, clearPromotions } = usePromotion();
@@ -19,12 +19,17 @@ export function PromotionsPage() {
 
   const headers = [...DEFAULT_COLUMN, ...PROMOTIONS_MANAGEMENT_COLUMNS];
 
-  useCustomEffect(() => {
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     if (!isEmpty(activePlatform)) {
-      getPromotions({});
+      getPromotions({}, signal);
     }
 
     return () => {
+      controller.abort();
+
       // Clear data on unmount
       clearPromotions({});
     };

@@ -30,10 +30,18 @@ const promotionReducer = (state: any, action: any) => {
         promotions: [],
       };
     }
+    case types.FETCH_PROMOTIONS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingPromotions: true,
+        promotions: [],
+      };
+    }
 
     case types.CLEAR_PROMOTIONS:
       return {
         ...state,
+        isFetchingPromotions: true,
         promotions: [],
       };
 

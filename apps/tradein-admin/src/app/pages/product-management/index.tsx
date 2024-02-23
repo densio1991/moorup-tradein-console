@@ -16,10 +16,10 @@ import {
   exportToCSV,
   useAuth,
   useCommon,
-  useCustomEffect,
   useProduct,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AddProductForm } from './add-product';
 import { AddProductVariantForm } from './add-product-variant';
@@ -47,14 +47,19 @@ export function ProductManagementPage() {
     ...ACTIONS_COLUMN,
   ];
 
-  useCustomEffect(() => {
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     if (!isEmpty(activePlatform)) {
-      getProducts(true);
-      getProductTypes();
-      getProductStatuses();
+      getProducts(true, signal);
+      getProductTypes(signal);
+      getProductStatuses(signal);
     }
 
     return () => {
+      controller.abort();
+
       // Clear data on unmount
       clearProducts({});
     };

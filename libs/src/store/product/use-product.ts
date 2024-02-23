@@ -9,16 +9,16 @@ export const useProduct = () => {
     activePlatform,
   } = state.auth;
 
-  const getProducts = (payload: any) => {
-    actions.getProducts(activePlatform, payload)(dispatch);
+  const getProducts = (payload: any, signal: AbortSignal) => {
+    actions.getProducts(activePlatform, payload, signal)(dispatch);
   }
 
   const clearProducts = (payload: any) => {
     actions.clearProducts(payload)(dispatch);
   }
 
-  const getProductTypes = () => {
-    actions.getProductTypes()(dispatch);
+  const getProductTypes = (signal: AbortSignal) => {
+    actions.getProductTypes(signal)(dispatch);
   }
 
   const getProductCategories = (payload: any) => {
@@ -29,8 +29,8 @@ export const useProduct = () => {
     actions.getProductBrands(activePlatform, payload)(dispatch);
   }
 
-  const getProductStatuses = () => {
-    actions.getProductStatuses()(dispatch);
+  const getProductStatuses = (signal: AbortSignal) => {
+    actions.getProductStatuses(signal)(dispatch);
   }
 
   const setAddProductPayload = (payload: any) => {

@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from 'react-toastify';
+import { CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
-export const getProducts = (platform: string, includeVariants?: boolean) => (dispatch: any) => {
+export const getProducts = (platform: string, includeVariants?: boolean, signal?: AbortSignal) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_PRODUCTS.baseType,
     payload: platform,
   });
 
   axiosInstance()
-    .get(`/api/products?platform=${platform}${includeVariants ? `&include_variants=${includeVariants}` : ''}`)
+    .get(`/api/products?platform=${platform}${includeVariants ? `&include_variants=${includeVariants}` : ''}`, { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_PRODUCTS.SUCCESS,
@@ -18,10 +19,17 @@ export const getProducts = (platform: string, includeVariants?: boolean) => (dis
       });
     })
     .catch((error) => {
-      dispatch({
-        type: types.FETCH_PRODUCTS.FAILED,
-        payload: error,
-      });
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.FETCH_PRODUCTS.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_PRODUCTS.FAILED,
+          payload: error,
+        });
+      }
     });
 };
 
@@ -32,14 +40,14 @@ export const clearProducts = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const getProductTypes = () => (dispatch: any) => {
+export const getProductTypes = (signal?: AbortSignal) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_PRODUCT_TYPES.baseType,
     payload: {},
   });
 
   axiosInstance()
-    .get('/api/products/types')
+    .get('/api/products/types', { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_PRODUCT_TYPES.SUCCESS,
@@ -47,10 +55,17 @@ export const getProductTypes = () => (dispatch: any) => {
       });
     })
     .catch((error) => {
-      dispatch({
-        type: types.FETCH_PRODUCT_TYPES.FAILED,
-        payload: error,
-      });
+      if (error.code === 'ERR_CANCELED') {
+        dispatch({
+          type: types.FETCH_PRODUCT_TYPES.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_PRODUCT_TYPES.FAILED,
+          payload: error,
+        });
+      }
     });
 };
 
@@ -98,14 +113,14 @@ export const getProductBrands = (platform: string, payload: any) => (dispatch: a
     });
 };
 
-export const getProductStatuses = () => (dispatch: any) => {
+export const getProductStatuses = (signal?: AbortSignal) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_PRODUCT_STATUSES.baseType,
     payload: {},
   });
 
   axiosInstance()
-    .get('/api/products/status')
+    .get('/api/products/status', { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_PRODUCT_STATUSES.SUCCESS,
@@ -113,10 +128,17 @@ export const getProductStatuses = () => (dispatch: any) => {
       });
     })
     .catch((error) => {
-      dispatch({
-        type: types.FETCH_PRODUCT_STATUSES.FAILED,
-        payload: error,
-      });
+      if (error.code === 'ERR_CANCELED') {
+        dispatch({
+          type: types.FETCH_PRODUCT_STATUSES.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_PRODUCT_STATUSES.FAILED,
+          payload: error,
+        });
+      }
     });
 };
 

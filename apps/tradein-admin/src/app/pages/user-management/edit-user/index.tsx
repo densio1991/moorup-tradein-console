@@ -13,11 +13,10 @@ import {
   hasEmptyValue,
   useAuth,
   useCommon,
-  useCustomEffect,
   useUser,
 } from '@tradein-admin/libs';
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
 interface FormValues {
@@ -90,7 +89,7 @@ export function EditUserForm({ data }: any) {
     a.label.localeCompare(b.label),
   );
 
-  useCustomEffect(() => {
+  useEffect(() => {
     const userData = {
       email: data?.email,
       role: data?.role,

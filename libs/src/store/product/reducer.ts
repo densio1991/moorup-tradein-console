@@ -47,10 +47,18 @@ const productReducer = (state: any, action: any) => {
         products: [],
       };
     }
+    case types.FETCH_PRODUCTS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingProducts: true,
+        products: [],
+      };
+    }
 
     case types.CLEAR_PRODUCTS:
       return {
         ...state,
+        isFetchingProducts: true,
         products: [],
       };
 
@@ -72,6 +80,13 @@ const productReducer = (state: any, action: any) => {
       return {
         ...state,
         isFetchingProductTypes: false,
+        productTypes: [],
+      };
+    }
+    case types.FETCH_PRODUCT_TYPES.CANCELLED: {
+      return {
+        ...state,
+        isFetchingProductTypes: true,
         productTypes: [],
       };
     }
@@ -138,6 +153,13 @@ const productReducer = (state: any, action: any) => {
       return {
         ...state,
         isFetchingProductStatuses: false,
+        productStatuses: [],
+      };
+    }
+    case types.FETCH_PRODUCT_STATUSES.CANCELLED: {
+      return {
+        ...state,
+        isFetchingProductStatuses: true,
         productStatuses: [],
       };
     }
