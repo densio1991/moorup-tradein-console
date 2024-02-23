@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { LoaderContainer, Tab, Tabs, useProduct } from '@tradein-admin/libs';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { EditProductDetails } from './edit-product';
 import { EditProductVariant } from './edit-product-variant';
@@ -22,17 +22,19 @@ export function EditProductPage() {
   } = state;
 
   const { id } = useParams();
-  const shouldRun = useRef(true);
 
   useEffect(() => {
-    if (shouldRun.current) {
-      getProduct(id);
-      getProductTypes();
-      getProductStatuses();
-      shouldRun.current = false;
-    }
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    getProduct(id, signal);
+    getProductTypes(signal);
+    getProductStatuses(signal);
 
     return () => {
+      controller.abort();
+
+      // Clear data on unmount
       clearProduct({});
     };
   }, []);

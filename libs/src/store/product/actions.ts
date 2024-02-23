@@ -55,7 +55,7 @@ export const getProductTypes = (signal?: AbortSignal) => (dispatch: any) => {
       });
     })
     .catch((error) => {
-      if (error.code === 'ERR_CANCELED') {
+      if (error.code === CANCELLED_AXIOS) {
         dispatch({
           type: types.FETCH_PRODUCT_TYPES.CANCELLED,
           payload: error,
@@ -128,7 +128,7 @@ export const getProductStatuses = (signal?: AbortSignal) => (dispatch: any) => {
       });
     })
     .catch((error) => {
-      if (error.code === 'ERR_CANCELED') {
+      if (error.code === CANCELLED_AXIOS) {
         dispatch({
           type: types.FETCH_PRODUCT_STATUSES.CANCELLED,
           payload: error,
@@ -184,14 +184,14 @@ export const addProduct = (payload: any, activePlatform: any) => (dispatch: any)
     });
 };
 
-export const getProduct = (id: string) => (dispatch: any) => {
+export const getProduct = (id: string, signal?: AbortSignal) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_PRODUCT.baseType,
     payload: id,
   });
 
   axiosInstance()
-    .get(`/api/products/${id}`)
+    .get(`/api/products/${id}`, { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_PRODUCT.SUCCESS,
@@ -199,10 +199,17 @@ export const getProduct = (id: string) => (dispatch: any) => {
       });
     })
     .catch((error) => {
-      dispatch({
-        type: types.FETCH_PRODUCT.FAILED,
-        payload: error,
-      });
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.FETCH_PRODUCT.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_PRODUCT.FAILED,
+          payload: error,
+        });
+      }
     });
 };
 
