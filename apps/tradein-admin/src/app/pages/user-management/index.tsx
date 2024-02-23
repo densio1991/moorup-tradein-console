@@ -9,10 +9,9 @@ import {
   Table,
   USER_MANAGEMENT_COLUMNS,
   useCommon,
-  useCustomEffect,
   useUser,
 } from '@tradein-admin/libs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AddUserForm } from './add-user';
 import { EditUserForm } from './edit-user';
 
@@ -30,10 +29,15 @@ export function UserManagementPage() {
 
   const [selectedUser, setSelectedUser] = useState({});
 
-  useCustomEffect(() => {
-    getUsers({});
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    getUsers({}, signal);
 
     return () => {
+      controller.abort();
+
       // Clear data on unmount
       clearUsers({});
     };

@@ -7,6 +7,7 @@ export function createActionTypes(baseType: string) {
     baseType,
     SUCCESS: `${baseType}_SUCCESS`,
     FAILED: `${baseType}_FAILED`,
+    CANCELLED: `${baseType}_CANCELLED`,
   };
 }
 
