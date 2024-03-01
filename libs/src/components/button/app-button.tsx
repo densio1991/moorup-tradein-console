@@ -8,6 +8,7 @@ interface CustomButtonProps {
   isLoading?: boolean;
   icon?: any;
   width?: string;
+  padding?: string;
   disabled?: boolean;
   type?: any;
   onClick?: () => void;
@@ -17,7 +18,7 @@ interface CustomButtonProps {
 
 const StyledButton = styled.button<CustomButtonProps>`
   width: ${(props) => (props.width ? props.width : '100%')};
-  padding: 8px 20px;
+  padding: ${(props) => (props.padding ? props.padding : '8px 20px')};
   color: ${(props) =>
     props.variant === 'text' ? '#01463A' : props.variant === 'outlined' ? '#01463A' : '#fff'};
   background: ${(props) => {
@@ -71,6 +72,7 @@ export function AppButton({
   isLoading = false,
   icon,
   width,
+  padding,
   disabled,
   type,
   onClick,
@@ -81,6 +83,7 @@ export function AppButton({
     <StyledButton
       isLoading={isLoading}
       width={width}
+      padding={padding}
       onClick={onClick}
       disabled={disabled || isLoading}
       type={type}
