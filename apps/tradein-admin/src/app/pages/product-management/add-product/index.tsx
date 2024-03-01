@@ -117,7 +117,7 @@ export function AddProductForm() {
 
   const categories = productCategories
     ?.map((item: any) => ({
-      value: item.name,
+      value: item.site_url,
       label: item.name,
     }))
     .sort((a: { label: string }, b: { label: any }) =>

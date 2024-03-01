@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
@@ -14,7 +13,7 @@ import {
   compareObjects,
   hasEmptyValue,
   useAuth,
-  useProduct
+  useProduct,
 } from '@tradein-admin/libs';
 import { useFormik } from 'formik';
 import { isEmpty } from 'lodash';
@@ -61,7 +60,7 @@ const validationSchema = Yup.object().shape({
     .url('Enter a valid URL'),
 });
 
-export function EditProductDetails({ productData }: { productData: any}) {
+export function EditProductDetails({ productData }: { productData: any }) {
   const {
     state: productState,
     getProductCategories,
@@ -83,7 +82,7 @@ export function EditProductDetails({ productData }: { productData: any}) {
   const { userDetails } = authState;
 
   const [initialFormValues, setInitialFormValues] = useState({});
-  
+
   const resetForm = () => {
     setAddProductPayload(ADD_PRODUCT_PAYLOAD);
     setIncludeProductVariant(false);
@@ -136,7 +135,7 @@ export function EditProductDetails({ productData }: { productData: any}) {
 
   const categories = productCategories
     ?.map((item: any) => ({
-      value: item.name,
+      value: item.site_url,
       label: item.name,
     }))
     .sort((a: { label: string }, b: { label: any }) =>
@@ -173,13 +172,9 @@ export function EditProductDetails({ productData }: { productData: any}) {
   return (
     <PageContainer>
       <ImageContainer>
-        <Image
-          src={formik.values?.image_url}
-          alt={formik.values?.image_url}
-        />
+        <Image src={formik.values?.image_url} alt={formik.values?.image_url} />
       </ImageContainer>
-      <FormWrapper width='100%'>
-        
+      <FormWrapper width="100%">
         <FormContainer onSubmit={formik.handleSubmit}>
           <FormGroup>
             <StyledInput
@@ -211,7 +206,9 @@ export function EditProductDetails({ productData }: { productData: any}) {
                 getProductBrands(selected.value);
               }}
               onBlur={() => formik.setFieldTouched('type')}
-              error={Boolean(formik.touched.type && isEmpty(formik.values.type))}
+              error={Boolean(
+                formik.touched.type && isEmpty(formik.values.type),
+              )}
               errorMessage="Type is required."
             />
             <StyledReactSelect
@@ -305,7 +302,9 @@ export function EditProductDetails({ productData }: { productData: any}) {
               onChange={formik.handleChange}
               value={formik.values.image_url}
               onBlur={formik.handleBlur}
-              error={Boolean(formik.touched.image_url && formik.errors.image_url)}
+              error={Boolean(
+                formik.touched.image_url && formik.errors.image_url,
+              )}
               errorMessage={formik.errors.image_url}
             />
           </FormGroup>
@@ -358,7 +357,10 @@ export function EditProductDetails({ productData }: { productData: any}) {
               <AppButton
                 type="submit"
                 width="fit-content"
-                disabled={hasEmptyValue(formik.values) || compareObjects(initialFormValues, formik.values)}
+                disabled={
+                  hasEmptyValue(formik.values) ||
+                  compareObjects(initialFormValues, formik.values)
+                }
               >
                 Save
               </AppButton>
