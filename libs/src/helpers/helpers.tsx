@@ -311,3 +311,18 @@ export function compareJSON(obj1: any, obj2: any): boolean {
 
   return true;
 }
+
+
+export function formatDateString(inputDateString: string) {
+  const date = new Date(inputDateString);
+  
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+  const formattedDateString = `${year}-${month}-${day} ${hours}:${minutes}`;
+  
+  return formattedDateString;
+}

@@ -10,21 +10,22 @@ interface NavLinkProps {
 }
 
 const SidebarContainer = styled.div`
-  flex: 1;
   height: calc(100vh - 50px);
   background-color: white;
   position: sticky;
   top: 50px;
-  min-width: 270px;
-  max-width: 270px;
-  width: 100%;
   margin-top: 1px;
   border-top: 1px solid #f4f4f5;
+  width: auto;
 `
 
 const SidebarWrapper = styled.div`
   padding: 0 20px;
   color: #555;
+
+  @media screen and (max-width: 768px) {
+    padding: 0px;
+  }
 `
 
 const SidebarList = styled.ul`
@@ -54,6 +55,14 @@ const NavLink = styled.a<NavLinkProps>`
   cursor: pointer;
   justify-content: start;
 
+  @media screen and (max-width: 768px) {
+    #label {
+      display: none;
+    }
+
+    border-radius: 0px;;
+  }
+
   &:hover {
     background: linear-gradient(to right, #216A4C, #01463A);
     color: white;
@@ -62,9 +71,13 @@ const NavLink = styled.a<NavLinkProps>`
       color: white;
     }
   }
+
   svg {
-    margin-right: 8px;
     color: ${(props) => (props.active ? 'white' : '#01463a')};
+  }
+
+  #label {
+    margin-left: 8px;
   }
 `
 
@@ -78,7 +91,7 @@ export function SideBar(): JSX.Element {
     <SidebarContainer>
       <SidebarWrapper>
         <SidebarList>
-          {SIDENAV_ITEMS.map((item) => (
+          {SIDENAV_ITEMS.map((item, index) => (
             <NavLink
               key={item.url}
               active={item.activeUrl?.test(pathname)}
@@ -87,7 +100,7 @@ export function SideBar(): JSX.Element {
               <span>
                 <StyledIcon icon={item.icon} />
               </span>
-              <span className="font-semibold text-sm flex">{item.title}</span>
+              <span id="label" className="font-semibold text-sm flex">{item.title}</span>
             </NavLink>
           ))}
         </SidebarList>
@@ -95,7 +108,7 @@ export function SideBar(): JSX.Element {
           <span>
             <StyledIcon icon={faRightFromBracket} />
           </span>
-          <span className="font-semibold text-sm flex">Logout</span>
+          <span id="label" className="font-semibold text-sm flex">Logout</span>
         </NavLink>
       </SidebarWrapper>
     </SidebarContainer>

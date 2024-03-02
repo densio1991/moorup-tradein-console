@@ -6,6 +6,7 @@ import { ReactNode, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import {
   capitalizeFirstLetter,
+  formatDateString,
   parseDateString,
   sortArray,
   sortByKey,
@@ -34,6 +35,7 @@ const HeaderSection = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  margin-bottom: 20px;
 `;
 
 const LeftSection = styled.div`
@@ -51,16 +53,14 @@ const TableWrapper = styled.div`
   box-shadow: none;
   margin-bottom: 16px;
   border-radius: 6px !important;
-  display: block;
-  width: 100%;
   overflow-x: auto;
+  height: 100%;
 `;
 
 const TableStyled = styled.table`
   border-collapse: separate;
   background-color: #fff;
-  margin-top: 20px;
-  margin-bottom: 60px;
+  margin-top: 5px;
   border-spacing: 0;
   width: 100%;
 
@@ -78,11 +78,6 @@ const TableStyled = styled.table`
     &:last-child {
       padding-right: 15px !important;
     }
-  }
-
-  @media (max-width: 768px) {
-    display: block;
-    overflow-x: auto;
   }
 `;
 
@@ -311,11 +306,10 @@ export function Table({
   };
 
   const parseRowValue = (
-    header: string | number,
-    row: { [x: string]: string },
-    index: any
+    header: any,
+    row: { [x: string]: any },
   ): ReactNode | string => {
-    switch (header) {
+    switch (header.label) {
       case 'ID': {
         if (isEmpty(row['_id'])) return '--';
         return row['_id'];
@@ -362,8 +356,11 @@ export function Table({
       }
 
       case 'Name': {
-        if (isEmpty(row['name'])) return '--';
-        return capitalizeFirstLetter(row['name']);
+        if (isEmpty(row['name']) && isEmpty(row.user_details)) return '--';
+        if (!isEmpty(row['name'])) return capitalizeFirstLetter(row['name']);
+        if (!isEmpty(row.user_details)) return `${row.user_details.first_name} ${row.user_details.last_name}`;
+
+        return;
       }
 
       case 'Products': {
@@ -383,6 +380,30 @@ export function Table({
       case 'End Date': {
         if (isEmpty(row['end_date'])) return '--';
         return parseDateString(row['end_date']);
+      }
+
+      case 'Original Offer': {
+        return row?.order_items?.original_offer ?? '--';
+      }
+
+      case 'Revised Offer': {
+        return row?.order_items?.revision?.price ?? '--';
+      }
+
+      case 'Revision Reasons': {
+        return row?.order_items?.revision?.reasons?.join(', ') ?? '--';
+      }
+
+      case 'Product Type': {
+        return capitalizeFirstLetter(row?.order_items?.product_type) ?? '--';
+      }
+
+      case 'Created': {
+        return formatDateString(row?.order_items?.createdAt) ?? '--';
+      }
+
+      case 'Updated': {
+        return formatDateString(row?.order_items?.updatedAt) ?? '--';
       }
 
       case 'Actions': {
@@ -468,7 +489,7 @@ export function Table({
               <Tr key={index}>
                 {sortedHeaders?.map((header) => (
                   <Td key={`${index}-${header.label}`} alignRight={header.label === 'Actions'}>
-                    <span>{parseRowValue(header.label, row, index)}</span>
+                    <span>{parseRowValue(header, row)}</span>
                   </Td>
                 ))}
               </Tr>

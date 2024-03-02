@@ -10,9 +10,8 @@ const CardContainerWrapper = styled.div`
   flex: 1;
   background-color: white;
   padding: 20px;
-  margin: 20px;
+  margin: 10px;
   flex-direction: column;
-  display: block;
   width: 100%;
   overflow-x: auto;
 `;

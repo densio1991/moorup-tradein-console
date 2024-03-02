@@ -4,7 +4,8 @@ import {
   faCube,
   faFileInvoice,
   faHouse,
-  faUsers,
+  faPenToSquare,
+  faUsers
 } from '@fortawesome/free-solid-svg-icons';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
@@ -27,6 +28,12 @@ export const SIDENAV_ITEMS = [
     url: '/dashboard/order',
     activeUrl: /^\/dashboard\/order/,
     icon: faFileInvoice,
+  },
+  {
+    title: 'Discrepancy',
+    url: '/dashboard/discrepancy',
+    activeUrl: /^\/dashboard\/discrepancy/,
+    icon: faPenToSquare,
   },
   {
     title: 'User Management',
@@ -107,6 +114,44 @@ export const ORDER_MANAGEMENT_COLUMNS = [
   },
   {
     label: 'Order Count',
+    order: 6,
+    enableSort: true,
+  },
+  {
+    label: 'Created',
+    order: 7,
+    enableSort: true,
+  },
+  {
+    label: 'Updated',
+    order: 8,
+    enableSort: true,
+  },
+]
+
+export const DISCREPANCY_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Name',
+    order: 2,
+    enableSort: true,
+  },
+  {
+    label: 'Original Offer',
+    order: 3,
+    enableSort: true,
+  },
+  {
+    label: 'Revised Offer',
+    order: 4,
+    enableSort: true,
+  },
+  {
+    label: 'Revision Reasons',
+    order: 5,
+    enableSort: true,
+  },
+  {
+    label: 'Product Type',
     order: 6,
     enableSort: true,
   },
@@ -465,3 +510,10 @@ export const ROLES = [
 ]
 
 export const CANCELLED_AXIOS = 'ERR_CANCELED';
+
+export const PRODUCT_TYPES = {
+  PHONES: 'phones',
+  TABLETS: 'tablets',
+  WATCHES: 'watches',
+  LAPTOPS: 'laptops',
+}

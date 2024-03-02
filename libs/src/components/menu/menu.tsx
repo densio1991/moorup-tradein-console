@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useRef, useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
 
-const StyledIcon = styled(FontAwesomeIcon)`
+const MenuIconContainer = styled.div`
+  position: relative;
+`;
+
+const MenuIcon = styled(FontAwesomeIcon)`
   width: 14px;
   height: 14px;
   fill: currentColor;
+  cursor: pointer;
 
   &:hover {
     color: #01463a;
@@ -15,48 +20,66 @@ const StyledIcon = styled(FontAwesomeIcon)`
   }
 `;
 
-const Menu = styled.div`
+const MenuList = styled.div`
   position: absolute;
-  background: #fff;
-  border: 1px solid #ccc;
-  z-index: 1;
-  top: 20px;
+  top: calc(100% - 2px);
   right: 0;
+  background-color: #fff;
+  border: 0px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 16px 0px;
+  padding: 0;
+  min-width: min-content;
+  z-index: 1000;
 `;
 
 const MenuItem = styled.div`
-  padding: 10px 10px;
+  padding: 8px 15px;
   cursor: pointer;
   text-align-last: left;
+  border-radius: 4px;
 
+  transition: background-color 0.3s ease;
   &:hover {
-    background: #dff1f0;
+    background-color: #dff1f0;
+    color: #01463a;
   }
 `;
 
-interface MenuItem {
+const StyledIcon = styled(FontAwesomeIcon)<{ margin?: any }>`
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  margin-right: ${(props) => (props.margin ? props.margin : '0px')};
+
+  &:hover {
+    color: #01463a;
+    cursor: pointer;
+  }
+`;
+
+interface MenuAction {
   label: string;
-  icon: any;
   action: () => void;
+  icon?: any;
 }
 
-export function StyledMenuIcon({
-  menuItems,
-  rowData,
-}: {
-  menuItems: MenuItem[];
+interface MenuProps {
+  menuItems: MenuAction[];
   rowData: any;
-}) {
-  const [showMenu, setShowMenu] = useState(false);
+}
+
+export function StyledMenuIcon({ menuItems, rowData }: MenuProps) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setShowMenu(false);
-      }
+  const handleClickOutside = (event: MouseEvent) => {
+    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      setIsMenuOpen(false);
     }
+  };
 
+  useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -64,7 +87,7 @@ export function StyledMenuIcon({
   }, []);
 
   const toggleMenu = () => {
-    setShowMenu(!showMenu);
+    setIsMenuOpen(!isMenuOpen);
   };
 
   const handleMenuItemClick = (action: (rowData: any) => void, label: string) => {
@@ -72,21 +95,18 @@ export function StyledMenuIcon({
   };
 
   return (
-    <div style={{ position: 'relative' }}>
-      {showMenu && (
-        <Menu ref={menuRef}>
+    <MenuIconContainer ref={menuRef}>
+      <MenuIcon icon={faEllipsisV} onClick={toggleMenu} />
+      {isMenuOpen && (
+        <MenuList>
           {menuItems.map((item, index) => (
-            <MenuItem
-              key={index}
-              onClick={() => handleMenuItemClick(item.action, item.label)}
-            >
+            <MenuItem key={index} onClick={() => handleMenuItemClick(item.action, item.label)}>
+              {item.icon && <StyledIcon icon={item.icon} margin='8px' />}
               {item.label}
             </MenuItem>
           ))}
-        </Menu>
+        </MenuList>
       )}
-      <StyledIcon icon={faEllipsisV} onClick={toggleMenu} />
-    </div>
+    </MenuIconContainer>
   );
 }
-
