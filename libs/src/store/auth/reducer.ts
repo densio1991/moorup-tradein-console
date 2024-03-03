@@ -80,11 +80,13 @@ const authReducer = (state: any, action: any) => {
       };
     }
     case types.GET_USER_DETAILS.SUCCESS: {
+      const platforms = action.payload?.data?.platforms;
+
       return {
         ...state,
         isFetchingUserDetails: false,
         userDetails: action.payload.data,
-        activePlatform: action.payload?.data?.platforms[0] || '',
+        activePlatform: platforms?.sort()[0] || '',
       };
     }
     case types.GET_USER_DETAILS.FAILED: {

@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useRef, useEffect } from 'react';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
 
 const MenuIconContainer = styled.div`
   position: relative;
@@ -30,7 +30,7 @@ const MenuList = styled.div`
   box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 16px 0px;
   padding: 0;
   min-width: min-content;
-  z-index: 1000;
+  z-index: 1;
 `;
 
 const MenuItem = styled.div`
