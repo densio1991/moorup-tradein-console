@@ -131,39 +131,130 @@ export const ORDER_MANAGEMENT_COLUMNS = [
 
 export const DISCREPANCY_MANAGEMENT_COLUMNS = [
   {
-    label: 'Name',
+    label: 'Order Number',
     order: 2,
     enableSort: true,
+    keyName: 'order_number',
+  },
+  {
+    label: 'Customer Name',
+    order: 3,
+    enableSort: true,
+    keyName: 'first_name',
+  },
+  {
+    label: 'Mobile Number',
+    order: 4,
+    enableSort: true,
+    keyName: 'mobile_number',
+  },
+  {
+    label: 'Email Address',
+    order: 5,
+    enableSort: true,
+    keyName: 'email',
+  },
+  {
+    label: 'Credit Timeframe',
+    order: 6,
+    enableSort: true,
+    keyName: 'credit_type',
+  },
+  {
+    label: 'Device',
+    order: 7,
+    enableSort: true,
+    keyName: 'product_name',
   },
   {
     label: 'Original Offer',
-    order: 3,
-    enableSort: true,
-  },
-  {
-    label: 'Revised Offer',
-    order: 4,
-    enableSort: true,
-  },
-  {
-    label: 'Revision Reasons',
-    order: 5,
-    enableSort: true,
-  },
-  {
-    label: 'Product Type',
-    order: 6,
-    enableSort: true,
-  },
-  {
-    label: 'Created',
-    order: 7,
-    enableSort: true,
-  },
-  {
-    label: 'Updated',
     order: 8,
     enableSort: true,
+    keyName: 'original_offer',
+  },
+  {
+    label: 'IMEI/Serial',
+    order: 9,
+    enableSort: true,
+    keyName: 'imei_serial',
+  },
+  {
+    label: 'System Model',
+    order: 9,
+    enableSort: true,
+    keyName: 'system_model',
+  },
+  {
+    label: 'Storage',
+    order: 10,
+    enableSort: true,
+    keyName: 'storage',
+  },
+  {
+    label: 'Locked',
+    order: 11,
+    enableSort: true,
+    keyName: 'locked',
+  },
+  {
+    label: 'Grade',
+    order: 12,
+    enableSort: true,
+    keyName: 'grade',
+  },
+  {
+    label: 'Operations Comments',
+    order: 13,
+    enableSort: true,
+    keyName: 'operations_comments',
+  },
+  {
+    label: 'Instructions for CS',
+    order: 14,
+    enableSort: true,
+    keyName: 'cs_instructions',
+  },
+  {
+    label: 'Customer Contacted',
+    order: 15,
+    enableSort: true,
+    keyName: 'cs_contacted',
+  },
+  {
+    label: 'Date',
+    order: 16,
+    enableSort: true,
+    keyName: 'cs_date',
+  },
+  {
+    label: 'CS Comments',
+    order: 17,
+    enableSort: true,
+    keyName: 'cs_comments',
+  },
+  {
+    label: 'ZD Ticket Number',
+    order: 18,
+    enableSort: true,
+    keyName: 'zd_ticket_number',
+  },
+  {
+    label: 'Owner',
+    order: 19,
+    enableSort: true,
+    keyName: 'owner',
+  },
+  {
+    label: 'Actions for Ops',
+    order: 20,
+    enableSort: true,
+    keyName: 'ops_action',
+  },
+  {
+    label: 'Status',
+    order: 21,
+    enableSort: true,
+    keyName: 'ops_status',
   },
 ]
 
@@ -221,7 +312,7 @@ export const PROMOTIONS_MANAGEMENT_COLUMNS = [
   },
   {
     label: 'Status',
-    order: 5,
+    order: 6,
     enableSort: true,
     keyName: 'status',
   },

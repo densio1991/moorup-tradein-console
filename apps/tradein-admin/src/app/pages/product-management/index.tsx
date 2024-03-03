@@ -14,6 +14,7 @@ import {
   SideModal,
   Table,
   exportToCSV,
+  productManagementParsingConfig,
   useAuth,
   useCommon,
   useProduct,
@@ -85,6 +86,7 @@ export function ProductManagementPage() {
         isLoading={isFetchingProducts}
         headers={headers}
         rows={products || []}
+        parsingConfig={productManagementParsingConfig}
         menuItems={[
           {
             label: 'Edit',

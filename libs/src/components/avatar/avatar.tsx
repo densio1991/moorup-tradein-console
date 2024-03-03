@@ -8,7 +8,7 @@ interface AvatarProps {
 const StyledAvatar = styled.div<{ size: number }>`
   display: none;
 
-  @media (min-width: 768px) {
+  @media (min-width: 769px) {
     display: flex;
     width: ${(props) => props.size}px;
     height: ${(props) => props.size}px;

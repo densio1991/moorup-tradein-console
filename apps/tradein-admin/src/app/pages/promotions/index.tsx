@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -5,6 +6,7 @@ import {
   DEFAULT_COLUMN,
   PROMOTIONS_MANAGEMENT_COLUMNS,
   Table,
+  promotionsManagementParsingConfig,
   useAuth,
   usePromotion,
 } from '@tradein-admin/libs';
@@ -41,6 +43,7 @@ export function PromotionsPage() {
       isLoading={isFetchingPromotions}
       headers={headers}
       rows={promotions || []}
+      parsingConfig={promotionsManagementParsingConfig}
       rightControls={
         <AppButton width="fit-content" icon={faPlus}>
           Add
