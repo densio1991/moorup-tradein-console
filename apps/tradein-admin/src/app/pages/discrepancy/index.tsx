@@ -5,6 +5,7 @@ import {
   DISCREPANCY_MANAGEMENT_COLUMNS,
   PRODUCT_TYPES,
   Table,
+  discrepancyManagementParsingConfig,
   useAuth,
   useOrder,
 } from '@tradein-admin/libs';
@@ -51,6 +52,7 @@ export function DiscrepancyPage() {
       isLoading={isFetchingOrderItems}
       headers={headers}
       rows={orderItems || []}
+      parsingConfig={discrepancyManagementParsingConfig}
     />
   );
 }

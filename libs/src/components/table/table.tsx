@@ -5,13 +5,9 @@ import { isEmpty } from 'lodash';
 import { ReactNode, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import {
-  capitalizeFirstLetter,
-  formatDateString,
-  parseDateString,
   sortArray,
-  sortByKey,
+  sortByKey
 } from '../../helpers';
-import { StyledMenuIcon } from '../menu';
 import Pagination from './pagination';
 
 interface ThProps {
@@ -20,14 +16,20 @@ interface ThProps {
   sorted?: boolean;
   alignRight?: boolean;
 }
+
 interface TableProps {
   label: string;
-  headers: Array<{ label: string; order: number; enableSort?: boolean }>;
+  headers: Array<{
+    label: string;
+    order: number;
+    enableSort?: boolean;
+  }>;
   rows: Array<{ [key: string]: string }>;
   isLoading: boolean;
   enableCheckbox?: boolean;
   menuItems?: any;
   rightControls?: any;
+  parsingConfig?: { [key: string]: (value: any) => any };
 }
 
 const HeaderSection = styled.div`
@@ -290,6 +292,7 @@ export function Table({
   enableCheckbox = false,
   menuItems,
   rightControls,
+  parsingConfig = {},
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
@@ -309,113 +312,13 @@ export function Table({
     header: any,
     row: { [x: string]: any },
   ): ReactNode | string => {
-    switch (header.label) {
-      case 'ID': {
-        if (isEmpty(row['_id'])) return '--';
-        return row['_id'];
-      }
+    const parsingFunction = parsingConfig[header.label];
 
-      case 'First Name': {
-        if (isEmpty(row['first_name'])) return '--';
-        return row['first_name'];
-      }
-
-      case 'Last Name': {
-        if (isEmpty(row['last_name'])) return '--';
-        return row['last_name'];
-      }
-
-      case 'Email': {
-        if (isEmpty(row['email'])) return '--';
-        return row['email'];
-      }
-
-      case 'Status': {
-        if (isEmpty(row['status'])) return '--';
-        return capitalizeFirstLetter(row['status']);
-      }
-
-      case 'Display Name': {
-        if (isEmpty(row['display_name'])) return '--';
-        return row['display_name'];
-      }
-
-      case 'Brand': {
-        if (isEmpty(row['brand'])) return '--';
-        return capitalizeFirstLetter(row['brand']);
-      }
-
-      case 'Model': {
-        if (isEmpty(row['model'])) return '--';
-        return capitalizeFirstLetter(row['model']);
-      }
-
-      case 'Year': {
-        if (isEmpty(row['year'])) return '--';
-        return row['year'];
-      }
-
-      case 'Name': {
-        if (isEmpty(row['name']) && isEmpty(row.user_details)) return '--';
-        if (!isEmpty(row['name'])) return capitalizeFirstLetter(row['name']);
-        if (!isEmpty(row.user_details)) return `${row.user_details.first_name} ${row.user_details.last_name}`;
-
-        return;
-      }
-
-      case 'Products': {
-        if (isEmpty(row['products'])) return '--';
-        const productNames = Array.isArray(row?.products)
-        ? row.products.map((product: { name: any }) => product.name)
-        : [];
-        const concatenatedNames = productNames.join(', ');
-        return concatenatedNames;
-      }
-
-      case 'Start Date': {
-        if (isEmpty(row['start_date'])) return '--';
-        return parseDateString(row['start_date']);
-      }
-
-      case 'End Date': {
-        if (isEmpty(row['end_date'])) return '--';
-        return parseDateString(row['end_date']);
-      }
-
-      case 'Original Offer': {
-        return row?.order_items?.original_offer ?? '--';
-      }
-
-      case 'Revised Offer': {
-        return row?.order_items?.revision?.price ?? '--';
-      }
-
-      case 'Revision Reasons': {
-        return row?.order_items?.revision?.reasons?.join(', ') ?? '--';
-      }
-
-      case 'Product Type': {
-        return capitalizeFirstLetter(row?.order_items?.product_type) ?? '--';
-      }
-
-      case 'Created': {
-        return formatDateString(row?.order_items?.createdAt) ?? '--';
-      }
-
-      case 'Updated': {
-        return formatDateString(row?.order_items?.updatedAt) ?? '--';
-      }
-
-      case 'Actions': {
-        return (
-          <StyledMenuIcon menuItems={menuItems} rowData={row} />
-        )
-      }
-
-      default:
-        if (isEmpty(row[header])) return '--';
-        return capitalizeFirstLetter(row[header]);
+    if (parsingFunction) {
+      return parsingFunction({ row, menuItems });
     }
+    
+    return row[header.keyName] || '--';
   };
 
   const sortedHeaders = sortByKey(headers, 'order');

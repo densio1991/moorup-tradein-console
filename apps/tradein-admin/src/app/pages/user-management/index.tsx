@@ -10,6 +10,7 @@ import {
   USER_MANAGEMENT_COLUMNS,
   useCommon,
   useUser,
+  userManagementParsingConfig,
 } from '@tradein-admin/libs';
 import { useEffect, useState } from 'react';
 import { AddUserForm } from './add-user';
@@ -63,6 +64,7 @@ export function UserManagementPage() {
         isLoading={isFetchingUsers || isCreatingUser || isUpdatingUser}
         headers={headers}
         rows={users || []}
+        parsingConfig={userManagementParsingConfig}
         menuItems={[
           {
             label: 'Edit',
