@@ -4,13 +4,12 @@ export const DetailCardContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 16px;
-  width: 100%;
   background-color: white;
   border: 1px solid #eee;
   border-radius: 4px;
   box-sizing: border-box;
 
-  h4:first-child {
+  h4:first-of-type {
     margin: 8px 0;
   }
 

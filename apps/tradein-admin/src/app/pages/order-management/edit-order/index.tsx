@@ -12,15 +12,26 @@ import {
   DetailCardContainer,
   useOrder,
   formatDate,
+  Badge,
+  OrderItems,
 } from '@tradein-admin/libs';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Collection from './collection';
+import ValidationOffer from './validation-offer';
 
 type AccordionHeadingProps = {
   id: any;
   title: string;
   isOpen: boolean;
   onToggle: (id: any) => void;
+};
+
+type AccordionStates = {
+  order: boolean;
+  collection: boolean;
+  validation: boolean;
+  completion: boolean;
 };
 
 export const AccordionHeading = ({
@@ -42,7 +53,7 @@ export const AccordionHeading = ({
 
 type CardItemProps = {
   label: string;
-  value: string;
+  value: any;
 };
 export const CardItem = ({ label, value }: CardItemProps) => {
   return (
@@ -66,25 +77,29 @@ export const EditOrderPage = () => {
     // closeModal,
   } = useOrder();
 
-  const { 
+  const {
     order = {},
-    shipments,
-    isFetchingOrder,
-    isUpdatingOrder,
-    isModalOpen,
-    activeOrderItem,
+    shipments = {},
+    // isFetchingOrder,
+    // isUpdatingOrder,
+    // isModalOpen,
+    // activeOrderItem,
   } = state;
 
   const {
     user_id = {},
     payment = {},
     identification = {},
+    order_items = [],
   } = order;
+
+  console.log({ shipments });
 
   useEffect(() => {
     if (shouldRun.current) {
       fetchOrderById(orderId);
       fetchOrderShipments(orderId);
+      shouldRun.current = false;
     }
 
     return () => {
@@ -92,10 +107,18 @@ export const EditOrderPage = () => {
     };
   }, []);
 
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const [accordionState, setAccordionState] = useState<AccordionStates>({
+    order: true,
+    collection: true,
+  } as AccordionStates);
 
-  const toggleAccordion = (item: number) => {
-    setOpenIndex((prev) => (prev === item ? null : item));
+  const toggleAccordion = (item: any) => {
+    setAccordionState((prev: any) => {
+      return {
+        ...prev,
+        [item]: !prev[item],
+      };
+    });
   };
 
   const { address = {}, bank_details = {} } = user_id;
@@ -105,6 +128,10 @@ export const EditOrderPage = () => {
   const accountName = bank_details ? bank_details[0]?.account_name : '';
   const fullName = `${user_id?.first_name} ${user_id?.last_name}`;
 
+  const products = order_items.map((item: OrderItems, idx: number) => {
+    return <Badge key={idx}>{item?.product_name}</Badge>;
+  });
+
   return (
     <PageContainer>
       <AccordionContainer>
@@ -113,19 +140,13 @@ export const EditOrderPage = () => {
             <AccordionHeading
               id="orderDetails"
               title="Order Details"
-              isOpen={true}
-              onToggle={toggleAccordion}
+              isOpen={accordionState.order}
+              onToggle={() => toggleAccordion('order')}
             />
           </AccordionHeaderContainer>
-          <AccordionContent isOpen={true} key="Order Details">
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '2fr 2fr 3fr',
-                gap: '16px',
-              }}
-            >
-              <DetailCardContainer>
+          <AccordionContent isOpen={accordionState.order} key="Order Details">
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2">
+              <DetailCardContainer className="md:col-span-1">
                 <h4>Account Information</h4>
                 <CardItem label="Name" value={fullName} />
                 <CardItem label="Account" value={accountName} />
@@ -133,11 +154,25 @@ export const EditOrderPage = () => {
                 <CardItem label="Email" value={fullName} />
                 <CardItem
                   label="Email Verified"
-                  value={!!user_id.is_verified ? 'Yes' : 'No'}
+                  value={user_id.is_verified ? 'Yes' : 'No'}
                 />
                 <CardItem label="Mobile" value={user_id.mobile_number} />
               </DetailCardContainer>
               <DetailCardContainer>
+                <h4>Quote Information</h4>
+                <CardItem label="Quote #" value={order.order_number} />
+                <CardItem label="Quote Status" value={order.status} />
+                <CardItem label="Products" value={products} />
+                <CardItem
+                  label="Date Created"
+                  value={formatDate(order.createdAt)}
+                />
+                <CardItem
+                  label="Last Updated"
+                  value={formatDate(order.updatedAt)}
+                />
+              </DetailCardContainer>
+              <DetailCardContainer className="md:col-span-2 xl:col-span-1">
                 <h4>Payment Details</h4>
                 <CardItem label="Credit Timeframe" value={order.order_type} />
                 <CardItem
@@ -156,20 +191,39 @@ export const EditOrderPage = () => {
                   value={identification.id_type}
                 />
               </DetailCardContainer>
-              <DetailCardContainer style={{}}>
-                <h4>Quote Information</h4>
-                <CardItem label="Quote #" value={order.order_number} />
-                <CardItem label="Quote Status" value={order.status} />
-                <CardItem label="Products" value={completeAddress} />
-                <CardItem
-                  label="Date Created"
-                  value={formatDate(order.createdAt)}
+            </div>
+          </AccordionContent>
+          <AccordionHeaderContainer>
+            <AccordionHeading
+              id="collection"
+              title="Collection"
+              isOpen={accordionState.collection}
+              onToggle={() => toggleAccordion('collection')}
+            />
+          </AccordionHeaderContainer>
+          <AccordionContent isOpen={accordionState.collection} key="Collection">
+            <div className="max-w-full mx-auto">
+              <div className="overflow-x-auto max-w-full pb-2">
+                <Collection orderItems={order_items} shipments={shipments} />
+              </div>
+            </div>
+          </AccordionContent>
+          <AccordionHeaderContainer>
+            <AccordionHeading
+              id="validation"
+              title="Validation & Offer"
+              isOpen={accordionState.validation}
+              onToggle={() => toggleAccordion('validation')}
+            />
+          </AccordionHeaderContainer>
+          <AccordionContent isOpen={accordionState.validation} key="validation">
+            <div className="max-w-full mx-auto">
+              <div className="overflow-x-auto max-w-full pb-2">
+                <ValidationOffer
+                  orderItems={order_items}
+                  shipments={shipments}
                 />
-                <CardItem
-                  label="Last Updated"
-                  value={formatDate(order.updatedAt)}
-                />
-              </DetailCardContainer>
+              </div>
             </div>
           </AccordionContent>
         </AccordionInnerContainer>
