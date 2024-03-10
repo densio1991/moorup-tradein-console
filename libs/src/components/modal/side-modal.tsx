@@ -1,10 +1,14 @@
 import { ReactNode } from 'react';
 import styled from 'styled-components';
+import { ProgressStepper } from '../stepper';
 
 interface SideModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+  withSteps?: boolean;
+  steps?: string[];
+  activeStep?: string;
 }
 
 const Overlay = styled.div<{ isOpen: boolean }>`
@@ -32,12 +36,30 @@ const SideModalWrapper = styled.div<{ isOpen: boolean }>`
   overflow-y: auto;
 `;
 
-export function SideModal({ isOpen, onClose, children }: SideModalProps): JSX.Element {
+const StepperContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 500px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+`;
+
+export function SideModal({ isOpen, onClose, children, withSteps, steps, activeStep }: SideModalProps): JSX.Element {
   return (
     <>
       <Overlay isOpen={isOpen} onClick={onClose} />
       <SideModalWrapper isOpen={isOpen}>
-        {children}
+        {
+          withSteps && (
+            <StepperContainer>
+              <ProgressStepper steps={steps} activeStep={activeStep} />
+            </StepperContainer>
+          )
+        }
+       {children}
       </SideModalWrapper>
     </>
   );

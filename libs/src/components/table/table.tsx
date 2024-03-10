@@ -56,7 +56,6 @@ const TableWrapper = styled.div`
   margin-bottom: 16px;
   border-radius: 6px !important;
   overflow-x: auto;
-  height: 100%;
 `;
 
 const TableStyled = styled.table`
