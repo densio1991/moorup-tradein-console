@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { jwtDecode } from 'jwt-decode';
 import { isEmpty } from 'lodash';
+import { CURRENCY_SYMBOLS } from '../constants';
 
 export function createActionTypes(baseType: string) {
   return {
@@ -312,7 +313,6 @@ export function compareJSON(obj1: any, obj2: any): boolean {
   return true;
 }
 
-
 export function formatDateString(inputDateString: string) {
   const date = new Date(inputDateString);
   
@@ -325,4 +325,8 @@ export function formatDateString(inputDateString: string) {
   const formattedDateString = `${year}-${month}-${day} ${hours}:${minutes}`;
   
   return formattedDateString;
+}
+
+export function getCurrencySymbol(currencyCode: string) {
+  return CURRENCY_SYMBOLS[currencyCode] || null;
 }
