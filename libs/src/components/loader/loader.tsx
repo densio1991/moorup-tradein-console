@@ -7,12 +7,13 @@ interface LoaderContainerProps {
   color?: string;
   children: React.ReactNode;
   title?: string;
+  height?: string;
 }
 
-const StyledLoaderContainer = styled.div`
+const StyledLoaderContainer = styled.div<{ height?: string }>`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: ${({ height }) => (height ?? '100%')};
 `;
 
 const StyledOverlay = styled.div`
@@ -34,9 +35,9 @@ const StyledPrimaryText = styled.span`
   font-weight: bold;
 `;
 
-export function LoaderContainer({ loading, color, children, title }: LoaderContainerProps) {
+export function LoaderContainer({ loading, color, children, title, height }: LoaderContainerProps) {
   return (
-    <StyledLoaderContainer>
+    <StyledLoaderContainer height={height}>
       {loading ? (
         <StyledOverlay>
           <LoadingSpinner color={color} />
