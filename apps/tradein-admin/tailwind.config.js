@@ -12,7 +12,11 @@ module.exports = {
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
-    extend: {},
+    extend: {
+      gridTemplateColumns: {
+        dataEntry: '2fr 3fr',
+      },
+    },
   },
   plugins: [
     plugin(({ addBase, theme }) => {

@@ -8,12 +8,12 @@ import {
 } from '@tradein-admin/libs';
 import DeviceSection from './sections/device-section';
 
-type ValidationOfferProps = {
+type CompletionProps = {
   orderItems: OrderItems[];
   shipments: Shipments;
 };
 
-const ValidationOffer = ({ orderItems }: ValidationOfferProps) => {
+const Completion = ({ orderItems }: CompletionProps) => {
   const formatQuestion = (question: string) => {
     return question?.replace('-', ' ');
   };
@@ -34,7 +34,7 @@ const ValidationOffer = ({ orderItems }: ValidationOfferProps) => {
                   return (
                     <span
                       key={idx}
-                      className={`px-2 py-1 text-white rounded-md w-fit 
+                      className={`px-2 py-1 text-white rounded-md w-fit
                         ${item.answer === 'yes' ? 'bg-green-600' : 'bg-red-600'}
                       `}
                     >
@@ -45,7 +45,7 @@ const ValidationOffer = ({ orderItems }: ValidationOfferProps) => {
               </div>
             </div>
             <hr />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 auto-cols-min items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-dataEntry gap-1 auto-cols-min items-center">
               <h4 className="sm:col-span-2">Offer</h4>
               {displayData(
                 'Original Quote',
@@ -63,4 +63,4 @@ const ValidationOffer = ({ orderItems }: ValidationOfferProps) => {
   );
 };
 
-export default ValidationOffer;
+export default Completion;

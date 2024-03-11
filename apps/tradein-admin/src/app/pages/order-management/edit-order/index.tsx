@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import {
   AccordionContainer,
@@ -19,6 +20,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Collection from './collection';
 import ValidationOffer from './validation-offer';
+import Completion from './completion';
 
 type AccordionHeadingProps = {
   id: any;
@@ -147,18 +149,6 @@ export const EditOrderPage = () => {
           <AccordionContent isOpen={accordionState.order} key="Order Details">
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2">
               <DetailCardContainer className="md:col-span-1">
-                <h4>Account Information</h4>
-                <CardItem label="Name" value={fullName} />
-                <CardItem label="Account" value={accountName} />
-                <CardItem label="Address" value={completeAddress} />
-                <CardItem label="Email" value={fullName} />
-                <CardItem
-                  label="Email Verified"
-                  value={user_id.is_verified ? 'Yes' : 'No'}
-                />
-                <CardItem label="Mobile" value={user_id.mobile_number} />
-              </DetailCardContainer>
-              <DetailCardContainer>
                 <h4>Quote Information</h4>
                 <CardItem label="Quote #" value={order.order_number} />
                 <CardItem label="Quote Status" value={order.status} />
@@ -171,6 +161,18 @@ export const EditOrderPage = () => {
                   label="Last Updated"
                   value={formatDate(order.updatedAt)}
                 />
+              </DetailCardContainer>
+              <DetailCardContainer className="md:col-span-1">
+                <h4>Account Information</h4>
+                <CardItem label="Name" value={fullName} />
+                <CardItem label="Account" value={accountName} />
+                <CardItem label="Address" value={completeAddress} />
+                <CardItem label="Email" value={fullName} />
+                <CardItem
+                  label="Email Verified"
+                  value={user_id.is_verified ? 'Yes' : 'No'}
+                />
+                <CardItem label="Mobile" value={user_id.mobile_number} />
               </DetailCardContainer>
               <DetailCardContainer className="md:col-span-2 xl:col-span-1">
                 <h4>Payment Details</h4>
@@ -201,7 +203,11 @@ export const EditOrderPage = () => {
               onToggle={() => toggleAccordion('collection')}
             />
           </AccordionHeaderContainer>
-          <AccordionContent isOpen={accordionState.collection} key="Collection">
+          <AccordionContent
+            isOpen={accordionState.collection}
+            removePadding={true}
+            key="Collection"
+          >
             <div className="max-w-full mx-auto">
               <div className="overflow-x-auto max-w-full pb-2">
                 <Collection orderItems={order_items} shipments={shipments} />
@@ -216,13 +222,36 @@ export const EditOrderPage = () => {
               onToggle={() => toggleAccordion('validation')}
             />
           </AccordionHeaderContainer>
-          <AccordionContent isOpen={accordionState.validation} key="validation">
+          <AccordionContent
+            isOpen={accordionState.validation}
+            removePadding={true}
+            key="validation"
+          >
             <div className="max-w-full mx-auto">
               <div className="overflow-x-auto max-w-full pb-2">
                 <ValidationOffer
                   orderItems={order_items}
                   shipments={shipments}
                 />
+              </div>
+            </div>
+          </AccordionContent>
+          <AccordionHeaderContainer>
+            <AccordionHeading
+              id="completion"
+              title="Completion"
+              isOpen={accordionState.completion}
+              onToggle={() => toggleAccordion('completion')}
+            />
+          </AccordionHeaderContainer>
+          <AccordionContent
+            isOpen={accordionState.completion}
+            removePadding={true}
+            key="completion"
+          >
+            <div className="max-w-full mx-auto">
+              <div className="overflow-x-auto max-w-full pb-2">
+                <Completion orderItems={order_items} shipments={shipments} />
               </div>
             </div>
           </AccordionContent>

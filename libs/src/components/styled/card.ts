@@ -6,15 +6,18 @@ export const DetailCardContainer = styled.div`
   padding: 16px;
   background-color: white;
   border: 1px solid #eee;
-  border-radius: 4px;
+  border-radius: 8px;
   box-sizing: border-box;
+  box-shadow: 0px 0px 8px #eee;
 
   h4:first-of-type {
     margin: 8px 0;
+    line-height: 1.2;
   }
 
   h4 {
     margin: 16px 0 8px 0;
+    line-height: 1.2;
   }
 `;
 

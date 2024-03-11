@@ -2,7 +2,9 @@ import {
   DetailCardContainer,
   OrderItems,
   Shipments,
+  displayData,
 } from '@tradein-admin/libs';
+import DeviceSection from './sections/device-section';
 
 type CollectionProps = {
   orderItems: OrderItems[];
@@ -10,42 +12,31 @@ type CollectionProps = {
 };
 
 const Collection = ({ orderItems, shipments }: CollectionProps) => {
-  const displayData = (label: string, value: string) => {
-    return (
-      <>
-        <dl className="font-semibold">{label}</dl>
-        <dt className="truncate">{value || '---'}</dt>
-      </>
-    );
-  };
-
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 p-2.5">
       {orderItems?.map((item: OrderItems, idx) => {
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
-            <div className="flex flex-row gap-2 mb-2">
-              <img
-                src={item?.product_variant_id?.image_url}
-                height="100px"
-                width="100px"
-                alt={item?.product_variant_id?.sku}
-              />
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-1 auto-cols-min">
-                {displayData('IMEI/Serial', item?.imei_serial)}
-                {displayData('TI SKU', item?.product_variant_id?.sku)}
-                {displayData('Device ID', item?._id)}
-                {displayData('Device Status', item?.status)}
-                {/* {displayData('Payment Status', item?.imei_serial)} */}
-              </div>
-            </div>
+            <DeviceSection order={item} />
             <hr />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-1 auto-cols-min">
-              <h4 className="col-span-2">Shipping</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-dataEntry gap-1">
+              <h4 className="sm:col-span-2">Shipping</h4>
               {displayData('Courier', shipments?.slug)}
               {displayData('Shipping Status', shipments?.status)}
               {displayData('Direction #', shipments?.direction)}
               {displayData('Inbound Tracking #', shipments?.tracking_number)}
+            </div>
+            <hr />
+            <div className="flex flex-row flex-wrap gap-1 pt-1 font-semibold">
+              <button className="px-3 py-1 text-white bg-teal-700 hover:bg-teal-800 rounded-md">
+                Mark as Received
+              </button>
+              <button className="px-3 py-1 text-white bg-green-700 hover:bg-green-800 rounded-md">
+                Send Box
+              </button>
+              <button className="px-3 py-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md">
+                Update Status
+              </button>
             </div>
           </DetailCardContainer>
         );

@@ -335,3 +335,12 @@ export function getCurrencySymbol(currencyCode: string) {
 export const formatDate = (date: Date, format='MM/DD/YYYY') => {
   return dayjs(date).format(format);
 }
+
+export const displayData = (label: string, value: any) => {
+  return (
+    <>
+      <dl className="font-semibold capitalize">{label}</dl>
+      <dt className="truncate capitalize">{value || '---'}</dt>
+    </>
+  );
+};

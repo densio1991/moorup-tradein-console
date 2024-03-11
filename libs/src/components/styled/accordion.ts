@@ -41,9 +41,9 @@ export const AccordionTitle = styled.span`
   font-weight: bold;
 `;
 
-export const AccordionContent = styled.div<{ isOpen?: boolean }>`
+export const AccordionContent = styled.div<{ isOpen?: boolean, removePadding?: boolean }>`
   display: ${(props) => (props.isOpen ? 'block' : 'none')};
-  padding: 10px;
+  padding: ${(props) => (props.removePadding ? '0' : '10px')};
   box-sizing: border-box;
 `;
 
