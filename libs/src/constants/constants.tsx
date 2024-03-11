@@ -565,6 +565,170 @@ export const CURRENCIES = [
   { value: 'ZWL', label: 'Zimbabwean Dollar (ZWL)' }
 ]
 
+export const CURRENCY_SYMBOLS: { [key: string]: string } = {
+  'AED': 'د.إ',
+  'AFN': '؋',
+  'ALL': 'L',
+  'AMD': '֏',
+  'ANG': 'ƒ',
+  'AOA': 'Kz',
+  'ARS': '$',
+  'AUD': '$',
+  'AWG': 'ƒ',
+  'AZN': '₼',
+  'BAM': 'КМ',
+  'BBD': '$',
+  'BDT': '৳',
+  'BGN': 'лв',
+  'BHD': 'ب.د',
+  'BIF': 'Fr',
+  'BMD': '$',
+  'BND': '$',
+  'BOB': 'Bs.',
+  'BRL': 'R$',
+  'BSD': '$',
+  'BTN': 'Nu.',
+  'BWP': 'P',
+  'BYN': 'Br',
+  'BZD': 'BZ$',
+  'CAD': '$',
+  'CDF': 'Fr',
+  'CHF': 'Fr',
+  'CLP': '$',
+  'CNY': '¥',
+  'COP': '$',
+  'CRC': '₡',
+  'CUP': '₱',
+  'CVE': '$',
+  'CZK': 'Kč',
+  'DJF': 'Fdj',
+  'DKK': 'kr',
+  'DOP': 'RD$',
+  'DZD': 'د.ج',
+  'EGP': 'ج.م',
+  'ERN': 'Nfk',
+  'ETB': 'Br',
+  'EUR': '€',
+  'FJD': '$',
+  'FKP': '£',
+  'FOK': 'kr',
+  'GBP': '£',
+  'GEL': '₾',
+  'GGP': '£',
+  'GHS': '₵',
+  'GIP': '£',
+  'GMD': 'D',
+  'GNF': 'Fr',
+  'GTQ': 'Q',
+  'GYD': '$',
+  'HKD': '$',
+  'HNL': 'L',
+  'HRK': 'kn',
+  'HTG': 'G',
+  'HUF': 'Ft',
+  'IDR': 'Rp',
+  'ILS': '₪',
+  'IMP': '£',
+  'INR': '₹',
+  'IQD': 'ع.د',
+  'IRR': '﷼',
+  'ISK': 'kr',
+  'JEP': '£',
+  'JMD': 'J$',
+  'JOD': 'د.ا',
+  'JPY': '¥',
+  'KES': 'Ksh',
+  'KGS': 'сом',
+  'KHR': '៛',
+  'KID': '$',
+  'KIN': 'RF',
+  'KIR': '$',
+  'KWD': 'د.ك',
+  'KYD': '$',
+  'KZT': '₸',
+  'LAK': '₭',
+  'LBP': 'ل.ل',
+  'LKR': 'රු',
+  'LRD': '$',
+  'LSL': 'L',
+  'LYD': 'ل.د',
+  'MAD': 'د.م.',
+  'MDL': 'L',
+  'MGA': 'Ar',
+  'MKD': 'ден',
+  'MMK': 'K',
+  'MNT': '₮',
+  'MOP': 'P',
+  'MRU': 'UM',
+  'MUR': '₨',
+  'MVR': 'ރ.',
+  'MWK': 'MK',
+  'MXN': '$',
+  'MYR': 'RM',
+  'MZN': 'MT',
+  'NAD': '$',
+  'NGN': '₦',
+  'NIO': 'C$',
+  'NOK': 'kr',
+  'NPR': '₨',
+  'NZD': '$',
+  'OMR': 'ر.ع.',
+  'PAB': 'B/.',
+  'PEN': 'S/.',
+  'PGK': 'K',
+  'PHP': '₱',
+  'PKR': '₨',
+  'PLN': 'zł',
+  'PYG': '₲',
+  'QAR': 'ر.ق',
+  'RON': 'lei',
+  'RSD': 'дин',
+  'RUB': '₽',
+  'RWF': 'Fr',
+  'SAR': 'ر.س',
+  'SBD': '$',
+  'SCR': '₨',
+  'SDG': 'ج.س.',
+  'SEK': 'kr',
+  'SGD': '$',
+  'SHP': '£',
+  'SLL': 'Le',
+  'SOS': 'Sh',
+  'SRD': '$',
+  'SSP': '£',
+  'STN': 'Db',
+  'SYP': 'ل.س',
+  'SZL': 'L',
+  'THB': '฿',
+  'TJS': 'ЅМ',
+  'TMT': 'm',
+  'TND': 'د.ت',
+  'TOP': 'T$',
+  'TRY': '₺',
+  'TTD': 'TT$',
+  'TVD': '$',
+  'TWD': 'NT$',
+  'TZS': 'Sh',
+  'UAH': '₴',
+  'UGX': 'Sh',
+  'USD': '$',
+  'UYU': '$U',
+  'UZS': 'UZS',
+  'VES': 'Bs',
+  'VND': '₫',
+  'VUV': 'VT',
+  'WST': 'T',
+  'XAF': 'FCFA',
+  'XCD': '$',
+  'XDR': 'SDR',
+  'XOF': 'CFA',
+  'XPF': 'Fr',
+  'YER': '﷼',
+  'ZAR': 'R',
+  'ZMW': 'ZK',
+  'ZWL': '$',
+};
+
 interface Attribute {
   value: string;
   label: string;
@@ -608,3 +772,74 @@ export const PRODUCT_TYPES = {
   WATCHES: 'watches',
   LAPTOPS: 'laptops',
 }
+
+export const MODAL_TYPES = {
+  ADD_PRODUCT: 'ADD_PRODUCT',
+  ADD_PRODUCT_VARIANT: 'ADD_PRODUCT_VARIANT',
+  ADD_USER: 'ADD_USER',
+  EDIT_USER: 'EDIT_USER',
+  ADD_PROMOTION: 'ADD_PROMOTION',
+  ADD_PROMOTION_CLAIMS: 'ADD_PROMOTION_CLAIMS',
+  ADD_PROMOTION_STEPS: 'ADD_PROMOTION_STEPS',
+  ADD_PROMOTION_CONDITION: 'ADD_PROMOTION_CONDITION',
+  ADD_PROMOTION_ELIGIBILITY_AND_FAQS: 'ADD_PROMOTION_ELIGIBILITY_AND_FAQS',
+}
+
+export const PROMOTION_STATUS = [
+  { value: 'active', label: 'Active' },
+  { value: 'inactive', label: 'Inactive' },
+]
+
+export const ADD_PROMOTION_DETAILS_PAYLOAD = {
+  name: '',
+  description: '',
+  status: '',
+  start_date: null,
+  end_date: null,
+  image_url: '',
+}
+
+export const ADD_PROMOTION_PRODUCTS_PAYLOAD = {
+  product_id: '',
+  product_name: '',
+  amount: 0,
+  currency: ''
+}
+
+export const ADD_PROMOTION_CLAIMS_PAYLOAD = {
+  title: '',
+  description: '',
+  disclaimer: '',
+  products: [ADD_PROMOTION_PRODUCTS_PAYLOAD]
+}
+
+export const ADD_PROMOTION_STEPS_ITEM = {
+  order: 1,
+  title: '',
+  description: ''
+};
+
+export const ADD_PROMOTION_STEPS_PAYLOAD = {
+  steps: [ADD_PROMOTION_STEPS_ITEM],
+}
+
+export const ADD_PROMOTION_CONDITION_ITEM = {
+  order: 1,
+  description: ''
+};
+
+export const ADD_PROMOTION_CONDITIONS_PAYLOAD = {
+  title: '',
+  items: [ADD_PROMOTION_CONDITION_ITEM]
+}
+
+export const ADD_PROMOTION_FAQ_ITEM = {
+  title: '',
+  content: ''
+};
+
+export const ADD_PROMOTION_ELIGIBILITY_AND_FAQS_PAYLOAD = {
+  title: '',
+  faq: [ADD_PROMOTION_FAQ_ITEM]
+}
+

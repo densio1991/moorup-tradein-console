@@ -7,6 +7,7 @@ import {
   FormContainer,
   FormGroup,
   FormWrapper,
+  MODAL_TYPES,
   StyledInput,
   StyledReactSelect,
   capitalizeFirstLetter,
@@ -87,7 +88,10 @@ export function AddProductForm() {
 
     if (includeProductVariant) {
       setAddProductPayload(values);
-      setSideModalState({ ...sideModalState, view: 'add-product-variant' });
+      setSideModalState({
+        ...sideModalState,
+        view: MODAL_TYPES.ADD_PRODUCT_VARIANT,
+      });
     } else {
       addProduct(values);
       setAddProductPayload(ADD_PRODUCT_PAYLOAD);

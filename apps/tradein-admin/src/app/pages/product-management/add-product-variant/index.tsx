@@ -17,6 +17,7 @@ import {
   FormContainer,
   FormGroup,
   FormWrapper,
+  MODAL_TYPES,
   ProductVariant,
   ProductVariantAttributes,
   ProductVariantPricing,
@@ -784,7 +785,10 @@ export function AddProductVariantForm() {
               variant="outlined"
               width="fit-content"
               onClick={() =>
-                setSideModalState({ ...sideModalState, view: 'add-product' })
+                setSideModalState({
+                  ...sideModalState,
+                  view: MODAL_TYPES.ADD_PRODUCT,
+                })
               }
             >
               Back
