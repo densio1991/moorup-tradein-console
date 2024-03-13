@@ -758,10 +758,20 @@ export const ATTRIBUTES: Attributes = {
   ]
 }
 
+export const SUPERADMIN = 'superadmin';
+export const ADMIN = 'admin';
+export const REGULAR = 'regular';
+export const WAREHOUSE = 'warehouse';
+export const PRODUCTS = 'products-team';
+export const CUSTOMER_SERVICE = 'customer-service';
+
 export const ROLES = [
-  { value: 'superadmin', label: 'Super Admin' },
-  { value: 'admin', label: 'Admin' },
-  { value: 'regular', label: 'Regular' }
+  { value: SUPERADMIN, label: 'Super Admin' },
+  { value: ADMIN, label: 'Admin' },
+  { value: REGULAR, label: 'Regular' },
+  { value: WAREHOUSE, label: 'Warehouse' },
+  { value: PRODUCTS, label: 'Products' },
+  { value: CUSTOMER_SERVICE, label: 'Customer Service' },
 ]
 
 export const CANCELLED_AXIOS = 'ERR_CANCELED';

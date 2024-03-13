@@ -5,3 +5,4 @@ export const LOGOUT_USER = createActionTypes('LOGOUT_USER');
 export const GET_USER_DETAILS = createActionTypes('GET_USER_DETAILS');
 
 export const SET_ACTIVE_PLATFORM = 'SET_ACTIVE_PLATFORM';
+export const SET_LOADING = 'SET_LOADING';

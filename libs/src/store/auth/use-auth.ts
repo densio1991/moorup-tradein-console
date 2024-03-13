@@ -22,11 +22,16 @@ export const useAuth = () => {
     actions.setActivePlatform(payload)(dispatch);
   }
 
+  const setLoading = (payload: any) => {
+    actions.setLoading(payload)(dispatch);
+  }
+
   return {
     state: state.auth,
     loginUser,
     logoutUser,
     getUserDetailsById,
     setActivePlatform,
+    setLoading,
   };
 };

@@ -29,6 +29,7 @@ export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Eleme
     token,
     userDetails,
     isFetchingUserDetails,
+    isPageLoading,
   } = state;
 
   const shouldRun = useRef(false);
@@ -78,7 +79,7 @@ export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Eleme
       <LoaderContainer
         color="#01463a"
         height="100vh"
-        loading={isFetchingUserDetails}
+        loading={isFetchingUserDetails || isPageLoading}
       >
         {children}
       </LoaderContainer>

@@ -11,6 +11,7 @@ const authState = {
   userDetails: {},
   isFetchingUserDetails: false,
   activePlatform: '',
+  isPageLoading: true,
 };
 
 const authReducer = (state: any, action: any) => {
@@ -101,6 +102,12 @@ const authReducer = (state: any, action: any) => {
       return {
         ...state,
         activePlatform: action.payload,
+      };
+
+    case types.SET_LOADING:
+      return {
+        ...state,
+        isPageLoading: action.payload,
       };
 
     default:

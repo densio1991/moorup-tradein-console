@@ -74,3 +74,10 @@ export const setActivePlatform = (payload: any) => (dispatch: any) => {
     payload,
   });
 };
+
+export const setLoading = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_LOADING,
+    payload,
+  });
+};
