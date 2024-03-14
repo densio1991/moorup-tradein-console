@@ -14,6 +14,7 @@ const StyledLoaderContainer = styled.div<{ height?: string }>`
   display: flex;
   flex-direction: column;
   height: ${({ height }) => (height ?? '100%')};
+  background-color: white;
 `;
 
 const StyledOverlay = styled.div`
@@ -28,6 +29,9 @@ const StyledContainerTitle = styled.div`
   font-weight: 600;
   font-size: 1.5rem;
   color: #000;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
 `;
 
 const StyledPrimaryText = styled.span`

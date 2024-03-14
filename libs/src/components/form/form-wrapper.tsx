@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 
@@ -16,13 +17,13 @@ const StyledFormWrapper = styled.div<FormWrapperProps>`
   flex-direction: column;
 `;
 
-const StyledFormTitle = styled.span`
+const StyledFormTitle = styled.span<{ withSubtitle?: boolean }>`
   text-align: left;
   margin-top: auto;
   color: #01463a;
   font-size: 24px;
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: ${(props) => props.withSubtitle ? '4px' : '40px'};
 `;
 
 const StyledFormSubTitle = styled.span`
@@ -36,7 +37,7 @@ const StyledFormSubTitle = styled.span`
 export function FormWrapper({ children, formTitle, subtTitle, width, padding }: FormWrapperProps): JSX.Element {
   return (
     <StyledFormWrapper width={width} padding={padding}>
-      {formTitle && <StyledFormTitle>{formTitle}</StyledFormTitle>}
+      {formTitle && <StyledFormTitle withSubtitle={!isEmpty(subtTitle)}>{formTitle}</StyledFormTitle>}
       {subtTitle && <StyledFormSubTitle>{subtTitle}</StyledFormSubTitle>}
       {children}
     </StyledFormWrapper>

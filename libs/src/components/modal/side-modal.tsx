@@ -27,13 +27,24 @@ const SideModalWrapper = styled.div<{ isOpen: boolean }>`
   top: 0;
   right: ${(props) => (props.isOpen ? '0' : '-540px')};
   height: 100%;
-  width: 500px;
   background-color: #fff;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
   z-index: 999;
   padding: 20px;
   transition: right 0.3s ease-in-out;
   overflow-y: auto;
+  max-width: 500px;
+  width: 100%;
+
+  @media screen and (max-width: 425px) {
+    width: 100%;
+    max-width: 325px;
+  }
+
+  @media screen and (max-width: 375px) {
+    width: 100%;
+    max-width: 275px;
+  }
 `;
 
 const StepperContainer = styled.div`

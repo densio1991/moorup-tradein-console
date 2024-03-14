@@ -11,6 +11,7 @@ import {
   CURRENCIES,
   FormContainer,
   FormGroup,
+  FormGroupWithIcon,
   FormWrapper,
   PageContainer,
   ProductVariantAttributes,
@@ -190,7 +191,7 @@ export function EditProductVariant({ productData }: { productData: any }) {
   };
 
   return (
-    <PageContainer>
+    <PageContainer bgColor="white">
       <FormWrapper width="100%" padding="0px 20px">
         <FormContainer onSubmit={formik.handleSubmit}>
           <FormGroup>
@@ -303,7 +304,7 @@ export function EditProductVariant({ productData }: { productData: any }) {
                 (price: ProductVariantPricing, priceIndex: number) => {
                   return (
                     <VariantItemsContainer key={priceIndex}>
-                      <FormGroup>
+                      <FormGroupWithIcon>
                         <StyledReactSelect
                           label={'Currency'}
                           name={`pricing[${priceIndex}].currency`}
@@ -342,7 +343,7 @@ export function EditProductVariant({ productData }: { productData: any }) {
                             handleArrayItemDelete(priceIndex, 'pricing')
                           }
                         />
-                      </FormGroup>
+                      </FormGroupWithIcon>
                       <FormGroup>
                         <StyledInput
                           type="text"
@@ -570,7 +571,7 @@ export function EditProductVariant({ productData }: { productData: any }) {
               {formik.values.attributes.map(
                 (attribute: ProductVariantAttributes, attributeIndex: any) => (
                   <VariantItemsContainer key={attributeIndex}>
-                    <FormGroup>
+                    <FormGroupWithIcon>
                       <StyledReactSelect
                         label={'Attribute Type'}
                         name={`attributes[${attributeIndex}].id`}
@@ -609,7 +610,7 @@ export function EditProductVariant({ productData }: { productData: any }) {
                           handleArrayItemDelete(attributeIndex, 'attributes')
                         }
                       />
-                    </FormGroup>
+                    </FormGroupWithIcon>
                     <FormGroup>
                       <StyledInput
                         type="text"
