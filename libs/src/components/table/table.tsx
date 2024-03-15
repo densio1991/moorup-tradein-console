@@ -144,10 +144,6 @@ const Thead = styled.thead`
 const Tbody = styled.tbody`
   tr {
     transition: background-color 0.3s ease;
-    &:hover {
-      background-color: #dff1f0;
-      cursor: pointer;
-    }
     td {
       padding: 15px 10px;
       border-bottom: 1px solid #e1e4e8;
