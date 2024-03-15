@@ -31,16 +31,18 @@ export const promotionsManagementParsingConfig = {
     return row['name'];
   },
   'Products': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['products'])) return '--';
+    // if (!row || isEmpty(row['claims'])) return '--';
+    if (!row || (isEmpty(row['claims']) && isEmpty(row['products']))) return '--';
 
-    const products = Array.isArray(row['products']) ? row['products'] : [];
+    // const products = Array.isArray(row['claims']?.products) ? row['claims'].products : [];
+    const products = Array.isArray(row['claims']?.products) && row['claims'].products.length > 0 ? row['claims'].products : (Array.isArray(row['products']) ? row['products'] : []);
     const maxItems = 2;
 
     if (products.length <= maxItems) {
       return (
         <ProductChipsContainer>
-          {products.map((product: { name: any }) => (
-            <StyledChip key={product.name} bgColor='#216A4C' textColor='white'>{product.name}</StyledChip>
+          {products.map((product: { name: any; product_name: any }) => (
+            <StyledChip key={product.product_name || product.name} bgColor='#216A4C' textColor='white'>{product.product_name || product.name}</StyledChip>
           ))}
         </ProductChipsContainer>
       );
@@ -50,8 +52,8 @@ export const promotionsManagementParsingConfig = {
 
       return (
         <ProductChipsContainer>
-          {visibleProducts.map((product: { name: any }) => (
-            <StyledChip key={product.name} bgColor='#216A4C' textColor='white'>{product.name}</StyledChip>
+          {visibleProducts.map((product: { name: any; product_name: any }) => (
+            <StyledChip key={product.product_name || product.name} bgColor='#216A4C' textColor='white'>{product.product_name || product.name}</StyledChip>
           ))}
           <StyledChip key="more" bgColor='#216A4C' textColor='white'>{`+${remainingCount} more`}</StyledChip>
         </ProductChipsContainer>

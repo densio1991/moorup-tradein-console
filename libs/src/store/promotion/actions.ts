@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { toast } from 'react-toastify';
 import { CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
@@ -38,3 +39,67 @@ export const clearPromotions = (payload: any) => (dispatch: any) => {
     payload,
   });
 };
+
+export const createPromotion = (payload: any, activePlatform: string) => (dispatch: any) => {
+  dispatch({
+    type: types.CREATE_PROMOTION.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .post('/api/promotions', payload)
+    .then((response) => {
+      dispatch({
+        type: types.CREATE_PROMOTION.SUCCESS,
+        payload: response?.data,
+      });
+
+      getPromotions({}, activePlatform)(dispatch);
+      toast.success('Promotion successfully added!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.CREATE_PROMOTION.FAILED,
+        payload: error,
+      });
+
+      getPromotions({}, activePlatform)(dispatch);
+      toast.error('Failed to add promotion.');
+    });
+};
+
+export const setAddPromotionDetailsPayload = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_ADD_PROMOTION_DETAILS_PAYLOAD,
+    payload,
+  });
+};
+
+export const setAddPromotionClaimsPayload = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_ADD_PROMOTION_CLAIMS_PAYLOAD,
+    payload,
+  });
+};
+
+export const setAddPromotionStepsPayload = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_ADD_PROMOTION_STEPS_PAYLOAD,
+    payload,
+  });
+};
+
+export const setAddPromotionConditionPayload = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_ADD_PROMOTION_CONDITION_PAYLOAD,
+    payload,
+  });
+};
+
+export const setAddPromotionEligibilityAndFaqsPayload = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_ADD_PROMOTION_ELIGIBILITY_AND_FAQS,
+    payload,
+  });
+};
+
