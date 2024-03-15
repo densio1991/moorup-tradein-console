@@ -7,12 +7,14 @@ interface LoaderContainerProps {
   color?: string;
   children: React.ReactNode;
   title?: string;
+  height?: string;
 }
 
-const StyledLoaderContainer = styled.div`
+const StyledLoaderContainer = styled.div<{ height?: string }>`
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: ${({ height }) => (height ?? '100%')};
+  background-color: white;
 `;
 
 const StyledOverlay = styled.div`
@@ -27,6 +29,9 @@ const StyledContainerTitle = styled.div`
   font-weight: 600;
   font-size: 1.5rem;
   color: #000;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
 `;
 
 const StyledPrimaryText = styled.span`
@@ -34,9 +39,9 @@ const StyledPrimaryText = styled.span`
   font-weight: bold;
 `;
 
-export function LoaderContainer({ loading, color, children, title }: LoaderContainerProps) {
+export function LoaderContainer({ loading, color, children, title, height }: LoaderContainerProps) {
   return (
-    <StyledLoaderContainer>
+    <StyledLoaderContainer height={height}>
       {loading ? (
         <StyledOverlay>
           <LoadingSpinner color={color} />

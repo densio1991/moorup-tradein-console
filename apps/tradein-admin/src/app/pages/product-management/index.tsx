@@ -10,6 +10,7 @@ import {
   ADD_PRODUCT_PAYLOAD,
   AppButton,
   DEFAULT_COLUMN,
+  MODAL_TYPES,
   PRODUCT_MANAGEMENT_COLUMNS,
   SideModal,
   Table,
@@ -68,10 +69,10 @@ export function ProductManagementPage() {
 
   const renderForm = () => {
     switch (sideModalState.view) {
-      case 'add-product':
+      case MODAL_TYPES.ADD_PRODUCT:
         return <AddProductForm />;
 
-      case 'add-product-variant':
+      case MODAL_TYPES.ADD_PRODUCT_VARIANT:
         return <AddProductVariantForm />;
 
       default:
@@ -102,7 +103,7 @@ export function ProductManagementPage() {
                 setSideModalState({
                   ...sideModalState,
                   open: true,
-                  view: 'add-product',
+                  view: MODAL_TYPES.ADD_PRODUCT,
                 })
               }
             >

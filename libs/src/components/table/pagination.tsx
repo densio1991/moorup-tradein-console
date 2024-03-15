@@ -13,9 +13,15 @@ const PaginationWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 100%;
-  margin-top: 10px;
+  width: calc(100% - 25px);
+  padding: 10px;
   white-space: nowrap;
+
+  @media screen and (max-width: 425px) {
+    flex-direction: column;
+    gap: 10px;
+    align-items: start;
+  }
 `;
 
 const LeftSection = styled.div`

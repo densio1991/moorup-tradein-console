@@ -6,24 +6,18 @@ import styled from 'styled-components';
 
 const MenuIconContainer = styled.div`
   position: relative;
+  cursor: pointer;
 `;
 
 const MenuIcon = styled(FontAwesomeIcon)`
   width: 14px;
   height: 14px;
   fill: currentColor;
-  cursor: pointer;
-
-  &:hover {
-    color: #01463a;
-    cursor: pointer;
-  }
 `;
 
 const MenuList = styled.div`
   position: absolute;
-  top: calc(100% - 2px);
-  right: 0;
+  right: 50px;
   background-color: #fff;
   border: 0px;
   border-radius: 5px;
@@ -42,7 +36,6 @@ const MenuItem = styled.div`
   transition: background-color 0.3s ease;
   &:hover {
     background-color: #dff1f0;
-    color: #01463a;
   }
 `;
 
@@ -51,11 +44,6 @@ const StyledIcon = styled(FontAwesomeIcon)<{ margin?: any }>`
   height: 14px;
   fill: currentColor;
   margin-right: ${(props) => (props.margin ? props.margin : '0px')};
-
-  &:hover {
-    color: #01463a;
-    cursor: pointer;
-  }
 `;
 
 interface MenuAction {
@@ -72,9 +60,15 @@ interface MenuProps {
 export function StyledMenuIcon({ menuItems, rowData }: MenuProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const menuListRef = useRef<HTMLDivElement>(null);
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+    if (
+      menuRef.current &&
+      !menuRef.current.contains(event.target as Node) &&
+      menuListRef.current &&
+      !menuListRef.current.contains(event.target as Node)
+    ) {
       setIsMenuOpen(false);
     }
   };
@@ -87,18 +81,21 @@ export function StyledMenuIcon({ menuItems, rowData }: MenuProps) {
   }, []);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
+    setIsMenuOpen((prevState) => !prevState); // Toggle the state
   };
 
   const handleMenuItemClick = (action: (rowData: any) => void, label: string) => {
     action(rowData);
+    setIsMenuOpen(false); // Close the menu after clicking an item
   };
 
   return (
-    <MenuIconContainer ref={menuRef}>
-      <MenuIcon icon={faEllipsisV} onClick={toggleMenu} />
+    <>
+      <MenuIconContainer ref={menuRef} onClick={toggleMenu}>
+        <MenuIcon icon={faEllipsisV} />
+      </MenuIconContainer>
       {isMenuOpen && (
-        <MenuList>
+        <MenuList ref={menuListRef}>
           {menuItems.map((item, index) => (
             <MenuItem key={index} onClick={() => handleMenuItemClick(item.action, item.label)}>
               {item.icon && <StyledIcon icon={item.icon} margin='8px' />}
@@ -107,6 +104,6 @@ export function StyledMenuIcon({ menuItems, rowData }: MenuProps) {
           ))}
         </MenuList>
       )}
-    </MenuIconContainer>
+    </>
   );
 }

@@ -14,6 +14,7 @@ interface StyledReactSelectProps {
   value: string | string[] | undefined;
   onChange: (value: any) => void;
   onBlur?: (value: any) => void;
+  isLoading?: boolean;
 }
 
 const StyledSelectContainer = styled.div<{ error?: boolean; }>`
@@ -84,7 +85,7 @@ const customStyles = (error: boolean = false) => ({
   }),
   placeholder: (provided: any) => ({
     ...provided,
-    fontSize: '14px',
+    fontSize: '12px',
     color: '#ccc'
   }),
 });
@@ -101,6 +102,7 @@ export function StyledReactSelect({
   value,
   onChange,
   onBlur,
+  isLoading,
 }: StyledReactSelectProps): JSX.Element {
   return (
     <StyledSelectContainer error={error}>
@@ -118,6 +120,7 @@ export function StyledReactSelect({
         onChange={onChange}
         onBlur={onBlur}
         blurInputOnSelect={false}
+        isLoading={isLoading}
       />
       {error && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </StyledSelectContainer>

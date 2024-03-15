@@ -28,6 +28,12 @@ const TopRight = styled.div`
   align-items: center;
 `
 
+const StyledText = styled.span`
+  font-size: 16px;
+  font-weight: 700;
+  color: #01463A;
+`
+
 const customStyles = () => ({
   control: (provided: any) => ({
     ...provided,
@@ -86,17 +92,25 @@ export function TopNavBar(): JSX.Element {
     <NavbarContainer>
       <NavbarWrapper>
         <TopLeft>
-          <Select
-            name="activePlatform"
-            isMulti={false}
-            styles={customStyles()}
-            options={platforms}
-            placeholder="Select platform"
-            value={platforms?.find((option: any) => activePlatform === option?.value) || null}
-            onChange={(selectedOption) => {
-              setActivePlatform(selectedOption.value)
-            }}
-          />
+          {
+            platforms?.length > 1 ? (
+              <Select
+                name="activePlatform"
+                isMulti={false}
+                styles={customStyles()}
+                options={platforms}
+                placeholder="Select platform"
+                value={platforms?.find((option: any) => activePlatform === option?.value) || null}
+                onChange={(selectedOption) => {
+                  setActivePlatform(selectedOption.value)
+                }}
+              />
+            ) : (
+              <StyledText>
+                {capitalizeFirstLetter(activePlatform)}
+              </StyledText>
+            )
+          }
         </TopLeft>
         <TopRight>
           <Avatar

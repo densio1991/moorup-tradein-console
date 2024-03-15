@@ -170,7 +170,7 @@ export function EditProductDetails({ productData }: { productData: any }) {
     );
 
   return (
-    <PageContainer>
+    <PageContainer bgColor="white">
       <ImageContainer>
         <Image src={formik.values?.image_url} alt={formik.values?.image_url} />
       </ImageContainer>

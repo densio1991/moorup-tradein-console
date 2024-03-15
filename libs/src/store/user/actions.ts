@@ -19,7 +19,6 @@ export const getUsers = (payload: any, signal?: AbortSignal) => (dispatch: any) 
       });
     })
     .catch((error) => {
-      console.log('Error: ', error);
       if (error.code === CANCELLED_AXIOS) {
         dispatch({
           type: types.FETCH_USERS.CANCELLED,

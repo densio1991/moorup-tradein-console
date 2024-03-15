@@ -37,26 +37,55 @@ const HeaderSection = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 20px;
+  padding: 10px 0px;
+
+  @media screen and (max-width: 425px) {
+    flex-direction: column;
+    gap: 10px;
+    align-items: start;
+  }
 `;
 
 const LeftSection = styled.div`
-  margin-right: auto;
-  flex: 1;
+  padding-left: 20px;
 `;
 
 const RightSection = styled.div`
   display: flex;
   align-items: center;
   column-gap: 8px;
+  padding-right: 20px;
+
+  @media screen and (max-width: 425px) {
+    flex-direction: column;
+    gap: 10px;
+    align-items: start;
+    padding-left: 20px;
+
+    span {
+      display: none;
+    }
+
+    svg {
+      margin: 0px;
+    }
+  }
 `;
+
+const ActionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+`
 
 const TableWrapper = styled.div`
   box-shadow: none;
   margin-bottom: 16px;
   border-radius: 6px !important;
   overflow-x: auto;
-  height: 100%;
+  padding: 0px 20px;
 `;
 
 const TableStyled = styled.table`
@@ -115,10 +144,6 @@ const Thead = styled.thead`
 const Tbody = styled.tbody`
   tr {
     transition: background-color 0.3s ease;
-    &:hover {
-      background-color: #dff1f0;
-      cursor: pointer;
-    }
     td {
       padding: 15px 10px;
       border-bottom: 1px solid #e1e4e8;
@@ -341,7 +366,7 @@ export function Table({
   const itemsToDisplay = filteredRows.slice(startIndex, endIndex);
 
   return (
-    <>
+    <div style={{ backgroundColor: 'white', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 8px 16px 0px' }}>
       <HeaderSection>
         <LeftSection>
           <TitleContainer>
@@ -358,7 +383,9 @@ export function Table({
             />
             <StyledIcon icon={faMagnifyingGlass}/>
           </StyledInput>
-          {rightControls}
+          <ActionContainer>
+            {rightControls}
+          </ActionContainer>
         </RightSection>
       </HeaderSection>
       <TableWrapper>
@@ -408,7 +435,7 @@ export function Table({
         totalRows={filteredRows.length}
         paginate={paginate}
       />
-    </>
+    </div>
   );
 }
  

@@ -10,8 +10,13 @@ export const useCommon = () => {
     actions.setSideModalState(payload)(dispatch);
   }
 
+  const setCenterModalState = (payload: any) => {
+    actions.setCenterModalState(payload)(dispatch);
+  }
+
   return {
     state: state.common,
     setSideModalState,
+    setCenterModalState,
   };
 };

@@ -5,6 +5,7 @@ import {
   ACTIONS_COLUMN,
   AppButton,
   DEFAULT_COLUMN,
+  MODAL_TYPES,
   SideModal,
   Table,
   USER_MANAGEMENT_COLUMNS,
@@ -46,10 +47,10 @@ export function UserManagementPage() {
 
   const renderForm = () => {
     switch (sideModalState.view) {
-      case 'add-user':
+      case MODAL_TYPES.ADD_USER:
         return <AddUserForm />;
 
-      case 'edit-user':
+      case MODAL_TYPES.EDIT_USER:
         return <EditUserForm data={selectedUser} />;
 
       default:
@@ -73,7 +74,7 @@ export function UserManagementPage() {
               setSideModalState({
                 ...sideModalState,
                 open: true,
-                view: 'edit-user',
+                view: MODAL_TYPES.EDIT_USER,
               });
             },
           },
@@ -86,7 +87,7 @@ export function UserManagementPage() {
               setSideModalState({
                 ...sideModalState,
                 open: true,
-                view: 'add-user',
+                view: MODAL_TYPES.ADD_USER,
               });
             }}
           >

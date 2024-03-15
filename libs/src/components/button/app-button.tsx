@@ -79,12 +79,18 @@ export function AppButton({
   variant = 'fill',
   children,
 }: CustomButtonProps) {
+  const handleClick = () => {
+    if (!disabled && !isLoading && onClick) {
+      onClick();
+    }
+  };
+
   return (
     <StyledButton
       isLoading={isLoading}
       width={width}
       padding={padding}
-      onClick={onClick}
+      onClick={handleClick}
       disabled={disabled || isLoading}
       type={type}
       variant={variant}
@@ -95,3 +101,4 @@ export function AppButton({
     </StyledButton>
   );
 }
+

@@ -16,7 +16,9 @@ import {
   CURRENCIES,
   FormContainer,
   FormGroup,
+  FormGroupWithIcon,
   FormWrapper,
+  MODAL_TYPES,
   ProductVariant,
   ProductVariantAttributes,
   ProductVariantPricing,
@@ -399,7 +401,7 @@ export function AddProductVariantForm() {
                       const pricingTouched = formik.touched[index]?.pricing;
                       return (
                         <VariantItemsContainer key={priceIndex}>
-                          <FormGroup>
+                          <FormGroupWithIcon>
                             <StyledReactSelect
                               label={'Currency'}
                               name={`pricing[${index}][${priceIndex}].currency`}
@@ -444,7 +446,7 @@ export function AddProductVariantForm() {
                                 )
                               }
                             />
-                          </FormGroup>
+                          </FormGroupWithIcon>
                           <FormGroup>
                             <StyledInput
                               type="text"
@@ -689,7 +691,7 @@ export function AddProductVariantForm() {
                         formik.touched[index]?.attributes;
                       return (
                         <VariantItemsContainer key={attributeIndex}>
-                          <FormGroup>
+                          <FormGroupWithIcon>
                             <StyledReactSelect
                               label={'Attribute Type'}
                               name={`attributes[${index}][${attributeIndex}].id`}
@@ -734,7 +736,7 @@ export function AddProductVariantForm() {
                                 )
                               }
                             />
-                          </FormGroup>
+                          </FormGroupWithIcon>
                           <FormGroup>
                             <StyledInput
                               type="text"
@@ -784,7 +786,10 @@ export function AddProductVariantForm() {
               variant="outlined"
               width="fit-content"
               onClick={() =>
-                setSideModalState({ ...sideModalState, view: 'add-product' })
+                setSideModalState({
+                  ...sideModalState,
+                  view: MODAL_TYPES.ADD_PRODUCT,
+                })
               }
             >
               Back

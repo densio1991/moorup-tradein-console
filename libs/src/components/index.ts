@@ -8,6 +8,9 @@ export * from './menu';
 export * from './modal';
 export * from './navigation';
 export * from './not-found';
+export * from './renderer';
+export * from './stepper';
 export * from './table';
 export * from './tabs';
+export * from './wysiwyg';
 

@@ -25,7 +25,7 @@ const StyledInputField = styled.input<{ error?: boolean }>`
   outline: none;
   transition: border-color 0.2s ease-in-out;
 
-  &:focus {
+  &:focus,:hover {
     border-color: #01463a;
   }
 
@@ -107,9 +107,9 @@ export function StyledInput({
         placeholder={placeholder}
         onBlur={onBlur}
         error={error}
-        onMouseEnter={enableHoverImage ? handleHover : undefined}
-        onMouseMove={enableHoverImage ? handleHover : undefined}
-        onMouseLeave={enableHoverImage ? handleMouseLeave : undefined}
+        onMouseEnter={(enableHoverImage && !isEmpty(value)) ? handleHover : undefined}
+        onMouseMove={(enableHoverImage && !isEmpty(value)) ? handleHover : undefined}
+        onMouseLeave={(enableHoverImage && !isEmpty(value)) ? handleMouseLeave : undefined}
         value={value}
         {...inputProps}
       />
