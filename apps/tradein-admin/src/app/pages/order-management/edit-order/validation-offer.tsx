@@ -6,7 +6,7 @@ import {
   amountFormatter,
   displayData,
 } from '@tradein-admin/libs';
-import DeviceSection from './sections/device-section';
+import { DeviceSection } from './sections';
 
 type ValidationOfferProps = {
   orderItems: OrderItems[];

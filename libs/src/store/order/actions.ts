@@ -73,6 +73,7 @@ export const getOrderShipments = (payload: string) => (dispatch: any) => {
   axiosInstance()
     .get(`/api/orders/${payload}/shipments`)
     .then((response) => {
+      console.log({response});
       dispatch({
         type: types.FETCH_ORDER_SHIPMENTS.SUCCESS,
         payload: response?.data,
@@ -308,6 +309,32 @@ export const evaluateOrderItemById =
       });
 
       toast.error('Failed to update order item status.');
+    });
+};
+
+export const updateShipmentStatus = (shipmentId: string, orderId: string, payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.UPDATE_SHIPPING_STATUS_BY_ID.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .patch(`/api/shipments/status/${shipmentId}`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.UPDATE_SHIPPING_STATUS_BY_ID.SUCCESS,
+        payload: response?.data,
+      });
+      getOrderShipments(orderId)(dispatch);
+      toast.success('Shipment status successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.UPDATE_SHIPPING_STATUS_BY_ID.FAILED,
+        payload: error,
+      });
+
+      toast.error('Failed to fetch order shipments.');
     });
 };
 

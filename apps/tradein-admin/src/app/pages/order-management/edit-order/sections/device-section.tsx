@@ -1,6 +1,6 @@
 import { OrderItems, displayData } from '@tradein-admin/libs';
 
-function DeviceSection({ order }: { order: OrderItems }) {
+export const DeviceSection = ({ order }: { order: OrderItems }) => {
   return (
     <div className="flex flex-row gap-2 mb-2">
       <img
@@ -18,6 +18,4 @@ function DeviceSection({ order }: { order: OrderItems }) {
       </div>
     </div>
   );
-}
-
-export default DeviceSection;
+};

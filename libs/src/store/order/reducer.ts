@@ -179,7 +179,7 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isFetchingShipments: false,
-        shipments: action.payload,
+        shipments: action.payload?.data,
       };
     }
     case types.FETCH_ORDER_SHIPMENTS.FAILED: {
@@ -204,18 +204,21 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.UPDATE_SHIPPING_STATUS_BY_ID.baseType:
     case types.RECEIVE_ORDER_ITEM_BY_ID.baseType: {
       return {
         ...state,
         isUpdatingOrderItem: true,
       };
     }
+    case types.UPDATE_SHIPPING_STATUS_BY_ID.SUCCESS:
     case types.RECEIVE_ORDER_ITEM_BY_ID.SUCCESS: {
       return {
         ...state,
         isUpdatingOrderItem: false,
       };
     }
+    case types.UPDATE_SHIPPING_STATUS_BY_ID.FAILED: 
     case types.RECEIVE_ORDER_ITEM_BY_ID.FAILED: {
       return {
         ...state,

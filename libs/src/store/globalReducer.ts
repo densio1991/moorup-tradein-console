@@ -6,7 +6,6 @@ import { orderReducer, orderState } from './order';
 import { productReducer, productState } from './product';
 import { promotionReducer, promotionState } from './promotion';
 import { userReducer, userState } from './user';
-import { orderReducer, orderState } from './order';
 
 const rootReducer = (state: any, action: any) => {
   return {
@@ -16,7 +15,6 @@ const rootReducer = (state: any, action: any) => {
     promotion: promotionReducer(state.promotion, action),
     order: orderReducer(state.common, action),
     common: commonReducer(state.common, action),
-    order: orderReducer(state.order, action),
   };
 };
 
@@ -27,7 +25,6 @@ const initialState = {
   promotion: promotionState,
   order: orderState,
   common: commonState,
-  order: orderState,
 };
 
 export const useAppReducer = () => useReducer(rootReducer, initialState);

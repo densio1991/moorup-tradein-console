@@ -15,6 +15,7 @@ import {
   formatDate,
   Badge,
   OrderItems,
+  OrderItemStatus,
 } from '@tradein-admin/libs';
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -74,6 +75,7 @@ export const EditOrderPage = () => {
     state,
     fetchOrderById,
     fetchOrderShipments,
+    cancelOrderById,
     // patchOrderItemById,
     // evaluateOrderItemById,
     // closeModal,
@@ -82,8 +84,8 @@ export const EditOrderPage = () => {
   const {
     order = {},
     shipments = {},
+    isUpdatingOrder,
     // isFetchingOrder,
-    // isUpdatingOrder,
     // isModalOpen,
     // activeOrderItem,
   } = state;
@@ -95,19 +97,18 @@ export const EditOrderPage = () => {
     order_items = [],
   } = order;
 
-  console.log({ shipments });
-
   useEffect(() => {
     if (shouldRun.current) {
       fetchOrderById(orderId);
-      fetchOrderShipments(orderId);
       shouldRun.current = false;
     }
-
-    return () => {
-      // clearProduct({});
-    };
   }, []);
+
+  useEffect(() => {
+    if (order._id) {
+      fetchOrderShipments(order._id);
+    }
+  }, [order._id]);
 
   const [accordionState, setAccordionState] = useState<AccordionStates>({
     order: true,
@@ -147,6 +148,17 @@ export const EditOrderPage = () => {
             />
           </AccordionHeaderContainer>
           <AccordionContent isOpen={accordionState.order} key="Order Details">
+            {order?.status !== OrderItemStatus.CANCELLED && (
+              <div className="flex justify-end gap-2 mb-2">
+                <button
+                  className="text-md font-medium text-white bg-red-500 py-1 px-3 rounded-md hover:bg-red-600"
+                  onClick={() => cancelOrderById(order?._id)}
+                  disabled={isUpdatingOrder}
+                >
+                  Cancel Order
+                </button>
+              </div>
+            )}
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2">
               <DetailCardContainer className="md:col-span-1">
                 <h4>Quote Information</h4>
@@ -210,7 +222,11 @@ export const EditOrderPage = () => {
           >
             <div className="max-w-full mx-auto">
               <div className="overflow-x-auto max-w-full pb-2">
-                <Collection orderItems={order_items} shipments={shipments} />
+                <Collection
+                  orderId={orderId}
+                  orderItems={order_items}
+                  shipments={shipments}
+                />
               </div>
             </div>
           </AccordionContent>

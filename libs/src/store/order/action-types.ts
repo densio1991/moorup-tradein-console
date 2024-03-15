@@ -14,6 +14,7 @@ export const DELETE_ORDER_ITEM_BY_ID = createActionTypes('DELETE_ORDER_ITEM_BY_I
 export const RESEND_SHIPMENT_LABEL = createActionTypes('RESEND_SHIPMENT_LABEL');
 export const RECEIVE_ORDER_ITEM_BY_ID = createActionTypes('RECEIVE_ORDER_ITEM_BY_ID');
 export const EVALUATE_ORDER_ITEM_BY_ID = createActionTypes('EVALUATE_ORDER_ITEM_BY_ID');
+export const UPDATE_SHIPPING_STATUS_BY_ID = createActionTypes('UPDATE_SHIPPING_STATUS_BY_ID');
 
 // Base action types
 export const SET_ORDERS = 'SET_ORDERS';

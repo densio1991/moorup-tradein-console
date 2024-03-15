@@ -16,6 +16,18 @@ module.exports = {
       gridTemplateColumns: {
         dataEntry: '2fr 3fr',
       },
+      colors: {
+        primary: {
+          DEFAULT: '#01463A',
+          light: '#216A4C',
+        },
+        secondary: {
+          DEFAULT: '#D4FDCC',
+        },
+        background: {
+          DEFAULT: '#E8EAE3',
+        },
+      },
     },
   },
   plugins: [

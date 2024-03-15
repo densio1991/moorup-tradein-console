@@ -46,17 +46,22 @@ export const useOrder = () => {
     actions.getOrderShipments(id)(dispatch);
   };
 
+  const updateShipmentStatusById = (shipmentId: string, payload: any) => {
+    const orderId = state.order?.order?._id;
+    actions.updateShipmentStatus(shipmentId, orderId, payload)(dispatch);
+  };
+
   const resendShipmentLabel = (id: any) => {
     actions.resendShipmentLabel(id)(dispatch);
   };
 
   const receiveOrderItemById = (id: any) => {
-    const orderId = state.order?._id;
+    const orderId = state.order?.order?._id;
     actions.receiveOrderItemById(id, orderId)(dispatch);
   };
 
   const evaluateOrderItemById = (id: any, payload: any) => {
-    const orderId = state.order?._id;
+    const orderId = state.order?.order?._id;
     actions.evaluateOrderItemById(id, orderId, payload)(dispatch);
   };
 
@@ -90,6 +95,7 @@ export const useOrder = () => {
     resendShipmentLabel,
     receiveOrderItemById,
     evaluateOrderItemById,
+    updateShipmentStatusById,
 
     openModal,
     closeModal,
