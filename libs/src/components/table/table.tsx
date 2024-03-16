@@ -9,7 +9,6 @@ import {
   sortArray,
   sortByKey
 } from '../../helpers';
-import { StyledMenuIcon } from '../menu';
 import Pagination from './pagination';
 
 interface ThProps {
@@ -358,18 +357,8 @@ export function Table({
     if (parsingFunction) {
       return parsingFunction({ row, menuItems });
     }
-
-    switch(header.label) {
-      case 'Actions': {
-        return (
-          <StyledMenuIcon menuItems={menuItems} rowData={row} />
-        )
-      }
-
-      default:
-        if (isEmpty(row[header.keyName])) return '--';
-        return row[header.keyName];
-    }
+    
+    return row[header.keyName] || '--';
   };
 
   const sortedHeaders = sortByKey(headers, 'order');
