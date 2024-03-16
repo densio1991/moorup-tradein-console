@@ -41,6 +41,14 @@ export const usePromotion = () => {
     actions.setAddPromotionEligibilityAndFaqsPayload(payload)(dispatch);
   }
 
+  const getPromotionClaims = (payload: any, signal: AbortSignal) => {
+    actions.getPromotionClaims(payload, activePlatform, signal)(dispatch);
+  }
+
+  const clearPromotionClaims = (payload: any) => {
+    actions.clearPromotionClaims(payload)(dispatch);
+  }
+
   return {
     state: state.promotion,
     getPromotions,
@@ -51,5 +59,7 @@ export const usePromotion = () => {
     setAddPromotionStepsPayload,
     setAddPromotionConditionPayload,
     setAddPromotionEligibilityAndFaqsPayload,
+    getPromotionClaims,
+    clearPromotionClaims,
   };
 };

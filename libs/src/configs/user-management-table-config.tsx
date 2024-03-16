@@ -1,25 +1,36 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
-import styled from 'styled-components';
-import { StyledMenuIcon } from '../components';
-import { capitalizeFirstLetter } from '../helpers';
+import { Chip, StyledMenuIcon } from '../components';
+import { DefaultStatus } from '../constants';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
   menuItems?: any;
 }
 
-const StyledChip = styled.span<{ value?: string; width?: string }>`
-  display: inline-block;
-  border-radius: 4px;
-  font-weight: 600;
-  padding: 2px 20px;
-  text-decoration: none;
-  width: ${(props) => props.width ?? 'auto'};
-  text-align: center;
-  background-color: ${(props) => props.value === 'active' ? '#b0d6d0' : '#ffdbd9'};
-  color: ${(props) => props.value === 'active' ? '#01463A' : '#f7564a'};
-`;
+const parseStatus = (value: string) => {
+  let textColor = 'white';
+  let bgColor = '#216A4C';
+
+  switch (value) {
+    case DefaultStatus.ACTIVE:
+      textColor = 'white';
+      bgColor = '#216A4C';
+      break;
+
+    case DefaultStatus.INACTIVE:
+      textColor = 'white';
+      bgColor = '#f7564a';
+      break;
+
+    default:
+      textColor = 'white';
+      bgColor = '#216A4C';
+      break;
+  }
+
+  return <Chip value={value} textColor={textColor} bgColor={bgColor} width='100px'/>
+}
 
 export const userManagementParsingConfig = {
   'First Name': ({ row }: ParsingFunctionParams) => {
@@ -36,7 +47,7 @@ export const userManagementParsingConfig = {
   },
   'Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['status'])) return '--';
-    return <StyledChip value={row['status']} width='100px'>{capitalizeFirstLetter(row['status'])}</StyledChip>;
+    return parseStatus(row['status']);
   },
   'Actions': ({ row, menuItems }: ParsingFunctionParams) => {
     if (!row || isEmpty(menuItems)) return '--';

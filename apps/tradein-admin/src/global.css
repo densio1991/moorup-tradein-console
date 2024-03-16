@@ -47,3 +47,7 @@ ul {
 a, button {
   line-height: normal;
 }
+
+input {
+  font-size: 12px;
+}

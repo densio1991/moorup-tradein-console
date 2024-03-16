@@ -103,3 +103,38 @@ export const setAddPromotionEligibilityAndFaqsPayload = (payload: any) => (dispa
   });
 };
 
+export const getPromotionClaims = (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any) => {
+  dispatch({
+    type: types.FETCH_PROMOTION_CLAIMS.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .get(`/api/claims?platform=${platform}`, { signal: signal })
+    .then((response) => {
+      dispatch({
+        type: types.FETCH_PROMOTION_CLAIMS.SUCCESS,
+        payload: response?.data,
+      });
+    })
+    .catch((error) => {
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.FETCH_PROMOTION_CLAIMS.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_PROMOTION_CLAIMS.FAILED,
+          payload: error,
+        });
+      }
+    });
+};
+
+export const clearPromotionClaims = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CLEAR_PROMOTION_CLAIMS,
+    payload,
+  });
+};

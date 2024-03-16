@@ -1,7 +1,8 @@
+/* eslint-disable no-case-declarations */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
-import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import {
   ADMIN,
   CUSTOMER_SERVICE,
@@ -19,6 +20,7 @@ import { ComponentWrapper } from './wrapper';
 
 export function PrivateRoute(): JSX.Element {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const {
     state, setLoading,
   } = useAuth();
@@ -30,35 +32,56 @@ export function PrivateRoute(): JSX.Element {
 
   useEffect(() => {
     if (!isEmpty(userDetails)) {
+      let activeUrl = /\/dashboard/;
+
       switch (userDetails?.role) {
         case REGULAR:
           setLoading(false);
-          navigate('/dashboard/promotion');
+
+          activeUrl = /^\/dashboard\/claims/;
+          if (!activeUrl?.test(pathname)) {
+            navigate('/dashboard/claims');
+          }
           break;
   
         case ADMIN:
           setLoading(false);
-          navigate('/dashboard/product');
+          activeUrl = /^\/dashboard\/product/;
+          if (!activeUrl?.test(pathname)) {
+            navigate('/dashboard/product');
+          }
           break;
   
         case WAREHOUSE:
           setLoading(false);
-          navigate('/dashboard/order');
+          activeUrl = /^\/dashboard\/order/;
+          if (!activeUrl?.test(pathname)) {
+            navigate('/dashboard/order');
+          }
           break;
   
         case PRODUCTS:
           setLoading(false);
-          navigate('/dashboard/product');
+          activeUrl = /^\/dashboard\/product/;
+          if (!activeUrl?.test(pathname)) {
+            navigate('/dashboard/product');
+          }
           break;
   
         case CUSTOMER_SERVICE:
           setLoading(false);
-          navigate('/dashboard/product');
+          activeUrl = /^\/dashboard\/product/;
+          if (!activeUrl?.test(pathname)) {
+            navigate('/dashboard/product');
+          }
           break;
   
         case SUPERADMIN:
           setLoading(false);
-          navigate('/dashboard');
+          activeUrl = /\/dashboard/;
+          if (!activeUrl?.test(pathname)) {
+            navigate('/dashboard');
+          }
           break;
   
         default:

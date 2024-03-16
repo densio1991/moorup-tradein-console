@@ -25,8 +25,6 @@ const orderState = {
 };
 
 const orderReducer = (state = orderState, action: any) => {
-  console.log('\x1b[33m action: ', action);
-
   switch (action.type) {
     case types.FETCH_ORDERS.baseType: {
       return {
@@ -46,6 +44,13 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isFetchingOrders: false,
+        orders: [],
+      };
+    }
+    case types.FETCH_ORDERS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingOrders: true,
         orders: [],
       };
     }

@@ -98,7 +98,7 @@ export function SideBar(): JSX.Element {
   const filteredSideNavItems = SIDENAV_ITEMS.filter(item => {
     switch (userDetails?.role) {
       case REGULAR:
-        return item.title === 'Promotions';
+        return item.title === 'Claims';
 
       case ADMIN:
         return [
