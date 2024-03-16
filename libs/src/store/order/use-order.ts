@@ -33,8 +33,8 @@ export const useOrder = () => {
     actions.cancelOrderById(id)(dispatch);
   }
 
-  const patchOrderItemById = (id: any, payload: any) => {
-    const orderId = state.order?._id;
+  const patchOrderItemById = (id: any, orderId: any, payload: any) => {
+    // const orderId = state.order?._id;
     actions.updateOrderItemById(id, orderId, payload)(dispatch);
   }
 

@@ -19,12 +19,14 @@ import {
   COLLECTION_ORDER_ITEM_STATUS,
   VALIDATION_ORDER_ITEM_STATUS,
   COMPLETION_ORDER_ITEM_STATUS,
+  StatusModal,
 } from '@tradein-admin/libs';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Collection from './collection';
 import ValidationOffer from './validation-offer';
 import Completion from './completion';
+import { EditForm } from './status/edit-form';
 
 type AccordionHeadingProps = {
   id: any;
@@ -78,8 +80,8 @@ export const EditOrderPage = () => {
     fetchOrderById,
     fetchOrderShipments,
     cancelOrderById,
-    // patchOrderItemById,
-    // evaluateOrderItemById,
+    patchOrderItemById,
+    evaluateOrderItemById,
     // closeModal,
   } = useOrder();
 
@@ -120,12 +122,30 @@ export const EditOrderPage = () => {
     }
   }, [order._id]);
 
+  const onUpdateStatus = (newValue: any, status: any) => {
+    if (newValue.status === OrderItemStatus.FOR_REVISION) {
+      const payload = {
+        pass: false,
+        revised_offer: newValue.revised_offer,
+        reasons: newValue.reason?.split(','),
+      };
+      evaluateOrderItemById(newValue._id, payload);
+    } else if (newValue.status === OrderItemStatus.EVALUATED) {
+      evaluateOrderItemById(newValue._id, { pass: true });
+    }
+    console.log(newValue);
+    patchOrderItemById(newValue._id, orderId, { status: status });
+  };
+
   const [accordionState, setAccordionState] = useState<AccordionStates>({
     quote: true,
     collection: true,
     validation: true,
     completion: true,
   } as AccordionStates);
+
+  const [statusModal, setStatusModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState({} as OrderItems);
 
   const toggleAccordion = (item: any) => {
     setAccordionState((prev: any) => {
@@ -252,6 +272,8 @@ export const EditOrderPage = () => {
                       orderId={orderId}
                       orderItems={collectionOrderItems}
                       shipments={shipments}
+                      setStatusModal={setStatusModal}
+                      setSelectedItem={setSelectedItem}
                     />
                   </div>
                 </div>
@@ -278,6 +300,8 @@ export const EditOrderPage = () => {
                     <ValidationOffer
                       orderItems={validationOrderItems}
                       shipments={shipments}
+                      setStatusModal={setStatusModal}
+                      setSelectedItem={setSelectedItem}
                     />
                   </div>
                 </div>
@@ -304,6 +328,8 @@ export const EditOrderPage = () => {
                     <Completion
                       orderItems={completionOrderItems}
                       shipments={shipments}
+                      setStatusModal={setStatusModal}
+                      setSelectedItem={setSelectedItem}
                     />
                   </div>
                 </div>
@@ -312,6 +338,13 @@ export const EditOrderPage = () => {
           )}
         </AccordionInnerContainer>
       </AccordionContainer>
+      <StatusModal isOpen={statusModal}>
+        <EditForm
+          setStatusModal={setStatusModal}
+          updateStatus={onUpdateStatus}
+          orderItems={selectedItem}
+        />
+      </StatusModal>
     </LoaderContainer>
   );
 };

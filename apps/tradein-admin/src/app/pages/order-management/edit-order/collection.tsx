@@ -12,9 +12,17 @@ type CollectionProps = {
   orderId: unknown;
   orderItems: OrderItems[];
   shipments: Shipments;
+  setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedItem: React.Dispatch<React.SetStateAction<OrderItems>>;
 };
 
-const Collection = ({ orderId, orderItems, shipments }: CollectionProps) => {
+const Collection = ({
+  orderId,
+  orderItems,
+  shipments,
+  setStatusModal,
+  setSelectedItem,
+}: CollectionProps) => {
   const {
     state,
     receiveOrderItemById,
@@ -44,6 +52,10 @@ const Collection = ({ orderId, orderItems, shipments }: CollectionProps) => {
   };
 
   const isOrderShipped = !isEmpty(shipments);
+  const handleStatus = (item: OrderItems) => {
+    setStatusModal(true);
+    setSelectedItem(item);
+  };
 
   return (
     <div className="flex gap-2 p-2.5">
@@ -104,6 +116,12 @@ const Collection = ({ orderId, orderItems, shipments }: CollectionProps) => {
                 </div>
               </>
             )}
+            <button
+              onClick={() => handleStatus(item)}
+              className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
+            >
+              Update Status
+            </button>
           </DetailCardContainer>
         );
       })}
