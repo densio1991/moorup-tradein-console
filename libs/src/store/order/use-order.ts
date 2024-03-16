@@ -59,7 +59,11 @@ export const useOrder = () => {
   };
 
   const resendShipmentLabel = (id: any) => {
-    actions.resendShipmentLabel(id)(dispatch);
+    const payload = {
+      platform: activePlatform,
+      orderFlow: state.order?.order?.order_flow,
+    }
+    actions.resendShipmentLabel(id, payload)(dispatch);
   };
 
   const resendOrderItemShipmentLabel = (id: any) => {

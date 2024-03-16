@@ -183,14 +183,14 @@ export const cancelOrderById = (orderId: any) => (dispatch: any) => {
   };
 
 export const resendShipmentLabel =
-  (orderId: any) => (dispatch: any) => {
+  (id: any, payload: any) => (dispatch: any) => {
     dispatch({
       type: types.RESEND_SHIPMENT_LABEL.baseType,
-      orderId,
+      id,
     });
 
     axiosInstance()
-      .post(`/api/orders/${orderId}/resend-label`)
+      .post('/api/shipments/resend-label', payload)
       .then((response) => {
         dispatch({
           type: types.RESEND_SHIPMENT_LABEL.SUCCESS,

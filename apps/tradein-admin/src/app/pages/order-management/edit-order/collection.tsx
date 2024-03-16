@@ -30,7 +30,7 @@ const Collection = ({
     receiveOrderItemById,
     cancelOrderItemById,
     updateShipmentStatusById,
-    resendOrderItemShipmentLabel,
+    resendShipmentLabel,
   } = useOrder();
   const {
     order = {},
@@ -54,7 +54,7 @@ const Collection = ({
   };
 
   const handleResendLabel = (orderItemId: any) => {
-    resendOrderItemShipmentLabel(orderItemId);
+    resendShipmentLabel(orderItemId);
   };
 
   const handleStatus = (item: OrderItems) => {
@@ -145,7 +145,6 @@ const Collection = ({
                 </>
               )
             )}
-            <hr />
             <button
               onClick={() => handleStatus(item)}
               className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
