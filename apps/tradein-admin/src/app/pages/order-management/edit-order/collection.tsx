@@ -102,10 +102,12 @@ const Collection = ({
                   <CardDetail
                     label="Direction #"
                     value={shipments?.direction}
+                    copy
                   />
                   <CardDetail
                     label="Inbound Tracking #"
                     value={shipments?.tracking_number}
+                    copy
                   />
                 </div>
               )}

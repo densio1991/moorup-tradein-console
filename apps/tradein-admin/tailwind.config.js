@@ -15,6 +15,7 @@ module.exports = {
     extend: {
       gridTemplateColumns: {
         dataEntry: '2fr 3fr',
+        fitLabel: 'fit-content auto',
       },
       colors: {
         primary: {

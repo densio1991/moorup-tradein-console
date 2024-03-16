@@ -16,11 +16,11 @@ import {
   OrderItems,
   OrderItemStatus,
   LoaderContainer,
+  CopyToClipboardButton,
+  StatusModal,
   COLLECTION_ORDER_ITEM_STATUS,
   VALIDATION_ORDER_ITEM_STATUS,
   COMPLETION_ORDER_ITEM_STATUS,
-  StatusModal,
-  resendShipmentLabel,
 } from '@tradein-admin/libs';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -63,12 +63,17 @@ export const AccordionHeading = ({
 type CardItemProps = {
   label: string;
   value: any;
+  copy?: boolean;
 };
-export const CardItem = ({ label, value }: CardItemProps) => {
+
+export const CardItem = ({ label, value, copy }: CardItemProps) => {
   return (
     <DataLine>
       <dl>{label}</dl>
-      <dt>{value || '---'}</dt>
+      <dt>
+        {value || '---'}
+        {copy && value && <CopyToClipboardButton textToCopy={value} />}
+      </dt>
     </DataLine>
   );
 };
@@ -84,6 +89,7 @@ export const EditOrderPage = () => {
     patchOrderItemById,
     evaluateOrderItemById,
     // closeModal,
+    resendShipmentLabel,
   } = useOrder();
 
   const {
@@ -207,7 +213,7 @@ export const EditOrderPage = () => {
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2">
               <DetailCardContainer className="md:col-span-1">
                 <h4>Quote Information</h4>
-                <CardItem label="Quote #" value={order.order_number} />
+                <CardItem label="Quote #" value={order.order_number} copy />
                 <CardItem label="Quote Status" value={order.status} />
                 <CardItem label="Products" value={products} />
                 <CardItem
@@ -221,25 +227,29 @@ export const EditOrderPage = () => {
               </DetailCardContainer>
               <DetailCardContainer className="md:col-span-1">
                 <h4>Account Information</h4>
-                <CardItem label="Name" value={fullName} />
-                <CardItem label="Account" value={accountName} />
-                <CardItem label="Address" value={completeAddress} />
-                <CardItem label="Email" value={fullName} />
+                <CardItem label="Name" value={fullName} copy />
+                <CardItem label="Account" value={accountName} copy />
+                <CardItem label="Address" value={completeAddress} copy />
+                <CardItem label="Email" value={fullName} copy />
                 <CardItem
                   label="Email Verified"
                   value={user_id.is_verified ? 'Yes' : 'No'}
                 />
-                <CardItem label="Mobile" value={user_id.mobile_number} />
+                <CardItem label="Mobile" value={user_id.mobile_number} copy />
               </DetailCardContainer>
               <DetailCardContainer className="md:col-span-2 xl:col-span-1">
                 <h4>Payment Details</h4>
-                <CardItem label="Credit Timeframe" value={order.order_type} />
+                <CardItem label="Credit Timeframe" value={order.credit_type} />
                 <CardItem
                   label="Payment Status"
                   value={payment.payment_status}
                 />
                 <CardItem label="Payment Type" value={payment.payment_type} />
-                <CardItem label="BSB & Account" value={user_id.bsb_account} />
+                <CardItem
+                  label="BSB & Account"
+                  value={user_id.bsb_account}
+                  copy
+                />
                 <h4>Identification</h4>
                 <CardItem
                   label="Identification"
