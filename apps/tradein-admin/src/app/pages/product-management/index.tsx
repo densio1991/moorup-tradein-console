@@ -14,6 +14,7 @@ import {
   PRODUCT_MANAGEMENT_COLUMNS,
   SideModal,
   Table,
+  capitalizeFirstLetter,
   exportToCSV,
   productManagementParsingConfig,
   useAuth,
@@ -21,7 +22,7 @@ import {
   useProduct,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AddProductForm } from './add-product';
 import { AddProductVariantForm } from './add-product-variant';
@@ -80,12 +81,25 @@ export function ProductManagementPage() {
     }
   };
 
+  // const formattedRows = useMemo(() => {
+  //   return products.map((row: any) => {
+  //     return {
+  //       _id: row?._id,
+  //       display_name: row?.display_name,
+  //       brand: capitalizeFirstLetter(row?.brand),
+  //       model: capitalizeFirstLetter(row?.model),
+  //       year: row?.year,
+  //     };
+  //   });
+  // }, [products]);
+
   return (
     <>
       <Table
         label="Products"
         isLoading={isFetchingProducts}
         headers={headers}
+        // rows={formattedRows || []}
         rows={products || []}
         parsingConfig={productManagementParsingConfig}
         menuItems={[

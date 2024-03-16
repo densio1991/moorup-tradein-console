@@ -6,6 +6,7 @@ import {
   EditProductPage,
   LoginPage,
   OrderManagementPage,
+  EditOrderPage,
   PaymentsPage,
   ProductManagementPage,
   PromotionsPage,
@@ -26,6 +27,7 @@ export function App() {
           <Route path="/dashboard/product/:id" element={<EditProductPage />} />
           <Route path="/dashboard/order" element={<OrderManagementPage />} />
           <Route path="/dashboard/discrepancy" element={<DiscrepancyPage />} />
+          <Route path="/dashboard/order/:id" element={<EditOrderPage />} />
           <Route path="/dashboard/user" element={<UserManagementPage />} />
           <Route path="/dashboard/promotion" element={<PromotionsPage />} />
           <Route path="/dashboard/payment" element={<PaymentsPage />} />

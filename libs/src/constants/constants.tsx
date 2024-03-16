@@ -93,39 +93,33 @@ export const PRODUCT_MANAGEMENT_COLUMNS = [
 
 export const ORDER_MANAGEMENT_COLUMNS = [
   {
-    label: 'First Name',
+    label: 'User Email',
     order: 2,
     enableSort: true,
-  },
-  {
-    label: 'Last Name',
-    order: 3,
-    enableSort: true,
+    keyName: 'user_email',
   },
   {
     label: 'Status',
-    order: 4,
+    order: 3,
     enableSort: true,
+    keyName: 'status',
   },
   {
     label: 'Payment Status',
-    order: 5,
+    order: 4,
     enableSort: true,
+    keyName: 'payment_status',
   },
   {
     label: 'Order Count',
-    order: 6,
-    enableSort: true,
-  },
-  {
-    label: 'Created',
-    order: 7,
-    enableSort: true,
+    order: 5,
+    keyName: 'order_count',
   },
   {
     label: 'Updated',
     order: 8,
     enableSort: true,
+    keyName: 'updated',
   },
 ]
 
@@ -399,6 +393,128 @@ export interface ProductVariantPricing {
 export interface ProductVariantAttributes {
   id: string;
   name: string;
+}
+export interface QuestionAnswered {
+  question: string;
+  answer: string;
+}
+
+export interface OrderItems {
+  _id: string;
+  product_variant_id: ProductVariant; // original type : number
+  product_name: string;
+  original_offer: number;
+  revised_offer: number;
+  status: string;
+  imei_serial: string;
+  cosmetic_sell_grade: string;
+  is_erased: boolean;
+  functional_tested: boolean;
+  lock_type: string;
+  line_item_number: string;
+  questions_answered: QuestionAnswered[];
+}
+
+export interface Addresses {
+  type: string;
+  line_1: string;
+  line_2: string;
+  suburb: string;
+  city: string;
+  state: string;
+  region: string;
+  dpid: string;
+  zipcode: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Claims {
+  order_id: string;
+  promotion_id: number;
+  platform: string;
+  user_id: number;
+  status: string;
+  payment_type: string;
+  payment_details: string;
+}
+
+export interface Shipments {
+  _id: string;
+  platform: string;
+  order_id: string | number;
+  tracking_number: string;
+  slug: string; // courier
+  status: string;
+  direction: string;
+  pdf_url: string;
+}
+
+export interface BankDetails {
+  _id: string;
+  bank_name: string;
+  account_name: string;
+  account_number: string;
+  swift_code: string;
+}
+export interface UserDocument {
+  _id: string;
+  platform: string;
+  first_name: string;
+  last_name: string;
+  identification: {
+    id_type?: string;
+    id_number?: string;
+    id_state?: string; // identification
+  };
+  email: string;
+  mobile_number: string;
+  is_verified: string;
+  status: string;
+  bank_details: BankDetails[];
+  address: Addresses[];
+  bsb_account: string;
+  updated_at: string;
+}
+
+export interface OrderInterface {
+  _id: string;
+  user_id: UserDocument; // must be number : populate data
+  platform: string;
+  order_type: string; // credit_timeframe
+  order_flow: string;
+  order_number: string | number;
+  status: string; // FIXME: create enums
+  credit_type: string;
+  order_items: OrderItems[];
+  pricing_detail: {
+    total_items_amount: number;
+    total_discount_amount: number;
+    total_shipping_amount: number;
+    sub_total_amount: number;
+  };
+  payment: {
+    payment_status: string; // FIXME: create enums : paid | to-pay | not-paid
+    payment_date: string;
+    payment_type: string;
+  };
+  cancellation: {
+    cancellation_status: string;
+    cancellation_date: string;
+  };
+  voucher_links: string[];
+  addresses: Addresses[];
+  new_device: {
+    product_variant_id: number;
+    shop: string;
+    status: number;
+    imei_serial: number;
+    created_at: string;
+    updated_at: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+  shipments: Shipments;
 }
 
 export const CURRENCIES = [
@@ -853,3 +969,40 @@ export const ADD_PROMOTION_ELIGIBILITY_AND_FAQS_PAYLOAD = {
   faq: [ADD_PROMOTION_FAQ_ITEM]
 }
 
+export interface Product {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [x: string]: any;
+  _id: string;
+  name: string;
+  brand: string;
+  model: string;
+  year: string;
+  display_name: string;
+  category: string;
+  type: string;
+  image_url: string;
+  site_url: string;
+  status: string;
+  is_archived: string;
+  createdAt: string;
+  updatedAt: string;
+  platform: string;
+}
+
+export interface Promotion {
+  // product: String
+  // amount: Number
+  // dateClaimSubmitted: Date
+  // transactionNumber: String
+  // dateClaimPaid: Date
+  _id: string;
+  name: string;
+  description: string;
+  platform: string;
+  status: string;
+  start_date: string;
+  end_date: string;
+  products: Product[];
+  price: number;
+  image_url: string;
+}

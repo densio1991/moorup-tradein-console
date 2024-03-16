@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import dayjs from 'dayjs';
 import { jwtDecode } from 'jwt-decode';
 import { isEmpty } from 'lodash';
 import { CURRENCY_SYMBOLS } from '../constants';
@@ -97,13 +98,13 @@ export function sortByKey(array: any[], key: string | number) {
 
 export function sortArray<T>(array: T[], key: string, direction: string): T[] {
   const compare = (a: T, b: T) => {
-    const aValue = (a as any)[key].toLowerCase();
-    const bValue = (b as any)[key].toLowerCase();
+    const aValue = ((a as any)[key])?.toLowerCase();
+    const bValue = ((b as any)[key])?.toLowerCase();
 
     if (direction === 'asc') {
-      return aValue.localeCompare(bValue);
+      return aValue?.localeCompare(bValue);
     } else {
-      return bValue.localeCompare(aValue);
+      return bValue?.localeCompare(aValue);
     }
   };
 
@@ -330,3 +331,16 @@ export function formatDateString(inputDateString: string) {
 export function getCurrencySymbol(currencyCode: string) {
   return CURRENCY_SYMBOLS[currencyCode] || null;
 }
+
+export const formatDate = (date: Date, format='MM/DD/YYYY') => {
+  return dayjs(date).format(format);
+}
+
+export const displayData = (label: string, value: any) => {
+  return (
+    <>
+      <dl className="font-semibold capitalize">{label}</dl>
+      <dt className="truncate capitalize">{value || '---'}</dt>
+    </>
+  );
+};

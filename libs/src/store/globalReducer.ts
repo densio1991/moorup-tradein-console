@@ -13,8 +13,8 @@ const rootReducer = (state: any, action: any) => {
     user: userReducer(state.user, action),
     product: productReducer(state.product, action),
     promotion: promotionReducer(state.promotion, action),
+    order: orderReducer(state.common, action),
     common: commonReducer(state.common, action),
-    order: orderReducer(state.order, action),
   };
 };
 
@@ -23,8 +23,8 @@ const initialState = {
   user: userState,
   product: productState,
   promotion: promotionState,
-  common: commonState,
   order: orderState,
+  common: commonState,
 };
 
 export const useAppReducer = () => useReducer(rootReducer, initialState);

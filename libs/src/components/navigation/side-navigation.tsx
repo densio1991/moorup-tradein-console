@@ -140,7 +140,7 @@ export function SideBar(): JSX.Element {
                 <span>
                   <StyledIcon icon={item.icon} />
                 </span>
-                <span id="label" className="font-semibold text-sm flex">{item.title}</span>
+                <span id="label" className="font-semibold flex">{item.title}</span>
               </NavLink>
             ))}
           </SidebarList>
@@ -148,7 +148,7 @@ export function SideBar(): JSX.Element {
             <span>
               <StyledIcon icon={faRightFromBracket} />
             </span>
-            <span id="label" className="font-semibold text-sm flex">Logout</span>
+            <span id="label" className="font-semibold flex">Logout</span>
           </NavLink>
         </SidebarWrapper>
       </LoaderContainer>

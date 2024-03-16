@@ -36,7 +36,7 @@ export const userManagementParsingConfig = {
   },
   'Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['status'])) return '--';
-    return <StyledChip value={row['status']} width='50px'>{capitalizeFirstLetter(row['status'])}</StyledChip>;
+    return <StyledChip value={row['status']} width='100px'>{capitalizeFirstLetter(row['status'])}</StyledChip>;
   },
   'Actions': ({ row, menuItems }: ParsingFunctionParams) => {
     if (!row || isEmpty(menuItems)) return '--';

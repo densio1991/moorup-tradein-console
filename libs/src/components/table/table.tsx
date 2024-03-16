@@ -3,11 +3,13 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
 import { ReactNode, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import {
   sortArray,
   sortByKey
 } from '../../helpers';
+import { StyledMenuIcon } from '../menu';
 import Pagination from './pagination';
 
 interface ThProps {
@@ -168,7 +170,13 @@ const Th = styled.th<ThProps>`
   ${({ alignRight }) => alignRight && 'text-align-last: right;'}
 `;
 
-const Tr = styled.tr``;
+const Tr = styled.tr<{ hover?: boolean }>`
+  transition: background-color 0.3s ease;
+  &:hover {
+    ${(props) => props.hover && 'background-color: #dff1f0;'}
+    ${(props) => props.hover && 'cursor: pointer;'}
+  }
+`;
 
 const Td = styled.td<{ alignRight: boolean }>`
   padding: 15px 10px;
@@ -312,7 +320,7 @@ const PAGE_SIZE = 10;
 export function Table({
   label,
   headers,
-  rows,
+  rows = [],
   isLoading,
   enableCheckbox = false,
   menuItems,
@@ -322,6 +330,7 @@ export function Table({
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const handleSort = (key: string) => {
     let direction = 'asc';
@@ -333,6 +342,13 @@ export function Table({
     setSortConfig({ key, direction });
   };
 
+  const handleRowClick = (row: any) => {
+    if (!isEmpty(row?.viewURL)) {
+      navigate(row?.viewURL);
+    }
+  }
+
+  // TODO: Make the parser a parameter for Table component
   const parseRowValue = (
     header: any,
     row: { [x: string]: any },
@@ -342,8 +358,18 @@ export function Table({
     if (parsingFunction) {
       return parsingFunction({ row, menuItems });
     }
-    
-    return row[header.keyName] || '--';
+
+    switch(header.label) {
+      case 'Actions': {
+        return (
+          <StyledMenuIcon menuItems={menuItems} rowData={row} />
+        )
+      }
+
+      default:
+        if (isEmpty(row[header.keyName])) return '--';
+        return row[header.keyName];
+    }
   };
 
   const sortedHeaders = sortByKey(headers, 'order');
@@ -416,7 +442,7 @@ export function Table({
           </Thead>
           <Tbody>
             {itemsToDisplay?.map((row: any, index: any) => (
-              <Tr key={index}>
+              <Tr key={index} onClick={() => handleRowClick(row)} hover={!isEmpty(row?.viewURL)}>
                 {sortedHeaders?.map((header) => (
                   <Td key={`${index}-${header.label}`} alignRight={header.label === 'Actions'}>
                     <span>{parseRowValue(header, row)}</span>
