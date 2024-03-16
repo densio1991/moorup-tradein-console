@@ -16,6 +16,9 @@ import {
   OrderItems,
   OrderItemStatus,
   LoaderContainer,
+  COLLECTION_ORDER_ITEM_STATUS,
+  VALIDATION_ORDER_ITEM_STATUS,
+  COMPLETION_ORDER_ITEM_STATUS,
 } from '@tradein-admin/libs';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -144,6 +147,18 @@ export const EditOrderPage = () => {
     return <Badge key={idx}>{item?.product_name}</Badge>;
   });
 
+  const collectionOrderItems = order_items.filter((item: OrderItems) =>
+    COLLECTION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
+  );
+
+  const validationOrderItems = order_items.filter((item: OrderItems) =>
+    VALIDATION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
+  );
+
+  const completionOrderItems = order_items.filter((item: OrderItems) =>
+    COMPLETION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
+  );
+
   return (
     <LoaderContainer title="Order Details" loading={isFetchingOrder}>
       <AccordionContainer className="px-2">
@@ -216,70 +231,85 @@ export const EditOrderPage = () => {
               </DetailCardContainer>
             </div>
           </AccordionContent>
-          <AccordionHeaderContainer>
-            <AccordionHeading
-              id="collection"
-              title="Collection"
-              isOpen={accordionState.collection}
-              onToggle={() => toggleAccordion('collection')}
-            />
-          </AccordionHeaderContainer>
-          <AccordionContent
-            isOpen={accordionState.collection}
-            removePadding={true}
-            key="Collection"
-          >
-            <div className="max-w-full mx-auto">
-              <div className="overflow-x-auto max-w-full pb-2">
-                <Collection
-                  orderId={orderId}
-                  orderItems={order_items}
-                  shipments={shipments}
+          {collectionOrderItems.length > 0 && (
+            <>
+              <AccordionHeaderContainer>
+                <AccordionHeading
+                  id="collection"
+                  title="Collection"
+                  isOpen={accordionState.collection}
+                  onToggle={() => toggleAccordion('collection')}
                 />
-              </div>
-            </div>
-          </AccordionContent>
-          <AccordionHeaderContainer>
-            <AccordionHeading
-              id="validation"
-              title="Validation & Offer"
-              isOpen={accordionState.validation}
-              onToggle={() => toggleAccordion('validation')}
-            />
-          </AccordionHeaderContainer>
-          <AccordionContent
-            isOpen={accordionState.validation}
-            removePadding={true}
-            key="validation"
-          >
-            <div className="max-w-full mx-auto">
-              <div className="overflow-x-auto max-w-full pb-2">
-                <ValidationOffer
-                  orderItems={order_items}
-                  shipments={shipments}
+              </AccordionHeaderContainer>
+              <AccordionContent
+                isOpen={accordionState.collection}
+                removePadding={true}
+                key="Collection"
+              >
+                <div className="max-w-full mx-auto">
+                  <div className="overflow-x-auto max-w-full pb-2">
+                    <Collection
+                      orderId={orderId}
+                      orderItems={collectionOrderItems}
+                      shipments={shipments}
+                    />
+                  </div>
+                </div>
+              </AccordionContent>
+            </>
+          )}
+          {validationOrderItems.length > 0 && (
+            <>
+              <AccordionHeaderContainer>
+                <AccordionHeading
+                  id="validation"
+                  title="Validation & Offer"
+                  isOpen={accordionState.validation}
+                  onToggle={() => toggleAccordion('validation')}
                 />
-              </div>
-            </div>
-          </AccordionContent>
-          <AccordionHeaderContainer>
-            <AccordionHeading
-              id="completion"
-              title="Completion"
-              isOpen={accordionState.completion}
-              onToggle={() => toggleAccordion('completion')}
-            />
-          </AccordionHeaderContainer>
-          <AccordionContent
-            isOpen={accordionState.completion}
-            removePadding={true}
-            key="completion"
-          >
-            <div className="max-w-full mx-auto">
-              <div className="overflow-x-auto max-w-full pb-2">
-                <Completion orderItems={order_items} shipments={shipments} />
-              </div>
-            </div>
-          </AccordionContent>
+              </AccordionHeaderContainer>
+              <AccordionContent
+                isOpen={accordionState.validation}
+                removePadding={true}
+                key="validation"
+              >
+                <div className="max-w-full mx-auto">
+                  <div className="overflow-x-auto max-w-full pb-2">
+                    <ValidationOffer
+                      orderItems={validationOrderItems}
+                      shipments={shipments}
+                    />
+                  </div>
+                </div>
+              </AccordionContent>
+            </>
+          )}
+          {completionOrderItems.length > 0 && (
+            <>
+              <AccordionHeaderContainer>
+                <AccordionHeading
+                  id="completion"
+                  title="Completion"
+                  isOpen={accordionState.completion}
+                  onToggle={() => toggleAccordion('completion')}
+                />
+              </AccordionHeaderContainer>
+              <AccordionContent
+                isOpen={accordionState.completion}
+                removePadding={true}
+                key="completion"
+              >
+                <div className="max-w-full mx-auto">
+                  <div className="overflow-x-auto max-w-full pb-2">
+                    <Completion
+                      orderItems={completionOrderItems}
+                      shipments={shipments}
+                    />
+                  </div>
+                </div>
+              </AccordionContent>
+            </>
+          )}
         </AccordionInnerContainer>
       </AccordionContainer>
     </LoaderContainer>

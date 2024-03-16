@@ -8,6 +8,7 @@ import {
   faPenToSquare,
   faUsers
 } from '@fortawesome/free-solid-svg-icons';
+import { OrderItemStatus } from './enums';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
 
@@ -1051,3 +1052,17 @@ export interface Promotion {
   price: number;
   image_url: string;
 }
+
+export const COLLECTION_ORDER_ITEM_STATUS = [
+  OrderItemStatus.CREATED,
+]
+export const VALIDATION_ORDER_ITEM_STATUS = [
+  OrderItemStatus.RECEIVED,
+  OrderItemStatus.LABEL_SENT,
+  OrderItemStatus.FOR_REVISION,
+]
+export const COMPLETION_ORDER_ITEM_STATUS = [
+  OrderItemStatus.EVALUATED,
+  OrderItemStatus.REVISED,
+  OrderItemStatus.COMPLETED,
+];
