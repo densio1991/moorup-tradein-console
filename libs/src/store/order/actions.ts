@@ -78,7 +78,6 @@ export const getOrderShipments = (payload: string) => (dispatch: any) => {
   axiosInstance()
     .get(`/api/orders/${payload}/shipments`)
     .then((response) => {
-      console.log({response});
       dispatch({
         type: types.FETCH_ORDER_SHIPMENTS.SUCCESS,
         payload: response?.data,

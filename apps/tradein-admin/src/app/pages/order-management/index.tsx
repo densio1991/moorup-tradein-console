@@ -1,22 +1,33 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   DEFAULT_COLUMN,
   ORDER_MANAGEMENT_COLUMNS,
-  OrderInterface,
   Table,
-  parseDateString,
+  orderManagementParsingConfig,
   useAuth,
   useOrder,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 
 export function OrderManagementPage() {
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
 
   const { state, fetchOrders, clearOrders } = useOrder();
-  const { orders = [], isFetchingOrders } = state;
+  const { orders, isFetchingOrders } = state;
+
+  const headers = [...DEFAULT_COLUMN, ...ORDER_MANAGEMENT_COLUMNS];
+
+  const addViewUrlToOrders = (orders: any) => {
+    return orders.map((order: any) => ({
+      ...order,
+      viewURL: `/dashboard/order/${order._id}`,
+    }));
+  };
+
+  const ordersWithViewUrl = addViewUrlToOrders(orders || []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -34,28 +45,13 @@ export function OrderManagementPage() {
     };
   }, [activePlatform]);
 
-  const headers = [...DEFAULT_COLUMN, ...ORDER_MANAGEMENT_COLUMNS];
-
-  const formattedRows = useMemo(() => {
-    return orders?.map((order: OrderInterface) => {
-      return {
-        _id: order?._id,
-        user_email: order?.user_id?.email,
-        status: order?.status,
-        payment_status: order?.payment?.payment_status,
-        order_count: order?.order_items?.length,
-        updated: parseDateString(order?.updatedAt),
-        viewURL: `/dashboard/order/${order._id}`,
-      };
-    });
-  }, [orders]);
-
   return (
     <Table
       label="Orders"
       isLoading={isFetchingOrders}
       headers={headers}
-      rows={formattedRows || []}
+      rows={ordersWithViewUrl || []}
+      parsingConfig={orderManagementParsingConfig}
     />
   );
 }
