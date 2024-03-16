@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { capitalizeFirstLetter, getInitials } from '../../helpers'
 import { useAuth } from '../../store'
 import { Avatar } from '../avatar'
+import { useEffect } from 'react'
 
 const NavbarContainer = styled.div`
   width: 100%;
@@ -76,17 +77,23 @@ const customStyles = () => ({
 });
 
 export function TopNavBar(): JSX.Element {
-  const { state, setActivePlatform } = useAuth()
+  const { state, getPlatformConfig,  setActivePlatform } = useAuth()
   const { activePlatform, userDetails } = state
 
+  useEffect(() => {
+    if(activePlatform) {
+      getPlatformConfig(activePlatform);
+    }
+  }, [activePlatform]);
+
   const platforms = userDetails?.platforms
-  ?.map((item: any) => ({
-    value: item,
-    label: capitalizeFirstLetter(item),
-  }))
-  .sort((a: { label: string }, b: { label: any }) =>
-    a.label.localeCompare(b.label),
-  );
+    ?.map((item: any) => ({
+      value: item,
+      label: capitalizeFirstLetter(item),
+    }))
+    .sort((a: { label: string }, b: { label: any }) =>
+      a.label.localeCompare(b.label),
+    );
 
   return (
     <NavbarContainer>

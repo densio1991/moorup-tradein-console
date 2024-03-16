@@ -6,16 +6,16 @@ const orderState = {
   isFetchingOrders: true,
   isAddingOrder: false,
   order: {},
-  isFetchingOrder: false,
+  isFetchingOrder: true,
   isUpdatingOrder: false,
   isDeletingOrder: false,
   orderItem: [],
-  isFetchingOrderItem: false,
+  isFetchingOrderItem: true,
   isUpdatingOrderItem: false,
   orderItems: [],
   isFetchingOrderItems: true,
   shipments: {},
-  isFetchingShipments: false,
+  isFetchingShipments: true,
   orderStatuses: [],
   isFetchingOrderStatuses: false,
   isResendingLabel: false,
@@ -73,6 +73,13 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isFetchingOrder: false,
+        order: {},
+      };
+    }
+    case types.FETCH_ORDER_BY_ID.CANCELLED: {
+      return {
+        ...state,
+        isFetchingOrder: true,
         order: {},
       };
     }
@@ -194,6 +201,13 @@ const orderReducer = (state = orderState, action: any) => {
         shipments: {},
       };
     }
+    case types.FETCH_ORDER_SHIPMENTS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingShipments: true,
+        shipments: {},
+      };
+    }
 
     case types.RESEND_SHIPMENT_LABEL.baseType: {
       return {
@@ -209,7 +223,22 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.RESEND_ITEM_SHIPMENT_LABEL.baseType: {
+      return {
+        ...state,
+        isResendingLabel: true,
+      };
+    }
+    case types.RESEND_ITEM_SHIPMENT_LABEL.SUCCESS:
+    case types.RESEND_ITEM_SHIPMENT_LABEL.FAILED: {
+      return {
+        ...state,
+        isResendingLabel: false,
+      };
+    }
+
     case types.UPDATE_SHIPPING_STATUS_BY_ID.baseType:
+    case types.CANCEL_ORDER_ITEM_BY_ID.baseType:
     case types.RECEIVE_ORDER_ITEM_BY_ID.baseType: {
       return {
         ...state,
@@ -217,6 +246,7 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
     case types.UPDATE_SHIPPING_STATUS_BY_ID.SUCCESS:
+    case types.CANCEL_ORDER_ITEM_BY_ID.SUCCESS:
     case types.RECEIVE_ORDER_ITEM_BY_ID.SUCCESS: {
       return {
         ...state,
@@ -224,6 +254,7 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
     case types.UPDATE_SHIPPING_STATUS_BY_ID.FAILED: 
+    case types.CANCEL_ORDER_ITEM_BY_ID.FAILED: 
     case types.RECEIVE_ORDER_ITEM_BY_ID.FAILED: {
       return {
         ...state,
@@ -275,8 +306,12 @@ const orderReducer = (state = orderState, action: any) => {
     case types.CLEAR_ORDERS: {
       return {
         ...state,
-        isFetchingOrders: true,
         orders: [],
+        isFetchingOrder: true,
+        isFetchingOrders: true,
+        isFetchingOrderItem: true,
+        isFetchingOrderItems: true,
+        isFetchingShipments: true,
       };
     }
 

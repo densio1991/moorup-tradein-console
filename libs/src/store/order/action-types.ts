@@ -12,8 +12,10 @@ export const DELETE_ORDER_BY_ID = createActionTypes('DELETE_ORDER_BY_ID');
 export const UPDATE_ORDER_ITEM_BY_ID = createActionTypes('UPDATE_ORDER_ITEM_BY_ID');
 export const DELETE_ORDER_ITEM_BY_ID = createActionTypes('DELETE_ORDER_ITEM_BY_ID');
 export const RESEND_SHIPMENT_LABEL = createActionTypes('RESEND_SHIPMENT_LABEL');
+export const RESEND_ITEM_SHIPMENT_LABEL = createActionTypes('RESEND_ITEM_SHIPMENT_LABEL');
 export const RECEIVE_ORDER_ITEM_BY_ID = createActionTypes('RECEIVE_ORDER_ITEM_BY_ID');
 export const EVALUATE_ORDER_ITEM_BY_ID = createActionTypes('EVALUATE_ORDER_ITEM_BY_ID');
+export const CANCEL_ORDER_ITEM_BY_ID = createActionTypes('CANCEL_ORDER_ITEM_BY_ID');
 export const UPDATE_SHIPPING_STATUS_BY_ID = createActionTypes('UPDATE_SHIPPING_STATUS_BY_ID');
 
 // Base action types

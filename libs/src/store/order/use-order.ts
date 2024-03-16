@@ -2,6 +2,7 @@
 import { useContext } from 'react';
 import { RootContext } from '../provider';
 import * as actions from './actions';
+import { OrderItemStatus } from '../../constants';
 
 export const useOrder = () => {
   const { state, dispatch } = useContext(RootContext);
@@ -21,8 +22,8 @@ export const useOrder = () => {
     actions.getAllOrders(activePlatform, signal)(dispatch);
   };
 
-  const fetchOrderById = (id: any) => {
-    actions.getOrderById(id)(dispatch);
+  const fetchOrderById = (id: any, signal: AbortSignal) => {
+    actions.getOrderById(id, signal)(dispatch);
   };
 
   const patchOrderById = async (id: any, payload: any) => {
@@ -34,16 +35,22 @@ export const useOrder = () => {
   }
 
   const patchOrderItemById = (id: any, payload: any) => {
-    const orderId = state.order?._id;
+    const orderId = state.order?.order?._id;
     actions.updateOrderItemById(id, orderId, payload)(dispatch);
+  }
+
+  const cancelOrderItemById = (id: any) => {
+    const orderId = state.order?.order?._id;
+    const payload = { status: OrderItemStatus.CANCELLED }
+    actions.cancelOrderItemById(id, orderId, payload)(dispatch);
   }
 
   const removeOrderById = (payload: any) => {
     actions.deleteOrderById(payload, activePlatform)(dispatch);
   }
 
-  const fetchOrderShipments = (id: any) => {
-    actions.getOrderShipments(id)(dispatch);
+  const fetchOrderShipments = (id: any, signal: AbortSignal) => {
+    actions.getOrderShipments(id, signal)(dispatch);
   };
 
   const updateShipmentStatusById = (shipmentId: string, payload: any) => {
@@ -52,7 +59,15 @@ export const useOrder = () => {
   };
 
   const resendShipmentLabel = (id: any) => {
-    actions.resendShipmentLabel(id)(dispatch);
+    const payload = {
+      platform: activePlatform,
+      orderFlow: state.order?.order?.order_flow,
+    }
+    actions.resendShipmentLabel(id, payload)(dispatch);
+  };
+
+  const resendOrderItemShipmentLabel = (id: any) => {
+    actions.resendOrderItemShipmentLabel(id)(dispatch);
   };
 
   const receiveOrderItemById = (id: any) => {
@@ -93,8 +108,10 @@ export const useOrder = () => {
     patchOrderItemById,
     fetchOrderShipments,
     resendShipmentLabel,
+    resendOrderItemShipmentLabel,
     receiveOrderItemById,
     evaluateOrderItemById,
+    cancelOrderItemById,
     updateShipmentStatusById,
 
     openModal,
