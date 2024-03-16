@@ -2,6 +2,7 @@
 import { useContext } from 'react';
 import { RootContext } from '../provider';
 import * as actions from './actions';
+import { OrderItemStatus } from '../../constants';
 
 export const useOrder = () => {
   const { state, dispatch } = useContext(RootContext);
@@ -33,9 +34,15 @@ export const useOrder = () => {
     actions.cancelOrderById(id)(dispatch);
   }
 
-  const patchOrderItemById = (id: any, orderId: any, payload: any) => {
-    // const orderId = state.order?._id;
+  const patchOrderItemById = (id: any, payload: any) => {
+    const orderId = state.order?.order?._id;
     actions.updateOrderItemById(id, orderId, payload)(dispatch);
+  }
+
+  const cancelOrderItemById = (id: any) => {
+    const orderId = state.order?.order?._id;
+    const payload = { status: OrderItemStatus.CANCELLED }
+    actions.cancelOrderItemById(id, orderId, payload)(dispatch);
   }
 
   const removeOrderById = (payload: any) => {
@@ -53,6 +60,10 @@ export const useOrder = () => {
 
   const resendShipmentLabel = (id: any) => {
     actions.resendShipmentLabel(id)(dispatch);
+  };
+
+  const resendOrderItemShipmentLabel = (id: any) => {
+    actions.resendOrderItemShipmentLabel(id)(dispatch);
   };
 
   const receiveOrderItemById = (id: any) => {
@@ -93,8 +104,10 @@ export const useOrder = () => {
     patchOrderItemById,
     fetchOrderShipments,
     resendShipmentLabel,
+    resendOrderItemShipmentLabel,
     receiveOrderItemById,
     evaluateOrderItemById,
+    cancelOrderItemById,
     updateShipmentStatusById,
 
     openModal,

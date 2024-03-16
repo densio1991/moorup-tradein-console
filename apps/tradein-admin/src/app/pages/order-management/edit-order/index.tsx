@@ -20,6 +20,7 @@ import {
   VALIDATION_ORDER_ITEM_STATUS,
   COMPLETION_ORDER_ITEM_STATUS,
   StatusModal,
+  resendShipmentLabel,
 } from '@tradein-admin/libs';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -90,8 +91,6 @@ export const EditOrderPage = () => {
     shipments = {},
     isUpdatingOrder,
     isFetchingOrder,
-    // isModalOpen,
-    // activeOrderItem,
   } = state;
 
   const {
@@ -134,7 +133,7 @@ export const EditOrderPage = () => {
       evaluateOrderItemById(newValue._id, { pass: true });
     }
     console.log(newValue);
-    patchOrderItemById(newValue._id, orderId, { status: status });
+    patchOrderItemById(newValue._id, { status: status });
   };
 
   const [accordionState, setAccordionState] = useState<AccordionStates>({
@@ -158,6 +157,7 @@ export const EditOrderPage = () => {
 
   const { address = {}, bank_details = {} } = user_id;
 
+  const isSingleOrderFlow = order?.order_flow === 'single';
   const completeAddress =
     address.length > 0 ? `${address[0]?.region} ${address[0]?.state}` : '';
   const accountName = bank_details ? bank_details[0]?.account_name : '';
@@ -192,17 +192,18 @@ export const EditOrderPage = () => {
             />
           </AccordionHeaderContainer>
           <AccordionContent isOpen={accordionState.quote} key="Quote Creation">
-            {order?.status !== OrderItemStatus.CANCELLED && (
-              <div className="flex justify-end gap-2 mb-2">
-                <button
-                  className="text-md font-medium text-white bg-red-500 py-1 px-3 rounded-md hover:bg-red-600"
-                  onClick={() => cancelOrderById(order?._id)}
-                  disabled={isUpdatingOrder}
-                >
-                  Cancel Order
-                </button>
-              </div>
-            )}
+            {!isSingleOrderFlow &&
+              order?.status !== OrderItemStatus.CANCELLED && (
+                <div className="flex justify-end gap-2 mb-2">
+                  <button
+                    className="text-md font-medium text-white bg-red-500 py-1 px-3 rounded-md hover:bg-red-600"
+                    onClick={() => cancelOrderById(order?._id)}
+                    disabled={isUpdatingOrder}
+                  >
+                    Cancel Order
+                  </button>
+                </div>
+              )}
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2">
               <DetailCardContainer className="md:col-span-1">
                 <h4>Quote Information</h4>
@@ -266,6 +267,18 @@ export const EditOrderPage = () => {
                 removePadding={true}
                 key="Collection"
               >
+                {!isSingleOrderFlow &&
+                  order?.status !== OrderItemStatus.CANCELLED && (
+                    <div className="flex justify-end gap-2 mb-2">
+                      <button
+                        className="text-md font-medium text-white bg-emerald-500 py-1 px-3 rounded-md hover:bg-emerald-600"
+                        onClick={() => resendShipmentLabel(order?._id)}
+                        disabled={isUpdatingOrder}
+                      >
+                        Resend Label
+                      </button>
+                    </div>
+                  )}
                 <div className="max-w-full mx-auto">
                   <div className="overflow-x-auto max-w-full pb-2">
                     <Collection

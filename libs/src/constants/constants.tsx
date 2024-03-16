@@ -449,6 +449,7 @@ export interface OrderItems {
   _id: string;
   product_variant_id: ProductVariant; // original type : number
   product_name: string;
+  product_type: string;
   original_offer: number;
   revised_offer: number;
   status: string;
@@ -1055,6 +1056,7 @@ export interface Promotion {
 
 export const COLLECTION_ORDER_ITEM_STATUS = [
   OrderItemStatus.CREATED,
+  OrderItemStatus.CANCELLED,
 ]
 export const VALIDATION_ORDER_ITEM_STATUS = [
   OrderItemStatus.RECEIVED,

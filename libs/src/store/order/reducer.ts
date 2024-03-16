@@ -223,7 +223,22 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.RESEND_ITEM_SHIPMENT_LABEL.baseType: {
+      return {
+        ...state,
+        isResendingLabel: true,
+      };
+    }
+    case types.RESEND_ITEM_SHIPMENT_LABEL.SUCCESS:
+    case types.RESEND_ITEM_SHIPMENT_LABEL.FAILED: {
+      return {
+        ...state,
+        isResendingLabel: false,
+      };
+    }
+
     case types.UPDATE_SHIPPING_STATUS_BY_ID.baseType:
+    case types.CANCEL_ORDER_ITEM_BY_ID.baseType:
     case types.RECEIVE_ORDER_ITEM_BY_ID.baseType: {
       return {
         ...state,
@@ -231,6 +246,7 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
     case types.UPDATE_SHIPPING_STATUS_BY_ID.SUCCESS:
+    case types.CANCEL_ORDER_ITEM_BY_ID.SUCCESS:
     case types.RECEIVE_ORDER_ITEM_BY_ID.SUCCESS: {
       return {
         ...state,
@@ -238,6 +254,7 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
     case types.UPDATE_SHIPPING_STATUS_BY_ID.FAILED: 
+    case types.CANCEL_ORDER_ITEM_BY_ID.FAILED: 
     case types.RECEIVE_ORDER_ITEM_BY_ID.FAILED: {
       return {
         ...state,

@@ -209,6 +209,33 @@ export const resendShipmentLabel =
       });
   };
 
+export const resendOrderItemShipmentLabel =
+  (orderId: any) => (dispatch: any) => {
+    dispatch({
+      type: types.RESEND_ITEM_SHIPMENT_LABEL.baseType,
+      orderId,
+    });
+
+    axiosInstance()
+      .post(`/api/orders/${orderId}/resend-label`)
+      .then((response) => {
+        dispatch({
+          type: types.RESEND_ITEM_SHIPMENT_LABEL.SUCCESS,
+          payload: response?.data,
+        });
+
+        toast.success('Order label successfully resent!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.RESEND_ITEM_SHIPMENT_LABEL.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to resend order label.');
+      });
+  };
+
 export const updateOrderItemById =
   (orderItemId: any, orderId: any, payload: any) => (dispatch: any) => {
     dispatch({
@@ -223,7 +250,7 @@ export const updateOrderItemById =
           type: types.UPDATE_ORDER_ITEM_BY_ID.SUCCESS,
           payload: response?.data,
         });
-
+ 
         getOrderById(orderId)(dispatch);
         getOrderShipments(orderId)(dispatch);
         setToggleModal(false)(dispatch);
@@ -325,6 +352,36 @@ export const evaluateOrderItemById =
       toast.error('Failed to update order item status.');
     });
 };
+
+export const cancelOrderItemById =
+  (orderItemId: any, orderId: any, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.CANCEL_ORDER_ITEM_BY_ID.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .patch(`/api/orders/items/${orderItemId}/status`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.CANCEL_ORDER_ITEM_BY_ID.SUCCESS,
+          payload: response?.data,
+        });
+ 
+        getOrderById(orderId)(dispatch);
+        getOrderShipments(orderId)(dispatch);
+        setToggleModal(false)(dispatch);
+        toast.success('Order item status successfully updated!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.CANCEL_ORDER_ITEM_BY_ID.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to update order item status.');
+      });
+  };
 
 export const updateShipmentStatus = (shipmentId: string, orderId: string, payload: any) => (dispatch: any) => {
   dispatch({

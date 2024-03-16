@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   DetailCardContainer,
   Loader,
   OrderItems,
   Shipments,
   useOrder,
+  PRODUCT_TYPES,
 } from '@tradein-admin/libs';
 import { DeviceSection, CardDetail } from './sections';
 import { isEmpty } from 'lodash';
@@ -26,20 +28,24 @@ const Collection = ({
   const {
     state,
     receiveOrderItemById,
+    cancelOrderItemById,
     updateShipmentStatusById,
-    resendShipmentLabel,
+    resendOrderItemShipmentLabel,
   } = useOrder();
   const {
+    order = {},
     isResendingLabel,
     // isUpdatingOrderItem,
     isFetchingShipments,
   } = state;
+  const isSingleOrderFlow = order?.order_flow === 'single';
+  const isOrderShipped = !isEmpty(shipments);
 
-  const onReceiveOrderItem = (orderItemId: string) => {
+  const handleReceiveOrderItem = (orderItemId: string) => {
     receiveOrderItemById(orderItemId);
   };
 
-  const onSendBox = (orderItemId: string) => {
+  const handleSendBox = (orderItemId: string) => {
     if (!isEmpty(shipments)) {
       updateShipmentStatusById(shipments._id, {
         status: 'box-sent',
@@ -47,14 +53,21 @@ const Collection = ({
     }
   };
 
-  const onResendLabel = async () => {
-    await resendShipmentLabel(orderId);
+  const handleResendLabel = (orderItemId: any) => {
+    resendOrderItemShipmentLabel(orderItemId);
   };
 
-  const isOrderShipped = !isEmpty(shipments);
   const handleStatus = (item: OrderItems) => {
     setStatusModal(true);
     setSelectedItem(item);
+  };
+
+  const handleCancelOrderItem = (orderItemId: string) => {
+    cancelOrderItemById(orderItemId);
+  };
+
+  const isBoxRequired = (productType: any) => {
+    return [PRODUCT_TYPES.LAPTOPS, PRODUCT_TYPES.TABLETS].includes(productType);
   };
 
   return (
@@ -67,11 +80,11 @@ const Collection = ({
             <div className="flex flex-col">
               <div className="flex justify-between items-center">
                 <h4>Shipping</h4>
-                {!isOrderShipped && (
+                {isSingleOrderFlow && !isOrderShipped && (
                   <button
                     className="font-medium text-white bg-primary py-1 px-3 rounded-md hover:bg-primary-light"
                     disabled={isResendingLabel}
-                    onClick={() => onResendLabel()}
+                    onClick={() => handleResendLabel(item?._id)}
                   >
                     Resend Label
                   </button>
@@ -97,24 +110,47 @@ const Collection = ({
                 </div>
               )}
             </div>
-            {!isEmpty(shipments) && (
+            {isOrderShipped ? (
               <>
                 <hr />
                 <div className="flex flex-row flex-wrap gap-1 pt-1 font-medium">
                   <button
-                    onClick={() => onReceiveOrderItem(item._id)}
+                    onClick={() => handleReceiveOrderItem(item._id)}
                     className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
                   >
                     Mark as Received
                   </button>
-                  <button
-                    onClick={() => onSendBox(item._id)}
-                    className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
-                  >
-                    Send Box
-                  </button>
+                  {isBoxRequired(item?.product_type) && (
+                    <button
+                      onClick={() => handleSendBox(item._id)}
+                      className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
+                    >
+                      Send Box
+                    </button>
+                  )}
                 </div>
               </>
+            ) : (
+              isSingleOrderFlow && (
+                <>
+                  <hr />
+                  <div className="flex flex-row flex-wrap gap-1 pt-1 font-medium">
+                    <button
+                      className="font-medium flex-1 text-white bg-primary py-1 px-3 rounded-md hover:bg-primary-light"
+                      disabled={isResendingLabel}
+                      onClick={() => handleResendLabel(item._id)}
+                    >
+                      Resend Label
+                    </button>
+                    <button
+                      onClick={() => handleCancelOrderItem(item._id)}
+                      className="px-3 py-1 flex-1 text-white bg-red-700 hover:bg-red-800 rounded-md"
+                    >
+                      Cancel Order
+                    </button>
+                  </div>
+                </>
+              )
             )}
             <button
               onClick={() => handleStatus(item)}
