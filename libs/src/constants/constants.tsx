@@ -1,5 +1,6 @@
 import {
   faBullhorn,
+  faCheckToSlot,
   faCreditCard,
   faCube,
   faFileInvoice,
@@ -47,6 +48,12 @@ export const SIDENAV_ITEMS = [
     url: '/dashboard/promotion',
     activeUrl: /^\/dashboard\/promotion/,
     icon: faBullhorn,
+  },
+  {
+    title: 'Claims',
+    url: '/dashboard/claims',
+    activeUrl: /^\/dashboard\/claims/,
+    icon: faCheckToSlot,
   },
   {
     title: 'Payment',
@@ -332,6 +339,44 @@ export const PAYMENTS_MANAGEMENT_COLUMNS = [
   {
     label: 'Contact',
     order: 5,
+    enableSort: true,
+  },
+]
+
+export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Order Number',
+    order: 2,
+    enableSort: true,
+  },
+  {
+    label: 'Promotion Name',
+    order: 3,
+    enableSort: true,
+  },
+  {
+    label: 'Promotion Link',
+    order: 4,
+    enableSort: true,
+  },
+  {
+    label: 'Claimed By',
+    order: 5,
+    enableSort: true,
+  },
+  {
+    label: 'Claimed Date',
+    order: 6,
+    enableSort: true,
+  },
+  {
+    label: 'Moorup Status',
+    order: 7,
+    enableSort: true,
+  },
+  {
+    label: 'Claim Status',
+    order: 8,
     enableSort: true,
   },
 ]

@@ -17,3 +17,20 @@ export enum OrderItemStatus {
   FOR_REVISION = 'for-revision',
   REVISED = 'revised',
 }
+
+export enum OrderPaymentStatus {
+  PENDING = 'pending',
+}
+
+export enum ClaimStatus {
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECT = 'reject',
+  CANCELLED = 'cancelled',
+  DELETED = 'deleted'
+}
+
+export enum DefaultStatus {
+  ACTIVE = 'active',
+  INACTIVE = 'inactive'
+}

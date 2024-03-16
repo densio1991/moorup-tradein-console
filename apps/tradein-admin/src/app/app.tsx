@@ -9,6 +9,7 @@ import {
   EditOrderPage,
   PaymentsPage,
   ProductManagementPage,
+  PromotionClaimsPage,
   PromotionsPage,
   UserManagementPage,
 } from './pages';
@@ -30,6 +31,7 @@ export function App() {
           <Route path="/dashboard/order/:id" element={<EditOrderPage />} />
           <Route path="/dashboard/user" element={<UserManagementPage />} />
           <Route path="/dashboard/promotion" element={<PromotionsPage />} />
+          <Route path="/dashboard/claims" element={<PromotionClaimsPage />} />
           <Route path="/dashboard/payment" element={<PaymentsPage />} />
         </Route>
 
