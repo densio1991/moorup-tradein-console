@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
   DEFAULT_COLUMN,
   ORDER_MANAGEMENT_COLUMNS,
@@ -9,6 +9,7 @@ import {
   useOrder,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
+import { useEffect, useMemo } from 'react';
 
 export function OrderManagementPage() {
   const { state: authState } = useAuth();
@@ -18,11 +19,16 @@ export function OrderManagementPage() {
   const { orders = [], isFetchingOrders } = state;
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     if (!isEmpty(activePlatform)) {
-      fetchOrders();
+      fetchOrders(signal);
     }
 
     return () => {
+      controller.abort();
+
       // Clear data on unmount
       clearOrders();
     };

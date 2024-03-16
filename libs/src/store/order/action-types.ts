@@ -19,7 +19,7 @@ export const UPDATE_SHIPPING_STATUS_BY_ID = createActionTypes('UPDATE_SHIPPING_S
 // Base action types
 export const SET_ORDERS = 'SET_ORDERS';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
-export const CLEAR_ORDERS = 'SET_ORDERS';
+export const CLEAR_ORDERS = 'CLEAR_ORDERS';
 export const CLEAR_ORDER_ITEMS = 'CLEAR_ORDER_ITEMS';
 
 export const SET_TOGGLE_FLOATING_SECTION = 'SET_TOGGLE_FLOATING_SECTION';

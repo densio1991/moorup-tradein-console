@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { toast } from 'react-toastify';
 import { CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
-import { toast } from 'react-toastify';
 
 
 export const getOrderItems = (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any) => {
@@ -40,14 +40,14 @@ export const clearOrderItems = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const getAllOrders = (platform: any) => (dispatch: any) => {
+export const getAllOrders = (platform: any, signal?: AbortSignal) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_ORDERS.baseType,
     platform,
   });
 
   axiosInstance()
-    .get(`/api/orders?platform=${platform}`)
+    .get(`/api/orders?platform=${platform}`, { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_ORDERS.SUCCESS,
@@ -55,12 +55,17 @@ export const getAllOrders = (platform: any) => (dispatch: any) => {
       });
     })
     .catch((error) => {
-      dispatch({
-        type: types.FETCH_ORDERS.FAILED,
-        payload: error,
-      });
-
-      toast.error('Failed to fetch orders.');
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.FETCH_ORDERS.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_ORDERS.FAILED,
+          payload: error,
+        });
+      }
     });
 };
 

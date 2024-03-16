@@ -3,7 +3,7 @@ import * as types from './action-types';
 
 const orderState = {
   orders: [],
-  isFetchingOrders: false,
+  isFetchingOrders: true,
   isAddingOrder: false,
   order: {},
   isFetchingOrder: false,
@@ -270,6 +270,7 @@ const orderReducer = (state = orderState, action: any) => {
     case types.CLEAR_ORDERS: {
       return {
         ...state,
+        isFetchingOrders: true,
         orders: [],
       };
     }
