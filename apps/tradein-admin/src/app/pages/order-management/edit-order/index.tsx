@@ -7,7 +7,6 @@ import {
   AccordionHeaderContainer,
   AccordionInnerContainer,
   AccordionTitle,
-  PageContainer,
   StyledIcon,
   DataLine,
   DetailCardContainer,
@@ -16,8 +15,9 @@ import {
   Badge,
   OrderItems,
   OrderItemStatus,
+  LoaderContainer,
 } from '@tradein-admin/libs';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Collection from './collection';
 import ValidationOffer from './validation-offer';
@@ -31,7 +31,7 @@ type AccordionHeadingProps = {
 };
 
 type AccordionStates = {
-  order: boolean;
+  quote: boolean;
   collection: boolean;
   validation: boolean;
   completion: boolean;
@@ -69,7 +69,6 @@ export const CardItem = ({ label, value }: CardItemProps) => {
 
 export const EditOrderPage = () => {
   const { id: orderId } = useParams();
-  const shouldRun = useRef(true);
 
   const {
     state,
@@ -85,7 +84,7 @@ export const EditOrderPage = () => {
     order = {},
     shipments = {},
     isUpdatingOrder,
-    // isFetchingOrder,
+    isFetchingOrder,
     // isModalOpen,
     // activeOrderItem,
   } = state;
@@ -98,21 +97,31 @@ export const EditOrderPage = () => {
   } = order;
 
   useEffect(() => {
-    if (shouldRun.current) {
-      fetchOrderById(orderId);
-      shouldRun.current = false;
-    }
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    fetchOrderById(orderId, signal);
+    // fetchOrderShipments(order._id, signal);
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     if (order._id) {
-      fetchOrderShipments(order._id);
+      fetchOrderShipments(order._id, signal);
     }
   }, [order._id]);
 
   const [accordionState, setAccordionState] = useState<AccordionStates>({
-    order: true,
+    quote: true,
     collection: true,
+    validation: true,
+    completion: true,
   } as AccordionStates);
 
   const toggleAccordion = (item: any) => {
@@ -136,18 +145,18 @@ export const EditOrderPage = () => {
   });
 
   return (
-    <PageContainer>
-      <AccordionContainer>
-        <AccordionInnerContainer key="Order Details">
+    <LoaderContainer title="Order Details" loading={isFetchingOrder}>
+      <AccordionContainer className="px-2">
+        <AccordionInnerContainer key="Quote Creation">
           <AccordionHeaderContainer>
             <AccordionHeading
-              id="orderDetails"
-              title="Order Details"
-              isOpen={accordionState.order}
-              onToggle={() => toggleAccordion('order')}
+              id="quote"
+              title="Quote Creation"
+              isOpen={accordionState.quote}
+              onToggle={() => toggleAccordion('quote')}
             />
           </AccordionHeaderContainer>
-          <AccordionContent isOpen={accordionState.order} key="Order Details">
+          <AccordionContent isOpen={accordionState.quote} key="Quote Creation">
             {order?.status !== OrderItemStatus.CANCELLED && (
               <div className="flex justify-end gap-2 mb-2">
                 <button
@@ -273,6 +282,6 @@ export const EditOrderPage = () => {
           </AccordionContent>
         </AccordionInnerContainer>
       </AccordionContainer>
-    </PageContainer>
+    </LoaderContainer>
   );
 };

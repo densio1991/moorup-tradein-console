@@ -69,14 +69,14 @@ export const getAllOrders = (platform: any, signal?: AbortSignal) => (dispatch: 
     });
 };
 
-export const getOrderShipments = (payload: string) => (dispatch: any) => {
+export const getOrderShipments = (payload: string, signal?: AbortSignal) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_ORDER_SHIPMENTS.baseType,
     payload,
   });
 
   axiosInstance()
-    .get(`/api/orders/${payload}/shipments`)
+    .get(`/api/orders/${payload}/shipments`, { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_ORDER_SHIPMENTS.SUCCESS,
@@ -84,23 +84,28 @@ export const getOrderShipments = (payload: string) => (dispatch: any) => {
       });
     })
     .catch((error) => {
-      dispatch({
-        type: types.FETCH_ORDER_SHIPMENTS.FAILED,
-        payload: error,
-      });
-
-      toast.error('Failed to fetch order shipments.');
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.FETCH_ORDER_SHIPMENTS.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_ORDER_SHIPMENTS.FAILED,
+          payload: error,
+        });
+      }
     });
 };
 
-export const getOrderById = (payload: any) => (dispatch: any) => {
+export const getOrderById = (payload: any, signal?: AbortSignal) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_ORDER_BY_ID.baseType,
     payload,
   });
 
   axiosInstance()
-    .get(`/api/orders/${payload}`)
+    .get(`/api/orders/${payload}`,  { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_ORDER_BY_ID.SUCCESS,
@@ -108,12 +113,17 @@ export const getOrderById = (payload: any) => (dispatch: any) => {
       });
     })
     .catch((error) => {
-      dispatch({
-        type: types.FETCH_ORDER_BY_ID.FAILED,
-        payload: error,
-      });
-
-      toast.error('Failed to fetch order details.');
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.FETCH_ORDER_BY_ID.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_ORDER_BY_ID.FAILED,
+          payload: error,
+        });
+      }
     });
 };
 
@@ -337,8 +347,6 @@ export const updateShipmentStatus = (shipmentId: string, orderId: string, payloa
         type: types.UPDATE_SHIPPING_STATUS_BY_ID.FAILED,
         payload: error,
       });
-
-      toast.error('Failed to fetch order shipments.');
     });
 };
 

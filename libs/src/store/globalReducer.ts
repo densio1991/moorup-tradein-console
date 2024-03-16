@@ -13,7 +13,7 @@ const rootReducer = (state: any, action: any) => {
     user: userReducer(state.user, action),
     product: productReducer(state.product, action),
     promotion: promotionReducer(state.promotion, action),
-    order: orderReducer(state.common, action),
+    order: orderReducer(state.order, action),
     common: commonReducer(state.common, action),
   };
 };
