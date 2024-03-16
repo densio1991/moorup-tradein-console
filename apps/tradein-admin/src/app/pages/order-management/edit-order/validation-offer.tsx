@@ -6,7 +6,7 @@ import {
   amountFormatter,
   displayData,
 } from '@tradein-admin/libs';
-import { DeviceSection } from './sections';
+import { DeviceSection, CardDetail } from './sections';
 
 type ValidationOfferProps = {
   orderItems: OrderItems[];
@@ -29,6 +29,23 @@ const ValidationOffer = ({
     setSelectedItem(item);
   };
 
+  const deviceValidation = (item: string) => (
+    <div className="flex flex-row gap-2">
+      <div
+        className={`text-sm px-2 rounded-md border-[1px] border-gray-400
+        ${item === 'no' ? 'bg-red-500 text-white' : 'bg-white'}`}
+      >
+        No
+      </div>
+      <div
+        className={`text-sm px-2 rounded-md border-[1px] border-gray-400
+        ${item === 'yes' ? 'bg-green-500 text-white' : 'bg-white'}`}
+      >
+        Yes
+      </div>
+    </div>
+  );
+
   return (
     <div className="flex gap-2 p-2.5">
       {orderItems?.map((item: OrderItems, idx) => {
@@ -40,18 +57,25 @@ const ValidationOffer = ({
             <hr />
             <div>
               <h4>Validation</h4>
-              <div className="flex gap-1 flex-wrap py-1 text-xs font-semibold uppercase">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 items-center">
                 {questions_answered.map((item, idx) => {
                   return (
-                    <span
+                    <CardDetail
                       key={idx}
-                      className={`px-2 py-1 text-white rounded-md w-fit
-                        ${item.answer === 'yes' ? 'bg-green-600' : 'bg-red-600'}
-                      `}
-                    >
-                      {formatQuestion(item.question)}
-                    </span>
+                      label={formatQuestion(item.question)}
+                      value={deviceValidation(item.answer)}
+                    />
                   );
+                  // return (
+                  //   <span
+                  //     key={idx}
+                  //     className={`px-2 py-1 text-white rounded-md w-fit
+                  //       ${item.answer === 'yes' ? 'bg-green-600' : 'bg-red-600'}
+                  //     `}
+                  //   >
+                  //     {formatQuestion(item.question)}
+                  //   </span>
+                  // );
                 })}
               </div>
             </div>
@@ -67,6 +91,7 @@ const ValidationOffer = ({
                 revised_offer && `$ ${amountFormatter(revised_offer)}`,
               )}
             </div>
+            <hr />
             <button
               onClick={() => handleStatus(item)}
               className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"

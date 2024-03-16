@@ -80,15 +80,6 @@ const Collection = ({
             <div className="flex flex-col">
               <div className="flex justify-between items-center">
                 <h4>Shipping</h4>
-                {isSingleOrderFlow && !isOrderShipped && (
-                  <button
-                    className="font-medium text-white bg-primary py-1 px-3 rounded-md hover:bg-primary-light"
-                    disabled={isResendingLabel}
-                    onClick={() => handleResendLabel(item?._id)}
-                  >
-                    Resend Label
-                  </button>
-                )}
               </div>
               {isFetchingShipments ? (
                 <Loader />
@@ -154,6 +145,7 @@ const Collection = ({
                 </>
               )
             )}
+            <hr />
             <button
               onClick={() => handleStatus(item)}
               className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"

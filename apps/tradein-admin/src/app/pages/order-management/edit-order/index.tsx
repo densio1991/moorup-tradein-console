@@ -213,7 +213,7 @@ export const EditOrderPage = () => {
                 </div>
               )}
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2">
-              <DetailCardContainer className="md:col-span-1">
+              <DetailCardContainer className="md:col-span-2 xl:col-span-1">
                 <h4>Quote Information</h4>
                 <CardItem label="Quote #" value={order.order_number} copy />
                 <CardItem label="Quote Status" value={order.status} />
@@ -239,7 +239,7 @@ export const EditOrderPage = () => {
                 />
                 <CardItem label="Mobile" value={user_id.mobile_number} copy />
               </DetailCardContainer>
-              <DetailCardContainer className="md:col-span-2 xl:col-span-1">
+              <DetailCardContainer className="md:col-span-1">
                 <h4>Payment Details</h4>
                 <CardItem label="Credit Timeframe" value={order.credit_type} />
                 <CardItem
