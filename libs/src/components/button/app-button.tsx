@@ -35,6 +35,8 @@ const StyledButton = styled.button<CustomButtonProps>`
   position: relative;
   white-space: nowrap;
   opacity: ${(props) => (props.isLoading ? '50%' : '100%')};
+  font-size: 13.3333px;
+  font-weight: normal;
 
   &:disabled {
     cursor: not-allowed;
@@ -47,6 +49,7 @@ const StyledButton = styled.button<CustomButtonProps>`
 
   svg {
     margin-right: 8px;
+    font-size: 13.3333px;
   }
 `;
 

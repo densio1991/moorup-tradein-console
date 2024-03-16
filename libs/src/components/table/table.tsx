@@ -3,14 +3,14 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
 import { ReactNode, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import {
   sortArray,
   sortByKey
 } from '../../helpers';
-import Pagination from './pagination';
-import { useNavigate } from 'react-router-dom';
 import { StyledMenuIcon } from '../menu';
+import Pagination from './pagination';
 
 interface ThProps {
   key: any;
@@ -170,7 +170,13 @@ const Th = styled.th<ThProps>`
   ${({ alignRight }) => alignRight && 'text-align-last: right;'}
 `;
 
-const Tr = styled.tr``;
+const Tr = styled.tr<{ hover?: boolean }>`
+  transition: background-color 0.3s ease;
+  &:hover {
+    ${(props) => props.hover && 'background-color: #dff1f0;'}
+    ${(props) => props.hover && 'cursor: pointer;'}
+  }
+`;
 
 const Td = styled.td<{ alignRight: boolean }>`
   padding: 15px 10px;
@@ -436,7 +442,7 @@ export function Table({
           </Thead>
           <Tbody>
             {itemsToDisplay?.map((row: any, index: any) => (
-              <Tr key={index} onClick={() => handleRowClick(row)}>
+              <Tr key={index} onClick={() => handleRowClick(row)} hover={!isEmpty(row?.viewURL)}>
                 {sortedHeaders?.map((header) => (
                   <Td key={`${index}-${header.label}`} alignRight={header.label === 'Actions'}>
                     <span>{parseRowValue(header, row)}</span>
