@@ -96,10 +96,61 @@ export function sortByKey(array: any[], key: string | number) {
   });
 }
 
+// export function sortArray<T>(array: T[], key: string, direction: string): T[] {
+//   const compare = (a: T, b: T) => {
+//     const aValue = ((a as any)[key])?.toLowerCase();
+//     const bValue = ((b as any)[key])?.toLowerCase();
+
+//     if (direction === 'asc') {
+//       return aValue?.localeCompare(bValue);
+//     } else {
+//       return bValue?.localeCompare(aValue);
+//     }
+//   };
+
+//   return array.slice().sort(compare);
+// }
+
+// export function sortArray<T>(array: T[], key: string, direction: string): T[] {
+//   const getValue = (obj: any, nestedKey: string) => {
+//     const keys = nestedKey.split('.');
+//     let value = obj;
+//     for (const k of keys) {
+//       value = value[k];
+//       if (value === undefined) return undefined;
+//     }
+//     return value;
+//   };
+
+//   const compare = (a: T, b: T) => {
+//     const aValue = getValue(a, key)?.toString().toLowerCase();
+//     const bValue = getValue(b, key)?.toString().toLowerCase();
+
+//     if (direction === 'asc') {
+//       return aValue?.localeCompare(bValue);
+//     } else {
+//       return bValue?.localeCompare(aValue);
+//     }
+//   };
+
+//   return array.slice().sort(compare);
+// }
+
 export function sortArray<T>(array: T[], key: string, direction: string): T[] {
+  const getValue = (obj: any, nestedKey: string) => {
+    const keys = nestedKey.split('.');
+    let value = obj;
+    for (const k of keys) {
+      if (!value || typeof value !== 'object') return undefined;
+      value = value[k];
+      if (value === undefined) return undefined;
+    }
+    return value;
+  };
+
   const compare = (a: T, b: T) => {
-    const aValue = ((a as any)[key])?.toLowerCase();
-    const bValue = ((b as any)[key])?.toLowerCase();
+    const aValue = getValue(a, key)?.toString().toLowerCase();
+    const bValue = getValue(b, key)?.toString().toLowerCase();
 
     if (direction === 'asc') {
       return aValue?.localeCompare(bValue);

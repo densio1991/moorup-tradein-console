@@ -104,7 +104,7 @@ export const ORDER_MANAGEMENT_COLUMNS = [
     label: 'User Email',
     order: 2,
     enableSort: true,
-    keyName: 'user_email',
+    keyName: 'user_id.email',
   },
   {
     label: 'Status',
@@ -116,18 +116,18 @@ export const ORDER_MANAGEMENT_COLUMNS = [
     label: 'Payment Status',
     order: 4,
     enableSort: true,
-    keyName: 'payment_status',
+    keyName: 'payment.payment_status',
   },
   {
     label: 'Order Count',
     order: 5,
-    keyName: 'order_count',
+    enableSort: false,
   },
   {
     label: 'Updated',
     order: 8,
     enableSort: true,
-    keyName: 'updated',
+    keyName: 'updatedAt',
   },
 ]
 
@@ -298,7 +298,6 @@ export const PROMOTIONS_MANAGEMENT_COLUMNS = [
     label: 'Products',
     order: 3,
     enableSort: false,
-    keyName: 'products',
   },
   {
     label: 'Start Date',
@@ -348,36 +347,43 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     label: 'Order Number',
     order: 2,
     enableSort: true,
+    keyName: 'order_id',
   },
   {
     label: 'Promotion Name',
     order: 3,
     enableSort: true,
+    keyName: 'promotion_details.name',
   },
   {
     label: 'Promotion Link',
     order: 4,
     enableSort: true,
+    keyName: 'promotion_details.slug',
   },
   {
     label: 'Claimed By',
     order: 5,
     enableSort: true,
+    keyName: 'user_details.first_name',
   },
   {
     label: 'Claimed Date',
     order: 6,
     enableSort: true,
+    keyName: 'createdAt',
   },
   {
     label: 'Moorup Status',
     order: 7,
     enableSort: true,
+    keyName: 'moorup_status',
   },
   {
     label: 'Claim Status',
     order: 8,
     enableSort: true,
+    keyName: 'status',
   },
 ]
 
