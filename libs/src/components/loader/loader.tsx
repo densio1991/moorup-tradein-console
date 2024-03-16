@@ -61,3 +61,11 @@ export function LoaderContainer({ loading, color, children, title, height }: Loa
     </StyledLoaderContainer>
   );
 }
+
+export const Loader = ({color}: {color?: string}) => {
+  return (
+    <StyledOverlay>
+      <LoadingSpinner color={color} />
+    </StyledOverlay>
+  );
+};

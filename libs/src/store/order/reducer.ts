@@ -6,16 +6,16 @@ const orderState = {
   isFetchingOrders: true,
   isAddingOrder: false,
   order: {},
-  isFetchingOrder: false,
+  isFetchingOrder: true,
   isUpdatingOrder: false,
   isDeletingOrder: false,
   orderItem: [],
-  isFetchingOrderItem: false,
+  isFetchingOrderItem: true,
   isUpdatingOrderItem: false,
   orderItems: [],
   isFetchingOrderItems: true,
   shipments: {},
-  isFetchingShipments: false,
+  isFetchingShipments: true,
   orderStatuses: [],
   isFetchingOrderStatuses: false,
   isResendingLabel: false,
@@ -49,6 +49,13 @@ const orderReducer = (state = orderState, action: any) => {
         orders: [],
       };
     }
+    case types.FETCH_ORDERS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingOrders: true,
+        orders: [],
+      };
+    }
 
     case types.FETCH_ORDER_BY_ID.baseType: {
       return {
@@ -68,6 +75,13 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isFetchingOrder: false,
+        order: {},
+      };
+    }
+    case types.FETCH_ORDER_BY_ID.CANCELLED: {
+      return {
+        ...state,
+        isFetchingOrder: true,
         order: {},
       };
     }
@@ -189,6 +203,13 @@ const orderReducer = (state = orderState, action: any) => {
         shipments: {},
       };
     }
+    case types.FETCH_ORDER_SHIPMENTS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingShipments: true,
+        shipments: {},
+      };
+    }
 
     case types.RESEND_SHIPMENT_LABEL.baseType: {
       return {
@@ -270,8 +291,12 @@ const orderReducer = (state = orderState, action: any) => {
     case types.CLEAR_ORDERS: {
       return {
         ...state,
-        isFetchingOrders: true,
         orders: [],
+        isFetchingOrder: true,
+        isFetchingOrders: true,
+        isFetchingOrderItem: true,
+        isFetchingOrderItems: true,
+        isFetchingShipments: true,
       };
     }
 

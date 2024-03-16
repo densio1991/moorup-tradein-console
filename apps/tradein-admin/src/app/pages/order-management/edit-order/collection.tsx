@@ -1,5 +1,6 @@
 import {
   DetailCardContainer,
+  Loader,
   OrderItems,
   Shipments,
   useOrder,
@@ -23,7 +24,7 @@ const Collection = ({ orderId, orderItems, shipments }: CollectionProps) => {
   const {
     isResendingLabel,
     // isUpdatingOrderItem,
-    // isFetchingShipments,
+    isFetchingShipments,
   } = state;
 
   const onReceiveOrderItem = (orderItemId: string) => {
@@ -64,15 +65,25 @@ const Collection = ({ orderId, orderItems, shipments }: CollectionProps) => {
                   </button>
                 )}
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-dataEntry gap-1">
-                <CardDetail label="Courier" value={shipments?.slug} />
-                <CardDetail label="Shipping Status" value={shipments?.status} />
-                <CardDetail label="Direction #" value={shipments?.direction} />
-                <CardDetail
-                  label="Inbound Tracking #"
-                  value={shipments?.tracking_number}
-                />
-              </div>
+              {isFetchingShipments ? (
+                <Loader />
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-dataEntry gap-1">
+                  <CardDetail label="Courier" value={shipments?.slug} />
+                  <CardDetail
+                    label="Shipping Status"
+                    value={shipments?.status}
+                  />
+                  <CardDetail
+                    label="Direction #"
+                    value={shipments?.direction}
+                  />
+                  <CardDetail
+                    label="Inbound Tracking #"
+                    value={shipments?.tracking_number}
+                  />
+                </div>
+              )}
             </div>
             {!isEmpty(shipments) && (
               <>

@@ -28,7 +28,6 @@ export function OrderManagementPage() {
 
     return () => {
       controller.abort();
-
       // Clear data on unmount
       clearOrders();
     };

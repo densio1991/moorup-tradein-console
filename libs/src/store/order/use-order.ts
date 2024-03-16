@@ -21,8 +21,8 @@ export const useOrder = () => {
     actions.getAllOrders(activePlatform, signal)(dispatch);
   };
 
-  const fetchOrderById = (id: any) => {
-    actions.getOrderById(id)(dispatch);
+  const fetchOrderById = (id: any, signal: AbortSignal) => {
+    actions.getOrderById(id, signal)(dispatch);
   };
 
   const patchOrderById = async (id: any, payload: any) => {
@@ -42,8 +42,8 @@ export const useOrder = () => {
     actions.deleteOrderById(payload, activePlatform)(dispatch);
   }
 
-  const fetchOrderShipments = (id: any) => {
-    actions.getOrderShipments(id)(dispatch);
+  const fetchOrderShipments = (id: any, signal: AbortSignal) => {
+    actions.getOrderShipments(id, signal)(dispatch);
   };
 
   const updateShipmentStatusById = (shipmentId: string, payload: any) => {
