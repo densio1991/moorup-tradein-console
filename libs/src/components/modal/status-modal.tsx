@@ -31,8 +31,6 @@ const CenterModalWrapper = styled.div<{ isOpen: boolean }>`
   transition: opacity 0.3s ease-in-out;
   opacity: ${(props) => (props.isOpen ? '1' : '0')};
   pointer-events: ${(props) => (props.isOpen ? 'auto' : 'none')};
-  overflow: auto;
-  height: 50%;
   max-height: 100%;
 `;
 

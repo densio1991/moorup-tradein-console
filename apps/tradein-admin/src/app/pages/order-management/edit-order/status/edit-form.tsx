@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   FormGroup,
   OrderItemStatus,
@@ -8,6 +9,7 @@ import {
 
 import styled from 'styled-components';
 import { useFormik } from 'formik';
+import { isEmpty } from 'lodash';
 
 const ModalBody = styled.div`
   padding: 16px;
@@ -25,8 +27,8 @@ const ModalButtonDiv = styled.div`
 `;
 
 const ModalButton = styled.button`
-  padding: 16px;
-  font-weight: bold:
+  padding: 4px 8px;
+  font-weight: bold;
   border: 1px solid #01463A;
   border-radius: 4px;
   background: #f5f5f4;
@@ -34,9 +36,8 @@ const ModalButton = styled.button`
 `;
 
 const ModalSubmitButton = styled.button`
-  padding: 16px;
-  font-weight: bold:
-  border: 2px solid #000;
+  padding: 4px 8px;
+  font-weight: bold;
   border-radius: 4px;
   color: #fff;
   background: #01463A;
@@ -44,27 +45,29 @@ const ModalSubmitButton = styled.button`
 `;
 
 const DEFAULT_VALUES = {
+  _id: '',
   status: '',
-  revision: '',
-  comma: '',
+  revised_offer: '',
+  reason: '',
 };
 
 interface FormValues {
+  _id: string;
   status: string;
-  revision: string;
-  comma: string;
+  revised_offer: string;
+  reason: string;
 }
 
 type FormProps = {
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
-  updateStatus: (newValue: OrderItems, status: string) => void;
-  orderItems: OrderItems;
+  updateStatus: (newValue: any) => void;
+  orderItem: OrderItems;
 };
 
 export const EditForm = ({
   setStatusModal,
   updateStatus,
-  orderItems,
+  orderItem,
 }: FormProps) => {
   const statusDropdown = Object.values(OrderItemStatus).map((item) => {
     return {
@@ -74,12 +77,32 @@ export const EditForm = ({
   });
 
   const onSubmit = () => {
-    updateStatus(orderItems, formik.values.status);
-    setStatusModal(false);
+    const { status, revised_offer, reason } = formik.values;
+    const errors = {} as FormValues;
+
+    if (status === OrderItemStatus.FOR_REVISION) {
+      if (isEmpty(revised_offer)) {
+        errors['revised_offer'] = 'Required field';
+      }
+      if (isEmpty(reason)) {
+        errors['reason'] = 'Required field';
+      }
+      formik.setErrors(errors);
+    }
+    if (isEmpty(errors)) {
+      updateStatus({
+        ...formik.values,
+      });
+      setStatusModal(false);
+    }
   };
 
   const formik = useFormik<FormValues>({
-    initialValues: DEFAULT_VALUES,
+    initialValues: {
+      ...DEFAULT_VALUES,
+      _id: orderItem?._id,
+      status: orderItem?.status,
+    },
     onSubmit,
   });
 
@@ -104,23 +127,27 @@ export const EditForm = ({
           <FormGroup>
             <StyledInput
               type="text"
-              id="revision"
+              id="revised_offer"
               label="Revision"
               name="name"
               placeholder="Revision Offer"
               onChange={formik.handleChange}
-              value={formik.values.revision}
+              value={formik.values.revised_offer}
+              error={!!formik.errors.revised_offer}
+              errorMessage={formik.errors.revised_offer}
             />
           </FormGroup>
           <FormGroup>
             <StyledInput
               type="text"
-              id="comma"
+              id="reason"
               label="Reasons"
-              name="comma"
+              name="reason"
               placeholder="Comma-separated reasons"
               onChange={formik.handleChange}
-              value={formik.values.comma}
+              value={formik.values.reason}
+              error={!!formik.errors.reason}
+              errorMessage={formik.errors.reason}
             />
           </FormGroup>
         </>

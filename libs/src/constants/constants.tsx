@@ -459,6 +459,7 @@ export interface OrderItems {
   functional_tested: boolean;
   lock_type: string;
   line_item_number: string;
+  reason: string[];
   questions_answered: QuestionAnswered[];
 }
 

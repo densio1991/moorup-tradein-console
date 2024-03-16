@@ -28,6 +28,7 @@ import Collection from './collection';
 import ValidationOffer from './validation-offer';
 import Completion from './completion';
 import { EditForm } from './status/edit-form';
+import { isEmpty } from 'lodash';
 
 type AccordionHeadingProps = {
   id: any;
@@ -127,7 +128,7 @@ export const EditOrderPage = () => {
     }
   }, [order._id]);
 
-  const onUpdateStatus = (newValue: any, status: any) => {
+  const onUpdateStatus = (newValue: any) => {
     if (newValue.status === OrderItemStatus.FOR_REVISION) {
       const payload = {
         pass: false,
@@ -137,9 +138,10 @@ export const EditOrderPage = () => {
       evaluateOrderItemById(newValue._id, payload);
     } else if (newValue.status === OrderItemStatus.EVALUATED) {
       evaluateOrderItemById(newValue._id, { pass: true });
+    } else {
+      patchOrderItemById(newValue._id, { status: newValue.status });
     }
-    console.log(newValue);
-    patchOrderItemById(newValue._id, { status: status });
+    setSelectedItem({} as OrderItems);
   };
 
   const [accordionState, setAccordionState] = useState<AccordionStates>({
@@ -362,11 +364,16 @@ export const EditOrderPage = () => {
         </AccordionInnerContainer>
       </AccordionContainer>
       <StatusModal isOpen={statusModal}>
-        <EditForm
-          setStatusModal={setStatusModal}
-          updateStatus={onUpdateStatus}
-          orderItems={selectedItem}
-        />
+        {!isEmpty(selectedItem) && (
+          <EditForm
+            setStatusModal={(value) => {
+              if (!value) setSelectedItem({} as OrderItems);
+              setStatusModal(value);
+            }}
+            updateStatus={onUpdateStatus}
+            orderItem={selectedItem}
+          />
+        )}
       </StatusModal>
     </LoaderContainer>
   );
