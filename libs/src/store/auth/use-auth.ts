@@ -18,6 +18,10 @@ export const useAuth = () => {
     actions.getUserDetailsById(payload)(dispatch);
   }
 
+  const getPlatformConfig = (payload: any) => {
+    actions.getPlatformConfig(payload)(dispatch);
+  }
+
   const setActivePlatform = (payload: any) => {
     actions.setActivePlatform(payload)(dispatch);
   }
@@ -31,6 +35,7 @@ export const useAuth = () => {
     loginUser,
     logoutUser,
     getUserDetailsById,
+    getPlatformConfig,
     setActivePlatform,
     setLoading,
   };

@@ -10,6 +10,8 @@ const authState = {
   isLoggingOut: false,
   userDetails: {},
   isFetchingUserDetails: false,
+  platformConfig: {},
+  isFetchingPlatformConfig: false,
   activePlatform: '',
   isPageLoading: true,
 };
@@ -95,6 +97,28 @@ const authReducer = (state: any, action: any) => {
         ...state,
         isFetchingUserDetails: false,
         userDetails: {},
+      };
+    }
+
+    case types.GET_PLATFORM_CONFIG.baseType: {
+      return {
+        ...state,
+        isFetchingPlatformConfig: true,
+        platformConfig: {},
+      };
+    }
+    case types.GET_PLATFORM_CONFIG.SUCCESS: {
+      return {
+        ...state,
+        isFetchingPlatformConfig: false,
+        platformConfig: action.payload.data,
+      };
+    }
+    case types.GET_PLATFORM_CONFIG.FAILED: {
+      return {
+        ...state,
+        isFetchingPlatformConfig: false,
+        platformConfig: {},
       };
     }
 
