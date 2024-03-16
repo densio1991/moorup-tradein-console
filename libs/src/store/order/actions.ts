@@ -190,7 +190,7 @@ export const resendShipmentLabel =
     });
 
     axiosInstance()
-      .post('/api/shipments/resend-label', payload)
+      .post(`/api/shipment/resend-label/${id}`, payload)
       .then((response) => {
         dispatch({
           type: types.RESEND_SHIPMENT_LABEL.SUCCESS,
