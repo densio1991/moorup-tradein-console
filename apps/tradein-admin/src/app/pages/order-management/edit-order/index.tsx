@@ -94,6 +94,7 @@ export const EditOrderPage = () => {
     evaluateOrderItemById,
     // closeModal,
     resendShipmentLabel,
+    clearOrder,
   } = useOrder();
 
   const { state: authState } = useAuth();
@@ -150,11 +151,10 @@ export const EditOrderPage = () => {
     };
   }, [order._id]);
 
-  console.log('order: ', order);
-
   useEffect(() => {
     if (!isEmpty(order)) {
       if (order.platform !== activePlatform) {
+        clearOrder();
         navigate('/dashboard/order');
       }
     }
