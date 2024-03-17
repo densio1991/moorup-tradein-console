@@ -52,3 +52,7 @@ export interface PromotionConditionItemInterface {
   order: number
   description: string
 }
+
+export interface PlatformType {
+  [key: string]: any;
+}

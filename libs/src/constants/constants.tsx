@@ -10,10 +10,23 @@ import {
   faUsers
 } from '@fortawesome/free-solid-svg-icons';
 import { OrderItemStatus } from './enums';
+import { PlatformType } from './interfaces';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
 export const TEMPLATE_LINK = import.meta.env.VITE_REACT_APP_TEMPLATE_LINK
 export const ACTIVE_PLATFORM = 'AP'
+
+export const PLATFORMS: PlatformType = {
+  binglee: 'Bing Lee',
+  noelleeming: 'Noel Leeming',
+  jbhifi: 'JB-HIFI',
+  costco: 'Costco',
+  moorup: 'Moorup',
+  betta: 'Betta',
+  birite: 'Bi-Rite',
+  officeworks: 'Officeworks',
+  '2degrees': '2degrees',
+};
 
 export const SIDENAV_ITEMS = [
   {
