@@ -39,6 +39,7 @@ const HeaderSection = styled.div`
   align-items: center;
   width: 100%;
   padding: 10px 0px;
+  flex-wrap: wrap;
 
   @media screen and (max-width: 425px) {
     flex-direction: column;
@@ -55,7 +56,8 @@ const RightSection = styled.div`
   display: flex;
   align-items: center;
   column-gap: 8px;
-  padding-right: 20px;
+  padding: 0px 20px;
+  padding-top: 8px;
 
   @media screen and (max-width: 425px) {
     flex-direction: column;

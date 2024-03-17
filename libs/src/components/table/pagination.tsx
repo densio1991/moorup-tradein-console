@@ -16,6 +16,7 @@ const PaginationWrapper = styled.div`
   width: 100%;
   padding: 10px;
   white-space: nowrap;
+  flex-wrap: wrap;
 
   @media screen and (max-width: 425px) {
     flex-direction: column;
