@@ -188,6 +188,12 @@ export const EditOrderPage = () => {
     return items;
   };
 
+  const creditType: any = {
+    post_assessment: 'Post assessment',
+    upfront: 'Gift card',
+    online: 'Online',
+  };
+
   const parsedShipments = parseShipments();
 
   const { address = {}, bank_details = {} } = user_id;
@@ -267,7 +273,10 @@ export const EditOrderPage = () => {
               </DetailCardContainer>
               <DetailCardContainer className="md:col-span-1">
                 <h4>Payment Details</h4>
-                <CardItem label="Credit Timeframe" value={order.credit_type} />
+                <CardItem
+                  label="Credit Timeframe"
+                  value={creditType[order.credit_type]}
+                />
                 <CardItem
                   label="Payment Status"
                   value={payment.payment_status}

@@ -119,14 +119,14 @@ const Collection = ({
                 <div className="flex flex-row flex-wrap gap-1 pt-1 font-medium">
                   <button
                     onClick={() => handleReceiveOrderItem(item._id)}
-                    className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
+                    className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
                   >
                     Mark as Received
                   </button>
                   {isBoxRequired(item?.product_type) && (
                     <button
                       onClick={() => handleSendBox(shipment)}
-                      className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
+                      className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
                     >
                       Send Box
                     </button>
@@ -139,7 +139,7 @@ const Collection = ({
                   <hr />
                   <div className="flex flex-row flex-wrap gap-1 pt-1 font-medium">
                     <button
-                      className="font-medium flex-1 text-white bg-primary py-1 px-3 rounded-md hover:bg-primary-light"
+                      className="font-medium flex-1 text-white bg-emerald-800 py-1 px-3 rounded-md hover:bg-emerald-900"
                       disabled={isResendingLabel}
                       onClick={() => handleResendLabel(item._id)}
                     >
@@ -157,7 +157,7 @@ const Collection = ({
             )}
             <button
               onClick={() => handleUpdateStatus(item)}
-              className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
+              className="font-medium px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
             >
               Update Status
             </button>

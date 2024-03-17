@@ -35,4 +35,9 @@ export const DataLine = styled.div`
     margin: 0;
     font-weight: 600;
   }
+
+  @media screen and (max-width: 425px) {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
 `
