@@ -435,15 +435,16 @@ export const generateLabels = (payload: any) => (dispatch: any) => {
   });
 
   axiosInstance()
-    .post('/api/orders/generate-labels', payload)
+    .post('/api/shipments/generate-labels?label=return,outbound', payload)
     .then((response) => {
       dispatch({
         type: types.GENERATE_LABELS.SUCCESS,
-        payload: response,
+        payload: response?.data,
       });
 
-      window.open(response?.data?.returnLabel, '_blank');
-      window.open(response?.data?.outboundLabel, '_blank');
+      const data = response?.data;
+      window.open(data?.data?.returnLabel, '_blank');
+      window.open(data?.data?.outBoundLabel, '_blank');
     })
     .catch((error) => {
       dispatch({
