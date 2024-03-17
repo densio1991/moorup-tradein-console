@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  DEFAULT_COLUMN,
   ORDER_MANAGEMENT_COLUMNS,
   Table,
   orderManagementParsingConfig,
@@ -18,7 +17,7 @@ export function OrderManagementPage() {
   const { state, fetchOrders, clearOrders } = useOrder();
   const { orders, isFetchingOrders } = state;
 
-  const headers = [...DEFAULT_COLUMN, ...ORDER_MANAGEMENT_COLUMNS];
+  const headers = [...ORDER_MANAGEMENT_COLUMNS];
 
   const addViewUrlToOrders = (orders: any) => {
     return orders.map((order: any) => ({

@@ -169,6 +169,7 @@ export function ProductManagementPage() {
                 width="fit-content"
                 icon={faFileExport}
                 onClick={handleDownloadClick}
+                disabled={isEmpty(TEMPLATE_LINK)}
               >
                 Export Template
               </AppButton>

@@ -13,6 +13,7 @@ import { OrderItemStatus } from './enums';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
 export const TEMPLATE_LINK = import.meta.env.VITE_REACT_APP_TEMPLATE_LINK
+export const ACTIVE_PLATFORM = 'AP'
 
 export const SIDENAV_ITEMS = [
   {
@@ -20,54 +21,63 @@ export const SIDENAV_ITEMS = [
     url: '/dashboard',
     activeUrl: /^\/dashboard$/,
     icon: faHouse,
+    disabled: false,
   },
   {
     title: 'Product Management',
     url: '/dashboard/product',
     activeUrl: /^\/dashboard\/product/,
     icon: faCube,
+    disabled: false,
   },
   {
     title: 'Order Management',
     url: '/dashboard/order',
     activeUrl: /^\/dashboard\/order/,
     icon: faFileInvoice,
+    disabled: false,
   },
   {
     title: 'Discrepancy',
     url: '/dashboard/discrepancy',
     activeUrl: /^\/dashboard\/discrepancy/,
     icon: faPenToSquare,
+    disabled: false,
   },
   {
     title: 'Actionables',
     url: '/dashboard/actionables',
     activeUrl: /^\/dashboard\/actionables/,
     icon: faFileCircleExclamation,
+    disabled: false,
   },
   {
     title: 'User Management',
     url: '/dashboard/user',
     activeUrl: /^\/dashboard\/user/,
     icon: faUsers,
+    disabled: false,
   },
   {
     title: 'Promotions',
     url: '/dashboard/promotion',
     activeUrl: /^\/dashboard\/promotion/,
     icon: faBullhorn,
+    disabled: false,
   },
   {
     title: 'Claims',
     url: '/dashboard/claims',
     activeUrl: /^\/dashboard\/claims/,
     icon: faCheckToSlot,
+    disabled: false,
   },
   {
     title: 'Payment',
     url: '/dashboard/payment',
     activeUrl: /^\/dashboard\/payment/,
     icon: faCreditCard,
+    disabled: true,
   },
 ]
 
@@ -109,26 +119,38 @@ export const PRODUCT_MANAGEMENT_COLUMNS = [
 
 export const ORDER_MANAGEMENT_COLUMNS = [
   {
-    label: 'User Email',
+    label: 'Order Number',
     order: 2,
     enableSort: true,
-    keyName: 'user_id.email',
+    keyName: 'order_number',
+  },
+  {
+    label: 'Order Type',
+    order: 3,
+    enableSort: true,
+    keyName: 'order_type',
+  },
+  {
+    label: 'Customer Name',
+    order: 4,
+    enableSort: true,
+    keyName: 'user_id.first_name',
   },
   {
     label: 'Status',
-    order: 3,
+    order: 5,
     enableSort: true,
     keyName: 'status',
   },
   {
     label: 'Payment Status',
-    order: 4,
+    order: 6,
     enableSort: true,
     keyName: 'payment.payment_status',
   },
   {
     label: 'Order Count',
-    order: 5,
+    order: 7,
     enableSort: false,
   },
   {

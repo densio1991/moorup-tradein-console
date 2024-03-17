@@ -9,10 +9,12 @@ import {
   SideModal,
   Table,
   USER_MANAGEMENT_COLUMNS,
+  useAuth,
   useCommon,
   useUser,
   userManagementParsingConfig,
 } from '@tradein-admin/libs';
+import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 import { AddUserForm } from './add-user';
 import { EditUserForm } from './edit-user';
@@ -22,6 +24,8 @@ export function UserManagementPage() {
   const { users, isFetchingUsers, isCreatingUser, isUpdatingUser } = state;
   const { state: commonState, setSideModalState } = useCommon();
   const { sideModalState } = commonState;
+  const { state: authState } = useAuth();
+  const { activePlatform } = authState;
 
   const headers = [
     ...DEFAULT_COLUMN,
@@ -35,7 +39,9 @@ export function UserManagementPage() {
     const controller = new AbortController();
     const signal = controller.signal;
 
-    getUsers({}, signal);
+    if (!isEmpty(activePlatform)) {
+      getUsers({}, signal);
+    }
 
     return () => {
       controller.abort();
@@ -43,7 +49,7 @@ export function UserManagementPage() {
       // Clear data on unmount
       clearUsers({});
     };
-  }, []);
+  }, [activePlatform]);
 
   const renderForm = () => {
     switch (sideModalState.view) {

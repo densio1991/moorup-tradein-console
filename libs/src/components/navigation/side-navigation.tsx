@@ -9,6 +9,7 @@ import { LoaderContainer } from '../loader'
 
 interface NavLinkProps {
   active?: boolean
+  disabled?: boolean;
 }
 
 const SidebarContainer = styled.div`
@@ -53,40 +54,41 @@ const NavLink = styled.a<NavLinkProps>`
   align-items: center;
   padding: 0.6rem 1rem;
   border-radius: 0.5rem;
-  color: ${(props) => (props.active ? 'white' : '#01463a')};
-  background: ${(props) => (props.active ? 'linear-gradient(to right, #216A4C, #01463A)' : 'transparent')};
+  color: ${(props) => (props.active ? 'white' : props.disabled ? '#ccc' : '#01463a')};
+  background: ${(props) => (props.active ? 'linear-gradient(to right, #216A4C, #01463A)' : props.disabled ? 'transparent' : 'transparent')};
   text-decoration: none;
   margin-bottom: 0.5rem;
   font-weight: 600;
   font-size: 14px;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
   justify-content: start;
+  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
 
   @media screen and (max-width: 768px) {
     #label {
       display: none;
     }
 
-    border-radius: 0px;;
+    border-radius: ${(props) => (props.disabled ? '0px' : '0.5rem')};
   }
 
   &:hover {
-    background: linear-gradient(to right, #216A4C, #01463A);
-    color: white;
+    background: ${(props) => (props.disabled ? 'transparent' : 'linear-gradient(to right, #216A4C, #01463A)')};
+    color: ${(props) => (props.disabled ? '#ccc' : 'white')};
 
     svg {
-      color: white;
+      color: ${(props) => (props.disabled ? '#ccc' : 'white')};
     }
   }
 
   svg {
-    color: ${(props) => (props.active ? 'white' : '#01463a')};
+    color: ${(props) => (props.active ? 'white' : props.disabled ? '#ccc' : '#01463a')};
   }
 
   #label {
     margin-left: 8px;
   }
-`
+`;
 
 export function SideBar(): JSX.Element {
   const { pathname } = useLocation()
@@ -136,6 +138,7 @@ export function SideBar(): JSX.Element {
                 key={item.url}
                 active={item.activeUrl?.test(pathname)}
                 onClick={() => navigate(item.url)}
+                disabled={item.disabled}
               >
                 <span>
                   <StyledIcon icon={item.icon} />

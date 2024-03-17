@@ -5,9 +5,12 @@ import * as actions from './actions';
 
 export const useUser = () => {
   const { state, dispatch } = useContext(RootContext);
+  const {
+    activePlatform,
+  } = state.auth;
 
   const getUsers = (payload: any, signal: AbortSignal) => {
-    actions.getUsers(payload, signal)(dispatch);
+    actions.getUsers(payload, activePlatform, signal)(dispatch);
   }
 
   const clearUsers = (payload: any) => {
@@ -15,11 +18,11 @@ export const useUser = () => {
   }
 
   const createUser = (payload: any) => {
-    actions.createUser(payload)(dispatch);
+    actions.createUser(payload, activePlatform)(dispatch);
   }
 
   const updateUser = (id: string, payload: any) => {
-    actions.updateUser(id, payload)(dispatch);
+    actions.updateUser(id, activePlatform, payload)(dispatch);
   }
 
   return {

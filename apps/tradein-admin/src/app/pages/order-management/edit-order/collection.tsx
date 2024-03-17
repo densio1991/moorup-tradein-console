@@ -3,12 +3,12 @@ import {
   DetailCardContainer,
   Loader,
   OrderItems,
+  PRODUCT_TYPES,
   Shipments,
   useOrder,
-  PRODUCT_TYPES,
 } from '@tradein-admin/libs';
-import { DeviceSection, CardDetail } from './sections';
 import { isEmpty } from 'lodash';
+import { CardDetail, DeviceSection } from './sections';
 
 type CollectionProps = {
   orderId: string;
@@ -85,7 +85,7 @@ const Collection = ({
 
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
-            <DeviceSection order={item} />
+            <DeviceSection order={item} orderId={orderId} />
             <hr />
             <div className="flex flex-col">
               <div className="flex justify-between items-center">

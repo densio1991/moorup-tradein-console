@@ -5,15 +5,17 @@ import {
   amountFormatter,
   displayData,
 } from '@tradein-admin/libs';
-import { DeviceSection, CardDetail } from './sections';
+import { CardDetail, DeviceSection } from './sections';
 
 type ValidationOfferProps = {
+  orderId: any;
   orderItems: OrderItems[];
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedItem: React.Dispatch<React.SetStateAction<OrderItems>>;
 };
 
 const ValidationOffer = ({
+  orderId,
   orderItems,
   setStatusModal,
   setSelectedItem,
@@ -51,7 +53,7 @@ const ValidationOffer = ({
 
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
-            <DeviceSection order={item} />
+            <DeviceSection order={item} orderId={orderId} />
             <hr />
             <div>
               <h4>Validation</h4>
