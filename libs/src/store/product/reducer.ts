@@ -22,6 +22,7 @@ const productState = {
   isUpdatingProduct: false,
   isAddingProductVariant: false,
   isUpdatingProductVariant: false,
+  isUploadingProductsExcel: false,
 };
 
 const productReducer = (state: any, action: any) => {
@@ -293,6 +294,27 @@ const productReducer = (state: any, action: any) => {
         isUpdatingProductVariant: false,
         product: {},
         isFetchingProduct: true,
+      };
+    }
+
+    case types.UPLOAD_PRODUCTS_EXCEL.baseType: {
+      return {
+        ...state,
+        isUploadingProductsExcel: true,
+        products: [],
+      };
+    }
+    case types.UPLOAD_PRODUCTS_EXCEL.SUCCESS: {
+      return {
+        ...state,
+        isUploadingProductsExcel: false,
+      };
+    }
+    case types.UPLOAD_PRODUCTS_EXCEL.FAILED: {
+      return {
+        ...state,
+        isUploadingProductsExcel: false,
+        products: [],
       };
     }
 
