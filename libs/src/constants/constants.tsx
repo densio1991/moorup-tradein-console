@@ -12,6 +12,7 @@ import {
 import { OrderItemStatus } from './enums';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
+export const TEMPLATE_LINK = import.meta.env.VITE_REACT_APP_TEMPLATE_LINK
 
 export const SIDENAV_ITEMS = [
   {

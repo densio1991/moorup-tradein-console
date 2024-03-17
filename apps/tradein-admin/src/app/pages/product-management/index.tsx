@@ -1,7 +1,10 @@
+/* eslint-disable jsx-a11y/anchor-has-content */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   faDownload,
+  faFileExport,
   faPlus,
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +16,7 @@ import {
   MODAL_TYPES,
   PRODUCT_MANAGEMENT_COLUMNS,
   SideModal,
+  TEMPLATE_LINK,
   Table,
   exportToCSV,
   productManagementParsingConfig,
@@ -97,6 +101,16 @@ export function ProductManagementPage() {
     }
   };
 
+  const downloadAnchorRef = useRef<HTMLAnchorElement>(null);
+
+  const handleDownloadClick = () => {
+    const fileUrl = TEMPLATE_LINK;
+    if (downloadAnchorRef.current) {
+      downloadAnchorRef.current.href = fileUrl;
+      downloadAnchorRef.current.click();
+    }
+  };
+
   return (
     <>
       <Table
@@ -150,6 +164,16 @@ export function ProductManagementPage() {
             >
               Export
             </AppButton>
+            <>
+              <AppButton
+                width="fit-content"
+                icon={faFileExport}
+                onClick={handleDownloadClick}
+              >
+                Export Template
+              </AppButton>
+              <a ref={downloadAnchorRef} style={{ display: 'none' }} download />
+            </>
           </>
         }
       />

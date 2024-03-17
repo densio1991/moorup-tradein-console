@@ -58,6 +58,8 @@ const RightSection = styled.div`
   column-gap: 8px;
   padding: 0px 20px;
   padding-top: 8px;
+  flex-wrap: wrap;
+  gap: 10px;
 
   @media screen and (max-width: 425px) {
     flex-direction: column;
@@ -79,8 +81,8 @@ const ActionContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
+  flex-wrap: wrap;
 `
 
 const TableWrapper = styled.div`
