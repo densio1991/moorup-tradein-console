@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { default as Select } from 'react-select'
 import styled from 'styled-components'
-import { ACTIVE_PLATFORM } from '../../constants'
+import { ACTIVE_PLATFORM, PLATFORMS } from '../../constants'
 import { capitalizeFirstLetter, getInitials } from '../../helpers'
 import { useAuth } from '../../store'
 import { Avatar } from '../avatar'
@@ -91,7 +91,7 @@ export function TopNavBar(): JSX.Element {
   const platforms = userDetails?.platforms
     ?.map((item: any) => ({
       value: item,
-      label: capitalizeFirstLetter(item),
+      label: PLATFORMS[item],
     }))
     .sort((a: { label: string }, b: { label: any }) =>
       a.label.localeCompare(b.label),

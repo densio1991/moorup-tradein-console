@@ -46,7 +46,7 @@ export function PrivateRoute(): JSX.Element {
   
         case ADMIN:
           setLoading(false);
-          activeUrl = /^\/dashboard\/product/;
+          activeUrl = /^\/dashboard\/(product|order|user|promotions)/;
           if (!activeUrl?.test(pathname)) {
             navigate('/dashboard/product');
           }
