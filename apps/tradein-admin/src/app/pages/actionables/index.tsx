@@ -29,7 +29,7 @@ export function ActionablesPage() {
   const addPrintLabelAction = (orderItems: any) => {
     return orderItems.map((orderItem: any) => ({
       ...orderItem,
-      action: () => generateLabels({ order_id: orderItem?._id }),
+      action: () => generateLabels({ order_id: orderItem?.order_items?._id }),
     }));
   };
 
