@@ -22,11 +22,12 @@ import {
   StyledIcon,
   VALIDATION_ORDER_ITEM_STATUS,
   formatDate,
+  useAuth,
   useOrder,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Collection from './collection';
 import Completion from './completion';
 import { EditForm } from './status/edit-form';
@@ -83,7 +84,7 @@ export const CardItem = ({ label, value, copy }: CardItemProps) => {
 
 export const EditOrderPage = () => {
   const { id: orderId } = useParams();
-
+  const navigate = useNavigate();
   const {
     state,
     fetchOrderById,
@@ -94,6 +95,9 @@ export const EditOrderPage = () => {
     // closeModal,
     resendShipmentLabel,
   } = useOrder();
+
+  const { state: authState } = useAuth();
+  const { activePlatform } = authState;
 
   const {
     order = {},
@@ -145,6 +149,16 @@ export const EditOrderPage = () => {
       controller.abort();
     };
   }, [order._id]);
+
+  console.log('order: ', order);
+
+  useEffect(() => {
+    if (!isEmpty(order)) {
+      if (order.platform !== activePlatform) {
+        navigate('/dashboard/order');
+      }
+    }
+  }, [activePlatform]);
 
   const onUpdateStatus = (newValue: any) => {
     if (newValue.status === OrderItemStatus.FOR_REVISION) {

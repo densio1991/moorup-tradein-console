@@ -8,4 +8,5 @@ export const Badge = styled.div`
   width: fit-content;
   border-radius: 3px;
   font-size: 12px;
+  margin-bottom: 2px;
 `;
