@@ -1,10 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect } from 'react'
 import { default as Select } from 'react-select'
 import styled from 'styled-components'
+import { ACTIVE_PLATFORM } from '../../constants'
 import { capitalizeFirstLetter, getInitials } from '../../helpers'
 import { useAuth } from '../../store'
 import { Avatar } from '../avatar'
-import { useEffect } from 'react'
 
 const NavbarContainer = styled.div`
   width: 100%;
@@ -110,6 +112,7 @@ export function TopNavBar(): JSX.Element {
                 value={platforms?.find((option: any) => activePlatform === option?.value) || null}
                 onChange={(selectedOption) => {
                   setActivePlatform(selectedOption.value)
+                  localStorage.setItem(ACTIVE_PLATFORM, selectedOption.value)
                 }}
               />
             ) : (

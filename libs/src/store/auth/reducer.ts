@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ACTIVE_PLATFORM } from '../../constants';
 import { decodeJWT } from '../../helpers';
 import * as types from './action-types';
 
@@ -12,7 +13,7 @@ const authState = {
   isFetchingUserDetails: false,
   platformConfig: {},
   isFetchingPlatformConfig: false,
-  activePlatform: '',
+  activePlatform: localStorage.getItem(ACTIVE_PLATFORM) || null,
   isPageLoading: true,
 };
 
@@ -89,7 +90,7 @@ const authReducer = (state: any, action: any) => {
         ...state,
         isFetchingUserDetails: false,
         userDetails: action.payload.data,
-        activePlatform: platforms?.sort()[0] || '',
+        activePlatform: localStorage.getItem(ACTIVE_PLATFORM) || platforms?.sort()[0] || '',
       };
     }
     case types.GET_USER_DETAILS.FAILED: {
