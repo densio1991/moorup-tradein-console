@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 
 const NavbarContainer = styled.div`
   width: 100%;
-  height: 45px;
+  height: 50px;
   background-color: white;
   position: sticky;
   top: 0;
@@ -16,7 +16,7 @@ const NavbarContainer = styled.div`
 `
 const NavbarWrapper = styled.div`
   height: 100%;
-  padding: 0px 20px;
+  padding: 8px 20px;
   display: flex;
   align-items: center;
 `

@@ -7,6 +7,7 @@ interface CardContainerProps {
 }
 
 const CardContainerWrapper = styled.div<{ direction?: string }>`
+  height: calc(100vh - 50px);
   display: flex;
   flex-direction: column;
   width: 100%;

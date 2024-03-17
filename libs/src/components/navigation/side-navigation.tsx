@@ -12,10 +12,10 @@ interface NavLinkProps {
 }
 
 const SidebarContainer = styled.div`
-  height: calc(100vh - 50px);
+  height: calc(100vh - 52px);
   background-color: white;
   position: sticky;
-  top: 50px;
+  top: 52px;
   margin-top: 1px;
   border-top: 1px solid #f4f4f5;
   width: auto;

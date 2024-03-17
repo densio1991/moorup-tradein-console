@@ -303,3 +303,39 @@ export const updateProductVariant = (id: string, productId: string, payload: any
       toast.error('Failed to update product variant!');
     });
 };
+
+export const uploadProductsExcelFile =
+  (file: File, activePlatform: string) => async (dispatch: any) => {
+    dispatch({
+      type: types.UPLOAD_PRODUCTS_EXCEL.baseType,
+      payload: {},
+    });
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    axiosInstance()
+      .post('/api/products/import/excel', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(() => {
+        dispatch({
+          type: types.UPLOAD_PRODUCTS_EXCEL.SUCCESS,
+          payload: {},
+        });
+
+        getProducts(activePlatform, true)(dispatch);
+        toast.success('Products successfully imported!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.UPLOAD_PRODUCTS_EXCEL.FAILED,
+          payload: error,
+        });
+
+        getProducts(activePlatform, true)(dispatch);
+        toast.error('Failed to import products.');
+      });
+  };

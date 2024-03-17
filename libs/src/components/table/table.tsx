@@ -39,6 +39,7 @@ const HeaderSection = styled.div`
   align-items: center;
   width: 100%;
   padding: 10px 0px;
+  flex-wrap: wrap;
 
   @media screen and (max-width: 425px) {
     flex-direction: column;
@@ -55,7 +56,10 @@ const RightSection = styled.div`
   display: flex;
   align-items: center;
   column-gap: 8px;
-  padding-right: 20px;
+  padding: 0px 20px;
+  padding-top: 8px;
+  flex-wrap: wrap;
+  gap: 10px;
 
   @media screen and (max-width: 425px) {
     flex-direction: column;
@@ -77,8 +81,8 @@ const ActionContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
+  flex-wrap: wrap;
 `
 
 const TableWrapper = styled.div`

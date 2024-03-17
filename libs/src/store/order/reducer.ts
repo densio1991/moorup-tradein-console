@@ -22,6 +22,8 @@ const orderState = {
   variants: [],
   isModalOpen: false,
   activeOrderItem: {},
+  generatedLabels: {},
+  isGeneratingLabels: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -315,6 +317,27 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.GENERATE_LABELS.baseType: {
+      return {
+        ...state,
+        isGeneratingLabels: true,
+        generatedLabels: {},
+      };
+    }
+    case types.GENERATE_LABELS.SUCCESS: {
+      return {
+        ...state,
+        isGeneratingLabels: false,
+        generatedLabels: action.payload,
+      };
+    }
+    case types.GENERATE_LABELS.FAILED: {
+      return {
+        ...state,
+        isGeneratingLabels: false,
+        generatedLabels: {},
+      };
+    }
 
     default:
       return state;

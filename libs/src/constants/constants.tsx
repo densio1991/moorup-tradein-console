@@ -3,6 +3,7 @@ import {
   faCheckToSlot,
   faCreditCard,
   faCube,
+  faFileCircleExclamation,
   faFileInvoice,
   faHouse,
   faPenToSquare,
@@ -11,6 +12,7 @@ import {
 import { OrderItemStatus } from './enums';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
+export const TEMPLATE_LINK = import.meta.env.VITE_REACT_APP_TEMPLATE_LINK
 
 export const SIDENAV_ITEMS = [
   {
@@ -36,6 +38,12 @@ export const SIDENAV_ITEMS = [
     url: '/dashboard/discrepancy',
     activeUrl: /^\/dashboard\/discrepancy/,
     icon: faPenToSquare,
+  },
+  {
+    title: 'Actionables',
+    url: '/dashboard/actionables',
+    activeUrl: /^\/dashboard\/actionables/,
+    icon: faFileCircleExclamation,
   },
   {
     title: 'User Management',
@@ -104,7 +112,7 @@ export const ORDER_MANAGEMENT_COLUMNS = [
     label: 'User Email',
     order: 2,
     enableSort: true,
-    keyName: 'user_email',
+    keyName: 'user_id.email',
   },
   {
     label: 'Status',
@@ -116,18 +124,18 @@ export const ORDER_MANAGEMENT_COLUMNS = [
     label: 'Payment Status',
     order: 4,
     enableSort: true,
-    keyName: 'payment_status',
+    keyName: 'payment.payment_status',
   },
   {
     label: 'Order Count',
     order: 5,
-    keyName: 'order_count',
+    enableSort: false,
   },
   {
     label: 'Updated',
     order: 8,
     enableSort: true,
-    keyName: 'updated',
+    keyName: 'updatedAt',
   },
 ]
 
@@ -298,7 +306,6 @@ export const PROMOTIONS_MANAGEMENT_COLUMNS = [
     label: 'Products',
     order: 3,
     enableSort: false,
-    keyName: 'products',
   },
   {
     label: 'Start Date',
@@ -348,36 +355,82 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     label: 'Order Number',
     order: 2,
     enableSort: true,
+    keyName: 'order_id',
   },
   {
     label: 'Promotion Name',
     order: 3,
     enableSort: true,
+    keyName: 'promotion_details.name',
   },
   {
     label: 'Promotion Link',
     order: 4,
     enableSort: true,
+    keyName: 'promotion_details.slug',
   },
   {
     label: 'Claimed By',
     order: 5,
     enableSort: true,
+    keyName: 'user_details.first_name',
   },
   {
     label: 'Claimed Date',
     order: 6,
     enableSort: true,
+    keyName: 'createdAt',
   },
   {
     label: 'Moorup Status',
     order: 7,
     enableSort: true,
+    keyName: 'moorup_status',
   },
   {
     label: 'Claim Status',
     order: 8,
     enableSort: true,
+    keyName: 'status',
+  },
+]
+
+export const ACTIONABLES_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Name',
+    order: 2,
+    enableSort: true,
+    keyName: 'user_details.first_name',
+  },
+  {
+    label: 'Status',
+    order: 3,
+    enableSort: true,
+    keyName: 'status',
+  },
+  {
+    label: 'Product Name',
+    order: 4,
+    enableSort: true,
+    keyName: 'order_items.product_name',
+  },
+  {
+    label: 'Product Type',
+    order: 5,
+    enableSort: true,
+    keyName: 'order_items.product_type',
+  },
+  {
+    label: 'Created',
+    order: 6,
+    enableSort: true,
+    keyName: 'createdAt',
+  },
+  {
+    label: 'Updated',
+    order: 7,
+    enableSort: true,
+    keyName: 'updatedAt',
   },
 ]
 

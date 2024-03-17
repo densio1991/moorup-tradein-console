@@ -1,12 +1,13 @@
 import { NotFound, PrivateRoute, PublicRoute } from '@tradein-admin/libs';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import {
+  ActionablesPage,
   DashboardPage,
   DiscrepancyPage,
+  EditOrderPage,
   EditProductPage,
   LoginPage,
   OrderManagementPage,
-  EditOrderPage,
   PaymentsPage,
   ProductManagementPage,
   PromotionClaimsPage,
@@ -33,6 +34,7 @@ export function App() {
           <Route path="/dashboard/promotion" element={<PromotionsPage />} />
           <Route path="/dashboard/claims" element={<PromotionClaimsPage />} />
           <Route path="/dashboard/payment" element={<PaymentsPage />} />
+          <Route path="/dashboard/actionables" element={<ActionablesPage />} />
         </Route>
 
         {/* Will redirect authenticated users to /dashboard */}

@@ -427,3 +427,30 @@ export const clearOrders = (payload: any) => (dispatch: any) => {
     payload,
   });
 };
+
+export const generateLabels = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.GENERATE_LABELS.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .post('/api/orders/generate-labels', payload)
+    .then((response) => {
+      dispatch({
+        type: types.GENERATE_LABELS.SUCCESS,
+        payload: response,
+      });
+
+      window.open(response?.data?.returnLabel, '_blank');
+      window.open(response?.data?.outboundLabel, '_blank');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.GENERATE_LABELS.FAILED,
+        payload: error,
+      });
+      
+      toast.error('Failed to generate labels.');
+    });
+};
