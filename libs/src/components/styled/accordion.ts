@@ -21,18 +21,11 @@ export const AccordionHeader = styled.div<{ isOpen?: boolean }>`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 4px 12px;
   cursor: pointer;
-  box-shadow: 0px 1px 0px 0px #ccc;
-
-  :first-child {
-    width: 100%;
-  }
-
-  :last-child {
-    padding: 0px;
-    box-shadow: 0px 1px 1px 0px #ccc;
-  }
+  box-shadow: 0px 2px 4px 1px #ccc;
+  width: 100%;
+  margin-bottom: 4px;
 `;
 
 export const AccordionTitle = styled.span`
@@ -53,7 +46,7 @@ export const StyledIcon = styled(FontAwesomeIcon)<{
   disabled?: boolean;
 }>`
   color: ${(props) => (props.color ? props.color : 'inherit')};
-  margin: 0 12px;
+  margin: 0 4px;
 
   &:hover {
     color: ${(props) => (props.hovercolor ? props.hovercolor : 'inherit')};

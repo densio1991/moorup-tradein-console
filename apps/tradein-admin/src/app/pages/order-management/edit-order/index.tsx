@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -7,29 +8,29 @@ import {
   AccordionHeaderContainer,
   AccordionInnerContainer,
   AccordionTitle,
-  StyledIcon,
+  Badge,
+  COLLECTION_ORDER_ITEM_STATUS,
+  COMPLETION_ORDER_ITEM_STATUS,
+  CopyToClipboardButton,
   DataLine,
   DetailCardContainer,
-  useOrder,
-  formatDate,
-  Badge,
-  OrderItems,
-  OrderItemStatus,
   LoaderContainer,
-  CopyToClipboardButton,
-  StatusModal,
-  COLLECTION_ORDER_ITEM_STATUS,
-  VALIDATION_ORDER_ITEM_STATUS,
-  COMPLETION_ORDER_ITEM_STATUS,
+  OrderItemStatus,
+  OrderItems,
   Shipments,
+  StatusModal,
+  StyledIcon,
+  VALIDATION_ORDER_ITEM_STATUS,
+  formatDate,
+  useOrder,
 } from '@tradein-admin/libs';
+import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Collection from './collection';
-import ValidationOffer from './validation-offer';
 import Completion from './completion';
 import { EditForm } from './status/edit-form';
-import { isEmpty } from 'lodash';
+import ValidationOffer from './validation-offer';
 
 type AccordionHeadingProps = {
   id: any;
@@ -99,6 +100,7 @@ export const EditOrderPage = () => {
     shipments = [],
     isUpdatingOrder,
     isFetchingOrder,
+    isUpdatingImeiSerial,
   } = state;
 
   const {
@@ -220,8 +222,11 @@ export const EditOrderPage = () => {
   );
 
   return (
-    <LoaderContainer title="Order Details" loading={isFetchingOrder}>
-      <AccordionContainer className="px-2">
+    <LoaderContainer
+      title="Order Details"
+      loading={isFetchingOrder || isUpdatingOrder || isUpdatingImeiSerial}
+    >
+      <AccordionContainer className="px-8 pt-8">
         <AccordionInnerContainer key="Quote Creation">
           <AccordionHeaderContainer>
             <AccordionHeading
@@ -359,6 +364,7 @@ export const EditOrderPage = () => {
                 <div className="max-w-full mx-auto">
                   <div className="overflow-x-auto max-w-full pb-2">
                     <ValidationOffer
+                      orderId={orderId}
                       orderItems={validationOrderItems}
                       setStatusModal={setStatusModal}
                       setSelectedItem={setSelectedItem}
@@ -386,6 +392,7 @@ export const EditOrderPage = () => {
                 <div className="max-w-full mx-auto">
                   <div className="overflow-x-auto max-w-full pb-2">
                     <Completion
+                      orderId={orderId}
                       orderItems={completionOrderItems}
                       setStatusModal={setStatusModal}
                       setSelectedItem={setSelectedItem}

@@ -24,6 +24,7 @@ const orderState = {
   activeOrderItem: {},
   generatedLabels: {},
   isGeneratingLabels: false,
+  isUpdatingImeiSerial: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -336,6 +337,25 @@ const orderReducer = (state = orderState, action: any) => {
         ...state,
         isGeneratingLabels: false,
         generatedLabels: {},
+      };
+    }
+
+    case types.UPDATE_ORDER_ITEM_IMEI_SERIAL.baseType: {
+      return {
+        ...state,
+        isUpdatingImeiSerial: true,
+      };
+    }
+    case types.UPDATE_ORDER_ITEM_IMEI_SERIAL.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingImeiSerial: false,
+      };
+    }
+    case types.UPDATE_ORDER_ITEM_IMEI_SERIAL.FAILED: {
+      return {
+        ...state,
+        isUpdatingImeiSerial: false,
       };
     }
 

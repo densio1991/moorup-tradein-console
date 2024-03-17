@@ -8,12 +8,14 @@ import {
 import { CardDetail, DeviceSection } from './sections';
 
 type CompletionProps = {
+  orderId: any;
   orderItems: OrderItems[];
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedItem: React.Dispatch<React.SetStateAction<OrderItems>>;
 };
 
 const Completion = ({
+  orderId,
   orderItems,
   setStatusModal,
   setSelectedItem,
@@ -51,7 +53,7 @@ const Completion = ({
 
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
-            <DeviceSection order={item} />
+            <DeviceSection order={item} orderId={orderId} />
             <hr />
             <div>
               <h4>Validation</h4>

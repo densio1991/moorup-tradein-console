@@ -454,3 +454,30 @@ export const generateLabels = (payload: any) => (dispatch: any) => {
       toast.error('Failed to generate labels.');
     });
 };
+
+export const updateOrderItemImeiSerial = (orderItemId: string, orderId: string, payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .patch(`/api/orders/items/${orderItemId}/imei-serial`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.SUCCESS,
+        payload: response,
+      });
+
+      getOrderById(orderId)(dispatch);
+      toast.success('IMEI/Serial successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.FAILED,
+        payload: error,
+      });
+      
+      toast.error('Failed to update IMEI/Serial.');
+    });
+};
