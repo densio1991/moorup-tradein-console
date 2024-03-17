@@ -114,7 +114,9 @@ export const CardDetail = ({
 
   return (
     <>
-      <dl className="flex font-semibold capitalize pr-4">{label}</dl>
+      <dl className="flex font-semibold whitespace-nowrap capitalize pr-6">
+        {label}
+      </dl>
       {editing ? (
         <div className="flex items-center">
           <input
@@ -138,7 +140,7 @@ export const CardDetail = ({
           </button>
         </div>
       ) : (
-        <dt className="flex truncate capitalize">
+        <dt className="flex items-center break-normal capitalize">
           {value || '---'}
           {copy && value && <CopyToClipboardButton textToCopy={value} />}
           {edit && value && (

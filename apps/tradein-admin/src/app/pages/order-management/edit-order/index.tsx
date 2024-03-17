@@ -240,7 +240,7 @@ export const EditOrderPage = () => {
       title="Order Details"
       loading={isFetchingOrder || isUpdatingOrder || isUpdatingImeiSerial}
     >
-      <AccordionContainer className="px-8 pt-8">
+      <AccordionContainer className="px-4 pt-4">
         <AccordionInnerContainer key="Quote Creation">
           <AccordionHeaderContainer>
             <AccordionHeading
@@ -268,7 +268,10 @@ export const EditOrderPage = () => {
                 <h4>Quote Information</h4>
                 <CardItem label="Quote #" value={order.order_number} copy />
                 <CardItem label="Quote Status" value={order.status} />
-                <CardItem label="Products" value={products} />
+                <CardItem
+                  label="Products"
+                  value={<div className="flex flex-wrap gap-1">{products}</div>}
+                />
                 <CardItem
                   label="Date Created"
                   value={formatDate(order.createdAt)}

@@ -79,7 +79,7 @@ const Collection = ({
   };
 
   return (
-    <div className="flex gap-2 p-2.5">
+    <div className="flex gap-2 p-2.5 items-end">
       {orderItems?.map((item: OrderItems, idx) => {
         const shipment = getItemShipment(item._id);
 
@@ -87,8 +87,8 @@ const Collection = ({
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
             <DeviceSection order={item} orderId={orderId} />
             <hr />
-            <div className="flex flex-col">
-              <div className="flex justify-between items-center">
+            <div className="flex flex-col mb-2">
+              <div className="flex justify-between">
                 <h4>Shipping</h4>
               </div>
               {isFetchingShipments ? (
