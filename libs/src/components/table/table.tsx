@@ -3,12 +3,11 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
 import { ReactNode, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import {
-  capitalizeFirstLetter,
-  parseDateString,
   sortArray,
-  sortByKey,
+  sortByKey
 } from '../../helpers';
 import Pagination from './pagination';
 
@@ -16,14 +15,22 @@ interface ThProps {
   key: any;
   enableSort?: boolean;
   sorted?: boolean;
+  alignRight?: boolean;
 }
+
 interface TableProps {
   label: string;
-  headers: Array<{ label: string; order: number; enableSort?: boolean }>;
+  headers: Array<{
+    label: string;
+    order: number;
+    enableSort?: boolean;
+  }>;
   rows: Array<{ [key: string]: string }>;
   isLoading: boolean;
   enableCheckbox?: boolean;
+  menuItems?: any;
   rightControls?: any;
+  parsingConfig?: { [key: string]: (value: any) => any };
 }
 
 const HeaderSection = styled.div`
@@ -31,32 +38,61 @@ const HeaderSection = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding: 10px 0px;
+
+  @media screen and (max-width: 425px) {
+    flex-direction: column;
+    gap: 10px;
+    align-items: start;
+  }
 `;
 
 const LeftSection = styled.div`
-  margin-right: auto;
-  flex: 1;
+  padding-left: 20px;
 `;
 
 const RightSection = styled.div`
   display: flex;
   align-items: center;
   column-gap: 8px;
+  padding-right: 20px;
+
+  @media screen and (max-width: 425px) {
+    flex-direction: column;
+    gap: 10px;
+    align-items: start;
+    padding-left: 20px;
+
+    span {
+      display: none;
+    }
+
+    svg {
+      margin: 0px;
+    }
+  }
 `;
+
+const ActionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+`
 
 const TableWrapper = styled.div`
   box-shadow: none;
   margin-bottom: 16px;
   border-radius: 6px !important;
-  display: block;
-  width: 100%;
   overflow-x: auto;
+  padding: 0px 20px;
 `;
 
 const TableStyled = styled.table`
   border-collapse: separate;
   background-color: #fff;
-  margin-top: 20px;
+  margin-top: 5px;
   border-spacing: 0;
   width: 100%;
 
@@ -74,11 +110,6 @@ const TableStyled = styled.table`
     &:last-child {
       padding-right: 15px !important;
     }
-  }
-
-  @media (max-width: 768px) {
-    display: block;
-    overflow-x: auto;
   }
 `;
 
@@ -114,10 +145,6 @@ const Thead = styled.thead`
 const Tbody = styled.tbody`
   tr {
     transition: background-color 0.3s ease;
-    &:hover {
-      background-color: #dff1f0;
-      cursor: pointer;
-    }
     td {
       padding: 15px 10px;
       border-bottom: 1px solid #e1e4e8;
@@ -138,17 +165,27 @@ const Th = styled.th<ThProps>`
     display: inline-block;
     margin-left: 5px;
   }
+
+  ${({ alignRight }) => alignRight && 'text-align-last: right;'}
 `;
 
-const Tr = styled.tr``;
+const Tr = styled.tr<{ hover?: boolean }>`
+  transition: background-color 0.3s ease;
+  &:hover {
+    ${(props) => props.hover && 'background-color: #dff1f0;'}
+    ${(props) => props.hover && 'cursor: pointer;'}
+  }
+`;
 
-const Td = styled.td`
+const Td = styled.td<{ alignRight: boolean }>`
   padding: 15px 10px;
   border-bottom: 1px solid #e1e4e8;
   color: #333;
   font-size: 12px;
   line-height: 18px;
   white-space: nowrap;
+
+  ${({ alignRight }) => alignRight && 'text-align-last: right;'}
 `;
 
 const LoaderText = styled.div`
@@ -282,14 +319,17 @@ const PAGE_SIZE = 10;
 export function Table({
   label,
   headers,
-  rows,
+  rows = [],
   isLoading,
   enableCheckbox = false,
+  menuItems,
   rightControls,
+  parsingConfig = {},
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   const handleSort = (key: string) => {
     let direction = 'asc';
@@ -301,85 +341,24 @@ export function Table({
     setSortConfig({ key, direction });
   };
 
-  const parseRowValue = (
-    header: string | number,
-    row: { [x: string]: string },
-    index: any
-  ): ReactNode | string => {
-    switch (header) {
-      case 'ID': {
-        if (isEmpty(row['_id'])) return '--';
-        return row['_id'];
-      }
-
-      case 'First Name': {
-        if (isEmpty(row['first_name'])) return '--';
-        return row['first_name'];
-      }
-
-      case 'Last Name': {
-        if (isEmpty(row['last_name'])) return '--';
-        return row['last_name'];
-      }
-
-      case 'Email': {
-        if (isEmpty(row['email'])) return '--';
-        return row['email'];
-      }
-
-      case 'Status': {
-        if (isEmpty(row['status'])) return '--';
-        return capitalizeFirstLetter(row['status']);
-      }
-
-      case 'Display Name': {
-        if (isEmpty(row['display_name'])) return '--';
-        return row['display_name'];
-      }
-
-      case 'Brand': {
-        if (isEmpty(row['brand'])) return '--';
-        return capitalizeFirstLetter(row['brand']);
-      }
-
-      case 'Model': {
-        if (isEmpty(row['model'])) return '--';
-        return capitalizeFirstLetter(row['model']);
-      }
-
-      case 'Year': {
-        if (isEmpty(row['year'])) return '--';
-        return row['year'];
-      }
-
-      case 'Name': {
-        if (isEmpty(row['name'])) return '--';
-        return capitalizeFirstLetter(row['name']);
-      }
-
-      case 'Products': {
-        if (isEmpty(row['products'])) return '--';
-        const productNames = Array.isArray(row?.products)
-        ? row.products.map((product: { name: any }) => product.name)
-        : [];
-        const concatenatedNames = productNames.join(', ');
-        return concatenatedNames;
-      }
-
-      case 'Start Date': {
-        if (isEmpty(row['start_date'])) return '--';
-        return parseDateString(row['start_date']);
-      }
-
-      case 'End Date': {
-        if (isEmpty(row['end_date'])) return '--';
-        return parseDateString(row['end_date']);
-      }
-
-      default:
-        if (isEmpty(row[header])) return '--';
-        return capitalizeFirstLetter(row[header]);
+  const handleRowClick = (row: any) => {
+    if (!isEmpty(row?.viewURL)) {
+      navigate(row?.viewURL);
     }
+  }
+
+  // TODO: Make the parser a parameter for Table component
+  const parseRowValue = (
+    header: any,
+    row: { [x: string]: any },
+  ): ReactNode | string => {
+    const parsingFunction = parsingConfig[header.label];
+
+    if (parsingFunction) {
+      return parsingFunction({ row, menuItems });
+    }
+    
+    return row[header.keyName] || '--';
   };
 
   const sortedHeaders = sortByKey(headers, 'order');
@@ -402,7 +381,7 @@ export function Table({
   const itemsToDisplay = filteredRows.slice(startIndex, endIndex);
 
   return (
-    <>
+    <div style={{ backgroundColor: 'white', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 8px 16px 0px' }}>
       <HeaderSection>
         <LeftSection>
           <TitleContainer>
@@ -419,7 +398,9 @@ export function Table({
             />
             <StyledIcon icon={faMagnifyingGlass}/>
           </StyledInput>
-          {rightControls}
+          <ActionContainer>
+            {rightControls}
+          </ActionContainer>
         </RightSection>
       </HeaderSection>
       <TableWrapper>
@@ -431,6 +412,7 @@ export function Table({
                   key={header.label}
                   onClick={() => header.enableSort && handleSort(header.keyName)}
                   className={header.enableSort ? 'enableSort' : ''}
+                  alignRight={header.label === 'Actions'}
                 >
                   {header.label}
                   {header.enableSort && (
@@ -449,10 +431,10 @@ export function Table({
           </Thead>
           <Tbody>
             {itemsToDisplay?.map((row: any, index: any) => (
-              <Tr key={index}>
+              <Tr key={index} onClick={() => handleRowClick(row)} hover={!isEmpty(row?.viewURL)}>
                 {sortedHeaders?.map((header) => (
-                  <Td key={`${index}-${header.label}`}>
-                    <span>{parseRowValue(header.label, row, index)}</span>
+                  <Td key={`${index}-${header.label}`} alignRight={header.label === 'Actions'}>
+                    <span>{parseRowValue(header, row)}</span>
                   </Td>
                 ))}
               </Tr>
@@ -468,6 +450,7 @@ export function Table({
         totalRows={filteredRows.length}
         paginate={paginate}
       />
-    </>
+    </div>
   );
 }
+ 

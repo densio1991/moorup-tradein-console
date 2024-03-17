@@ -9,16 +9,16 @@ export const useProduct = () => {
     activePlatform,
   } = state.auth;
 
-  const getProducts = (payload: any) => {
-    actions.getProducts(activePlatform, payload)(dispatch);
+  const getProducts = (payload: any, signal: AbortSignal) => {
+    actions.getProducts(activePlatform, payload, signal)(dispatch);
   }
 
   const clearProducts = (payload: any) => {
     actions.clearProducts(payload)(dispatch);
   }
 
-  const getProductTypes = () => {
-    actions.getProductTypes()(dispatch);
+  const getProductTypes = (signal: AbortSignal) => {
+    actions.getProductTypes(signal)(dispatch);
   }
 
   const getProductCategories = (payload: any) => {
@@ -29,8 +29,8 @@ export const useProduct = () => {
     actions.getProductBrands(activePlatform, payload)(dispatch);
   }
 
-  const getProductStatuses = () => {
-    actions.getProductStatuses()(dispatch);
+  const getProductStatuses = (signal: AbortSignal) => {
+    actions.getProductStatuses(signal)(dispatch);
   }
 
   const setAddProductPayload = (payload: any) => {
@@ -45,6 +45,26 @@ export const useProduct = () => {
     actions.addProduct(payload, activePlatform)(dispatch);
   }
 
+  const getProduct = (payload: any, signal: AbortSignal) => {
+    actions.getProduct(payload, signal)(dispatch);
+  }
+
+  const clearProduct = (payload: any) => {
+    actions.clearProduct(payload)(dispatch);
+  }
+
+  const updateProduct = (id: string, payload: any) => {
+    actions.updateProduct(id, payload)(dispatch);
+  }
+
+  const addProductVariant = (id: string, payload: any) => {
+    actions.addProductVariant(id, payload)(dispatch);
+  }
+
+  const updateProductVariant = (id: string, productId: string, payload: any) => {
+    actions.updateProductVariant(id, productId, payload)(dispatch);
+  }
+
   return {
     state: state.product,
     getProducts,
@@ -56,5 +76,10 @@ export const useProduct = () => {
     setAddProductPayload,
     setIncludeProductVariant,
     addProduct,
+    getProduct,
+    clearProduct,
+    updateProduct,
+    addProductVariant,
+    updateProductVariant,
   };
 };

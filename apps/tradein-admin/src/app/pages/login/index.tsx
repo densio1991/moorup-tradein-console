@@ -10,12 +10,6 @@ const LoginContainer = styled.div`
   height: 100vh;
 `;
 
-const FormTitle = styled.h2`
-  text-align: left;
-  margin-top: auto;
-  color: #333;
-`;
-
 const FormContainer = styled.form`
   width: 400px;
   padding: 40px;
@@ -48,7 +42,6 @@ export function LoginPage() {
   return (
     <LoginContainer>
       <FormContainer onSubmit={formik.handleSubmit}>
-        <FormTitle>Login</FormTitle>
         <StyledInput
           type="text"
           id="email"

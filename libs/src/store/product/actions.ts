@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from 'react-toastify';
+import { CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
-export const getProducts = (platform: string, includeVariants?: boolean) => (dispatch: any) => {
+export const getProducts = (platform: string, includeVariants?: boolean, signal?: AbortSignal) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_PRODUCTS.baseType,
     payload: platform,
   });
 
   axiosInstance()
-    .get(`/api/products?platform=${platform}${includeVariants ? `&include_variants=${includeVariants}` : ''}`)
+    .get(`/api/products?platform=${platform}${includeVariants ? `&include_variants=${includeVariants}` : ''}`, { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_PRODUCTS.SUCCESS,
@@ -18,10 +19,17 @@ export const getProducts = (platform: string, includeVariants?: boolean) => (dis
       });
     })
     .catch((error) => {
-      dispatch({
-        type: types.FETCH_PRODUCTS.FAILED,
-        payload: error,
-      });
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.FETCH_PRODUCTS.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_PRODUCTS.FAILED,
+          payload: error,
+        });
+      }
     });
 };
 
@@ -32,14 +40,14 @@ export const clearProducts = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const getProductTypes = () => (dispatch: any) => {
+export const getProductTypes = (signal?: AbortSignal) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_PRODUCT_TYPES.baseType,
     payload: {},
   });
 
   axiosInstance()
-    .get('/api/products/types')
+    .get('/api/products/types', { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_PRODUCT_TYPES.SUCCESS,
@@ -47,10 +55,17 @@ export const getProductTypes = () => (dispatch: any) => {
       });
     })
     .catch((error) => {
-      dispatch({
-        type: types.FETCH_PRODUCT_TYPES.FAILED,
-        payload: error,
-      });
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.FETCH_PRODUCT_TYPES.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_PRODUCT_TYPES.FAILED,
+          payload: error,
+        });
+      }
     });
 };
 
@@ -98,14 +113,14 @@ export const getProductBrands = (platform: string, payload: any) => (dispatch: a
     });
 };
 
-export const getProductStatuses = () => (dispatch: any) => {
+export const getProductStatuses = (signal?: AbortSignal) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_PRODUCT_STATUSES.baseType,
     payload: {},
   });
 
   axiosInstance()
-    .get('/api/products/status')
+    .get('/api/products/status', { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_PRODUCT_STATUSES.SUCCESS,
@@ -113,10 +128,17 @@ export const getProductStatuses = () => (dispatch: any) => {
       });
     })
     .catch((error) => {
-      dispatch({
-        type: types.FETCH_PRODUCT_STATUSES.FAILED,
-        payload: error,
-      });
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.FETCH_PRODUCT_STATUSES.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_PRODUCT_STATUSES.FAILED,
+          payload: error,
+        });
+      }
     });
 };
 
@@ -159,5 +181,125 @@ export const addProduct = (payload: any, activePlatform: any) => (dispatch: any)
 
       getProducts(activePlatform, true)(dispatch);
       toast.error('Failed to add product!');
+    });
+};
+
+export const getProduct = (id: string, signal?: AbortSignal) => (dispatch: any) => {
+  dispatch({
+    type: types.FETCH_PRODUCT.baseType,
+    payload: id,
+  });
+
+  axiosInstance()
+    .get(`/api/products/${id}`, { signal: signal })
+    .then((response) => {
+      dispatch({
+        type: types.FETCH_PRODUCT.SUCCESS,
+        payload: response?.data,
+      });
+    })
+    .catch((error) => {
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.FETCH_PRODUCT.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_PRODUCT.FAILED,
+          payload: error,
+        });
+      }
+    });
+};
+
+export const clearProduct = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CLEAR_PRODUCT,
+    payload,
+  });
+};
+
+export const updateProduct = (id: string, payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.UPDATE_PRODUCT.baseType,
+    payload: payload,
+  });
+
+  axiosInstance()
+    .patch(`/api/products/${id}`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.UPDATE_PRODUCT.SUCCESS,
+        payload: response?.data,
+      });
+
+      getProduct(id)(dispatch);
+      toast.success('Product successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.UPDATE_PRODUCT.FAILED,
+        payload: error,
+      });
+
+      getProduct(id)(dispatch);
+      toast.error('Failed to update product!');
+    });
+};
+
+export const addProductVariant = (id: string, payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.ADD_PRODUCT_VARIANT.baseType,
+    payload: payload,
+  });
+
+  axiosInstance()
+    .post(`/api/products/${id}/variants`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.ADD_PRODUCT_VARIANT.SUCCESS,
+        payload: response?.data,
+      });
+
+      getProduct(id)(dispatch);
+      toast.success('Product variant successfully added!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.ADD_PRODUCT_VARIANT.FAILED,
+        payload: error,
+      });
+
+      getProduct(id)(dispatch);
+      toast.error('Failed to add product variant!');
+    });
+};
+
+export const updateProductVariant = (id: string, productId: string, payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.UPDATE_PRODUCT_VARIANT.baseType,
+    payload: payload,
+  });
+
+  axiosInstance()
+    .patch(`/api/products/variants/${id}`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.UPDATE_PRODUCT_VARIANT.SUCCESS,
+        payload: response?.data,
+      });
+
+      getProduct(productId)(dispatch);
+      toast.success('Product variant successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.UPDATE_PRODUCT_VARIANT.FAILED,
+        payload: error,
+      });
+
+      getProduct(productId)(dispatch);
+      toast.error('Failed to update product variant!');
     });
 };

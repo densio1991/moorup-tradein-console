@@ -68,9 +68,38 @@ export const getUserDetailsById = (payload: any) => (dispatch: any) => {
     });
 };
 
+export const getPlatformConfig = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.GET_PLATFORM_CONFIG.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .get(`/api/configurations?platform=${payload}`)
+    .then((response: { data: any; }) => {
+      dispatch({
+        type: types.GET_PLATFORM_CONFIG.SUCCESS,
+        payload: response?.data,
+      });
+    })
+    .catch((error: any) => {
+      dispatch({
+        type: types.GET_PLATFORM_CONFIG.FAILED,
+        payload: error,
+      });
+    });
+};
+
 export const setActivePlatform = (payload: any) => (dispatch: any) => {
   dispatch({
     type: types.SET_ACTIVE_PLATFORM,
+    payload,
+  });
+};
+
+export const setLoading = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_LOADING,
     payload,
   });
 };

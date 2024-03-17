@@ -14,6 +14,14 @@ const PaginationWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding: 10px;
+  white-space: nowrap;
+
+  @media screen and (max-width: 425px) {
+    flex-direction: column;
+    gap: 10px;
+    align-items: start;
+  }
 `;
 
 const LeftSection = styled.div`
@@ -24,6 +32,7 @@ const LeftSection = styled.div`
 const RightSection = styled.div`
   display: flex;
   align-items: center;
+  padding-right: 0.5em;
 `;
 
 const PaginationButton = styled.button`

@@ -10,7 +10,10 @@ const authState = {
   isLoggingOut: false,
   userDetails: {},
   isFetchingUserDetails: false,
+  platformConfig: {},
+  isFetchingPlatformConfig: false,
   activePlatform: '',
+  isPageLoading: true,
 };
 
 const authReducer = (state: any, action: any) => {
@@ -80,11 +83,13 @@ const authReducer = (state: any, action: any) => {
       };
     }
     case types.GET_USER_DETAILS.SUCCESS: {
+      const platforms = action.payload?.data?.platforms;
+
       return {
         ...state,
         isFetchingUserDetails: false,
         userDetails: action.payload.data,
-        activePlatform: action.payload?.data?.platforms[0] || '',
+        activePlatform: platforms?.sort()[0] || '',
       };
     }
     case types.GET_USER_DETAILS.FAILED: {
@@ -95,10 +100,38 @@ const authReducer = (state: any, action: any) => {
       };
     }
 
+    case types.GET_PLATFORM_CONFIG.baseType: {
+      return {
+        ...state,
+        isFetchingPlatformConfig: true,
+        platformConfig: {},
+      };
+    }
+    case types.GET_PLATFORM_CONFIG.SUCCESS: {
+      return {
+        ...state,
+        isFetchingPlatformConfig: false,
+        platformConfig: action.payload.data,
+      };
+    }
+    case types.GET_PLATFORM_CONFIG.FAILED: {
+      return {
+        ...state,
+        isFetchingPlatformConfig: false,
+        platformConfig: {},
+      };
+    }
+
     case types.SET_ACTIVE_PLATFORM:
       return {
         ...state,
         activePlatform: action.payload,
+      };
+
+    case types.SET_LOADING:
+      return {
+        ...state,
+        isPageLoading: action.payload,
       };
 
     default:

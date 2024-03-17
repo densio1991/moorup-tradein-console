@@ -4,6 +4,10 @@ import {
   ADD_PRODUCT_PAYLOAD,
   AppButton,
   Checkbox,
+  FormContainer,
+  FormGroup,
+  FormWrapper,
+  MODAL_TYPES,
   StyledInput,
   StyledReactSelect,
   capitalizeFirstLetter,
@@ -15,34 +19,9 @@ import {
 import { useFormik } from 'formik';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
-import styled from 'styled-components';
 import * as Yup from 'yup';
 
-const FormWrapper = styled.div`
-  padding: 20px;
-`;
-
-const FormTitle = styled.h2`
-  text-align: left;
-  margin-top: auto;
-  color: #01463a;
-`;
-
-const FormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  align-items: top;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-`;
-
 interface FormValues {
-  name: string;
   brand: string;
   model: string;
   year: string;
@@ -57,16 +36,13 @@ interface FormValues {
 }
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required.'),
   display_name: Yup.string().required('Display Name is required'),
   model: Yup.string().required('Model is required'),
   year: Yup.string().required('Year is required'),
   image_url: Yup.string()
     .required('Image URL is required.')
     .url('Enter a valid URL'),
-  site_url: Yup.string()
-    .required('Site URL is required.')
-    .url('Enter a valid URL'),
+  site_url: Yup.string().required('Site URL is required.'),
 });
 
 export function AddProductForm() {
@@ -107,11 +83,15 @@ export function AddProductForm() {
   };
 
   const onSubmit = (values: any) => {
+    values.name = values.display_name;
     values.is_archived = false;
 
     if (includeProductVariant) {
       setAddProductPayload(values);
-      setSideModalState({ ...sideModalState, view: 'add-product-variant' });
+      setSideModalState({
+        ...sideModalState,
+        view: MODAL_TYPES.ADD_PRODUCT_VARIANT,
+      });
     } else {
       addProduct(values);
       setAddProductPayload(ADD_PRODUCT_PAYLOAD);
@@ -141,7 +121,7 @@ export function AddProductForm() {
 
   const categories = productCategories
     ?.map((item: any) => ({
-      value: item.name,
+      value: item.site_url,
       label: item.name,
     }))
     .sort((a: { label: string }, b: { label: any }) =>
@@ -176,22 +156,9 @@ export function AddProductForm() {
     );
 
   return (
-    <FormWrapper>
-      <FormTitle>Add Product</FormTitle>
+    <FormWrapper formTitle="Add Product">
       <FormContainer onSubmit={formik.handleSubmit}>
         <FormGroup>
-          <StyledInput
-            type="text"
-            id="name"
-            label="Name"
-            name="name"
-            placeholder="Name"
-            onChange={formik.handleChange}
-            value={formik.values.name}
-            onBlur={formik.handleBlur}
-            error={Boolean(formik.touched.name && formik.errors.name)}
-            errorMessage={formik.errors.name}
-          />
           <StyledInput
             type="text"
             id="display_name"
@@ -306,6 +273,35 @@ export function AddProductForm() {
           />
         </FormGroup>
         <FormGroup>
+          <StyledInput
+            type="text"
+            id="image_url"
+            label="Image URL"
+            name="image_url"
+            placeholder="Image URL"
+            onChange={formik.handleChange}
+            value={formik.values.image_url}
+            onBlur={formik.handleBlur}
+            error={Boolean(formik.touched.image_url && formik.errors.image_url)}
+            errorMessage={formik.errors.image_url}
+            enableHoverImage={true}
+          />
+        </FormGroup>
+        <FormGroup>
+          <StyledInput
+            type="text"
+            id="site_url"
+            label="Site URL"
+            name="site_url"
+            placeholder="Site URL"
+            onChange={formik.handleChange}
+            value={formik.values.site_url}
+            onBlur={formik.handleBlur}
+            error={Boolean(formik.touched.site_url && formik.errors.site_url)}
+            errorMessage={formik.errors.site_url}
+          />
+        </FormGroup>
+        <FormGroup>
           <StyledReactSelect
             label="Platforms"
             name="platforms"
@@ -324,34 +320,6 @@ export function AddProductForm() {
               formik.touched.platforms && isEmpty(formik.values.platforms),
             )}
             errorMessage="At least one platform is required"
-          />
-        </FormGroup>
-        <FormGroup>
-          <StyledInput
-            type="text"
-            id="image_url"
-            label="Image URL"
-            name="image_url"
-            placeholder="Image URL"
-            onChange={formik.handleChange}
-            value={formik.values.image_url}
-            onBlur={formik.handleBlur}
-            error={Boolean(formik.touched.image_url && formik.errors.image_url)}
-            errorMessage={formik.errors.image_url}
-          />
-        </FormGroup>
-        <FormGroup>
-          <StyledInput
-            type="text"
-            id="site_url"
-            label="Site URL"
-            name="site_url"
-            placeholder="Site URL"
-            onChange={formik.handleChange}
-            value={formik.values.site_url}
-            onBlur={formik.handleBlur}
-            error={Boolean(formik.touched.site_url && formik.errors.site_url)}
-            errorMessage={formik.errors.site_url}
           />
         </FormGroup>
         <FormGroup>

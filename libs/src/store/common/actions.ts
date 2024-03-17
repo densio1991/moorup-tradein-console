@@ -7,3 +7,10 @@ export const setSideModalState = (payload: any) => (dispatch: any) => {
     payload,
   });
 };
+
+export const setCenterModalState = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_CENTER_MODAL_STATE,
+    payload,
+  });
+};

@@ -17,6 +17,11 @@ const productState = {
   addProductPayload: ADD_PRODUCT_PAYLOAD,
   includeProductVariant: false,
   isAddingProduct: false,
+  product: {},
+  isFetchingProduct: false,
+  isUpdatingProduct: false,
+  isAddingProductVariant: false,
+  isUpdatingProductVariant: false,
 };
 
 const productReducer = (state: any, action: any) => {
@@ -42,10 +47,18 @@ const productReducer = (state: any, action: any) => {
         products: [],
       };
     }
+    case types.FETCH_PRODUCTS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingProducts: true,
+        products: [],
+      };
+    }
 
     case types.CLEAR_PRODUCTS:
       return {
         ...state,
+        isFetchingProducts: true,
         products: [],
       };
 
@@ -67,6 +80,13 @@ const productReducer = (state: any, action: any) => {
       return {
         ...state,
         isFetchingProductTypes: false,
+        productTypes: [],
+      };
+    }
+    case types.FETCH_PRODUCT_TYPES.CANCELLED: {
+      return {
+        ...state,
+        isFetchingProductTypes: true,
         productTypes: [],
       };
     }
@@ -136,6 +156,13 @@ const productReducer = (state: any, action: any) => {
         productStatuses: [],
       };
     }
+    case types.FETCH_PRODUCT_STATUSES.CANCELLED: {
+      return {
+        ...state,
+        isFetchingProductStatuses: true,
+        productStatuses: [],
+      };
+    }
 
     case types.SET_ADD_PRODUCT_PAYLOAD:
       return {
@@ -169,6 +196,103 @@ const productReducer = (state: any, action: any) => {
         isAddingProduct: false,
         products: [],
         isFetchingProducts: true,
+      };
+    }
+
+    case types.FETCH_PRODUCT.baseType: {
+      return {
+        ...state,
+        isFetchingProduct: true,
+        product: {},
+      };
+    }
+    case types.FETCH_PRODUCT.SUCCESS: {
+      return {
+        ...state,
+        isFetchingProduct: false,
+        product: action.payload?.data,
+      };
+    }
+    case types.FETCH_PRODUCT.FAILED: {
+      return {
+        ...state,
+        isFetchingProduct: false,
+        product: {},
+      };
+    }
+
+    case types.CLEAR_PRODUCT:
+      return {
+        ...state,
+        product: {},
+      };
+
+    case types.UPDATE_PRODUCT.baseType: {
+      return {
+        ...state,
+        isUpdatingProduct: true,
+      };
+    }
+    case types.UPDATE_PRODUCT.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingProduct: false,
+        product: {},
+        isFetchingProduct: true,
+      };
+    }
+    case types.UPDATE_PRODUCT.FAILED: {
+      return {
+        ...state,
+        isUpdatingProduct: false,
+        product: {},
+        isFetchingProduct: true,
+      };
+    }
+
+    case types.ADD_PRODUCT_VARIANT.baseType: {
+      return {
+        ...state,
+        isAddingProductVariant: true,
+      };
+    }
+    case types.ADD_PRODUCT_VARIANT.SUCCESS: {
+      return {
+        ...state,
+        isAddingProductVariant: false,
+        product: {},
+        isFetchingProduct: true,
+      };
+    }
+    case types.ADD_PRODUCT_VARIANT.FAILED: {
+      return {
+        ...state,
+        isAddingProductVariant: false,
+        product: {},
+        isFetchingProduct: true,
+      };
+    }
+
+    case types.UPDATE_PRODUCT_VARIANT.baseType: {
+      return {
+        ...state,
+        isUpdatingProductVariant: true,
+      };
+    }
+    case types.UPDATE_PRODUCT_VARIANT.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingProductVariant: false,
+        product: {},
+        isFetchingProduct: true,
+      };
+    }
+    case types.UPDATE_PRODUCT_VARIANT.FAILED: {
+      return {
+        ...state,
+        isUpdatingProductVariant: false,
+        product: {},
+        isFetchingProduct: true,
       };
     }
 

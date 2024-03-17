@@ -4,7 +4,9 @@ import * as types from './action-types';
 
 const userState = {
   users: [],
-  isFetchingUsers: false,
+  isFetchingUsers: true,
+  isCreatingUser: false,
+  isUpdatingUser: false,
 };
 
 const userReducer = (state: any, action: any) => {
@@ -30,12 +32,58 @@ const userReducer = (state: any, action: any) => {
         users: [],
       };
     }
+    case types.FETCH_USERS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingUsers: true,
+        users: [],
+      };
+    }
 
     case types.CLEAR_USERS:
       return {
         ...state,
+        isFetchingUsers: true,
         users: [],
       };
+
+    case types.CREATE_USER.baseType: {
+      return {
+        ...state,
+        isCreatingUser: true,
+      };
+    }
+    case types.CREATE_USER.SUCCESS: {
+      return {
+        ...state,
+        isCreatingUser: false,
+      };
+    }
+    case types.CREATE_USER.FAILED: {
+      return {
+        ...state,
+        isCreatingUser: false,
+      };
+    }
+
+    case types.UPDATE_USER.baseType: {
+      return {
+        ...state,
+        isUpdatingUser: true,
+      };
+    }
+    case types.UPDATE_USER.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingUser: false,
+      };
+    }
+    case types.UPDATE_USER.FAILED: {
+      return {
+        ...state,
+        isUpdatingUser: false,
+      };
+    }
 
     default:
       return state;

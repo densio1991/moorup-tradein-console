@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
@@ -8,15 +9,21 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   ADD_PRODUCT_PAYLOAD,
-  ADD_PRODUCT_VARIANT_PAYLOAD,
+  ADD_PRODUCT_VARIANT_ATTRIBUTES_PAYLOAD,
   ADD_PRODUCT_VARIANT_PRICING_PAYLOAD,
+  ATTRIBUTES,
   AppButton,
   CURRENCIES,
+  FormContainer,
+  FormGroup,
+  FormGroupWithIcon,
+  FormWrapper,
+  MODAL_TYPES,
   ProductVariant,
+  ProductVariantAttributes,
   ProductVariantPricing,
   StyledInput,
   StyledReactSelect,
-  capitalizeFirstLetter,
   hasEmptyValueInArray,
   useCommon,
   useProduct,
@@ -25,29 +32,6 @@ import { useFormik } from 'formik';
 import { isEmpty } from 'lodash';
 import { useState } from 'react';
 import styled from 'styled-components';
-
-const FormWrapper = styled.div`
-  padding: 20px;
-`;
-
-const FormTitle = styled.h2`
-  text-align: left;
-  margin-top: auto;
-  color: #01463a;
-`;
-
-const FormContainer = styled.form`
-  display: flex;
-  flex-direction: column;
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  align-items: top;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-`;
 
 const AccordionContainer = styled.div`
   display: flex;
@@ -106,7 +90,7 @@ const StyledIcon = styled(FontAwesomeIcon)<{
   }
 `;
 
-const PricingContainer = styled.div`
+const VariantItemsContainer = styled.div`
   box-shadow: 0px 1px 0px 0px #ccc;
   padding: 10px;
   margin-bottom: 10px;
@@ -119,7 +103,7 @@ export function AddProductVariantForm() {
     setIncludeProductVariant,
     addProduct,
   } = useProduct();
-  const { productTypes, productStatuses, addProductPayload } = productState;
+  const { addProductPayload } = productState;
 
   const { state: commonState, setSideModalState } = useCommon();
   const { sideModalState } = commonState;
@@ -137,30 +121,27 @@ export function AddProductVariantForm() {
     setSideModalState({ ...sideModalState, view: null, open: false });
   };
 
+  const PRODUCT_VARIANT_PAYLOAD = {
+    name: '',
+    sku: '',
+    type: addProductPayload.type,
+    image_url: '',
+    site_url: '',
+    status: addProductPayload.status,
+    pricing: [ADD_PRODUCT_VARIANT_PRICING_PAYLOAD],
+    attributes: [ADD_PRODUCT_VARIANT_ATTRIBUTES_PAYLOAD],
+  };
+
   const formik = useFormik({
-    initialValues: [ADD_PRODUCT_VARIANT_PAYLOAD],
+    initialValues: [PRODUCT_VARIANT_PAYLOAD],
     onSubmit,
   });
 
-  const types = productTypes
-    ?.map((item: any) => ({
-      value: item,
-      label: capitalizeFirstLetter(item),
-    }))
-    .sort((a: { label: string }, b: { label: any }) =>
-      a.label.localeCompare(b.label),
-    );
-
-  const statuses = productStatuses
-    ?.map((item: any) => ({
-      value: item,
-      label: capitalizeFirstLetter(item),
-    }))
-    .sort((a: { label: string }, b: { label: any }) =>
-      a.label.localeCompare(b.label),
-    );
-
   const currencies = CURRENCIES?.sort(
+    (a: { label: string }, b: { label: any }) => a.label.localeCompare(b.label),
+  );
+
+  const attributes = ATTRIBUTES[addProductPayload.type]?.sort(
     (a: { label: string }, b: { label: any }) => a.label.localeCompare(b.label),
   );
 
@@ -179,10 +160,7 @@ export function AddProductVariantForm() {
   };
 
   const handleAddNewVariantForm = () => {
-    formik.setValues((prevValues) => [
-      ...prevValues,
-      ADD_PRODUCT_VARIANT_PAYLOAD,
-    ]);
+    formik.setValues((prevValues) => [...prevValues, PRODUCT_VARIANT_PAYLOAD]);
   };
 
   const handleDeleteVariantForm = (indexToDelete: number) => {
@@ -211,32 +189,80 @@ export function AddProductVariantForm() {
     });
   };
 
-  const handlePricingChange = (
+  const addAttributesToVariant = (
     variantIndex: number,
-    priceIndex: number,
+    attributesPayload: any,
+  ) => {
+    formik.setValues((prevValues: any) => {
+      const updatedVariants = prevValues.map((variant: any, index: number) => {
+        if (index === variantIndex) {
+          return {
+            ...variant,
+            attributes: variant?.attributes
+              ? [...variant.attributes, attributesPayload]
+              : [attributesPayload],
+          };
+        }
+        return variant;
+      });
+
+      return updatedVariants;
+    });
+  };
+
+  const handleArrayValueChange = (
+    variantIndex: number,
+    fieldIndex: number,
     field: string,
     value: any,
+    arrayField: string,
   ) => {
     formik.setFieldValue(
-      `[${variantIndex}].pricing[${priceIndex}].${field}`,
+      `[${variantIndex}].${arrayField}[${fieldIndex}].${field}`,
       value,
     );
   };
 
-  const handlePricingOnBlur = (
+  const handleArrayValueOnBlur = (
     variantIndex: number,
-    priceIndex: number,
+    fieldIndex: number,
     field: string,
+    arrayField: string,
   ) => {
     formik.setFieldTouched(
-      `[${variantIndex}].pricing[${priceIndex}].${field}`,
+      `[${variantIndex}].${arrayField}[${fieldIndex}].${field}`,
       true,
     );
   };
 
+  const handleArrayItemDelete = (
+    variantIndex: number,
+    fieldIndex: number,
+    arrayField: string,
+  ) => {
+    // @ts-ignore
+    const variantItemArray = formik.values[variantIndex][arrayField];
+
+    if (variantItemArray.length > 1) {
+      if (
+        Array.isArray(variantItemArray) &&
+        variantItemArray.length > fieldIndex
+      ) {
+        const updatedItemArray = [
+          ...variantItemArray.slice(0, fieldIndex),
+          ...variantItemArray.slice(fieldIndex + 1),
+        ];
+
+        formik.setFieldValue(
+          `[${variantIndex}].${arrayField}`,
+          updatedItemArray,
+        );
+      }
+    }
+  };
+
   return (
-    <FormWrapper>
-      <FormTitle>Add Product Variant</FormTitle>
+    <FormWrapper formTitle="Add Product Variant">
       <FormGroup>
         <span />
         <AppButton
@@ -313,42 +339,6 @@ export function AddProductVariantForm() {
                     />
                   </FormGroup>
                   <FormGroup>
-                    <StyledReactSelect
-                      label={'Type'}
-                      name={`type[${index}]`}
-                      isMulti={false}
-                      options={types}
-                      placeholder={'Select type'}
-                      value={item.type}
-                      onChange={(selected) =>
-                        handleInputChange(index, 'type', selected.value)
-                      }
-                      onBlur={() => handleOnBlur(index, 'type')}
-                      error={Boolean(
-                        formik.touched[index]?.type &&
-                          isEmpty(formik.values[index]?.type),
-                      )}
-                      errorMessage="Type is required."
-                    />
-                    <StyledReactSelect
-                      label={'Status'}
-                      name={`status[${index}]`}
-                      isMulti={false}
-                      options={statuses}
-                      placeholder={'Select status'}
-                      value={item.status}
-                      onChange={(selected) =>
-                        handleInputChange(index, 'status', selected.value)
-                      }
-                      onBlur={() => handleOnBlur(index, 'status')}
-                      error={Boolean(
-                        formik.touched[index]?.status &&
-                          isEmpty(formik.values[index]?.status),
-                      )}
-                      errorMessage="Status is required."
-                    />
-                  </FormGroup>
-                  <FormGroup>
                     <StyledInput
                       type="text"
                       id={`image_url[${index}]`}
@@ -365,6 +355,7 @@ export function AddProductVariantForm() {
                           isEmpty(formik.values[index]?.image_url),
                       )}
                       errorMessage="Image URL is required."
+                      enableHoverImage={true}
                     />
                   </FormGroup>
                   <FormGroup>
@@ -408,10 +399,9 @@ export function AddProductVariantForm() {
                   {item?.pricing.map(
                     (price: ProductVariantPricing, priceIndex: any) => {
                       const pricingTouched = formik.touched[index]?.pricing;
-
                       return (
-                        <PricingContainer key={priceIndex}>
-                          <FormGroup>
+                        <VariantItemsContainer key={priceIndex}>
+                          <FormGroupWithIcon>
                             <StyledReactSelect
                               label={'Currency'}
                               name={`pricing[${index}][${priceIndex}].currency`}
@@ -420,18 +410,20 @@ export function AddProductVariantForm() {
                               placeholder={'Select currency'}
                               value={price.currency}
                               onChange={(selected) =>
-                                handlePricingChange(
+                                handleArrayValueChange(
                                   index,
                                   priceIndex,
                                   'currency',
                                   selected.value,
+                                  'pricing',
                                 )
                               }
                               onBlur={() =>
-                                handlePricingOnBlur(
+                                handleArrayValueOnBlur(
                                   index,
                                   priceIndex,
                                   'currency',
+                                  'pricing',
                                 )
                               }
                               error={Boolean(
@@ -441,7 +433,20 @@ export function AddProductVariantForm() {
                               )}
                               errorMessage="Currency is required."
                             />
-                          </FormGroup>
+                            <StyledIcon
+                              icon={faTrash}
+                              color="#ccc"
+                              hovercolor="#f44336"
+                              disabled={item?.pricing.length <= 1}
+                              onClick={() =>
+                                handleArrayItemDelete(
+                                  index,
+                                  priceIndex,
+                                  'pricing',
+                                )
+                              }
+                            />
+                          </FormGroupWithIcon>
                           <FormGroup>
                             <StyledInput
                               type="text"
@@ -467,11 +472,12 @@ export function AddProductVariantForm() {
                                   inputValue = `${parts[0]}.${parts[1].slice(0, 2)}`;
                                 }
 
-                                handlePricingChange(
+                                handleArrayValueChange(
                                   index,
                                   priceIndex,
                                   'working',
                                   inputValue === '' ? '' : inputValue,
+                                  'pricing',
                                 );
                               }}
                               onBlur={(e) => {
@@ -483,11 +489,12 @@ export function AddProductVariantForm() {
 
                                   const numericValue = parseFloat(inputValue);
 
-                                  handlePricingChange(
+                                  handleArrayValueChange(
                                     index,
                                     priceIndex,
                                     'working',
                                     isNaN(numericValue) ? '' : numericValue,
+                                    'pricing',
                                   );
                                 }
                               }}
@@ -517,11 +524,12 @@ export function AddProductVariantForm() {
                                   inputValue = `${parts[0]}.${parts[1].slice(0, 2)}`;
                                 }
 
-                                handlePricingChange(
+                                handleArrayValueChange(
                                   index,
                                   priceIndex,
                                   'working_damaged',
                                   inputValue === '' ? '' : inputValue,
+                                  'pricing',
                                 );
                               }}
                               onBlur={(e) => {
@@ -533,11 +541,12 @@ export function AddProductVariantForm() {
 
                                   const numericValue = parseFloat(inputValue);
 
-                                  handlePricingChange(
+                                  handleArrayValueChange(
                                     index,
                                     priceIndex,
                                     'working_damaged',
                                     isNaN(numericValue) ? '' : numericValue,
+                                    'pricing',
                                   );
                                 }
                               }}
@@ -569,11 +578,12 @@ export function AddProductVariantForm() {
                                   inputValue = `${parts[0]}.${parts[1].slice(0, 2)}`;
                                 }
 
-                                handlePricingChange(
+                                handleArrayValueChange(
                                   index,
                                   priceIndex,
                                   'not_working',
                                   inputValue === '' ? '' : inputValue,
+                                  'pricing',
                                 );
                               }}
                               onBlur={(e) => {
@@ -585,11 +595,12 @@ export function AddProductVariantForm() {
 
                                   const numericValue = parseFloat(inputValue);
 
-                                  handlePricingChange(
+                                  handleArrayValueChange(
                                     index,
                                     priceIndex,
                                     'not_working',
                                     isNaN(numericValue) ? '' : numericValue,
+                                    'pricing',
                                   );
                                 }
                               }}
@@ -619,11 +630,12 @@ export function AddProductVariantForm() {
                                   inputValue = `${parts[0]}.${parts[1].slice(0, 2)}`;
                                 }
 
-                                handlePricingChange(
+                                handleArrayValueChange(
                                   index,
                                   priceIndex,
                                   'not_working_damaged',
                                   inputValue === '' ? '' : inputValue,
+                                  'pricing',
                                 );
                               }}
                               onBlur={(e) => {
@@ -635,18 +647,130 @@ export function AddProductVariantForm() {
 
                                   const numericValue = parseFloat(inputValue);
 
-                                  handlePricingChange(
+                                  handleArrayValueChange(
                                     index,
                                     priceIndex,
                                     'not_working_damaged',
                                     isNaN(numericValue) ? '' : numericValue,
+                                    'pricing',
                                   );
                                 }
                               }}
                               value={price.not_working_damaged}
                             />
                           </FormGroup>
-                        </PricingContainer>
+                        </VariantItemsContainer>
+                      );
+                    },
+                  )}
+                  <FormGroup>
+                    <span />
+                    <AppButton
+                      type="button"
+                      width="fit-content"
+                      onClick={() =>
+                        addAttributesToVariant(
+                          index,
+                          ADD_PRODUCT_VARIANT_ATTRIBUTES_PAYLOAD,
+                        )
+                      }
+                      disabled={
+                        item?.attributes?.length > 0 &&
+                        hasEmptyValueInArray(item?.attributes)
+                      }
+                    >
+                      Add Attribute
+                    </AppButton>
+                  </FormGroup>
+                  {item?.attributes.map(
+                    (
+                      attribute: ProductVariantAttributes,
+                      attributeIndex: any,
+                    ) => {
+                      const attributeTouched =
+                        formik.touched[index]?.attributes;
+                      return (
+                        <VariantItemsContainer key={attributeIndex}>
+                          <FormGroupWithIcon>
+                            <StyledReactSelect
+                              label={'Attribute Type'}
+                              name={`attributes[${index}][${attributeIndex}].id`}
+                              isMulti={false}
+                              options={attributes}
+                              placeholder={'Select attribute type'}
+                              value={attribute.id}
+                              onChange={(selected) =>
+                                handleArrayValueChange(
+                                  index,
+                                  attributeIndex,
+                                  'id',
+                                  selected.value,
+                                  'attributes',
+                                )
+                              }
+                              onBlur={() =>
+                                handleArrayValueOnBlur(
+                                  index,
+                                  attributeIndex,
+                                  'id',
+                                  'attributes',
+                                )
+                              }
+                              error={Boolean(
+                                attributeTouched &&
+                                  attributeTouched[attributeIndex]?.id &&
+                                  isEmpty(attribute.id),
+                              )}
+                              errorMessage="Attribute type is required."
+                            />
+                            <StyledIcon
+                              icon={faTrash}
+                              color="#ccc"
+                              hovercolor="#f44336"
+                              disabled={item?.attributes.length <= 1}
+                              onClick={() =>
+                                handleArrayItemDelete(
+                                  index,
+                                  attributeIndex,
+                                  'attributes',
+                                )
+                              }
+                            />
+                          </FormGroupWithIcon>
+                          <FormGroup>
+                            <StyledInput
+                              type="text"
+                              id={`attributes[${index}][${attributeIndex}].name`}
+                              label={'Attribute Value'}
+                              name={`attributes[${index}][${attributeIndex}].name`}
+                              placeholder={'Enter value'}
+                              onChange={(e) => {
+                                handleArrayValueChange(
+                                  index,
+                                  attributeIndex,
+                                  'name',
+                                  e.target.value,
+                                  'attributes',
+                                );
+                              }}
+                              onBlur={() =>
+                                handleArrayValueOnBlur(
+                                  index,
+                                  attributeIndex,
+                                  'name',
+                                  'attributes',
+                                )
+                              }
+                              value={attribute.name}
+                              error={Boolean(
+                                attributeTouched &&
+                                  attributeTouched[attributeIndex]?.name &&
+                                  isEmpty(attribute.name),
+                              )}
+                              errorMessage="Attribute value is required."
+                            />
+                          </FormGroup>
+                        </VariantItemsContainer>
                       );
                     },
                   )}
@@ -662,7 +786,10 @@ export function AddProductVariantForm() {
               variant="outlined"
               width="fit-content"
               onClick={() =>
-                setSideModalState({ ...sideModalState, view: 'add-product' })
+                setSideModalState({
+                  ...sideModalState,
+                  view: MODAL_TYPES.ADD_PRODUCT,
+                })
               }
             >
               Back

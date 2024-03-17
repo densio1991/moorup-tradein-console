@@ -7,6 +7,10 @@ const commonState = {
     open: false,
     view: null,
   },
+  centerModalState: {
+    open: false,
+    view: null,
+  },
 };
 
 const commonReducer = (state: any, action: any) => {
@@ -15,6 +19,12 @@ const commonReducer = (state: any, action: any) => {
       return {
         ...state,
         sideModalState: action.payload,
+      };
+
+    case types.SET_CENTER_MODAL_STATE:
+      return {
+        ...state,
+        centerModalState: action.payload,
       };
 
     default:

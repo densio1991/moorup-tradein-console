@@ -1,30 +1,38 @@
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { isEmpty } from 'lodash'
 import { useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
-import { SIDENAV_ITEMS } from '../../constants'
+import { ADMIN, CUSTOMER_SERVICE, PRODUCTS, REGULAR, SIDENAV_ITEMS, SUPERADMIN, WAREHOUSE } from '../../constants'
 import { useAuth } from '../../store'
+import { LoaderContainer } from '../loader'
 
 interface NavLinkProps {
   active?: boolean
 }
 
 const SidebarContainer = styled.div`
-  flex: 1;
   height: calc(100vh - 50px);
-  background-color: rgb(251, 251, 255);
+  background-color: white;
   position: sticky;
   top: 50px;
-  min-width: 270px;
-  max-width: 270px;
-  width: 100%;
   margin-top: 1px;
   border-top: 1px solid #f4f4f5;
+  width: auto;
+  min-width: 240px;
+
+  @media screen and (max-width: 768px) {
+    min-width: auto;
+  }
 `
 
 const SidebarWrapper = styled.div`
   padding: 0 20px;
   color: #555;
+
+  @media screen and (max-width: 768px) {
+    padding: 0px;
+  }
 `
 
 const SidebarList = styled.ul`
@@ -54,6 +62,14 @@ const NavLink = styled.a<NavLinkProps>`
   cursor: pointer;
   justify-content: start;
 
+  @media screen and (max-width: 768px) {
+    #label {
+      display: none;
+    }
+
+    border-radius: 0px;;
+  }
+
   &:hover {
     background: linear-gradient(to right, #216A4C, #01463A);
     color: white;
@@ -62,9 +78,13 @@ const NavLink = styled.a<NavLinkProps>`
       color: white;
     }
   }
+
   svg {
-    margin-right: 8px;
     color: ${(props) => (props.active ? 'white' : '#01463a')};
+  }
+
+  #label {
+    margin-left: 8px;
   }
 `
 
@@ -72,32 +92,66 @@ export function SideBar(): JSX.Element {
   const { pathname } = useLocation()
   const navigate = useNavigate()
 
-  const { logoutUser } = useAuth()
+  const { state: authState, logoutUser } = useAuth();
+  const { isFetchingUserDetails, userDetails } = authState;
 
+  const filteredSideNavItems = SIDENAV_ITEMS.filter(item => {
+    switch (userDetails?.role) {
+      case REGULAR:
+        return item.title === 'Claims';
+
+      case ADMIN:
+        return [
+          'Product Management', 
+          'Order Management',
+          'User Management',
+          'Promotions',
+        ].includes(item.title);
+
+      case WAREHOUSE:
+        return item.title === 'Order Management';
+
+      case PRODUCTS:
+        return item.title === 'Product Management';
+
+      case CUSTOMER_SERVICE:
+        return item.title === 'Product Management';
+
+      case SUPERADMIN:
+        // Show all items for superadmin and other roles
+        return true;
+
+      default:
+        return navigate('/404');
+    }
+  });
+  
   return (
     <SidebarContainer>
-      <SidebarWrapper>
-        <SidebarList>
-          {SIDENAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.url}
-              active={pathname === item.url}
-              onClick={() => navigate(item.url)}
-            >
-              <span>
-                <StyledIcon icon={item.icon} />
-              </span>
-              <span className="font-semibold text-sm flex">{item.title}</span>
-            </NavLink>
-          ))}
-        </SidebarList>
-        <NavLink onClick={() => logoutUser()}>
-          <span>
-            <StyledIcon icon={faRightFromBracket} />
-          </span>
-          <span className="font-semibold text-sm flex">Logout</span>
-        </NavLink>
-      </SidebarWrapper>
+      <LoaderContainer loading={isFetchingUserDetails || isEmpty(userDetails)}>
+        <SidebarWrapper>
+          <SidebarList>
+            {filteredSideNavItems?.map((item) => (
+              <NavLink
+                key={item.url}
+                active={item.activeUrl?.test(pathname)}
+                onClick={() => navigate(item.url)}
+              >
+                <span>
+                  <StyledIcon icon={item.icon} />
+                </span>
+                <span id="label" className="font-semibold flex">{item.title}</span>
+              </NavLink>
+            ))}
+          </SidebarList>
+          <NavLink onClick={() => logoutUser()}>
+            <span>
+              <StyledIcon icon={faRightFromBracket} />
+            </span>
+            <span id="label" className="font-semibold flex">Logout</span>
+          </NavLink>
+        </SidebarWrapper>
+      </LoaderContainer>
     </SidebarContainer>
   )
 }

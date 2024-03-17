@@ -1,11 +1,14 @@
 import {
   faBullhorn,
+  faCheckToSlot,
   faCreditCard,
   faCube,
   faFileInvoice,
   faHouse,
-  faUsers,
-} from '@fortawesome/free-solid-svg-icons'
+  faPenToSquare,
+  faUsers
+} from '@fortawesome/free-solid-svg-icons';
+import { OrderItemStatus } from './enums';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
 
@@ -13,31 +16,49 @@ export const SIDENAV_ITEMS = [
   {
     title: 'Home',
     url: '/dashboard',
+    activeUrl: /^\/dashboard$/,
     icon: faHouse,
   },
   {
     title: 'Product Management',
     url: '/dashboard/product',
+    activeUrl: /^\/dashboard\/product/,
     icon: faCube,
   },
   {
     title: 'Order Management',
     url: '/dashboard/order',
+    activeUrl: /^\/dashboard\/order/,
     icon: faFileInvoice,
+  },
+  {
+    title: 'Discrepancy',
+    url: '/dashboard/discrepancy',
+    activeUrl: /^\/dashboard\/discrepancy/,
+    icon: faPenToSquare,
   },
   {
     title: 'User Management',
     url: '/dashboard/user',
+    activeUrl: /^\/dashboard\/user/,
     icon: faUsers,
   },
   {
     title: 'Promotions',
     url: '/dashboard/promotion',
+    activeUrl: /^\/dashboard\/promotion/,
     icon: faBullhorn,
+  },
+  {
+    title: 'Claims',
+    url: '/dashboard/claims',
+    activeUrl: /^\/dashboard\/claims/,
+    icon: faCheckToSlot,
   },
   {
     title: 'Payment',
     url: '/dashboard/payment',
+    activeUrl: /^\/dashboard\/payment/,
     icon: faCreditCard,
   },
 ]
@@ -80,39 +101,162 @@ export const PRODUCT_MANAGEMENT_COLUMNS = [
 
 export const ORDER_MANAGEMENT_COLUMNS = [
   {
-    label: 'First Name',
+    label: 'User Email',
     order: 2,
     enableSort: true,
-  },
-  {
-    label: 'Last Name',
-    order: 3,
-    enableSort: true,
+    keyName: 'user_email',
   },
   {
     label: 'Status',
-    order: 4,
+    order: 3,
     enableSort: true,
+    keyName: 'status',
   },
   {
     label: 'Payment Status',
-    order: 5,
+    order: 4,
     enableSort: true,
+    keyName: 'payment_status',
   },
   {
     label: 'Order Count',
-    order: 6,
-    enableSort: true,
-  },
-  {
-    label: 'Created',
-    order: 7,
-    enableSort: true,
+    order: 5,
+    keyName: 'order_count',
   },
   {
     label: 'Updated',
     order: 8,
     enableSort: true,
+    keyName: 'updated',
+  },
+]
+
+export const DISCREPANCY_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Order Number',
+    order: 2,
+    enableSort: true,
+    keyName: 'order_number',
+  },
+  {
+    label: 'Customer Name',
+    order: 3,
+    enableSort: true,
+    keyName: 'first_name',
+  },
+  {
+    label: 'Mobile Number',
+    order: 4,
+    enableSort: true,
+    keyName: 'mobile_number',
+  },
+  {
+    label: 'Email Address',
+    order: 5,
+    enableSort: true,
+    keyName: 'email',
+  },
+  {
+    label: 'Credit Timeframe',
+    order: 6,
+    enableSort: true,
+    keyName: 'credit_type',
+  },
+  {
+    label: 'Device',
+    order: 7,
+    enableSort: true,
+    keyName: 'product_name',
+  },
+  {
+    label: 'Original Offer',
+    order: 8,
+    enableSort: true,
+    keyName: 'original_offer',
+  },
+  {
+    label: 'IMEI/Serial',
+    order: 9,
+    enableSort: true,
+    keyName: 'imei_serial',
+  },
+  {
+    label: 'System Model',
+    order: 9,
+    enableSort: true,
+    keyName: 'system_model',
+  },
+  {
+    label: 'Storage',
+    order: 10,
+    enableSort: true,
+    keyName: 'storage',
+  },
+  {
+    label: 'Locked',
+    order: 11,
+    enableSort: true,
+    keyName: 'locked',
+  },
+  {
+    label: 'Grade',
+    order: 12,
+    enableSort: true,
+    keyName: 'grade',
+  },
+  {
+    label: 'Operations Comments',
+    order: 13,
+    enableSort: true,
+    keyName: 'operations_comments',
+  },
+  {
+    label: 'Instructions for CS',
+    order: 14,
+    enableSort: true,
+    keyName: 'cs_instructions',
+  },
+  {
+    label: 'Customer Contacted',
+    order: 15,
+    enableSort: true,
+    keyName: 'cs_contacted',
+  },
+  {
+    label: 'Date',
+    order: 16,
+    enableSort: true,
+    keyName: 'cs_date',
+  },
+  {
+    label: 'CS Comments',
+    order: 17,
+    enableSort: true,
+    keyName: 'cs_comments',
+  },
+  {
+    label: 'ZD Ticket Number',
+    order: 18,
+    enableSort: true,
+    keyName: 'zd_ticket_number',
+  },
+  {
+    label: 'Owner',
+    order: 19,
+    enableSort: true,
+    keyName: 'owner',
+  },
+  {
+    label: 'Actions for Ops',
+    order: 20,
+    enableSort: true,
+    keyName: 'ops_action',
+  },
+  {
+    label: 'Status',
+    order: 21,
+    enableSort: true,
+    keyName: 'ops_status',
   },
 ]
 
@@ -170,7 +314,7 @@ export const PROMOTIONS_MANAGEMENT_COLUMNS = [
   },
   {
     label: 'Status',
-    order: 5,
+    order: 6,
     enableSort: true,
     keyName: 'status',
   },
@@ -199,6 +343,44 @@ export const PAYMENTS_MANAGEMENT_COLUMNS = [
   },
 ]
 
+export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Order Number',
+    order: 2,
+    enableSort: true,
+  },
+  {
+    label: 'Promotion Name',
+    order: 3,
+    enableSort: true,
+  },
+  {
+    label: 'Promotion Link',
+    order: 4,
+    enableSort: true,
+  },
+  {
+    label: 'Claimed By',
+    order: 5,
+    enableSort: true,
+  },
+  {
+    label: 'Claimed Date',
+    order: 6,
+    enableSort: true,
+  },
+  {
+    label: 'Moorup Status',
+    order: 7,
+    enableSort: true,
+  },
+  {
+    label: 'Claim Status',
+    order: 8,
+    enableSort: true,
+  },
+]
+
 export const ACTIONS_COLUMN = [
   {
     label: 'Actions',
@@ -208,7 +390,6 @@ export const ACTIONS_COLUMN = [
 ]
 
 export const ADD_PRODUCT_PAYLOAD = {
-  name: '',
   brand: '',
   model: '',
   year: '',
@@ -221,6 +402,20 @@ export const ADD_PRODUCT_PAYLOAD = {
   platforms: [],
 }
 
+export const ADD_PRODUCT_VARIANT_PRICING_PAYLOAD = {
+  currency: '',
+  amount: 0,
+  working: 0,
+  working_damaged: 0,
+  not_working_damaged: 0,
+  not_working: 0
+}
+
+export const ADD_PRODUCT_VARIANT_ATTRIBUTES_PAYLOAD = {
+  id: '',
+  name: '',
+}
+
 export interface ProductVariant {
   name: string;
   sku: string;
@@ -229,17 +424,8 @@ export interface ProductVariant {
   site_url: string;
   status: string;
   pricing: ProductVariantPricing[];
+  attributes: ProductVariantAttributes[];
 }
-
-export const ADD_PRODUCT_VARIANT_PAYLOAD: ProductVariant = {
-  name: '',
-  sku: '',
-  type: '',
-  image_url: '',
-  site_url: '',
-  status: '',
-  pricing: [],
-};
 
 export interface ProductVariantPricing {
   currency: string;
@@ -250,13 +436,133 @@ export interface ProductVariantPricing {
   not_working: number;
 }
 
-export const ADD_PRODUCT_VARIANT_PRICING_PAYLOAD = {
-  currency: '',
-  amount: 0,
-  working: 0,
-  working_damaged: 0,
-  not_working_damaged: 0,
-  not_working: 0
+export interface ProductVariantAttributes {
+  id: string;
+  name: string;
+}
+export interface QuestionAnswered {
+  question: string;
+  answer: string;
+}
+
+export interface OrderItems {
+  _id: string;
+  product_variant_id: ProductVariant; // original type : number
+  product_name: string;
+  product_type: string;
+  original_offer: number;
+  revised_offer: number;
+  status: string;
+  imei_serial: string;
+  cosmetic_sell_grade: string;
+  is_erased: boolean;
+  functional_tested: boolean;
+  lock_type: string;
+  line_item_number: string;
+  reason: string[];
+  questions_answered: QuestionAnswered[];
+}
+
+export interface Addresses {
+  type: string;
+  line_1: string;
+  line_2: string;
+  suburb: string;
+  city: string;
+  state: string;
+  region: string;
+  dpid: string;
+  zipcode: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Claims {
+  order_id: string;
+  promotion_id: number;
+  platform: string;
+  user_id: number;
+  status: string;
+  payment_type: string;
+  payment_details: string;
+}
+
+export interface Shipments {
+  _id: string;
+  platform: string;
+  order_id: string | number;
+  tracking_number: string;
+  slug: string; // courier
+  status: string;
+  direction: string;
+  pdf_url: string;
+}
+
+export interface BankDetails {
+  _id: string;
+  bank_name: string;
+  account_name: string;
+  account_number: string;
+  swift_code: string;
+}
+export interface UserDocument {
+  _id: string;
+  platform: string;
+  first_name: string;
+  last_name: string;
+  identification: {
+    id_type?: string;
+    id_number?: string;
+    id_state?: string; // identification
+  };
+  email: string;
+  mobile_number: string;
+  is_verified: string;
+  status: string;
+  bank_details: BankDetails[];
+  address: Addresses[];
+  bsb_account: string;
+  updated_at: string;
+}
+
+export interface OrderInterface {
+  _id: string;
+  user_id: UserDocument; // must be number : populate data
+  platform: string;
+  order_type: string; // credit_timeframe
+  order_flow: string;
+  order_number: string | number;
+  status: string; // FIXME: create enums
+  credit_type: string;
+  order_items: OrderItems[];
+  pricing_detail: {
+    total_items_amount: number;
+    total_discount_amount: number;
+    total_shipping_amount: number;
+    sub_total_amount: number;
+  };
+  payment: {
+    payment_status: string; // FIXME: create enums : paid | to-pay | not-paid
+    payment_date: string;
+    payment_type: string;
+  };
+  cancellation: {
+    cancellation_status: string;
+    cancellation_date: string;
+  };
+  voucher_links: string[];
+  addresses: Addresses[];
+  new_device: {
+    product_variant_id: number;
+    shop: string;
+    status: number;
+    imei_serial: number;
+    created_at: string;
+    updated_at: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+  shipments: Shipments;
 }
 
 export const CURRENCIES = [
@@ -422,3 +728,344 @@ export const CURRENCIES = [
   { value: 'ZMW', label: 'Zambian Kwacha (ZMW)' },
   { value: 'ZWL', label: 'Zimbabwean Dollar (ZWL)' }
 ]
+
+export const CURRENCY_SYMBOLS: { [key: string]: string } = {
+  'AED': 'د.إ',
+  'AFN': '؋',
+  'ALL': 'L',
+  'AMD': '֏',
+  'ANG': 'ƒ',
+  'AOA': 'Kz',
+  'ARS': '$',
+  'AUD': '$',
+  'AWG': 'ƒ',
+  'AZN': '₼',
+  'BAM': 'КМ',
+  'BBD': '$',
+  'BDT': '৳',
+  'BGN': 'лв',
+  'BHD': 'ب.د',
+  'BIF': 'Fr',
+  'BMD': '$',
+  'BND': '$',
+  'BOB': 'Bs.',
+  'BRL': 'R$',
+  'BSD': '$',
+  'BTN': 'Nu.',
+  'BWP': 'P',
+  'BYN': 'Br',
+  'BZD': 'BZ$',
+  'CAD': '$',
+  'CDF': 'Fr',
+  'CHF': 'Fr',
+  'CLP': '$',
+  'CNY': '¥',
+  'COP': '$',
+  'CRC': '₡',
+  'CUP': '₱',
+  'CVE': '$',
+  'CZK': 'Kč',
+  'DJF': 'Fdj',
+  'DKK': 'kr',
+  'DOP': 'RD$',
+  'DZD': 'د.ج',
+  'EGP': 'ج.م',
+  'ERN': 'Nfk',
+  'ETB': 'Br',
+  'EUR': '€',
+  'FJD': '$',
+  'FKP': '£',
+  'FOK': 'kr',
+  'GBP': '£',
+  'GEL': '₾',
+  'GGP': '£',
+  'GHS': '₵',
+  'GIP': '£',
+  'GMD': 'D',
+  'GNF': 'Fr',
+  'GTQ': 'Q',
+  'GYD': '$',
+  'HKD': '$',
+  'HNL': 'L',
+  'HRK': 'kn',
+  'HTG': 'G',
+  'HUF': 'Ft',
+  'IDR': 'Rp',
+  'ILS': '₪',
+  'IMP': '£',
+  'INR': '₹',
+  'IQD': 'ع.د',
+  'IRR': '﷼',
+  'ISK': 'kr',
+  'JEP': '£',
+  'JMD': 'J$',
+  'JOD': 'د.ا',
+  'JPY': '¥',
+  'KES': 'Ksh',
+  'KGS': 'сом',
+  'KHR': '៛',
+  'KID': '$',
+  'KIN': 'RF',
+  'KIR': '$',
+  'KWD': 'د.ك',
+  'KYD': '$',
+  'KZT': '₸',
+  'LAK': '₭',
+  'LBP': 'ل.ل',
+  'LKR': 'රු',
+  'LRD': '$',
+  'LSL': 'L',
+  'LYD': 'ل.د',
+  'MAD': 'د.م.',
+  'MDL': 'L',
+  'MGA': 'Ar',
+  'MKD': 'ден',
+  'MMK': 'K',
+  'MNT': '₮',
+  'MOP': 'P',
+  'MRU': 'UM',
+  'MUR': '₨',
+  'MVR': 'ރ.',
+  'MWK': 'MK',
+  'MXN': '$',
+  'MYR': 'RM',
+  'MZN': 'MT',
+  'NAD': '$',
+  'NGN': '₦',
+  'NIO': 'C$',
+  'NOK': 'kr',
+  'NPR': '₨',
+  'NZD': '$',
+  'OMR': 'ر.ع.',
+  'PAB': 'B/.',
+  'PEN': 'S/.',
+  'PGK': 'K',
+  'PHP': '₱',
+  'PKR': '₨',
+  'PLN': 'zł',
+  'PYG': '₲',
+  'QAR': 'ر.ق',
+  'RON': 'lei',
+  'RSD': 'дин',
+  'RUB': '₽',
+  'RWF': 'Fr',
+  'SAR': 'ر.س',
+  'SBD': '$',
+  'SCR': '₨',
+  'SDG': 'ج.س.',
+  'SEK': 'kr',
+  'SGD': '$',
+  'SHP': '£',
+  'SLL': 'Le',
+  'SOS': 'Sh',
+  'SRD': '$',
+  'SSP': '£',
+  'STN': 'Db',
+  'SYP': 'ل.س',
+  'SZL': 'L',
+  'THB': '฿',
+  'TJS': 'ЅМ',
+  'TMT': 'm',
+  'TND': 'د.ت',
+  'TOP': 'T$',
+  'TRY': '₺',
+  'TTD': 'TT$',
+  'TVD': '$',
+  'TWD': 'NT$',
+  'TZS': 'Sh',
+  'UAH': '₴',
+  'UGX': 'Sh',
+  'USD': '$',
+  'UYU': '$U',
+  'UZS': 'UZS',
+  'VES': 'Bs',
+  'VND': '₫',
+  'VUV': 'VT',
+  'WST': 'T',
+  'XAF': 'FCFA',
+  'XCD': '$',
+  'XDR': 'SDR',
+  'XOF': 'CFA',
+  'XPF': 'Fr',
+  'YER': '﷼',
+  'ZAR': 'R',
+  'ZMW': 'ZK',
+  'ZWL': '$',
+};
+
+interface Attribute {
+  value: string;
+  label: string;
+}
+
+interface Attributes {
+  [key: string]: Attribute[];
+}
+
+export const ATTRIBUTES: Attributes = {
+  laptops: [
+    { value: 'processor', label: 'Processor' },
+    { value: 'screen-size', label: 'Screen Size' },
+    { value: 'storage', label: 'Storage' },
+    { value: 'memory', label: 'Memory' },
+  ],
+  watches: [
+    { value: 'case-size', label: 'Case Size' },
+    { value: 'case-material', label: 'Material' }
+  ],
+  tablets: [
+    { value: 'screen-size', label: 'Screen Size' },
+    { value: 'storage', label: 'Storage' },
+  ],
+  phones: [
+    { value: 'storage', label: 'Storage' },
+  ]
+}
+
+export const SUPERADMIN = 'superadmin';
+export const ADMIN = 'admin';
+export const REGULAR = 'regular';
+export const WAREHOUSE = 'warehouse';
+export const PRODUCTS = 'products-team';
+export const CUSTOMER_SERVICE = 'customer-service';
+
+export const ROLES = [
+  { value: SUPERADMIN, label: 'Super Admin' },
+  { value: ADMIN, label: 'Admin' },
+  { value: REGULAR, label: 'Regular' },
+  { value: WAREHOUSE, label: 'Warehouse' },
+  { value: PRODUCTS, label: 'Products' },
+  { value: CUSTOMER_SERVICE, label: 'Customer Service' },
+]
+
+export const CANCELLED_AXIOS = 'ERR_CANCELED';
+
+export const PRODUCT_TYPES = {
+  PHONES: 'phones',
+  TABLETS: 'tablets',
+  WATCHES: 'watches',
+  LAPTOPS: 'laptops',
+}
+
+export const MODAL_TYPES = {
+  ADD_PRODUCT: 'ADD_PRODUCT',
+  ADD_PRODUCT_VARIANT: 'ADD_PRODUCT_VARIANT',
+  ADD_USER: 'ADD_USER',
+  EDIT_USER: 'EDIT_USER',
+  ADD_PROMOTION: 'ADD_PROMOTION',
+  ADD_PROMOTION_CLAIMS: 'ADD_PROMOTION_CLAIMS',
+  ADD_PROMOTION_STEPS: 'ADD_PROMOTION_STEPS',
+  ADD_PROMOTION_CONDITION: 'ADD_PROMOTION_CONDITION',
+  ADD_PROMOTION_ELIGIBILITY_AND_FAQS: 'ADD_PROMOTION_ELIGIBILITY_AND_FAQS',
+}
+
+export const PROMOTION_STATUS = [
+  { value: 'active', label: 'Active' },
+  { value: 'inactive', label: 'Inactive' },
+]
+
+export const ADD_PROMOTION_DETAILS_PAYLOAD = {
+  name: '',
+  description: '',
+  status: '',
+  start_date: null,
+  end_date: null,
+  image_url: '',
+}
+
+export const ADD_PROMOTION_PRODUCTS_PAYLOAD = {
+  product_id: '',
+  product_name: '',
+  amount: 0,
+  currency: ''
+}
+
+export const ADD_PROMOTION_CLAIMS_PAYLOAD = {
+  title: '',
+  description: '',
+  disclaimer: '',
+  products: [ADD_PROMOTION_PRODUCTS_PAYLOAD]
+}
+
+export const ADD_PROMOTION_STEPS_ITEM = {
+  order: 1,
+  title: '',
+  description: ''
+};
+
+export const ADD_PROMOTION_STEPS_PAYLOAD = {
+  steps: [ADD_PROMOTION_STEPS_ITEM],
+}
+
+export const ADD_PROMOTION_CONDITION_ITEM = {
+  order: 1,
+  description: ''
+};
+
+export const ADD_PROMOTION_CONDITIONS_PAYLOAD = {
+  title: '',
+  items: [ADD_PROMOTION_CONDITION_ITEM]
+}
+
+export const ADD_PROMOTION_FAQ_ITEM = {
+  title: '',
+  content: ''
+};
+
+export const ADD_PROMOTION_ELIGIBILITY_AND_FAQS_PAYLOAD = {
+  title: '',
+  faq: [ADD_PROMOTION_FAQ_ITEM]
+}
+
+export interface Product {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [x: string]: any;
+  _id: string;
+  name: string;
+  brand: string;
+  model: string;
+  year: string;
+  display_name: string;
+  category: string;
+  type: string;
+  image_url: string;
+  site_url: string;
+  status: string;
+  is_archived: string;
+  createdAt: string;
+  updatedAt: string;
+  platform: string;
+}
+
+export interface Promotion {
+  // product: String
+  // amount: Number
+  // dateClaimSubmitted: Date
+  // transactionNumber: String
+  // dateClaimPaid: Date
+  _id: string;
+  name: string;
+  description: string;
+  platform: string;
+  status: string;
+  start_date: string;
+  end_date: string;
+  products: Product[];
+  price: number;
+  image_url: string;
+}
+
+export const COLLECTION_ORDER_ITEM_STATUS = [
+  OrderItemStatus.CREATED,
+  OrderItemStatus.CANCELLED,
+]
+export const VALIDATION_ORDER_ITEM_STATUS = [
+  OrderItemStatus.RECEIVED,
+  OrderItemStatus.LABEL_SENT,
+  OrderItemStatus.FOR_REVISION,
+]
+export const COMPLETION_ORDER_ITEM_STATUS = [
+  OrderItemStatus.EVALUATED,
+  OrderItemStatus.REVISED,
+  OrderItemStatus.COMPLETED,
+];

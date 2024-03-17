@@ -2,10 +2,14 @@ import { NotFound, PrivateRoute, PublicRoute } from '@tradein-admin/libs';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import {
   DashboardPage,
+  DiscrepancyPage,
+  EditProductPage,
   LoginPage,
   OrderManagementPage,
+  EditOrderPage,
   PaymentsPage,
   ProductManagementPage,
+  PromotionClaimsPage,
   PromotionsPage,
   UserManagementPage,
 } from './pages';
@@ -21,9 +25,13 @@ export function App() {
             path="/dashboard/product"
             element={<ProductManagementPage />}
           />
+          <Route path="/dashboard/product/:id" element={<EditProductPage />} />
           <Route path="/dashboard/order" element={<OrderManagementPage />} />
+          <Route path="/dashboard/discrepancy" element={<DiscrepancyPage />} />
+          <Route path="/dashboard/order/:id" element={<EditOrderPage />} />
           <Route path="/dashboard/user" element={<UserManagementPage />} />
           <Route path="/dashboard/promotion" element={<PromotionsPage />} />
+          <Route path="/dashboard/claims" element={<PromotionClaimsPage />} />
           <Route path="/dashboard/payment" element={<PaymentsPage />} />
         </Route>
 

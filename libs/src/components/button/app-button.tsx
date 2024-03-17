@@ -8,6 +8,7 @@ interface CustomButtonProps {
   isLoading?: boolean;
   icon?: any;
   width?: string;
+  padding?: string;
   disabled?: boolean;
   type?: any;
   onClick?: () => void;
@@ -17,12 +18,11 @@ interface CustomButtonProps {
 
 const StyledButton = styled.button<CustomButtonProps>`
   width: ${(props) => (props.width ? props.width : '100%')};
-  padding: 8px 20px;
+  padding: ${(props) => (props.padding ? props.padding : '8px 20px')};
   color: ${(props) =>
     props.variant === 'text' ? '#01463A' : props.variant === 'outlined' ? '#01463A' : '#fff'};
   background: ${(props) => {
     if (props.variant === 'outlined' || props.variant === 'text') return 'transparent';
-    if (props.isLoading) return '#ccc';
     return 'linear-gradient(to right, #216A4C, #01463A)';
   }};
   border: ${(props) =>
@@ -33,6 +33,10 @@ const StyledButton = styled.button<CustomButtonProps>`
   justify-content: center;
   align-items: center;
   position: relative;
+  white-space: nowrap;
+  opacity: ${(props) => (props.isLoading ? '50%' : '100%')};
+  font-size: 13.3333px;
+  font-weight: normal;
 
   &:disabled {
     cursor: not-allowed;
@@ -45,6 +49,7 @@ const StyledButton = styled.button<CustomButtonProps>`
 
   svg {
     margin-right: 8px;
+    font-size: 13.3333px;
   }
 `;
 
@@ -70,17 +75,25 @@ export function AppButton({
   isLoading = false,
   icon,
   width,
+  padding,
   disabled,
   type,
   onClick,
   variant = 'fill',
   children,
 }: CustomButtonProps) {
+  const handleClick = () => {
+    if (!disabled && !isLoading && onClick) {
+      onClick();
+    }
+  };
+
   return (
     <StyledButton
       isLoading={isLoading}
       width={width}
-      onClick={onClick}
+      padding={padding}
+      onClick={handleClick}
       disabled={disabled || isLoading}
       type={type}
       variant={variant}
@@ -91,3 +104,4 @@ export function AppButton({
     </StyledButton>
   );
 }
+

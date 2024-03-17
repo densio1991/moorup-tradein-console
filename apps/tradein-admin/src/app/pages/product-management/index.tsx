@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   faDownload,
@@ -5,23 +6,28 @@ import {
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
 import {
+  ACTIONS_COLUMN,
   ADD_PRODUCT_PAYLOAD,
   AppButton,
   DEFAULT_COLUMN,
+  MODAL_TYPES,
   PRODUCT_MANAGEMENT_COLUMNS,
   SideModal,
   Table,
   exportToCSV,
+  productManagementParsingConfig,
   useAuth,
   useCommon,
   useProduct,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AddProductForm } from './add-product';
 import { AddProductVariantForm } from './add-product-variant';
 
 export function ProductManagementPage() {
+  const navigate = useNavigate();
   const {
     state,
     getProducts,
@@ -37,16 +43,25 @@ export function ProductManagementPage() {
   const { state: commonState, setSideModalState } = useCommon();
   const { sideModalState } = commonState;
 
-  const headers = [...DEFAULT_COLUMN, ...PRODUCT_MANAGEMENT_COLUMNS];
+  const headers = [
+    ...DEFAULT_COLUMN,
+    ...PRODUCT_MANAGEMENT_COLUMNS,
+    ...ACTIONS_COLUMN,
+  ];
 
   useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     if (!isEmpty(activePlatform)) {
-      getProducts(true);
-      getProductTypes();
-      getProductStatuses();
+      getProducts(true, signal);
+      getProductTypes(signal);
+      getProductStatuses(signal);
     }
 
     return () => {
+      controller.abort();
+
       // Clear data on unmount
       clearProducts({});
     };
@@ -54,10 +69,10 @@ export function ProductManagementPage() {
 
   const renderForm = () => {
     switch (sideModalState.view) {
-      case 'add-product':
+      case MODAL_TYPES.ADD_PRODUCT:
         return <AddProductForm />;
 
-      case 'add-product-variant':
+      case MODAL_TYPES.ADD_PRODUCT_VARIANT:
         return <AddProductVariantForm />;
 
       default:
@@ -72,6 +87,13 @@ export function ProductManagementPage() {
         isLoading={isFetchingProducts}
         headers={headers}
         rows={products || []}
+        parsingConfig={productManagementParsingConfig}
+        menuItems={[
+          {
+            label: 'Edit',
+            action: (value: any) => navigate(`/dashboard/product/${value._id}`),
+          },
+        ]}
         rightControls={
           <>
             <AppButton
@@ -81,7 +103,7 @@ export function ProductManagementPage() {
                 setSideModalState({
                   ...sideModalState,
                   open: true,
-                  view: 'add-product',
+                  view: MODAL_TYPES.ADD_PRODUCT,
                 })
               }
             >

@@ -2,6 +2,7 @@
 import { useReducer } from 'react';
 import { authReducer, authState } from './auth';
 import { commonReducer, commonState } from './common';
+import { orderReducer, orderState } from './order';
 import { productReducer, productState } from './product';
 import { promotionReducer, promotionState } from './promotion';
 import { userReducer, userState } from './user';
@@ -12,6 +13,7 @@ const rootReducer = (state: any, action: any) => {
     user: userReducer(state.user, action),
     product: productReducer(state.product, action),
     promotion: promotionReducer(state.promotion, action),
+    order: orderReducer(state.order, action),
     common: commonReducer(state.common, action),
   };
 };
@@ -21,6 +23,7 @@ const initialState = {
   user: userState,
   product: productState,
   promotion: promotionState,
+  order: orderState,
   common: commonState,
 };
 

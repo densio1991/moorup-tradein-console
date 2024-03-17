@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { decodeJWT, validateExpiry } from '../../helpers';
 import { useAuth } from '../../store';
+import { LoaderContainer } from '../loader';
 
 interface ComponentWrapperProps {
   children: ReactNode;
@@ -27,6 +28,8 @@ export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Eleme
     expiry,
     token,
     userDetails,
+    isFetchingUserDetails,
+    isPageLoading,
   } = state;
 
   const shouldRun = useRef(false);
@@ -73,7 +76,13 @@ export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Eleme
 
   return (
     <StyledApp>
-      {children}
+      <LoaderContainer
+        color="#01463a"
+        height="100vh"
+        loading={isFetchingUserDetails || isPageLoading}
+      >
+        {children}
+      </LoaderContainer>
     </StyledApp>
   );
 }
