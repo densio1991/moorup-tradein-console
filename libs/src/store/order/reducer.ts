@@ -14,7 +14,7 @@ const orderState = {
   isUpdatingOrderItem: false,
   orderItems: [],
   isFetchingOrderItems: true,
-  shipments: {},
+  shipments: [],
   isFetchingShipments: true,
   orderStatuses: [],
   isFetchingOrderStatuses: false,
@@ -184,7 +184,7 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isFetchingShipments: true,
-        shipments: {},
+        shipments: [],
       };
     }
     case types.FETCH_ORDER_SHIPMENTS.SUCCESS: {
@@ -198,14 +198,14 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isFetchingShipments: false,
-        shipments: {},
+        shipments: [],
       };
     }
     case types.FETCH_ORDER_SHIPMENTS.CANCELLED: {
       return {
         ...state,
         isFetchingShipments: true,
-        shipments: {},
+        shipments: [],
       };
     }
 

@@ -21,6 +21,7 @@ import {
   COLLECTION_ORDER_ITEM_STATUS,
   VALIDATION_ORDER_ITEM_STATUS,
   COMPLETION_ORDER_ITEM_STATUS,
+  Shipments,
 } from '@tradein-admin/libs';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -95,7 +96,7 @@ export const EditOrderPage = () => {
 
   const {
     order = {},
-    shipments = {},
+    shipments = [],
     isUpdatingOrder,
     isFetchingOrder,
   } = state;
@@ -106,6 +107,17 @@ export const EditOrderPage = () => {
     identification = {},
     order_items = [],
   } = order;
+
+  const [accordionState, setAccordionState] = useState<AccordionStates>({
+    quote: true,
+    collection: true,
+    validation: true,
+    completion: true,
+  } as AccordionStates);
+
+  const [statusModal, setStatusModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState({} as OrderItems);
+  const isSingleOrderFlow = order?.order_flow === 'single';
 
   useEffect(() => {
     const controller = new AbortController();
@@ -126,6 +138,10 @@ export const EditOrderPage = () => {
     if (order._id) {
       fetchOrderShipments(order._id, signal);
     }
+
+    return () => {
+      controller.abort();
+    };
   }, [order._id]);
 
   const onUpdateStatus = (newValue: any) => {
@@ -144,16 +160,6 @@ export const EditOrderPage = () => {
     setSelectedItem({} as OrderItems);
   };
 
-  const [accordionState, setAccordionState] = useState<AccordionStates>({
-    quote: true,
-    collection: true,
-    validation: true,
-    completion: true,
-  } as AccordionStates);
-
-  const [statusModal, setStatusModal] = useState(false);
-  const [selectedItem, setSelectedItem] = useState({} as OrderItems);
-
   const toggleAccordion = (item: any) => {
     setAccordionState((prev: any) => {
       return {
@@ -163,9 +169,29 @@ export const EditOrderPage = () => {
     });
   };
 
+  const parseShipments = () => {
+    const items: any = {};
+    const itemShipments = Array.isArray(shipments)
+      ? [...shipments]
+      : [shipments];
+
+    if (isSingleOrderFlow) {
+      itemShipments?.forEach((item: Shipments) => {
+        if (isSingleOrderFlow) {
+          items[item.item_id] = item;
+        }
+      });
+    } else if (itemShipments?.length > 0) {
+      items[order._id] = itemShipments[0];
+    }
+
+    return items;
+  };
+
+  const parsedShipments = parseShipments();
+
   const { address = {}, bank_details = {} } = user_id;
 
-  const isSingleOrderFlow = order?.order_flow === 'single';
   const completeAddress =
     address.length > 0 ? `${address[0]?.region} ${address[0]?.state}` : '';
   const accountName = bank_details ? bank_details[0]?.account_name : '';
@@ -294,9 +320,10 @@ export const EditOrderPage = () => {
                 <div className="max-w-full mx-auto">
                   <div className="overflow-x-auto max-w-full pb-2">
                     <Collection
-                      orderId={orderId}
+                      orderId={order._id}
                       orderItems={collectionOrderItems}
-                      shipments={shipments}
+                      shipments={parsedShipments}
+                      isSingleOrderFlow={isSingleOrderFlow}
                       setStatusModal={setStatusModal}
                       setSelectedItem={setSelectedItem}
                     />
@@ -324,7 +351,6 @@ export const EditOrderPage = () => {
                   <div className="overflow-x-auto max-w-full pb-2">
                     <ValidationOffer
                       orderItems={validationOrderItems}
-                      shipments={shipments}
                       setStatusModal={setStatusModal}
                       setSelectedItem={setSelectedItem}
                     />
@@ -352,7 +378,6 @@ export const EditOrderPage = () => {
                   <div className="overflow-x-auto max-w-full pb-2">
                     <Completion
                       orderItems={completionOrderItems}
-                      shipments={shipments}
                       setStatusModal={setStatusModal}
                       setSelectedItem={setSelectedItem}
                     />

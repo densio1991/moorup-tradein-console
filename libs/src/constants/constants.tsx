@@ -491,6 +491,7 @@ export interface Shipments {
   _id: string;
   platform: string;
   order_id: string | number;
+  item_id: string | number;
   tracking_number: string;
   slug: string; // courier
   status: string;

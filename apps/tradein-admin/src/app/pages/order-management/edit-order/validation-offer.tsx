@@ -2,7 +2,6 @@
 import {
   DetailCardContainer,
   OrderItems,
-  Shipments,
   amountFormatter,
   displayData,
 } from '@tradein-admin/libs';
@@ -10,7 +9,6 @@ import { DeviceSection, CardDetail } from './sections';
 
 type ValidationOfferProps = {
   orderItems: OrderItems[];
-  shipments: Shipments;
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedItem: React.Dispatch<React.SetStateAction<OrderItems>>;
 };
