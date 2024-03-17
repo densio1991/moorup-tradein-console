@@ -126,7 +126,7 @@ export const CardDetail = ({
           <button
             onClick={handleSave}
             className="text-sm text-emerald-900 hover:text-emerald-700 mr-2"
-            disabled={editedValue?.length !== 15}
+            disabled={!isImeiValid}
           >
             Save
           </button>
