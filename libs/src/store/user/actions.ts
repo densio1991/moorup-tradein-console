@@ -4,14 +4,14 @@ import { CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
-export const getUsers = (payload: any, signal?: AbortSignal) => (dispatch: any) => {
+export const getUsers = (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any) => {
   dispatch({
     type: types.FETCH_USERS.baseType,
     payload,
   });
 
   axiosInstance()
-    .get('/api/admins', { signal: signal })
+    .get(`/api/admins?platform=${platform}`, { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_USERS.SUCCESS,
@@ -40,7 +40,7 @@ export const clearUsers = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const createUser = (payload: any) => (dispatch: any) => {
+export const createUser = (payload: any, platform: string) => (dispatch: any) => {
   dispatch({
     type: types.CREATE_USER.baseType,
     payload,
@@ -54,7 +54,7 @@ export const createUser = (payload: any) => (dispatch: any) => {
         payload: response?.data,
       });
 
-      getUsers({})(dispatch);
+      getUsers({}, platform)(dispatch);
       toast.success('User successfully added!');
     })
     .catch((error) => {
@@ -63,11 +63,12 @@ export const createUser = (payload: any) => (dispatch: any) => {
         payload: error,
       });
 
+      getUsers({}, platform)(dispatch);
       toast.error('Failed to add user!');
     });
 };
 
-export const updateUser = (id: string, payload: any) => (dispatch: any) => {
+export const updateUser = (id: string, platform: string, payload: any) => (dispatch: any) => {
   dispatch({
     type: types.UPDATE_USER.baseType,
     payload,
@@ -81,7 +82,7 @@ export const updateUser = (id: string, payload: any) => (dispatch: any) => {
         payload: response?.data,
       });
 
-      getUsers({})(dispatch);
+      getUsers({}, platform)(dispatch);
       toast.success('User successfully updated!');
     })
     .catch((error) => {

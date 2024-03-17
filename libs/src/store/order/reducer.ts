@@ -14,7 +14,7 @@ const orderState = {
   isUpdatingOrderItem: false,
   orderItems: [],
   isFetchingOrderItems: true,
-  shipments: {},
+  shipments: [],
   isFetchingShipments: true,
   orderStatuses: [],
   isFetchingOrderStatuses: false,
@@ -22,6 +22,9 @@ const orderState = {
   variants: [],
   isModalOpen: false,
   activeOrderItem: {},
+  generatedLabels: {},
+  isGeneratingLabels: false,
+  isUpdatingImeiSerial: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -184,7 +187,7 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isFetchingShipments: true,
-        shipments: {},
+        shipments: [],
       };
     }
     case types.FETCH_ORDER_SHIPMENTS.SUCCESS: {
@@ -198,14 +201,14 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isFetchingShipments: false,
-        shipments: {},
+        shipments: [],
       };
     }
     case types.FETCH_ORDER_SHIPMENTS.CANCELLED: {
       return {
         ...state,
         isFetchingShipments: true,
-        shipments: {},
+        shipments: [],
       };
     }
 
@@ -315,6 +318,46 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.GENERATE_LABELS.baseType: {
+      return {
+        ...state,
+        isGeneratingLabels: true,
+        generatedLabels: {},
+      };
+    }
+    case types.GENERATE_LABELS.SUCCESS: {
+      return {
+        ...state,
+        isGeneratingLabels: false,
+        generatedLabels: action.payload,
+      };
+    }
+    case types.GENERATE_LABELS.FAILED: {
+      return {
+        ...state,
+        isGeneratingLabels: false,
+        generatedLabels: {},
+      };
+    }
+
+    case types.UPDATE_ORDER_ITEM_IMEI_SERIAL.baseType: {
+      return {
+        ...state,
+        isUpdatingImeiSerial: true,
+      };
+    }
+    case types.UPDATE_ORDER_ITEM_IMEI_SERIAL.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingImeiSerial: false,
+      };
+    }
+    case types.UPDATE_ORDER_ITEM_IMEI_SERIAL.FAILED: {
+      return {
+        ...state,
+        isUpdatingImeiSerial: false,
+      };
+    }
 
     default:
       return state;

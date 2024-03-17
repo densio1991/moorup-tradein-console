@@ -65,6 +65,10 @@ export const useProduct = () => {
     actions.updateProductVariant(id, productId, payload)(dispatch);
   }
 
+  const uploadProductsExcelFile = (payload: any) => {
+    actions.uploadProductsExcelFile(payload, activePlatform)(dispatch);
+  }
+
   return {
     state: state.product,
     getProducts,
@@ -81,5 +85,6 @@ export const useProduct = () => {
     updateProduct,
     addProductVariant,
     updateProductVariant,
+    uploadProductsExcelFile,
   };
 };

@@ -1,7 +1,10 @@
+/* eslint-disable jsx-a11y/anchor-has-content */
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   faDownload,
+  faFileExport,
   faPlus,
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
@@ -13,6 +16,7 @@ import {
   MODAL_TYPES,
   PRODUCT_MANAGEMENT_COLUMNS,
   SideModal,
+  TEMPLATE_LINK,
   Table,
   exportToCSV,
   productManagementParsingConfig,
@@ -21,7 +25,7 @@ import {
   useProduct,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AddProductForm } from './add-product';
 import { AddProductVariantForm } from './add-product-variant';
@@ -36,12 +40,15 @@ export function ProductManagementPage() {
     getProductStatuses,
     setAddProductPayload,
     setIncludeProductVariant,
+    uploadProductsExcelFile,
   } = useProduct();
   const { state: authState } = useAuth();
   const { products, isFetchingProducts } = state;
   const { activePlatform } = authState;
   const { state: commonState, setSideModalState } = useCommon();
   const { sideModalState } = commonState;
+
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const headers = [
     ...DEFAULT_COLUMN,
@@ -80,6 +87,30 @@ export function ProductManagementPage() {
     }
   };
 
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files && e.target.files[0];
+
+    if (file) {
+      uploadProductsExcelFile(file);
+    }
+  };
+
+  const handleImportClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const downloadAnchorRef = useRef<HTMLAnchorElement>(null);
+
+  const handleDownloadClick = () => {
+    const fileUrl = TEMPLATE_LINK;
+    if (downloadAnchorRef.current) {
+      downloadAnchorRef.current.href = fileUrl;
+      downloadAnchorRef.current.click();
+    }
+  };
+
   return (
     <>
       <Table
@@ -109,9 +140,22 @@ export function ProductManagementPage() {
             >
               Add
             </AppButton>
-            <AppButton width="fit-content" icon={faUpload}>
-              Import
-            </AppButton>
+            <>
+              <AppButton
+                width="fit-content"
+                icon={faUpload}
+                onClick={handleImportClick}
+              >
+                Import
+              </AppButton>
+              <input
+                type="file"
+                accept=".xls, .xlsx"
+                style={{ display: 'none' }}
+                ref={fileInputRef}
+                onChange={handleFileChange}
+              />
+            </>
             <AppButton
               width="fit-content"
               icon={faDownload}
@@ -120,6 +164,17 @@ export function ProductManagementPage() {
             >
               Export
             </AppButton>
+            <>
+              <AppButton
+                width="fit-content"
+                icon={faFileExport}
+                onClick={handleDownloadClick}
+                disabled={isEmpty(TEMPLATE_LINK)}
+              >
+                Export Template
+              </AppButton>
+              <a ref={downloadAnchorRef} style={{ display: 'none' }} download />
+            </>
           </>
         }
       />

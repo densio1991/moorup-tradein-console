@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext } from 'react';
+import { OrderItemStatus } from '../../constants';
 import { RootContext } from '../provider';
 import * as actions from './actions';
-import { OrderItemStatus } from '../../constants';
 
 export const useOrder = () => {
   const { state, dispatch } = useContext(RootContext);
@@ -96,6 +96,14 @@ export const useOrder = () => {
     actions.clearOrders({})(dispatch);
   }
 
+  const generateLabels = (payload: any) => {
+    actions.generateLabels(payload)(dispatch);
+  }
+
+  const updateOrderItemImeiSerial = (orderItemId: string, orderId: any, payload: any) => {
+    actions.updateOrderItemImeiSerial(orderItemId, orderId, payload)(dispatch);
+  }
+
   return {
     state: state.order,
     getOrderItems,
@@ -113,10 +121,11 @@ export const useOrder = () => {
     evaluateOrderItemById,
     cancelOrderItemById,
     updateShipmentStatusById,
-
     openModal,
     closeModal,
     setActiveOrderItem,
     clearOrders,
+    generateLabels,
+    updateOrderItemImeiSerial,
   };
 };

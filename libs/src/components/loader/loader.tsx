@@ -15,6 +15,7 @@ const StyledLoaderContainer = styled.div<{ height?: string }>`
   flex-direction: column;
   height: ${({ height }) => (height ?? '100%')};
   background-color: white;
+  overflow-y: auto;
 `;
 
 const StyledOverlay = styled.div`

@@ -39,6 +39,7 @@ const HeaderSection = styled.div`
   align-items: center;
   width: 100%;
   padding: 10px 0px;
+  flex-wrap: wrap;
 
   @media screen and (max-width: 425px) {
     flex-direction: column;
@@ -55,7 +56,10 @@ const RightSection = styled.div`
   display: flex;
   align-items: center;
   column-gap: 8px;
-  padding-right: 20px;
+  padding: 0px 20px;
+  padding-top: 8px;
+  flex-wrap: wrap;
+  gap: 10px;
 
   @media screen and (max-width: 425px) {
     flex-direction: column;
@@ -77,8 +81,8 @@ const ActionContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   gap: 10px;
+  flex-wrap: wrap;
 `
 
 const TableWrapper = styled.div`
@@ -369,12 +373,41 @@ export function Table({
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const filteredRows = searchTerm
-    ? sortedRows.filter((row) =>
-        Object.values(row).some((value) =>
-          typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      )
-    : sortedRows;
+  ? sortedRows.filter(row =>
+      Object.values(row).some(value => {
+        if (Array.isArray(value)) {
+          return value.some(item => searchItem(item, searchTerm));
+        } else if (typeof value === 'object' && value !== null) {
+          return searchObject(value, searchTerm);
+        } else if (typeof value === 'string') {
+          return value.toLowerCase().includes(searchTerm.toLowerCase());
+        }
+        return false;
+      })
+    )
+  : sortedRows;
+
+  function searchObject(obj: any, term: string): boolean {
+    return Object.values(obj).some(value => {
+      if (Array.isArray(value)) {
+        return value.some(item => searchItem(item, term));
+      } else if (typeof value === 'object' && value !== null) {
+        return searchObject(value, term);
+      } else if (typeof value === 'string') {
+        return value.toLowerCase().includes(term.toLowerCase());
+      }
+      return false;
+    });
+  }
+
+  function searchItem(item: any, term: string): boolean {
+    if (typeof item === 'object' && item !== null) {
+      return searchObject(item, term);
+    } else if (typeof item === 'string') {
+      return item.toLowerCase().includes(term.toLowerCase());
+    }
+    return false;
+  }
 
   const startIndex = (currentPage - 1) * PAGE_SIZE;
   const endIndex = startIndex + PAGE_SIZE;

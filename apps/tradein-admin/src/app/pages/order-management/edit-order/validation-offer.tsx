@@ -2,20 +2,20 @@
 import {
   DetailCardContainer,
   OrderItems,
-  Shipments,
   amountFormatter,
   displayData,
 } from '@tradein-admin/libs';
-import { DeviceSection, CardDetail } from './sections';
+import { CardDetail, DeviceSection } from './sections';
 
 type ValidationOfferProps = {
+  orderId: any;
   orderItems: OrderItems[];
-  shipments: Shipments;
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedItem: React.Dispatch<React.SetStateAction<OrderItems>>;
 };
 
 const ValidationOffer = ({
+  orderId,
   orderItems,
   setStatusModal,
   setSelectedItem,
@@ -53,7 +53,7 @@ const ValidationOffer = ({
 
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
-            <DeviceSection order={item} />
+            <DeviceSection order={item} orderId={orderId} />
             <hr />
             <div>
               <h4>Validation</h4>
@@ -94,7 +94,7 @@ const ValidationOffer = ({
             <hr />
             <button
               onClick={() => handleStatus(item)}
-              className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
+              className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
             >
               Update Status
             </button>

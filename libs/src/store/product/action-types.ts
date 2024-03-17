@@ -10,6 +10,7 @@ export const FETCH_PRODUCT = createActionTypes('FETCH_PRODUCT');
 export const UPDATE_PRODUCT = createActionTypes('UPDATE_PRODUCT');
 export const ADD_PRODUCT_VARIANT = createActionTypes('ADD_PRODUCT_VARIANT');
 export const UPDATE_PRODUCT_VARIANT = createActionTypes('UPDATE_PRODUCT_VARIANT');
+export const UPLOAD_PRODUCTS_EXCEL = createActionTypes('UPLOAD_PRODUCTS_EXCEL');
 
 export const CLEAR_PRODUCTS = 'CLEAR_PRODUCTS';
 export const SET_ADD_PRODUCT_PAYLOAD = 'SET_ADD_PRODUCT_PAYLOAD';

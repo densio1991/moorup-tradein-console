@@ -1,7 +1,13 @@
 import { OrderItems } from '@tradein-admin/libs';
 import { CardDetail } from './card-detail';
 
-export const DeviceSection = ({ order }: { order: OrderItems }) => {
+export const DeviceSection = ({
+  order,
+  orderId,
+}: {
+  order: OrderItems;
+  orderId: string;
+}) => {
   return (
     <div className="flex flex-col sm:flex-row gap-2 mb-2">
       <img
@@ -20,13 +26,20 @@ export const DeviceSection = ({ order }: { order: OrderItems }) => {
             {order.product_variant_id?.name}
           </a>
         </h3>
-        <CardDetail label="IMEI/Serial" value={order?.imei_serial} copy />
+        <CardDetail
+          label="IMEI/Serial"
+          value={order?.imei_serial}
+          orderItem={order}
+          orderId={orderId}
+          copy
+          edit={order?.status !== 'evaluated'}
+        />
         <CardDetail
           label="TI SKU"
           value={order?.product_variant_id?.sku}
           copy
         />
-        <CardDetail label="Device ID" value={order?._id} copy />
+        <CardDetail label="Device ID" value={order?.line_item_number} copy />
         <CardDetail label="Device Status" value={order?.status} />
       </div>
     </div>
