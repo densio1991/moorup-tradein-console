@@ -481,3 +481,9 @@ export const updateOrderItemImeiSerial = (orderItemId: string, orderId: string, 
       toast.error('Failed to update IMEI/Serial.');
     });
 };
+
+export const clearOrder = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CLEAR_ORDER,payload,
+  });
+};

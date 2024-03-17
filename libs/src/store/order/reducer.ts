@@ -359,6 +359,14 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.CLEAR_ORDER: {
+      return {
+        ...state,
+        isFetchingOrder: true,
+        order: {},
+      };
+    }
+
     default:
       return state;
   }
