@@ -104,6 +104,10 @@ export const useOrder = () => {
     actions.updateOrderItemImeiSerial(orderItemId, orderId, payload)(dispatch);
   }
 
+  const clearOrder = () => {
+    actions.clearOrder({})(dispatch);
+  }
+
   return {
     state: state.order,
     getOrderItems,
@@ -127,5 +131,6 @@ export const useOrder = () => {
     clearOrders,
     generateLabels,
     updateOrderItemImeiSerial,
+    clearOrder,
   };
 };
