@@ -96,6 +96,10 @@ export const useOrder = () => {
     actions.clearOrders({})(dispatch);
   }
 
+  const generateLabels = (payload: any) => {
+    actions.generateLabels(payload)(dispatch);
+  }
+
   return {
     state: state.order,
     getOrderItems,
@@ -113,10 +117,10 @@ export const useOrder = () => {
     evaluateOrderItemById,
     cancelOrderItemById,
     updateShipmentStatusById,
-
     openModal,
     closeModal,
     setActiveOrderItem,
     clearOrders,
+    generateLabels,
   };
 };

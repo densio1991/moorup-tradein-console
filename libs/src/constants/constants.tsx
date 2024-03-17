@@ -3,6 +3,7 @@ import {
   faCheckToSlot,
   faCreditCard,
   faCube,
+  faFileCircleExclamation,
   faFileInvoice,
   faHouse,
   faPenToSquare,
@@ -36,6 +37,12 @@ export const SIDENAV_ITEMS = [
     url: '/dashboard/discrepancy',
     activeUrl: /^\/dashboard\/discrepancy/,
     icon: faPenToSquare,
+  },
+  {
+    title: 'Actionables',
+    url: '/dashboard/actionables',
+    activeUrl: /^\/dashboard\/actionables/,
+    icon: faFileCircleExclamation,
   },
   {
     title: 'User Management',
@@ -384,6 +391,45 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     order: 8,
     enableSort: true,
     keyName: 'status',
+  },
+]
+
+export const ACTIONABLES_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Name',
+    order: 2,
+    enableSort: true,
+    keyName: 'user_details.first_name',
+  },
+  {
+    label: 'Status',
+    order: 3,
+    enableSort: true,
+    keyName: 'status',
+  },
+  {
+    label: 'Product Name',
+    order: 4,
+    enableSort: true,
+    keyName: 'order_items.product_name',
+  },
+  {
+    label: 'Product Type',
+    order: 5,
+    enableSort: true,
+    keyName: 'order_items.product_type',
+  },
+  {
+    label: 'Created',
+    order: 6,
+    enableSort: true,
+    keyName: 'createdAt',
+  },
+  {
+    label: 'Updated',
+    order: 7,
+    enableSort: true,
+    keyName: 'updatedAt',
   },
 ]
 
