@@ -49,11 +49,17 @@ const parseStatus = (value: string) => {
 }
 
 export const orderManagementParsingConfig = {
-  'User Email': ({ row }: ParsingFunctionParams) => {
+  'Customer Name': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['user_id'])) return '--';
     const userDetails = row ? row['user_id'] : null;
-    if (!userDetails || isEmpty(userDetails['email'])) return '--';
-    return userDetails['email'];
+    if (!userDetails || (isEmpty(userDetails['first_name']) && isEmpty(userDetails['last_name']))) return '--';
+    const firstName = userDetails['first_name'] || '';
+    const lastName = userDetails['last_name'] || '';
+    return `${firstName} ${lastName}`;
+  },
+  'Order Type': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['order_type'])) return '--';
+    return row['order_type'];
   },
   'Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['status'])) return '--';
