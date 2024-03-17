@@ -2,7 +2,6 @@
 import {
   DetailCardContainer,
   OrderItems,
-  Shipments,
   amountFormatter,
   displayData,
 } from '@tradein-admin/libs';
@@ -10,7 +9,6 @@ import { CardDetail, DeviceSection } from './sections';
 
 type CompletionProps = {
   orderItems: OrderItems[];
-  shipments: Shipments;
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedItem: React.Dispatch<React.SetStateAction<OrderItems>>;
 };
@@ -84,7 +82,7 @@ const Completion = ({
             <hr />
             <button
               onClick={() => handleStatus(item)}
-              className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
+              className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
             >
               Update Status
             </button>

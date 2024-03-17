@@ -11,9 +11,10 @@ import { DeviceSection, CardDetail } from './sections';
 import { isEmpty } from 'lodash';
 
 type CollectionProps = {
-  orderId: unknown;
+  orderId: string;
   orderItems: OrderItems[];
-  shipments: Shipments;
+  shipments: any;
+  isSingleOrderFlow: boolean;
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedItem: React.Dispatch<React.SetStateAction<OrderItems>>;
 };
@@ -22,6 +23,7 @@ const Collection = ({
   orderId,
   orderItems,
   shipments,
+  isSingleOrderFlow,
   setStatusModal,
   setSelectedItem,
 }: CollectionProps) => {
@@ -32,22 +34,20 @@ const Collection = ({
     updateShipmentStatusById,
     resendShipmentLabel,
   } = useOrder();
+
   const {
-    order = {},
     isResendingLabel,
     // isUpdatingOrderItem,
     isFetchingShipments,
   } = state;
-  const isSingleOrderFlow = order?.order_flow === 'single';
-  const isOrderShipped = !isEmpty(shipments);
 
   const handleReceiveOrderItem = (orderItemId: string) => {
     receiveOrderItemById(orderItemId);
   };
 
-  const handleSendBox = (orderItemId: string) => {
-    if (!isEmpty(shipments)) {
-      updateShipmentStatusById(shipments._id, {
+  const handleSendBox = (shipment: Shipments) => {
+    if (!isEmpty(shipment)) {
+      updateShipmentStatusById(shipment._id, {
         status: 'box-sent',
       });
     }
@@ -57,9 +57,9 @@ const Collection = ({
     resendShipmentLabel(orderItemId);
   };
 
-  const handleStatus = (item: OrderItems) => {
+  const handleUpdateStatus = (orderItem: OrderItems) => {
     setStatusModal(true);
-    setSelectedItem(item);
+    setSelectedItem(orderItem);
   };
 
   const handleCancelOrderItem = (orderItemId: string) => {
@@ -70,9 +70,19 @@ const Collection = ({
     return [PRODUCT_TYPES.LAPTOPS, PRODUCT_TYPES.TABLETS].includes(productType);
   };
 
+  const getItemShipment = (orderItemId: string) => {
+    if (isSingleOrderFlow) {
+      return shipments[orderItemId];
+    } else if (orderId) {
+      return shipments[orderId];
+    }
+  };
+
   return (
     <div className="flex gap-2 p-2.5">
       {orderItems?.map((item: OrderItems, idx) => {
+        const shipment = getItemShipment(item._id);
+
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
             <DeviceSection order={item} />
@@ -85,38 +95,38 @@ const Collection = ({
                 <Loader />
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-dataEntry gap-1">
-                  <CardDetail label="Courier" value={shipments?.slug} />
+                  <CardDetail label="Courier" value={shipment?.slug} />
                   <CardDetail
                     label="Shipping Status"
-                    value={shipments?.status}
+                    value={shipment?.status}
                   />
                   <CardDetail
                     label="Direction #"
-                    value={shipments?.direction}
+                    value={shipment?.direction}
                     copy
                   />
                   <CardDetail
                     label="Inbound Tracking #"
-                    value={shipments?.tracking_number}
+                    value={shipment?.tracking_number}
                     copy
                   />
                 </div>
               )}
             </div>
-            {isOrderShipped ? (
+            {!isEmpty(shipment) ? (
               <>
                 <hr />
                 <div className="flex flex-row flex-wrap gap-1 pt-1 font-medium">
                   <button
                     onClick={() => handleReceiveOrderItem(item._id)}
-                    className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
+                    className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
                   >
                     Mark as Received
                   </button>
                   {isBoxRequired(item?.product_type) && (
                     <button
-                      onClick={() => handleSendBox(item._id)}
-                      className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
+                      onClick={() => handleSendBox(shipment)}
+                      className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
                     >
                       Send Box
                     </button>
@@ -129,7 +139,7 @@ const Collection = ({
                   <hr />
                   <div className="flex flex-row flex-wrap gap-1 pt-1 font-medium">
                     <button
-                      className="font-medium flex-1 text-white bg-primary py-1 px-3 rounded-md hover:bg-primary-light"
+                      className="font-medium flex-1 text-white bg-emerald-800 py-1 px-3 rounded-md hover:bg-emerald-900"
                       disabled={isResendingLabel}
                       onClick={() => handleResendLabel(item._id)}
                     >
@@ -146,8 +156,8 @@ const Collection = ({
               )
             )}
             <button
-              onClick={() => handleStatus(item)}
-              className="px-3 py-1 flex-1 text-white bg-emerald-700 hover:bg-emerald-800 rounded-md"
+              onClick={() => handleUpdateStatus(item)}
+              className="font-medium px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
             >
               Update Status
             </button>
