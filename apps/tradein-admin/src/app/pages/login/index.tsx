@@ -2,7 +2,7 @@
 import { AppButton, StyledInput, useAuth } from '@tradein-admin/libs';
 import { useFormik } from 'formik';
 import styled from 'styled-components';
-import Logo from '../../../assets/moorup.png';
+import Logo from '../../../../public/Moorup.png';
 
 const Container = styled.div`
   display: flex;

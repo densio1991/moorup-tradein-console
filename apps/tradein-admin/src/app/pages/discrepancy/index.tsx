@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  DEFAULT_COLUMN,
   DISCREPANCY_MANAGEMENT_COLUMNS,
   PRODUCT_TYPES,
   Table,
@@ -18,7 +17,7 @@ export function DiscrepancyPage() {
   const { orderItems, isFetchingOrderItems } = state;
   const { activePlatform } = authState;
 
-  const headers = [...DEFAULT_COLUMN, ...DISCREPANCY_MANAGEMENT_COLUMNS];
+  const headers = [...DISCREPANCY_MANAGEMENT_COLUMNS];
 
   useEffect(() => {
     const filters = {

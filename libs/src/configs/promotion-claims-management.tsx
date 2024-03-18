@@ -45,8 +45,8 @@ const parseClaimStatus = (value: string) => {
 
 export const promotionClaimsManagementParsingConfig = {
   'Order Number': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['order_id'])) return '--';
-    return row['order_id'];
+    if (!row || isEmpty(row['order_number'])) return '--';
+    return row['order_number'];
   },
   'Promotion Name': ({ row }: ParsingFunctionParams) => {
     const promotionDetails = row ? row['promotion_details'] : null;
@@ -59,6 +59,10 @@ export const promotionClaimsManagementParsingConfig = {
 
     const promotionLink = `${row['platform_domain']}promotions/${row['promotion_details']?.slug}`
     return promotionLink;
+  },
+  'Receipt Number': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['receipt_number'])) return '--';
+    return row['receipt_number'];
   },
   'Claimed By': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['user_details'])) return '--';

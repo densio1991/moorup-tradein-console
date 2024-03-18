@@ -392,7 +392,7 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     label: 'Order Number',
     order: 2,
     enableSort: true,
-    keyName: 'order_id',
+    keyName: 'order_number',
   },
   {
     label: 'Promotion Name',
@@ -407,26 +407,32 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     keyName: 'promotion_details.slug',
   },
   {
-    label: 'Claimed By',
+    label: 'Receipt Number',
     order: 5,
+    enableSort: true,
+    keyName: 'receipt_number',
+  },
+  {
+    label: 'Claimed By',
+    order: 6,
     enableSort: true,
     keyName: 'user_details.first_name',
   },
   {
     label: 'Claimed Date',
-    order: 6,
+    order: 7,
     enableSort: true,
     keyName: 'createdAt',
   },
   {
     label: 'Moorup Status',
-    order: 7,
+    order: 8,
     enableSort: true,
     keyName: 'moorup_status',
   },
   {
     label: 'Claim Status',
-    order: 8,
+    order: 9,
     enableSort: true,
     keyName: 'status',
   },
@@ -434,38 +440,44 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
 
 export const ACTIONABLES_MANAGEMENT_COLUMNS = [
   {
-    label: 'Name',
+    label: 'Order Number',
     order: 2,
+    enableSort: true,
+    keyName: 'order_number',
+  },
+  {
+    label: 'Name',
+    order: 3,
     enableSort: true,
     keyName: 'user_details.first_name',
   },
   {
     label: 'Status',
-    order: 3,
+    order: 4,
     enableSort: true,
     keyName: 'status',
   },
   {
     label: 'Product Name',
-    order: 4,
+    order: 5,
     enableSort: true,
     keyName: 'order_items.product_name',
   },
   {
     label: 'Product Type',
-    order: 5,
+    order: 6,
     enableSort: true,
     keyName: 'order_items.product_type',
   },
   {
     label: 'Created',
-    order: 6,
+    order: 7,
     enableSort: true,
     keyName: 'createdAt',
   },
   {
     label: 'Updated',
-    order: 7,
+    order: 8,
     enableSort: true,
     keyName: 'updatedAt',
   },
@@ -1037,6 +1049,13 @@ export const PRODUCT_TYPES = {
   WATCHES: 'watches',
   LAPTOPS: 'laptops',
 }
+
+export const PRODUCT_TYPES_OPTIONS = [
+  { value: PRODUCT_TYPES.PHONES, label: 'Phones', disabled: true },
+  { value: PRODUCT_TYPES.TABLETS, label: 'Tablets', disabled: false },
+  { value: PRODUCT_TYPES.WATCHES, label: 'Watches', disabled: true },
+  { value: PRODUCT_TYPES.LAPTOPS, label: 'Laptops', disabled: false },
+]
 
 export const MODAL_TYPES = {
   ADD_PRODUCT: 'ADD_PRODUCT',

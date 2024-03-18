@@ -292,10 +292,10 @@ const Line = styled.div`
 
 const Input = styled.input`
   font-size: 12px;
-  border: 1px solid #aaa;
+  border: 1px solid #ccc;
   border-radius: 4px;
   outline: none;
-  padding: 8px;
+  padding: 10px;
   box-sizing: border-box;
   transition: 0.3s;
   padding-left: 25px;
@@ -308,7 +308,7 @@ const StyledInput = styled.div`
     position: absolute;
     left: 0;
     top: 2px;
-    padding: 8px 8px;
+    padding: 10px 10px;
     fill: #01463a;
     transition: 0.3s;
   }
