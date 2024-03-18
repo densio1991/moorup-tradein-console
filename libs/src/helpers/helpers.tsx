@@ -203,6 +203,7 @@ export function exportToCSV(data: any) {
           (header) => variant.pricing[0]?.[header.key] || ''
         ),
         variant.name || '',
+        variant.sku || '',
       ]) || [
         [
           ...productHeaders.map((header) => item[header.key]),
@@ -217,6 +218,7 @@ export function exportToCSV(data: any) {
       ...productHeaders.map((header) => header.label),
       ...pricingHeaders.map((header) => header.label),
       'Variant Name',
+      'SKU'
     ],
     ...csvData,
   ]
