@@ -1,4 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
 import { InputHTMLAttributes, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -24,6 +26,7 @@ const StyledInputField = styled.input<{ error?: boolean }>`
   border-radius: 4px;
   outline: none;
   transition: border-color 0.2s ease-in-out;
+  padding-right: 30px; /* Added padding for the icon */
 
   &:focus,:hover {
     border-color: #01463a;
@@ -46,6 +49,18 @@ const HoverImage = styled.img<{ positionX: number; positionY: number }>`
   left: ${(props) => props.positionX}px;
   z-index: 1;
   margin-top: 10px;
+`;
+
+const EyeIcon = styled.span`
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  cursor: pointer;
+  color: #ccc;
+
+  :hover {
+    color: #01463a;
+  }
 `;
 
 interface StyledInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -73,6 +88,7 @@ export function StyledInput({
   const [positionX, setPositionX] = useState<number>(0);
   const [positionY, setPositionY] = useState<number>(0);
   const [isValidImage, setIsValidImage] = useState<boolean>(true);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const handleHover = (e: React.MouseEvent<HTMLInputElement>) => {
     setIsHovered(true);
@@ -86,6 +102,10 @@ export function StyledInput({
 
   const handleImageError = () => {
     setIsValidImage(false);
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   // Validate image URL
@@ -103,7 +123,7 @@ export function StyledInput({
     <StyledInputContainer error={error}>
       <StyledInputLabel>{label}</StyledInputLabel>
       <StyledInputField
-        type={type}
+        type={showPassword ? 'text' : type}
         placeholder={placeholder}
         onBlur={onBlur}
         error={error}
@@ -113,6 +133,11 @@ export function StyledInput({
         value={value}
         {...inputProps}
       />
+      {type === 'password' && (
+        <EyeIcon onClick={toggleShowPassword}>
+          <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
+        </EyeIcon>
+      )}
       {(error || (enableHoverImage && isHovered && !isValidImage)) && (
         <ErrorMessage>
           {(enableHoverImage &&

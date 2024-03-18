@@ -14,6 +14,8 @@ import { PlatformType } from './interfaces';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
 export const TEMPLATE_LINK = import.meta.env.VITE_REACT_APP_TEMPLATE_LINK
+export const ACCESS_TOKEN = 'FTK'
+export const ACCESS_TOKEN_EXPIRY = 'FTKX'
 export const ACTIVE_PLATFORM = 'AP'
 
 export const PLATFORMS: PlatformType = {

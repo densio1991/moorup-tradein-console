@@ -64,13 +64,17 @@ export function UserManagementPage() {
     }
   };
 
+  const filteredUsers = users?.filter((obj: any) =>
+    obj.platforms.includes(activePlatform),
+  );
+
   return (
     <>
       <Table
         label="Users"
         isLoading={isFetchingUsers || isCreatingUser || isUpdatingUser}
         headers={headers}
-        rows={users || []}
+        rows={filteredUsers || []}
         parsingConfig={userManagementParsingConfig}
         menuItems={[
           {

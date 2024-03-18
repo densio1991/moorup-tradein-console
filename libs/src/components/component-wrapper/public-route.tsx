@@ -1,6 +1,9 @@
 import { isEmpty } from 'lodash';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import {
+  ACCESS_TOKEN,
+  ACCESS_TOKEN_EXPIRY,
+  ACTIVE_PLATFORM,
   ADMIN,
   CUSTOMER_SERVICE,
   PRODUCTS,
@@ -65,6 +68,10 @@ export function PublicRoute(): JSX.Element {
     }
 
     return <Navigate to="/dashboard" />;
+  } else {
+    localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(ACCESS_TOKEN_EXPIRY);
+    localStorage.removeItem(ACTIVE_PLATFORM);
   }
 
   return <Outlet />;
