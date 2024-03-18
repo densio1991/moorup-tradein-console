@@ -102,6 +102,10 @@ const parseStatus = (value: string) => {
 }
 
 export const actionablesManagementParsingConfig = {
+  'Order Number': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['order_number'])) return '--';
+    return row['order_number'];
+  },
   Name: ({ row }: ParsingFunctionParams) => {
     const userDetails = row ? row['user_details'] : null;
     if (
