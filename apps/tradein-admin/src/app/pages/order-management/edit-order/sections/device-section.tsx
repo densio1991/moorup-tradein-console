@@ -9,14 +9,13 @@ export const DeviceSection = ({
   orderId: string;
 }) => {
   return (
-    <div className="flex flex-col sm:flex-row gap-2 mb-2">
+    <div className="flex flex-col sm:flex-row gap-3 mb-2 items-start">
       <img
+        className="w-28"
         src={order?.product_variant_id?.image_url}
-        height="120px"
-        width="120px"
         alt={order?.product_variant_id?.sku}
       />
-      <div className="grid grid-cols-1 md:grid-cols-fitLabel gap-1 items-center">
+      <div className="grid grid-cols-1 sm:grid-cols-fitLabel gap-1 max-w-[360px]">
         <h3 className="sm:col-span-2 mb-2 font-bold text-primary">
           <a
             href={order.product_variant_id?.image_url}

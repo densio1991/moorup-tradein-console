@@ -9,6 +9,7 @@ export const DetailCardContainer = styled.div`
   border-radius: 8px;
   box-sizing: border-box;
   box-shadow: 0px 0px 8px #eee;
+  overflow: visible;
 
   h4:first-of-type {
     margin: 8px 0;
