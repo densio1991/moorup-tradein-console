@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ACTIVE_PLATFORM } from '../../constants';
+import { isEmpty } from 'lodash';
+import { ACCESS_TOKEN, ACCESS_TOKEN_EXPIRY, ACTIVE_PLATFORM } from '../../constants';
 import { decodeJWT } from '../../helpers';
 import * as types from './action-types';
 
@@ -32,8 +33,8 @@ const authReducer = (state: any, action: any) => {
       const decodedToken = decodeJWT(accessToken);
 
       if (decodedToken) {
-        localStorage.setItem('FTK', accessToken);
-        localStorage.setItem('FTKX', decodedToken.exp.toString());
+        localStorage.setItem(ACCESS_TOKEN, accessToken);
+        localStorage.setItem(ACCESS_TOKEN_EXPIRY, decodedToken.exp.toString());
       }
 
       return {
@@ -85,6 +86,10 @@ const authReducer = (state: any, action: any) => {
     }
     case types.GET_USER_DETAILS.SUCCESS: {
       const platforms = action.payload?.data?.platforms;
+
+      if (isEmpty(localStorage.getItem(ACTIVE_PLATFORM))) {
+        localStorage.setItem(ACTIVE_PLATFORM, platforms?.sort()[0] || '');
+      }
 
       return {
         ...state,

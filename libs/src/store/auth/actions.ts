@@ -1,3 +1,4 @@
+import { ACCESS_TOKEN, ACCESS_TOKEN_EXPIRY, ACTIVE_PLATFORM } from './../../constants';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from '../axios';
 import * as types from './action-types';
@@ -31,8 +32,9 @@ export const logoutUser = (payload: any) => (dispatch: any) => {
   });
 
   try {
-    localStorage.removeItem('FTK');
-    localStorage.removeItem('FTKX');
+    localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(ACCESS_TOKEN_EXPIRY);
+    localStorage.removeItem(ACTIVE_PLATFORM)
   
     dispatch({
       type: types.LOGOUT_USER.SUCCESS,
