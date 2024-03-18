@@ -10,11 +10,13 @@ const CopyToClipboardButton: React.FC<CopyToClipboardButtonProps> = ({
   textToCopy,
 }) => {
   const [isCopied, setIsCopied] = useState(false);
-  const copiedText = <span className="ml-1 text-xs">Copied!</span>;
+  const copiedText = (
+    <span className="absolute z-10 left-5 bg-gray-600 py-0.5 px-2 rounded-md text-white ml-1 text-xs">Copied!</span>
+  );
 
   const copyIcon = (
-    <div className="flex">
-      <StyledIcon icon={faCopy} />
+    <div className="flex items-center relative px-1">
+      <StyledIcon icon={faCopy} color='#666666' />
       {isCopied && copiedText}
     </div>
   );

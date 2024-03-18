@@ -3,28 +3,29 @@
 import {
   ACTIONABLES_MANAGEMENT_COLUMNS,
   ACTIONS_COLUMN,
-  DEFAULT_COLUMN,
   OrderStatus,
   PRODUCT_TYPES,
+  PRODUCT_TYPES_OPTIONS,
+  StyledReactSelect,
   Table,
   actionablesManagementParsingConfig,
   useAuth,
   useOrder,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export function ActionablesPage() {
   const { state, getOrderItems, clearOrderItems, generateLabels } = useOrder();
   const { state: authState } = useAuth();
   const { orderItems, isFetchingOrderItems } = state;
   const { activePlatform } = authState;
+  const [selectedProductTypes, setSelectedProductTypes] = useState([
+    PRODUCT_TYPES.LAPTOPS,
+    PRODUCT_TYPES.TABLETS,
+  ]);
 
-  const headers = [
-    ...DEFAULT_COLUMN,
-    ...ACTIONABLES_MANAGEMENT_COLUMNS,
-    ...ACTIONS_COLUMN,
-  ];
+  const headers = [...ACTIONABLES_MANAGEMENT_COLUMNS, ...ACTIONS_COLUMN];
 
   const addPrintLabelAction = (orderItems: any) => {
     return orderItems.map((orderItem: any) => ({
@@ -38,7 +39,7 @@ export function ActionablesPage() {
   useEffect(() => {
     const filters = {
       status: OrderStatus.CREATED,
-      product_type: [PRODUCT_TYPES.LAPTOPS, PRODUCT_TYPES.TABLETS].join(','),
+      product_type: selectedProductTypes?.join(','),
     };
 
     const controller = new AbortController();
@@ -54,7 +55,11 @@ export function ActionablesPage() {
       // Clear data on unmount
       clearOrderItems({});
     };
-  }, [activePlatform]);
+  }, [activePlatform, selectedProductTypes]);
+
+  const types = PRODUCT_TYPES_OPTIONS?.sort(
+    (a: { label: string }, b: { label: any }) => a.label.localeCompare(b.label),
+  );
 
   return (
     <Table
@@ -63,6 +68,22 @@ export function ActionablesPage() {
       headers={headers}
       rows={formattedOrderItems || []}
       parsingConfig={actionablesManagementParsingConfig}
+      rightControls={
+        <StyledReactSelect
+          name="product_type"
+          isMulti={true}
+          options={types}
+          placeholder="Filter product type"
+          value={selectedProductTypes}
+          onChange={(selected) => {
+            const productTypeValues = selected?.map(
+              (option: any) => option.value,
+            );
+
+            setSelectedProductTypes(productTypeValues);
+          }}
+        />
+      }
     />
   );
 }

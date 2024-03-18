@@ -124,7 +124,7 @@ export function SideBar(): JSX.Element {
         return true;
 
       default:
-        return navigate('/404');
+        return false;
     }
   });
   

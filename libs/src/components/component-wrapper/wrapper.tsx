@@ -3,6 +3,7 @@ import { isEmpty } from 'lodash';
 import { ReactNode, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { ACCESS_TOKEN, ACCESS_TOKEN_EXPIRY, ACTIVE_PLATFORM } from '../../constants';
 import { decodeJWT, validateExpiry } from '../../helpers';
 import { useAuth } from '../../store';
 import { LoaderContainer } from '../loader';
@@ -35,8 +36,9 @@ export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Eleme
   const shouldRun = useRef(false);
 
   const clearStorage = () => {
-    localStorage.removeItem('FTK');
-    localStorage.removeItem('FTKX');
+    localStorage.removeItem(ACCESS_TOKEN);
+    localStorage.removeItem(ACCESS_TOKEN_EXPIRY);
+    localStorage.removeItem(ACTIVE_PLATFORM);
   };
 
   // Token validation function

@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { isEmpty, isUndefined } from 'lodash';
 import { default as Select } from 'react-select';
 import styled from 'styled-components';
 
 interface StyledReactSelectProps {
-  label: string;
+  label?: string;
   error?: boolean;
   errorMessage?: string | string[] | undefined;
   name: string;
-  options: { value: string; label: string }[]
+  options: { value: string; label: string; disabled?: any }[]
   isMulti: boolean;
   placeholder?: string;
   disabled?: boolean;
@@ -20,7 +21,7 @@ interface StyledReactSelectProps {
 const StyledSelectContainer = styled.div<{ error?: boolean; }>`
   display: flex;
   flex-direction: column;
-  margin-bottom: ${(props) => (props.error ? '0px' : '20px')};
+  margin-bottom: ${(props) => (isUndefined(props.error) ? '0px' : '20px')};
   width: 100%;
 `;
 
@@ -51,14 +52,16 @@ const customStyles = (error: boolean = false) => ({
   }),
   option: (provided: any, state: any) => ({
     ...provided,
-    background: state.isFocused ? 'rgba(1, 70, 58, 0.8)' : state.isSelected ? '#01463A' : undefined,
-    color: state.isFocused ? '#fff' : state.isSelected ? '#fff' : 'inherit',
+    background: state.isFocused ? 'rgba(1, 70, 58, 0.8)' : state.isSelected ? '#01463A' : state.isDisabled ? '#fff' : undefined,
+    color: state.isDisabled ? '#ccc' : state.isFocused || state.isSelected ? '#fff' : 'inherit',
     zIndex: 1,
     ':hover': {
-      color: '#fff',
+      color: state.isDisabled ? '#ccc' : '#fff',
+      background: state.isDisabled ? 'inherit' : state.isFocused ? 'rgba(1, 70, 58, 0.8)' : '#01463A',
     },
     ':active': {
-      color: '#fff',
+      color: state.isDisabled ? '#ccc' : '#fff',
+      background: state.isDisabled ? 'inherit' : '#01463A',
     },
   }),
   multiValue: (provided: any) => ({
@@ -104,9 +107,12 @@ export function StyledReactSelect({
   onBlur,
   isLoading,
 }: StyledReactSelectProps): JSX.Element {
+  console.log('error: ', error);
+  console.log('errorMessage: ', errorMessage);
+
   return (
-    <StyledSelectContainer error={error}>
-      <StyledSelectLabel>{label}</StyledSelectLabel>
+    <StyledSelectContainer error={error && !isEmpty(errorMessage)}>
+      {label && <StyledSelectLabel>{label}</StyledSelectLabel>}
       <Select
         name={name}
         styles={customStyles(error)}
@@ -121,8 +127,9 @@ export function StyledReactSelect({
         onBlur={onBlur}
         blurInputOnSelect={false}
         isLoading={isLoading}
+        isOptionDisabled={(option) => option.disabled}
       />
-      {error && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      {!isUndefined(error) && error && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </StyledSelectContainer>
   );
 }

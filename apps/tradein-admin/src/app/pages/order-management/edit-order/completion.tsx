@@ -57,7 +57,7 @@ const Completion = ({
             <hr />
             <div>
               <h4>Validation</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 items-center">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
                 {questions_answered.map((item, idx) => {
                   return (
                     <CardDetail
@@ -70,7 +70,7 @@ const Completion = ({
               </div>
             </div>
             <hr />
-            <div className="grid grid-cols-1 sm:grid-cols-dataEntry gap-1 auto-cols-min items-center">
+            <div className="grid grid-cols-1 sm:grid-cols-dataEntry gap-1 auto-cols-min">
               <h4 className="sm:col-span-2">Offer</h4>
               {displayData(
                 'Original Quote',
