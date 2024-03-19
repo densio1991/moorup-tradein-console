@@ -3,7 +3,6 @@ import {
   DetailCardContainer,
   OrderItems,
   amountFormatter,
-  displayData,
 } from '@tradein-admin/libs';
 import { CardDetail, DeviceSection } from './sections';
 
@@ -72,14 +71,18 @@ const Completion = ({
             <hr />
             <div className="grid grid-cols-1 sm:grid-cols-dataEntry gap-1 auto-cols-min">
               <h4 className="sm:col-span-2">Offer</h4>
-              {displayData(
-                'Original Quote',
-                original_offer && `$ ${amountFormatter(original_offer)}`,
-              )}
-              {displayData(
-                'Final Offer',
-                revised_offer && `$ ${amountFormatter(revised_offer)}`,
-              )}
+              <CardDetail
+                label="Original Quote"
+                value={`$ ${amountFormatter(original_offer)}`}
+              />
+              <CardDetail
+                label="Final Offer"
+                value={
+                  revised_offer
+                    ? `$ ${amountFormatter(revised_offer)}`
+                    : `$ ${amountFormatter(original_offer)}`
+                }
+              />
             </div>
             <hr />
             <button

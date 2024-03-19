@@ -15,8 +15,8 @@ export const DeviceSection = ({
         src={order?.product_variant_id?.image_url}
         alt={order?.product_variant_id?.sku}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-fitLabel gap-1 max-w-[360px]">
-        <h3 className="sm:col-span-2 mb-2 font-bold text-primary">
+      <div className="grid grid-cols-1 sm:grid-cols-fitLabel sm:gap-2 max-w-[360px]">
+        <h3 className="sm:col-span-2 mb-1 font-bold text-primary">
           <a
             href={order.product_variant_id?.image_url}
             target="_blank"
