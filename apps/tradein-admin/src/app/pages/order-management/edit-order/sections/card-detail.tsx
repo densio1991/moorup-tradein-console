@@ -140,7 +140,7 @@ export const CardDetail = ({
           </button>
         </div>
       ) : (
-        <dt className="flex items-center break-normal capitalize">
+        <dt className="flex items-center break-normal capitalize pb-2 sm:pb-0">
           {value || '---'}
           {copy && value && <CopyToClipboardButton textToCopy={value} />}
           {edit && value && (

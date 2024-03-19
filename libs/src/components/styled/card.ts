@@ -24,7 +24,7 @@ export const DetailCardContainer = styled.div`
 
 export const DataLine = styled.div`
   display: grid;
-  grid-template-columns: 2fr 3fr;
+  grid-template-columns: 3fr 5fr;
   box-sizing: content-box;
   gap: 16px;
   padding: 6px 0;

@@ -94,7 +94,7 @@ const Collection = ({
               {isFetchingShipments ? (
                 <Loader />
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-dataEntry gap-1">
+                <div className="grid grid-cols-1 sm:grid-cols-dataEntry sm:gap-2">
                   <CardDetail label="Courier" value={shipment?.slug} />
                   <CardDetail
                     label="Shipping Status"
@@ -137,7 +137,7 @@ const Collection = ({
               isSingleOrderFlow && (
                 <>
                   <hr />
-                  <div className="flex flex-row flex-wrap gap-1 pt-1 font-medium">
+                  <div className="flex flex-row flex-wrap gap-2 pt-1 font-medium">
                     <button
                       className="font-medium flex-1 text-white bg-emerald-800 py-1 px-3 rounded-md hover:bg-emerald-900"
                       disabled={isResendingLabel}

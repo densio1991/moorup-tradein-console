@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import dayjs from 'dayjs';
 import { jwtDecode } from 'jwt-decode';
-import { isEmpty } from 'lodash';
+import { isEmpty, capitalize } from 'lodash';
 import { CURRENCY_SYMBOLS } from '../constants';
 
 export function createActionTypes(baseType: string) {
@@ -26,7 +26,7 @@ export const amountFormatter = (amount: any, currency = 'PHP') => {
 };
 
 export const capitalizeFirstLetter = (string: string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+  return capitalize(string);
 };
 
 export const validateExpiry = (date: any) => {
@@ -348,12 +348,3 @@ export function getCurrencySymbol(currencyCode: string) {
 export const formatDate = (date: Date, format='MM/DD/YYYY') => {
   return dayjs(date).format(format);
 }
-
-export const displayData = (label: string, value: any) => {
-  return (
-    <>
-      <dl className="font-semibold capitalize">{label}</dl>
-      <dt className="truncate capitalize">{value || '---'}</dt>
-    </>
-  );
-};
