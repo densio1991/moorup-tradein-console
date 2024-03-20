@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  DropdownOrderItemStatus,
   FormGroup,
-  OrderItemStatus,
   OrderItems,
   StyledInput,
   StyledReactSelect,
 } from '@tradein-admin/libs';
 
-import styled from 'styled-components';
 import { useFormik } from 'formik';
 import { isEmpty } from 'lodash';
+import styled from 'styled-components';
 
 const ModalBody = styled.div`
   padding: 16px;
@@ -29,7 +29,7 @@ const ModalButtonDiv = styled.div`
 const ModalButton = styled.button`
   padding: 4px 8px;
   font-weight: bold;
-  border: 1px solid #01463A;
+  border: 1px solid #01463a;
   border-radius: 4px;
   background: #f5f5f4;
   width: 49%;
@@ -40,7 +40,7 @@ const ModalSubmitButton = styled.button`
   font-weight: bold;
   border-radius: 4px;
   color: #fff;
-  background: #01463A;
+  background: #01463a;
   width: 49%;
 `;
 
@@ -69,7 +69,7 @@ export const EditForm = ({
   updateStatus,
   orderItem,
 }: FormProps) => {
-  const statusDropdown = Object.values(OrderItemStatus).map((item) => {
+  const statusDropdown = Object.values(DropdownOrderItemStatus).map((item) => {
     return {
       label: item.replace('-', ' ').toLocaleUpperCase(),
       value: item,
@@ -80,7 +80,7 @@ export const EditForm = ({
     const { status, revised_offer, reason } = formik.values;
     const errors = {} as FormValues;
 
-    if (status === OrderItemStatus.FOR_REVISION) {
+    if (status === DropdownOrderItemStatus.FOR_REVISION) {
       if (isEmpty(revised_offer)) {
         errors['revised_offer'] = 'Required field';
       }
@@ -122,7 +122,7 @@ export const EditForm = ({
           }}
         />
       </FormGroup>
-      {formik.values.status === OrderItemStatus.FOR_REVISION && (
+      {formik.values.status === DropdownOrderItemStatus.FOR_REVISION && (
         <>
           <FormGroup>
             <StyledInput

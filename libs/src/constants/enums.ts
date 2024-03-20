@@ -18,6 +18,14 @@ export enum OrderItemStatus {
   REVISED = 'revised',
 }
 
+export enum DropdownOrderItemStatus {
+  CANCELLED = 'cancelled',
+  EVALUATED = 'evaluated',
+  COMPLETED = 'completed',
+  FOR_REVISION = 'for-revision',
+  REVISED = 'revised',
+}
+
 export enum OrderPaymentStatus {
   PENDING = 'pending',
 }
@@ -33,4 +41,16 @@ export enum ClaimStatus {
 export enum DefaultStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive'
+}
+
+export enum OrderTypes {
+  ONLINE = 'online',
+  INSTORE = 'in-store',
+  IN_STORE = 'in_store'
+}
+
+export enum CreditTypes {
+  UPFRONT = 'upfront',
+  POSTASSESSMENT = 'post-assessment',
+  POST_ASSESSMENT = 'post_assessment',
 }

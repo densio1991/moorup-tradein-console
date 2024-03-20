@@ -24,6 +24,7 @@ import {
   formatDate,
   useAuth,
   useOrder,
+  parseStatus,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -205,8 +206,9 @@ export const EditOrderPage = () => {
   };
 
   const creditType: any = {
-    post_assessment: 'Post assessment',
-    upfront: 'Gift card',
+    'post-assessment': 'Post Assessment',
+    post_assessment: 'Post Assessment',
+    upfront: 'Upfront',
     online: 'Online',
   };
 
@@ -263,11 +265,14 @@ export const EditOrderPage = () => {
                   </button>
                 </div>
               )}
-            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-2">
-              <DetailCardContainer className="md:col-span-2 xl:col-span-1">
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-2">
+              <DetailCardContainer className="lg:col-span-2 2xl:col-span-1">
                 <h4>Quote Information</h4>
                 <CardItem label="Quote #" value={order.order_number} copy />
-                <CardItem label="Quote Status" value={order.status} />
+                <CardItem
+                  label="Quote Status"
+                  value={parseStatus(order.status)}
+                />
                 <CardItem
                   label="Products"
                   value={<div className="flex flex-wrap gap-1">{products}</div>}
@@ -281,19 +286,19 @@ export const EditOrderPage = () => {
                   value={formatDate(order.updatedAt)}
                 />
               </DetailCardContainer>
-              <DetailCardContainer className="md:col-span-1">
+              <DetailCardContainer className="lg:col-span-1">
                 <h4>Account Information</h4>
                 <CardItem label="Name" value={fullName} copy />
                 <CardItem label="Account" value={accountName} copy />
                 <CardItem label="Address" value={completeAddress} copy />
-                <CardItem label="Email" value={fullName} copy />
+                <CardItem label="Email" value={user_id?.email} copy />
                 <CardItem
                   label="Email Verified"
                   value={user_id.is_verified ? 'Yes' : 'No'}
                 />
                 <CardItem label="Mobile" value={user_id.mobile_number} copy />
               </DetailCardContainer>
-              <DetailCardContainer className="md:col-span-1">
+              <DetailCardContainer className="lg:col-span-1">
                 <h4>Payment Details</h4>
                 <CardItem
                   label="Credit Timeframe"

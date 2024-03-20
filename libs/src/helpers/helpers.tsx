@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import dayjs from 'dayjs';
 import { jwtDecode } from 'jwt-decode';
-import { isEmpty } from 'lodash';
-import { CURRENCY_SYMBOLS } from '../constants';
+import { capitalize, isEmpty } from 'lodash';
+import { Chip } from '../components';
+import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes } from '../constants';
 
 export function createActionTypes(baseType: string) {
   return {
@@ -26,7 +27,7 @@ export const amountFormatter = (amount: any, currency = 'PHP') => {
 };
 
 export const capitalizeFirstLetter = (string: string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1);
+  return capitalize(string);
 };
 
 export const validateExpiry = (date: any) => {
@@ -185,7 +186,6 @@ const productHeaders = [
 ];
 
 const pricingHeaders = [
-  { label: 'Platform', key: 'platform' },
   { label: 'Currency', key: 'currency' },
   { label: 'Amount', key: 'amount' },
   { label: 'Working', key: 'working' },
@@ -194,20 +194,34 @@ const pricingHeaders = [
   { label: 'Not Working', key: 'not_working' },
 ];
 
-export function exportToCSV(data: any) {
+export function exportToCSV(data: any, activePlatform: string) {
   const csvData = data.flatMap(
     (item: any) =>
-      item.variants?.map((variant: any) => [
-        ...productHeaders.map((header) => item[header.key]),
-        ...pricingHeaders.map(
-          (header) => variant.pricing[0]?.[header.key] || ''
-        ),
-        variant.name || '',
-        variant.sku || '',
-      ]) || [
+      item.variants?.map((variant: any) => {
+        let pricing: any;
+        if (variant.pricing) {
+          const sortedPricing = variant.pricing.sort((a: any, b: any) => {
+            if (a.platform === activePlatform) return -1;
+            if (b.platform === activePlatform) return 1;
+            return 0;
+          });
+          pricing = sortedPricing[0];
+        }
+        return [
+          ...productHeaders.map((header) => item[header.key]),
+          ...pricingHeaders.map(
+            (header) => pricing ? pricing[header.key] || '' : ''
+          ),
+          activePlatform,
+          variant.name || '',
+          variant.sku || '',
+        ];
+      }) || [
         [
           ...productHeaders.map((header) => item[header.key]),
           ...pricingHeaders.map(() => ''),
+          activePlatform,
+          '',
           '',
         ],
       ]
@@ -217,6 +231,7 @@ export function exportToCSV(data: any) {
     [
       ...productHeaders.map((header) => header.label),
       ...pricingHeaders.map((header) => header.label),
+      'Platform',
       'Variant Name',
       'SKU'
     ],
@@ -349,11 +364,109 @@ export const formatDate = (date: Date, format='MM/DD/YYYY') => {
   return dayjs(date).format(format);
 }
 
-export const displayData = (label: string, value: any) => {
-  return (
-    <>
-      <dl className="font-semibold capitalize">{label}</dl>
-      <dt className="truncate capitalize">{value || '---'}</dt>
-    </>
-  );
-};
+export const parseStatus = (value: string) => {
+  let text = value;
+  let textColor = 'white';
+  let bgColor = '#5e5d5d';
+
+  switch (value) {
+    case OrderStatus.PROCESSING:
+      text = 'Processing';
+      textColor = 'white';
+      bgColor = '#f28933';
+      break;
+
+    case OrderStatus.COMPLETED:
+      text = 'Completed';
+      textColor = 'white';
+      bgColor = '#216A4C';
+      break;
+
+    case OrderStatus.CREATED:
+      text = 'Created';
+      textColor = 'white';
+      bgColor = '#216A4C';
+      break;
+
+    case OrderStatus.DELETED:
+      text = 'Deleted';
+      textColor = 'white';
+      bgColor = '#f7564a';
+      break;
+
+    case OrderPaymentStatus.PENDING:
+      text = 'Pending';
+      textColor = 'white';
+      bgColor = '#f28933';
+      break;
+
+    case OrderTypes.ONLINE:
+      text = 'Online';
+      textColor = 'white';
+      bgColor = '#01463A';
+      break;
+
+    case OrderTypes.INSTORE:
+    case OrderTypes.IN_STORE:
+      text = 'In-Store'
+      textColor = 'white';
+      bgColor = '#216A4C';
+      break;
+
+    case CreditTypes.UPFRONT:
+      text = 'Upfront';
+      textColor = 'white';
+      bgColor = '#01463A';
+      break;
+
+    case CreditTypes.POSTASSESSMENT:
+    case CreditTypes.POST_ASSESSMENT:
+      text = 'Post Assessment';
+      textColor = 'white';
+      bgColor = '#216A4C';
+      break;
+  
+    case ClaimStatus.PENDING:
+      text = 'Pending';
+      textColor = 'white';
+      bgColor = '#f28933';
+      break;
+
+    case ClaimStatus.APPROVED:
+      text = 'Approved';
+      textColor = 'white';
+      bgColor = '#216A4C';
+      break;
+
+    case ClaimStatus.REJECT:
+      text = 'Rejected';
+      textColor = 'white';
+      bgColor = '#f7564a';
+      break;
+
+    case ClaimStatus.DELETED:
+      text = 'Deleted';
+      textColor = 'white';
+      bgColor = '#f7564a';
+      break;
+
+    case DefaultStatus.ACTIVE:
+      text = 'Active';
+      textColor = 'white';
+      bgColor = '#216A4C';
+      break;
+
+    case DefaultStatus.INACTIVE:
+      text = 'Inactive';
+      textColor = 'white';
+      bgColor = '#f7564a';
+      break;
+
+    default:
+      textColor = 'white';
+      bgColor = '#5e5d5d';
+      break;
+  }
+
+  return <Chip value={text} textColor={textColor} bgColor={bgColor} />
+}

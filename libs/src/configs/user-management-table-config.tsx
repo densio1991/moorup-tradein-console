@@ -1,35 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
-import { Chip, StyledMenuIcon } from '../components';
-import { DefaultStatus } from '../constants';
+import { StyledMenuIcon } from '../components';
+import { parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
   menuItems?: any;
-}
-
-const parseStatus = (value: string) => {
-  let textColor = 'white';
-  let bgColor = '#216A4C';
-
-  switch (value) {
-    case DefaultStatus.ACTIVE:
-      textColor = 'white';
-      bgColor = '#216A4C';
-      break;
-
-    case DefaultStatus.INACTIVE:
-      textColor = 'white';
-      bgColor = '#f7564a';
-      break;
-
-    default:
-      textColor = 'white';
-      bgColor = '#216A4C';
-      break;
-  }
-
-  return <Chip value={value} textColor={textColor} bgColor={bgColor} width='100px'/>
 }
 
 export const userManagementParsingConfig = {
