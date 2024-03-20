@@ -100,6 +100,7 @@ export function UserManagementPage() {
                 view: MODAL_TYPES.ADD_USER,
               });
             }}
+            disabled
           >
             Add
           </AppButton>
