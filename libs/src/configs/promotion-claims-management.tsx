@@ -1,47 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
-import { Chip } from '../components';
-import { ClaimStatus } from '../constants';
-import { parseDateString } from '../helpers';
+import styled from 'styled-components';
+import { parseDateString, parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
   menuItems?: any;
 }
 
-const parseClaimStatus = (value: string) => {
-  let textColor = 'white';
-  let bgColor = '#5e5d5d';
-
-  switch (value) {
-    case ClaimStatus.PENDING:
-      textColor = 'white';
-      bgColor = '#f28933';
-      break;
-
-    case ClaimStatus.APPROVED:
-      textColor = 'white';
-      bgColor = '#216A4C';
-      break;
-
-    case ClaimStatus.REJECT:
-      textColor = 'white';
-      bgColor = '#f7564a';
-      break;
-
-    case ClaimStatus.DELETED:
-      textColor = 'white';
-      bgColor = '#f7564a';
-      break;
-
-    default:
-      textColor = 'white';
-      bgColor = '#5e5d5d';
-      break;
-  }
-
-  return <Chip value={value} textColor={textColor} bgColor={bgColor} />
-}
+const StyledLink = styled.a`
+  text-decoration: underline;
+  color: #216A4C;
+`
 
 export const promotionClaimsManagementParsingConfig = {
   'Order Number': ({ row }: ParsingFunctionParams) => {
@@ -58,7 +28,8 @@ export const promotionClaimsManagementParsingConfig = {
     if (!promotionDetails || isEmpty(promotionDetails['slug']) || isEmpty(row['platform_domain'])) return '--';
 
     const promotionLink = `${row['platform_domain']}promotions/${row['promotion_details']?.slug}`
-    return promotionLink;
+    return <StyledLink href={promotionLink} target="_blank" rel="noopener noreferrer">{promotionLink}</StyledLink>
+    ;
   },
   'Receipt Number': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['receipt_number'])) return '--';
@@ -78,11 +49,11 @@ export const promotionClaimsManagementParsingConfig = {
   },
   'Moorup Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['moorup_status'])) return '--';
-    return parseClaimStatus(row['moorup_status']);
+    return parseStatus(row['moorup_status']);
   },
   'Claim Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['status'])) return '--';
 
-    return parseClaimStatus(row['status']);
+    return parseStatus(row['status']);
   }
 };

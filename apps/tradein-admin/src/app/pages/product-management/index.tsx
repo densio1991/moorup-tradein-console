@@ -159,7 +159,7 @@ export function ProductManagementPage() {
             <AppButton
               width="fit-content"
               icon={faDownload}
-              onClick={() => exportToCSV(products)}
+              onClick={() => exportToCSV(products, activePlatform)}
               disabled={isEmpty(products) || isFetchingProducts}
             >
               Export

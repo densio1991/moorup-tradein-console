@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { capitalizeFirstLetter } from '../../helpers';
 
 interface ChipProps {
   value: string;
@@ -20,5 +19,5 @@ const StyledChip = styled.span<{ value?: string; width?: string; bgColor?: strin
 `;
 
 export function Chip({ value, textColor, bgColor, width }: ChipProps) {
-  return <StyledChip value={value} textColor={textColor} bgColor={bgColor} width={width}>{capitalizeFirstLetter(value)}</StyledChip>;
+  return <StyledChip value={value} textColor={textColor} bgColor={bgColor} width={width}>{value}</StyledChip>;
 }
