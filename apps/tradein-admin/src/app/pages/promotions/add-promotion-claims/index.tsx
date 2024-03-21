@@ -17,13 +17,10 @@ import {
   StyledReactSelect,
   hasEmptyValue,
   hasEmptyValueInArray,
-  useAuth,
   useCommon,
-  useProduct,
   usePromotion,
 } from '@tradein-admin/libs';
 import { useFormik } from 'formik';
-import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import * as Yup from 'yup';
@@ -62,7 +59,6 @@ const validationSchema = Yup.object().shape({
   disclaimer: Yup.string().required('Section Disclaimer is required'),
   products: Yup.array().of(
     Yup.object().shape({
-      product_id: Yup.string().required('Product ID is required'),
       product_name: Yup.string().required('Product name is required'),
       amount: Yup.number()
         .required('Amount is required')
@@ -75,29 +71,9 @@ const validationSchema = Yup.object().shape({
 export function AddPromotionClaimsForm() {
   const { state: commonState, setSideModalState } = useCommon();
   const { sideModalState } = commonState;
-  const { state: authState } = useAuth();
-  const { activePlatform } = authState;
-  const { state: productState, getProducts, clearProducts } = useProduct();
-  const { products, isFetchingProducts } = productState;
   const { state: promotionState, setAddPromotionClaimsPayload } =
     usePromotion();
   const { addPromotionClaimsPayload } = promotionState;
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    if (!isEmpty(activePlatform)) {
-      getProducts(false, signal);
-    }
-
-    return () => {
-      controller.abort();
-
-      // Clear data on unmount
-      clearProducts({});
-    };
-  }, [activePlatform]);
 
   const resetForm = () => {
     formik.resetForm();
@@ -120,16 +96,6 @@ export function AddPromotionClaimsForm() {
   const currencies = CURRENCIES?.sort(
     (a: { label: string }, b: { label: any }) => a.label.localeCompare(b.label),
   );
-
-  const PRODUCTS = products
-    ?.map((item: any) => ({
-      value: item.name,
-      label: item.name,
-      id: item._id,
-    }))
-    .sort((a: { label: string }, b: { label: any }) =>
-      a.label.localeCompare(b.label),
-    );
 
   const handleArrayValueChange = (
     fieldIndex: number,
@@ -238,31 +204,17 @@ export function AddPromotionClaimsForm() {
             return (
               <ItemsContainer key={index}>
                 <FormGroupWithIcon>
-                  <StyledReactSelect
+                  <StyledInput
+                    type="text"
+                    id={`products[${index}].product_name`}
                     label="Product Name"
                     name={`products[${index}].product_name`}
-                    isMulti={false}
-                    options={PRODUCTS}
-                    placeholder={'Select product'}
+                    placeholder="Product Name"
+                    onChange={formik.handleChange}
                     value={product.product_name}
-                    onChange={(selected) => {
-                      handleArrayValueChange(
-                        index,
-                        'product_name',
-                        selected.value,
-                        'products',
-                      );
-
-                      handleArrayValueChange(
-                        index,
-                        'product_id',
-                        selected.id,
-                        'products',
-                      );
+                    onBlur={(e) => {
+                      handleArrayValueOnBlur(index, 'product_name', 'products');
                     }}
-                    onBlur={() =>
-                      handleArrayValueOnBlur(index, 'product_name', 'products')
-                    }
                     error={Boolean(
                       formik.touched.products &&
                         formik.touched.products[index]?.product_name &&
@@ -273,8 +225,6 @@ export function AddPromotionClaimsForm() {
                       formik.errors.products &&
                       (formik.errors.products as any)[index]?.product_name
                     }
-                    isLoading={isFetchingProducts}
-                    disabled={isFetchingProducts}
                   />
                   <StyledIcon
                     icon={faTrash}

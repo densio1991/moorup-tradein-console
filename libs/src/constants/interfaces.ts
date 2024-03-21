@@ -37,7 +37,6 @@ export interface PromotionClaimsInterface {
 }
 
 export interface PromotionProductInterface {
-  product_id: string
   product_name: string
   amount: number
   currency: string

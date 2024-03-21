@@ -107,9 +107,6 @@ export function StyledReactSelect({
   onBlur,
   isLoading,
 }: StyledReactSelectProps): JSX.Element {
-  console.log('error: ', error);
-  console.log('errorMessage: ', errorMessage);
-
   return (
     <StyledSelectContainer error={error && !isEmpty(errorMessage)}>
       {label && <StyledSelectLabel>{label}</StyledSelectLabel>}
