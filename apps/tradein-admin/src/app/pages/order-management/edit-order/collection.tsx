@@ -9,6 +9,7 @@ import {
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { CardDetail, DeviceSection } from './sections';
+import OfferSection from './sections/offer-section';
 
 type CollectionProps = {
   orderId: string;
@@ -86,6 +87,7 @@ const Collection = ({
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
             <DeviceSection order={item} orderId={orderId} />
+            <OfferSection orderItem={item} />
             <hr />
             <div className="flex flex-col mb-2">
               <div className="flex justify-between">
