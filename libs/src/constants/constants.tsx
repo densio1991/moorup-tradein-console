@@ -1090,7 +1090,6 @@ export const ADD_PROMOTION_DETAILS_PAYLOAD = {
 }
 
 export const ADD_PROMOTION_PRODUCTS_PAYLOAD = {
-  product_id: '',
   product_name: '',
   amount: 0,
   currency: ''
