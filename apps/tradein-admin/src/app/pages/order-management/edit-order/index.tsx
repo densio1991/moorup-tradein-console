@@ -109,12 +109,7 @@ export const EditOrderPage = () => {
     isUpdatingImeiSerial,
   } = state;
 
-  const {
-    user_id = {},
-    payment = {},
-    identification = {},
-    order_items = [],
-  } = order;
+  const { user_id = {}, payment = {}, address = {}, order_items = [] } = order;
 
   const [accordionState, setAccordionState] = useState<AccordionStates>({
     quote: true,
@@ -214,10 +209,15 @@ export const EditOrderPage = () => {
 
   const parsedShipments = parseShipments();
 
-  const { address = {}, bank_details = {} } = user_id;
+  const { bank_details = {} } = user_id;
 
-  const completeAddress =
-    address.length > 0 ? `${address[0]?.region} ${address[0]?.state}` : '';
+  const completeAddress = [
+    address?.line_1,
+    address?.suburb,
+    address?.city,
+    address?.zipcode,
+    address?.state,
+  ].join(', ');
   const accountName = bank_details ? bank_details[0]?.account_name : '';
   const fullName = `${user_id?.first_name} ${user_id?.last_name}`;
 
@@ -313,15 +313,6 @@ export const EditOrderPage = () => {
                   label="BSB & Account"
                   value={user_id.bsb_account}
                   copy
-                />
-                <h4>Identification</h4>
-                <CardItem
-                  label="Identification"
-                  value={identification.id_state}
-                />
-                <CardItem
-                  label="Identification Type"
-                  value={identification.id_type}
                 />
               </DetailCardContainer>
             </div>

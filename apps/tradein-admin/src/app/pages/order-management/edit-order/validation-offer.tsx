@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  DetailCardContainer,
-  OrderItems,
-  amountFormatter,
-} from '@tradein-admin/libs';
+import { DetailCardContainer, OrderItems } from '@tradein-admin/libs';
 import { CardDetail, DeviceSection } from './sections';
+import OfferSection from './sections/offer-section';
 
 type ValidationOfferProps = {
   orderId: any;
@@ -48,11 +45,12 @@ const ValidationOffer = ({
   return (
     <div className="flex gap-2 p-2.5">
       {orderItems?.map((item: OrderItems, idx) => {
-        const { original_offer, revised_offer, questions_answered = [] } = item;
+        const { questions_answered = [] } = item;
 
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
             <DeviceSection order={item} orderId={orderId} />
+            <OfferSection orderItem={item} />
             <hr />
             <div>
               <h4>Validation</h4>
@@ -77,22 +75,6 @@ const ValidationOffer = ({
                   // );
                 })}
               </div>
-            </div>
-            <hr />
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2">
-              <h4 className="sm:col-span-2">Offer</h4>
-              <CardDetail
-                label="Original Quote"
-                value={`$ ${amountFormatter(original_offer)}`}
-              />
-              <CardDetail
-                label="Final Offer"
-                value={
-                  revised_offer
-                    ? `$ ${amountFormatter(revised_offer)}`
-                    : `$ ${amountFormatter(original_offer)}`
-                }
-              />
             </div>
             <hr />
             <button
