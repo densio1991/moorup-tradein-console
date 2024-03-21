@@ -289,7 +289,6 @@ export const EditOrderPage = () => {
               <DetailCardContainer className="lg:col-span-1">
                 <h4>Account Information</h4>
                 <CardItem label="Name" value={fullName} copy />
-                <CardItem label="Account" value={accountName} copy />
                 <CardItem label="Address" value={completeAddress} copy />
                 <CardItem label="Email" value={user_id?.email} copy />
                 <CardItem
@@ -297,6 +296,7 @@ export const EditOrderPage = () => {
                   value={user_id.is_verified ? 'Yes' : 'No'}
                 />
                 <CardItem label="Mobile" value={user_id.mobile_number} copy />
+                <CardItem label="Account" value={accountName} copy />
               </DetailCardContainer>
               <DetailCardContainer className="lg:col-span-1">
                 <h4>Payment Details</h4>
