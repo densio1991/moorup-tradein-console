@@ -106,7 +106,6 @@ export function SideBar(): JSX.Element {
         return [
           'Product Management', 
           'Order Management',
-          'User Management',
           'Promotions',
         ].includes(item.title);
 
