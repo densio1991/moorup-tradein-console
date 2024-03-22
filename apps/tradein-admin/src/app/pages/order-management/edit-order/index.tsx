@@ -120,6 +120,7 @@ export const EditOrderPage = () => {
 
   const [statusModal, setStatusModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState({} as OrderItems);
+  const [parsedShipments, setParsedShipments] = useState({});
   const isSingleOrderFlow = order?.order_flow === 'single';
 
   useEffect(() => {
@@ -156,6 +157,11 @@ export const EditOrderPage = () => {
     }
   }, [activePlatform]);
 
+  useEffect(() => {
+    const formattedShipments = parseShipments();
+    setParsedShipments(formattedShipments);
+  }, [shipments]);
+
   const onUpdateStatus = (newValue: any) => {
     if (newValue.status === OrderItemStatus.FOR_REVISION) {
       const payload = {
@@ -189,9 +195,7 @@ export const EditOrderPage = () => {
 
     if (isSingleOrderFlow) {
       itemShipments?.forEach((item: Shipments) => {
-        if (isSingleOrderFlow) {
-          items[item.item_id] = item;
-        }
+        items[item.item_id] = item;
       });
     } else if (itemShipments?.length > 0) {
       items[order._id] = itemShipments[0];
@@ -206,8 +210,6 @@ export const EditOrderPage = () => {
     upfront: 'Upfront',
     online: 'Online',
   };
-
-  const parsedShipments = parseShipments();
 
   const { bank_details = {} } = user_id;
 
