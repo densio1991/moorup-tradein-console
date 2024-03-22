@@ -3,9 +3,8 @@ import {
   DetailCardContainer,
   Loader,
   OrderItems,
-  PRODUCT_TYPES,
-  Shipments,
   useOrder,
+  PRODUCT_TYPES,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { CardDetail, DeviceSection } from './sections';
@@ -32,8 +31,8 @@ const Collection = ({
     state,
     receiveOrderItemById,
     cancelOrderItemById,
-    updateShipmentStatusById,
     resendShipmentLabel,
+    generateLabels,
   } = useOrder();
 
   const {
@@ -46,12 +45,8 @@ const Collection = ({
     receiveOrderItemById(orderItemId);
   };
 
-  const handleSendBox = (shipment: Shipments) => {
-    if (!isEmpty(shipment)) {
-      updateShipmentStatusById(shipment._id, {
-        status: 'box-sent',
-      });
-    }
+  const handleSendBox = (orderItemId: string) => {
+    generateLabels({ order_id: orderItemId });
   };
 
   const handleResendLabel = (orderItemId: any) => {
@@ -118,7 +113,7 @@ const Collection = ({
             {!isEmpty(shipment) ? (
               <>
                 <hr />
-                <div className="flex flex-row flex-wrap gap-1 pt-1 font-medium">
+                <div className="flex flex-row flex-wrap gap-2 pt-1 font-medium">
                   <button
                     onClick={() => handleReceiveOrderItem(item._id)}
                     className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
@@ -127,7 +122,7 @@ const Collection = ({
                   </button>
                   {isBoxRequired(item?.product_type) && (
                     <button
-                      onClick={() => handleSendBox(shipment)}
+                      onClick={() => handleSendBox(item?._id)}
                       className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
                     >
                       Send Box

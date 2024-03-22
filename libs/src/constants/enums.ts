@@ -24,7 +24,6 @@ export enum DropdownOrderItemStatus {
   EVALUATED = 'evaluated',
   COMPLETED = 'completed',
   FOR_REVISION = 'for-revision',
-  REVISED = 'revised',
 }
 
 export enum OrderPaymentStatus {

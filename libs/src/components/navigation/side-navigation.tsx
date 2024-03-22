@@ -107,6 +107,7 @@ export function SideBar(): JSX.Element {
           'Product Management', 
           'Order Management',
           'Promotions',
+          'Actionables',
         ].includes(item.title);
 
       case WAREHOUSE:
