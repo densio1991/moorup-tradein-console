@@ -46,7 +46,7 @@ const Collection = ({
   };
 
   const handleSendBox = (orderItemId: string) => {
-    generateLabels({ order_id: orderItemId });
+    generateLabels({ item_id: orderItemId }, true);
   };
 
   const handleResendLabel = (orderItemId: any) => {
