@@ -189,16 +189,17 @@ export const EditOrderPage = () => {
 
   const parseShipments = () => {
     const items: any = {};
-    const itemShipments = Array.isArray(shipments)
-      ? [...shipments]
-      : [shipments];
 
-    if (isSingleOrderFlow) {
-      itemShipments?.forEach((item: Shipments) => {
+    if (Array.isArray(shipments)) {
+      shipments?.forEach((item: Shipments) => {
         items[item.item_id] = item;
       });
-    } else if (itemShipments?.length > 0) {
-      items[order._id] = itemShipments[0];
+    } else if (Array.isArray(shipments?.item_id)) {
+      shipments?.item_id?.forEach((item_id: string) => {
+        items[item_id] = shipments;
+      });
+    } else {
+      items[order?._id] = shipments;
     }
 
     return items;

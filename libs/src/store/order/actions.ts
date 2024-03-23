@@ -428,14 +428,14 @@ export const clearOrders = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const generateLabels = (payload: any) => (dispatch: any) => {
+export const generateLabels = (payload: any, updateStatus: boolean) => (dispatch: any) => {
   dispatch({
     type: types.GENERATE_LABELS.baseType,
     payload,
   });
 
   axiosInstance()
-    .post('/api/shipments/generate-labels?label=return,outbound', payload)
+    .post(`/api/shipments/generate-labels?label=return,outbound&update_status=${updateStatus}`, payload)
     .then((response) => {
       dispatch({
         type: types.GENERATE_LABELS.SUCCESS,
