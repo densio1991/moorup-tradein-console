@@ -19,6 +19,9 @@ const promotionState = {
   addPromotionEligibilityAndFaqsPayload: ADD_PROMOTION_ELIGIBILITY_AND_FAQS_PAYLOAD,
   promotionClaims: [],
   isFetchingPromotionClaims: true,
+  promotion: {},
+  isFetchingPromotionById: true,
+  isUpdatingPromotion: false,
 };
 
 const promotionReducer = (state: any, action: any) => {
@@ -134,6 +137,62 @@ const promotionReducer = (state: any, action: any) => {
         ...state,
         isFetchingPromotionClaims: true,
         promotionClaims: [],
+      };
+    }
+
+    case types.FETCH_PROMOTION_BY_ID.baseType: {
+      return {
+        ...state,
+        isFetchingPromotionById: true,
+        promotion: {},
+      };
+    }
+    case types.FETCH_PROMOTION_BY_ID.SUCCESS: {
+      return {
+        ...state,
+        isFetchingPromotionById: false,
+        promotion: action.payload?.data,
+      };
+    }
+    case types.FETCH_PROMOTION_BY_ID.FAILED: {
+      return {
+        ...state,
+        isFetchingPromotionById: false,
+        promotion: {},
+      };
+    }
+    case types.FETCH_PROMOTION_BY_ID.CANCELLED: {
+      return {
+        ...state,
+        isFetchingPromotionById: true,
+        promotion: {},
+      };
+    }
+
+    case types.CLEAR_PROMOTION:
+      return {
+        ...state,
+        isUpdatingPromotion: false,
+        promotion: {},
+      };
+
+    case types.UPDATE_PROMOTION.baseType: {
+      return {
+        ...state,
+        isUpdatingPromotion: true,
+        promotion: {},
+      };
+    }
+    case types.UPDATE_PROMOTION.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingPromotion: false,
+      };
+    }
+    case types.UPDATE_PROMOTION.FAILED: {
+      return {
+        ...state,
+        isUpdatingPromotion: false,
       };
     }
 

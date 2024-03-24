@@ -6,6 +6,7 @@ import {
   faFileCircleExclamation,
   faFileInvoice,
   faHouse,
+  faList,
   faPenToSquare,
   faUsers
 } from '@fortawesome/free-solid-svg-icons';
@@ -51,27 +52,29 @@ export const SIDENAV_ITEMS = [
     activeUrl: /^\/dashboard\/order/,
     icon: faFileInvoice,
     disabled: false,
-  },
-  {
-    title: 'Discrepancy',
-    url: '/dashboard/discrepancy',
-    activeUrl: /^\/dashboard\/discrepancy/,
-    icon: faPenToSquare,
-    disabled: false,
-  },
-  {
-    title: 'Actionables',
-    url: '/dashboard/actionables',
-    activeUrl: /^\/dashboard\/actionables/,
-    icon: faFileCircleExclamation,
-    disabled: false,
-  },
-  {
-    title: 'User Management',
-    url: '/dashboard/user',
-    activeUrl: /^\/dashboard\/user/,
-    icon: faUsers,
-    disabled: false,
+    submenu: [
+      {
+        title: 'Order List',
+        url: '/dashboard/order/list',
+        activeUrl: /^\/dashboard\/order\/list/,
+        icon: faList,
+        disabled: false,
+      },
+      {
+        title: 'Discrepancy',
+        url: '/dashboard/order/discrepancy',
+        activeUrl: /^\/dashboard\/order\/discrepancy/,
+        icon: faPenToSquare,
+        disabled: false,
+      },
+      {
+        title: 'Actionables',
+        url: '/dashboard/order/actionables',
+        activeUrl: /^\/dashboard\/order\/actionables/,
+        icon: faFileCircleExclamation,
+        disabled: false,
+      }
+    ]
   },
   {
     title: 'Promotions',
@@ -79,12 +82,28 @@ export const SIDENAV_ITEMS = [
     activeUrl: /^\/dashboard\/promotion/,
     icon: faBullhorn,
     disabled: false,
+    submenu: [
+      {
+        title: 'Promotion List',
+        url: '/dashboard/promotion/list',
+        activeUrl: /^\/dashboard\/promotion\/list/,
+        icon: faList,
+        disabled: false,
+      },
+      {
+        title: 'Claims',
+        url: '/dashboard/promotion/claims',
+        activeUrl: /^\/dashboard\/promotion\/claims/,
+        icon: faCheckToSlot,
+        disabled: false,
+      }
+    ]
   },
   {
-    title: 'Claims',
-    url: '/dashboard/claims',
-    activeUrl: /^\/dashboard\/claims/,
-    icon: faCheckToSlot,
+    title: 'User Management',
+    url: '/dashboard/user',
+    activeUrl: /^\/dashboard\/user/,
+    icon: faUsers,
     disabled: false,
   },
   {
@@ -1073,6 +1092,13 @@ export const MODAL_TYPES = {
   ADD_PROMOTION_STEPS: 'ADD_PROMOTION_STEPS',
   ADD_PROMOTION_CONDITION: 'ADD_PROMOTION_CONDITION',
   ADD_PROMOTION_ELIGIBILITY_AND_FAQS: 'ADD_PROMOTION_ELIGIBILITY_AND_FAQS',
+  EDIT_PROMOTION: 'EDIT_PROMOTION',
+  EDIT_PROMOTION_CLAIMS: 'EDIT_PROMOTION_CLAIMS',
+  EDIT_PROMOTION_STEPS: 'EDIT_PROMOTION_STEPS',
+  EDIT_PROMOTION_CONDITION: 'EDIT_PROMOTION_CONDITION',
+  EDIT_PROMOTION_ELIGIBILITY_AND_FAQS: 'EDIT_PROMOTION_ELIGIBILITY_AND_FAQS',
+  ADD_PROMOTION_PREVIEW: 'ADD_PROMOTION_PREVIEW',
+  EDIT_PROMOTION_PREVIEW: 'EDIT_PROMOTION_PREVIEW',
 }
 
 export const PROMOTION_STATUS = [

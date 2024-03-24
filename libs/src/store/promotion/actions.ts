@@ -138,3 +138,67 @@ export const clearPromotionClaims = (payload: any) => (dispatch: any) => {
     payload,
   });
 };
+
+export const getPromotionById = (payload: any, signal?: AbortSignal) => (dispatch: any) => {
+  dispatch({
+    type: types.FETCH_PROMOTION_BY_ID.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .get(`/api/promotions/${payload}`,  { signal: signal })
+    .then((response) => {
+      dispatch({
+        type: types.FETCH_PROMOTION_BY_ID.SUCCESS,
+        payload: response?.data,
+      });
+    })
+    .catch((error) => {
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.FETCH_PROMOTION_BY_ID.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.FETCH_PROMOTION_BY_ID.FAILED,
+          payload: error,
+        });
+      }
+    });
+};
+
+export const clearPromotion = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CLEAR_PROMOTION,
+    payload,
+  });
+};
+
+export const updatePromotion = (payload: any, promotionId: string, activePlatform: string) => (dispatch: any) => {
+  dispatch({
+    type: types.UPDATE_PROMOTION.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .patch(`/api/promotions/${promotionId}`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.UPDATE_PROMOTION.SUCCESS,
+        payload: response?.data,
+      });
+
+      getPromotions({}, activePlatform)(dispatch);
+      toast.success('Promotion successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.UPDATE_PROMOTION.FAILED,
+        payload: error,
+      });
+
+      getPromotions({}, activePlatform)(dispatch);
+      toast.error('Failed to update promotion.');
+    });
+};

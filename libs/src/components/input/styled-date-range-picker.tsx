@@ -3,7 +3,7 @@ import { faCalendar } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
-import { forwardRef, useCallback } from 'react';
+import { forwardRef } from 'react';
 import ReactDatePicker, { ReactDatePickerProps } from 'react-datepicker';
 import styled, { css } from 'styled-components';
 
@@ -172,23 +172,17 @@ export function StyledDateRangePicker({
   label,
   disabled,
 }: StyledDateRangePickerProps) {
-  const setStartDate = useCallback(
-    (date: Date | null) => {
-      if (date && (!endDateValue || moment(date).isBefore(endDateValue))) {
-        startDateInputChange(date);
-      }
-    },
-    [endDateValue, startDateInputChange],
-  );
+  const setStartDate = (date: Date | null) => {
+    if (date) {
+      startDateInputChange(date);
+    }
+  }
 
-  const setEndDate = useCallback(
-    (date: Date | null) => {
-      if (date && (!startDateValue || moment(date).isAfter(startDateValue))) {
-        endDateInputChange(date);
-      }
-    },
-    [endDateInputChange, startDateValue],
-  );
+  const setEndDate = (date: Date | null) => {
+    if (date) {
+      endDateInputChange(date);
+    }
+  }
 
   const formattedStartDateValue = startDateValue
     ? moment(startDateValue).format('YYYY-MM-DD')

@@ -1,6 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { AppButton, StyledInput, useAuth } from '@tradein-admin/libs';
+import {
+  AppButton,
+  StyledInput,
+  useAuth,
+  useCommon,
+} from '@tradein-admin/libs';
 import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Logo from '../../../../public/Moorup.png';
 
@@ -10,6 +17,7 @@ const Container = styled.div`
   align-items: center;
   height: 100vh;
   width: 100%;
+  padding: 20px;
 `;
 
 const FormContainer = styled.form`
@@ -22,6 +30,7 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   background-color: white;
+  row-gap: 10px;
 `;
 
 const StyledText = styled.span<{
@@ -59,6 +68,9 @@ export function LoginPage() {
   const { state, loginUser } = useAuth();
   const { isAuthenticating } = state;
 
+  const { setShowSideNav } = useCommon();
+  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
+
   const initialValues = {
     email: '',
     password: '',
@@ -73,23 +85,34 @@ export function LoginPage() {
     onSubmit,
   });
 
+  useEffect(() => {
+    const handleResize = () => {
+      setViewportWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    // Automatically toggle showSideNav based on viewport width
+    setShowSideNav(viewportWidth > 1200);
+  }, [viewportWidth]);
+
   return (
     <Container>
       <FormContainer onSubmit={formik.handleSubmit}>
         <Image src={Logo} alt="" />
-        <StyledText
-          color="#01463a"
-          fontSize="1.5rem"
-          fontWeight="500"
-          marginBottom="0.5rem"
-          center
-        >
+        <StyledText color="#01463a" fontSize="1.5rem" fontWeight="700" center>
           Welcome Back!
         </StyledText>
         <StyledText
           color="#216A4C"
           fontSize="0.75rem"
-          fontWeight="500"
+          fontWeight="400"
           marginBottom="2rem"
           center
         >

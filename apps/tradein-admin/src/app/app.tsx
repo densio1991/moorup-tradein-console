@@ -27,14 +27,29 @@ export function App() {
             element={<ProductManagementPage />}
           />
           <Route path="/dashboard/product/:id" element={<EditProductPage />} />
-          <Route path="/dashboard/order" element={<OrderManagementPage />} />
-          <Route path="/dashboard/discrepancy" element={<DiscrepancyPage />} />
           <Route path="/dashboard/order/:id" element={<EditOrderPage />} />
+          <Route
+            path="/dashboard/order/list"
+            element={<OrderManagementPage />}
+          />
+          <Route
+            path="/dashboard/order/discrepancy"
+            element={<DiscrepancyPage />}
+          />
+          <Route
+            path="/dashboard/order/actionables"
+            element={<ActionablesPage />}
+          />
           <Route path="/dashboard/user" element={<UserManagementPage />} />
-          <Route path="/dashboard/promotion" element={<PromotionsPage />} />
-          <Route path="/dashboard/claims" element={<PromotionClaimsPage />} />
+          <Route
+            path="/dashboard/promotion/list"
+            element={<PromotionsPage />}
+          />
+          <Route
+            path="/dashboard/promotion/claims"
+            element={<PromotionClaimsPage />}
+          />
           <Route path="/dashboard/payment" element={<PaymentsPage />} />
-          <Route path="/dashboard/actionables" element={<ActionablesPage />} />
         </Route>
 
         {/* Will redirect authenticated users to /dashboard */}

@@ -156,7 +156,7 @@ export function AddProductForm() {
     );
 
   return (
-    <FormWrapper formTitle="Add Product">
+    <FormWrapper formTitle="Add Product" subtTitle="Enter Product Details">
       <FormContainer onSubmit={formik.handleSubmit}>
         <FormGroup>
           <StyledInput

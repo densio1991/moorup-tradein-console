@@ -15,9 +15,11 @@ import {
   DEFAULT_COLUMN,
   MODAL_TYPES,
   PRODUCT_MANAGEMENT_COLUMNS,
+  PageSubHeader,
   SideModal,
   TEMPLATE_LINK,
   Table,
+  UploadFileModal,
   exportToCSV,
   productManagementParsingConfig,
   useAuth,
@@ -25,7 +27,7 @@ import {
   useProduct,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AddProductForm } from './add-product';
 import { AddProductVariantForm } from './add-product-variant';
@@ -40,15 +42,16 @@ export function ProductManagementPage() {
     getProductStatuses,
     setAddProductPayload,
     setIncludeProductVariant,
-    uploadProductsExcelFile,
+    // uploadProductsExcelFile,
   } = useProduct();
   const { state: authState } = useAuth();
   const { products, isFetchingProducts } = state;
   const { activePlatform } = authState;
-  const { state: commonState, setSideModalState } = useCommon();
+  const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  // const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isOpenUploadModal, setIsOpenUploadModal] = useState(false);
 
   const headers = [
     ...DEFAULT_COLUMN,
@@ -71,6 +74,7 @@ export function ProductManagementPage() {
 
       // Clear data on unmount
       clearProducts({});
+      setSearchTerm('');
     };
   }, [activePlatform]);
 
@@ -87,18 +91,20 @@ export function ProductManagementPage() {
     }
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
+  // const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files && e.target.files[0];
 
-    if (file) {
-      uploadProductsExcelFile(file);
-    }
-  };
+  //   if (file) {
+  //     uploadProductsExcelFile(file);
+  //   }
+  // };
 
   const handleImportClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    // if (fileInputRef.current) {
+    //   fileInputRef.current.click();
+    // }
+
+    setIsOpenUploadModal(true);
   };
 
   const downloadAnchorRef = useRef<HTMLAnchorElement>(null);
@@ -113,19 +119,9 @@ export function ProductManagementPage() {
 
   return (
     <>
-      <Table
-        label="Products"
-        isLoading={isFetchingProducts}
-        headers={headers}
-        rows={products || []}
-        parsingConfig={productManagementParsingConfig}
-        menuItems={[
-          {
-            label: 'Edit',
-            action: (value: any) => navigate(`/dashboard/product/${value._id}`),
-          },
-        ]}
-        rightControls={
+      <PageSubHeader
+        withSearch
+        leftControls={
           <>
             <AppButton
               width="fit-content"
@@ -140,7 +136,7 @@ export function ProductManagementPage() {
             >
               Add
             </AppButton>
-            <>
+            <div>
               <AppButton
                 width="fit-content"
                 icon={faUpload}
@@ -148,14 +144,14 @@ export function ProductManagementPage() {
               >
                 Import
               </AppButton>
-              <input
+              {/* <input
                 type="file"
                 accept=".xls, .xlsx"
                 style={{ display: 'none' }}
                 ref={fileInputRef}
                 onChange={handleFileChange}
-              />
-            </>
+              /> */}
+            </div>
             <AppButton
               width="fit-content"
               icon={faDownload}
@@ -178,6 +174,19 @@ export function ProductManagementPage() {
           </>
         }
       />
+      <Table
+        label="Products"
+        isLoading={isFetchingProducts}
+        headers={headers}
+        rows={products || []}
+        parsingConfig={productManagementParsingConfig}
+        menuItems={[
+          {
+            label: 'Edit',
+            action: (value: any) => navigate(`/dashboard/product/${value._id}`),
+          },
+        ]}
+      />
       <SideModal
         isOpen={sideModalState?.open}
         onClose={() => {
@@ -188,6 +197,11 @@ export function ProductManagementPage() {
       >
         {renderForm()}
       </SideModal>
+
+      <UploadFileModal
+        isOpen={isOpenUploadModal}
+        closeModal={() => setIsOpenUploadModal(false)}
+      />
     </>
   );
 }

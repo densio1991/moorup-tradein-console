@@ -1,17 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isEmpty } from 'lodash';
+import { isEmpty, isUndefined } from 'lodash';
 import { InputHTMLAttributes, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { isImageUrl } from '../../helpers';
+import { StyledIcon } from '../styled';
 
 const StyledInputContainer = styled.div<{ error?: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
-  margin-bottom: ${(props) => (props.error ? '0px' : '20px')};
+  margin-bottom: ${(props) => (isUndefined(props.error) ? '0px' : '20px')};
   width: 100%;
+
+  & > svg {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 10px 10px;
+    color: #ccc;
+    transition: 0.3s;
+  }
+  
+  &.inputWithIcon {
+    position: relative;
+  }
 `;
 
 const StyledInputLabel = styled.label`
@@ -64,7 +78,7 @@ const EyeIcon = styled.span`
 `;
 
 interface StyledInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label: string;
+  label?: string;
   error?: boolean;
   errorMessage?: string;
   name: string;
@@ -121,7 +135,7 @@ export function StyledInput({
 
   return (
     <StyledInputContainer error={error}>
-      <StyledInputLabel>{label}</StyledInputLabel>
+      {label && <StyledInputLabel>{label}</StyledInputLabel>}
       <StyledInputField
         type={showPassword ? 'text' : type}
         placeholder={placeholder}
@@ -138,7 +152,10 @@ export function StyledInput({
           <FontAwesomeIcon icon={showPassword ? faEye : faEyeSlash} />
         </EyeIcon>
       )}
-      {(error || (enableHoverImage && isHovered && !isValidImage)) && (
+      {name === 'search' && (
+        <StyledIcon icon={faMagnifyingGlass}/>
+      )}
+      {(!isUndefined(error) && error || (enableHoverImage && isHovered && !isValidImage)) && (
         <ErrorMessage>
           {(enableHoverImage &&
             isHovered &&

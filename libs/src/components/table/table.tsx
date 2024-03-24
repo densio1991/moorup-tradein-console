@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowDownWideShort, faArrowUpWideShort } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty } from 'lodash';
 import { ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +8,8 @@ import {
   sortArray,
   sortByKey
 } from '../../helpers';
+import { useCommon } from '../../store';
+import { StyledIcon } from '../styled';
 import Pagination from './pagination';
 
 interface ThProps {
@@ -38,7 +39,7 @@ const HeaderSection = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 10px 0px;
+  padding: 12px 0px;
   flex-wrap: wrap;
 
   @media screen and (max-width: 425px) {
@@ -57,7 +58,6 @@ const RightSection = styled.div`
   align-items: center;
   column-gap: 8px;
   padding: 0px 20px;
-  padding-top: 8px;
   flex-wrap: wrap;
   gap: 10px;
 
@@ -87,7 +87,6 @@ const ActionContainer = styled.div`
 
 const TableWrapper = styled.div`
   box-shadow: none;
-  margin-bottom: 16px;
   border-radius: 6px !important;
   overflow-x: auto;
   padding: 0px 20px;
@@ -103,8 +102,8 @@ const TableStyled = styled.table`
   tbody td {
     white-space: nowrap;
     border-bottom: 1px solid #f0f0f0;
-    padding-top: 15px !important;
-    padding-bottom: 15px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
     padding-left: 30px !important;
 
     &:nth-child(2) {
@@ -128,8 +127,8 @@ const Thead = styled.thead`
     border-top: 1px solid #e1e4e8;
     border-bottom: 1px solid #e1e4e8;
     white-space: nowrap;
-    padding-top: 15px !important;
-    padding-bottom: 15px !important;
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
     padding-left: 30px !important;
 
     &:nth-child(2) {
@@ -150,7 +149,7 @@ const Tbody = styled.tbody`
   tr {
     transition: background-color 0.3s ease;
     td {
-      padding: 15px 10px;
+      padding: 12px 10px;
       border-bottom: 1px solid #e1e4e8;
       color: #333;
       font-size: 12px;
@@ -182,7 +181,7 @@ const Tr = styled.tr<{ hover?: boolean }>`
 `;
 
 const Td = styled.td<{ alignRight: boolean }>`
-  padding: 15px 10px;
+  padding: 12px 10px;
   border-bottom: 1px solid #e1e4e8;
   color: #333;
   font-size: 12px;
@@ -205,31 +204,13 @@ const LoaderText = styled.div`
 
 const TitleContainer = styled.div`
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: #000;
 `;
 
 const PrimaryText = styled.span`
   color: #01463a;
   font-weight: bold;
-`;
-
-const AscIcon = styled.span`
-  &::before {
-    content: ' ▲';
-  }
-`;
-
-const DescIcon = styled.span`
-  &::before {
-    content: ' ▼';
-  }
-`;
-
-const StyledIcon = styled(FontAwesomeIcon)`
-  width: 12px;
-  height: 12px;
-  fill: currentColor;
 `;
 
 const LinearLoaderWrapper = styled.div`
@@ -290,34 +271,6 @@ const Line = styled.div`
   }
 `;
 
-const Input = styled.input`
-  font-size: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  outline: none;
-  padding: 10px;
-  box-sizing: border-box;
-  transition: 0.3s;
-  padding-left: 25px;
-`;
-
-const StyledInput = styled.div`
-  position: relative;
-
-  & > svg {
-    position: absolute;
-    left: 0;
-    top: 2px;
-    padding: 10px 10px;
-    fill: #01463a;
-    transition: 0.3s;
-  }
-
-  &.inputWithIcon {
-    position: relative;
-  }
-`;
-
 const PAGE_SIZE = 10;
 
 export function Table({
@@ -332,7 +285,9 @@ export function Table({
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState('');
+  const { state: commonState } = useCommon();
+  const { searchTerm } = commonState;
+
   const navigate = useNavigate();
 
   const handleSort = (key: string) => {
@@ -422,15 +377,6 @@ export function Table({
           </TitleContainer>
         </LeftSection>
         <RightSection>
-          <StyledInput className={'inputWithIcon'}>
-            <Input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search..."
-            />
-            <StyledIcon icon={faMagnifyingGlass}/>
-          </StyledInput>
           <ActionContainer>
             {rightControls}
           </ActionContainer>
@@ -452,9 +398,9 @@ export function Table({
                     <span className="sort-icon">
                       {sortConfig.key === header.keyName &&
                         (sortConfig.direction === 'asc' ? (
-                          <AscIcon />
+                          <StyledIcon icon={faArrowUpWideShort} />
                         ) : (
-                          <DescIcon />
+                          <StyledIcon icon={faArrowDownWideShort} />
                         ))}
                     </span>
                   )}
