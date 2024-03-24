@@ -41,8 +41,8 @@ export const promotionsManagementParsingConfig = {
     if (products.length <= maxItems) {
       return (
         <ProductChipsContainer>
-          {products.map((product: { name: any; product_name: any }) => (
-            <StyledChip key={product.product_name || product.name} bgColor='#216A4C' textColor='white'>{product.product_name || product.name}</StyledChip>
+          {products.map((product: { name: any; product_name: any }, index: number) => (
+            <StyledChip key={index} bgColor='#216A4C' textColor='white'>{product.product_name || product.name}</StyledChip>
           ))}
         </ProductChipsContainer>
       );
@@ -52,8 +52,8 @@ export const promotionsManagementParsingConfig = {
 
       return (
         <ProductChipsContainer>
-          {visibleProducts.map((product: { name: any; product_name: any }) => (
-            <StyledChip key={product.product_name || product.name} bgColor='#216A4C' textColor='white'>{product.product_name || product.name}</StyledChip>
+          {visibleProducts.map((product: { name: any; product_name: any }, index: number) => (
+            <StyledChip key={index} bgColor='#216A4C' textColor='white'>{product.product_name || product.name}</StyledChip>
           ))}
           <StyledChip key="more" bgColor='#216A4C' textColor='white'>{`+${remainingCount} more`}</StyledChip>
         </ProductChipsContainer>
