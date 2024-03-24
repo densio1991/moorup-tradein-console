@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
+import { StyledMenuIcon } from '../components';
 import { parseDateString, parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
@@ -71,5 +72,9 @@ export const promotionsManagementParsingConfig = {
   'Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['status'])) return '--';
     return parseStatus(row['status']);
+  },
+  'Actions': ({ row, menuItems }: ParsingFunctionParams) => {
+    if (!row || isEmpty(menuItems)) return '--';
+    return <StyledMenuIcon menuItems={menuItems} rowData={row} />;
   },
 };

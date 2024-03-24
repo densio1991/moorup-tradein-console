@@ -14,6 +14,7 @@ import {
   Grid,
   GridItem,
   HTMLRenderer,
+  MODAL_TYPES,
   PromotionConditionItemInterface,
   PromotionProductInterface,
   PromotionStepsInterface,
@@ -103,6 +104,7 @@ export function PromotionPreview() {
     setAddPromotionStepsPayload,
     setAddPromotionConditionPayload,
     setAddPromotionEligibilityAndFaqsPayload,
+    updatePromotion,
   } = usePromotion();
   const {
     addPromotionDetailsPayload,
@@ -300,8 +302,14 @@ export function PromotionPreview() {
           variant="fill"
           width="fit-content"
           onClick={() => {
-            createPromotion(payload);
-            clearPromotions({});
+            if (centerModalState.view === MODAL_TYPES.ADD_PROMOTION_PREVIEW) {
+              createPromotion(payload);
+              clearPromotions({});
+            } else {
+              updatePromotion(payload, centerModalState?.data);
+              clearPromotions({});
+            }
+
             setSideModalState({
               ...sideModalState,
               open: false,

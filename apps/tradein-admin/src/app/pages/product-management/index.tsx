@@ -15,6 +15,7 @@ import {
   DEFAULT_COLUMN,
   MODAL_TYPES,
   PRODUCT_MANAGEMENT_COLUMNS,
+  PageSubHeader,
   SideModal,
   TEMPLATE_LINK,
   Table,
@@ -45,7 +46,7 @@ export function ProductManagementPage() {
   const { state: authState } = useAuth();
   const { products, isFetchingProducts } = state;
   const { activePlatform } = authState;
-  const { state: commonState, setSideModalState } = useCommon();
+  const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -71,6 +72,7 @@ export function ProductManagementPage() {
 
       // Clear data on unmount
       clearProducts({});
+      setSearchTerm('');
     };
   }, [activePlatform]);
 
@@ -113,19 +115,9 @@ export function ProductManagementPage() {
 
   return (
     <>
-      <Table
-        label="Products"
-        isLoading={isFetchingProducts}
-        headers={headers}
-        rows={products || []}
-        parsingConfig={productManagementParsingConfig}
-        menuItems={[
-          {
-            label: 'Edit',
-            action: (value: any) => navigate(`/dashboard/product/${value._id}`),
-          },
-        ]}
-        rightControls={
+      <PageSubHeader
+        withSearch
+        leftControls={
           <>
             <AppButton
               width="fit-content"
@@ -140,7 +132,7 @@ export function ProductManagementPage() {
             >
               Add
             </AppButton>
-            <>
+            <div>
               <AppButton
                 width="fit-content"
                 icon={faUpload}
@@ -155,7 +147,7 @@ export function ProductManagementPage() {
                 ref={fileInputRef}
                 onChange={handleFileChange}
               />
-            </>
+            </div>
             <AppButton
               width="fit-content"
               icon={faDownload}
@@ -177,6 +169,19 @@ export function ProductManagementPage() {
             </>
           </>
         }
+      />
+      <Table
+        label="Products"
+        isLoading={isFetchingProducts}
+        headers={headers}
+        rows={products || []}
+        parsingConfig={productManagementParsingConfig}
+        menuItems={[
+          {
+            label: 'Edit',
+            action: (value: any) => navigate(`/dashboard/product/${value._id}`),
+          },
+        ]}
       />
       <SideModal
         isOpen={sideModalState?.open}

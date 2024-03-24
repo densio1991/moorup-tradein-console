@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
+  ACTIONS_COLUMN,
   ADD_PROMOTION_CLAIMS_PAYLOAD,
   ADD_PROMOTION_CONDITIONS_PAYLOAD,
   ADD_PROMOTION_DETAILS_PAYLOAD,
@@ -12,6 +13,7 @@ import {
   DEFAULT_COLUMN,
   MODAL_TYPES,
   PROMOTIONS_MANAGEMENT_COLUMNS,
+  PageSubHeader,
   SideModal,
   Table,
   promotionsManagementParsingConfig,
@@ -20,12 +22,17 @@ import {
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { AddPromotionForm } from './add-promotion';
 import { AddPromotionClaimsForm } from './add-promotion-claims';
 import { AddPromotionConditionsForm } from './add-promotion-condition';
 import { AddPromotionEligibilityAndFaqsForm } from './add-promotion-eligibility-and-faqs';
 import { AddPromotionStepsForm } from './add-promotion-steps';
+import { EditPromotionForm } from './edit-promotion';
+import { EditPromotionClaimsForm } from './edit-promotion-claims';
+import { EditPromotionConditionsForm } from './edit-promotion-condition';
+import { EditPromotionEligibilityAndFaqsForm } from './edit-promotion-eligibility-and-faqs';
+import { EditPromotionStepsForm } from './edit-promotion-steps';
 import { PromotionPreview } from './preview-content';
 
 export function PromotionsPage() {
@@ -46,18 +53,51 @@ export function PromotionsPage() {
     state: commonState,
     setSideModalState,
     setCenterModalState,
+    setSearchTerm,
   } = useCommon();
   const { sideModalState, centerModalState } = commonState;
 
-  const headers = [...DEFAULT_COLUMN, ...PROMOTIONS_MANAGEMENT_COLUMNS];
-
-  const steps = [
+  const addPromotionSteps = [
     MODAL_TYPES.ADD_PROMOTION,
     MODAL_TYPES.ADD_PROMOTION_CLAIMS,
     MODAL_TYPES.ADD_PROMOTION_STEPS,
     MODAL_TYPES.ADD_PROMOTION_CONDITION,
     MODAL_TYPES.ADD_PROMOTION_ELIGIBILITY_AND_FAQS,
   ];
+
+  const editPromotionSteps = [
+    MODAL_TYPES.EDIT_PROMOTION,
+    MODAL_TYPES.EDIT_PROMOTION_CLAIMS,
+    MODAL_TYPES.EDIT_PROMOTION_STEPS,
+    MODAL_TYPES.EDIT_PROMOTION_CONDITION,
+    MODAL_TYPES.EDIT_PROMOTION_ELIGIBILITY_AND_FAQS,
+  ];
+
+  const [steps, setSteps] = useState(addPromotionSteps);
+
+  const [selectedPromotion, setSelectedPromotion] = useState({});
+
+  const headers = [
+    ...DEFAULT_COLUMN,
+    ...PROMOTIONS_MANAGEMENT_COLUMNS,
+    ...ACTIONS_COLUMN,
+  ];
+
+  useEffect(() => {
+    switch (true) {
+      case addPromotionSteps.includes(sideModalState.view):
+        setSteps(addPromotionSteps);
+        break;
+
+      case editPromotionSteps.includes(sideModalState.view):
+        setSteps(editPromotionSteps);
+        break;
+
+      default:
+        setSteps(addPromotionSteps);
+        break;
+    }
+  }, [sideModalState]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -72,6 +112,7 @@ export function PromotionsPage() {
 
       // Clear data on unmount
       clearPromotions({});
+      setSearchTerm('');
     };
   }, [activePlatform]);
 
@@ -92,6 +133,21 @@ export function PromotionsPage() {
       case MODAL_TYPES.ADD_PROMOTION_ELIGIBILITY_AND_FAQS:
         return <AddPromotionEligibilityAndFaqsForm />;
 
+      case MODAL_TYPES.EDIT_PROMOTION:
+        return <EditPromotionForm data={selectedPromotion} />;
+
+      case MODAL_TYPES.EDIT_PROMOTION_CLAIMS:
+        return <EditPromotionClaimsForm data={selectedPromotion} />;
+
+      case MODAL_TYPES.EDIT_PROMOTION_STEPS:
+        return <EditPromotionStepsForm data={selectedPromotion} />;
+
+      case MODAL_TYPES.EDIT_PROMOTION_CONDITION:
+        return <EditPromotionConditionsForm data={selectedPromotion} />;
+
+      case MODAL_TYPES.EDIT_PROMOTION_ELIGIBILITY_AND_FAQS:
+        return <EditPromotionEligibilityAndFaqsForm data={selectedPromotion} />;
+
       default:
         break;
     }
@@ -99,13 +155,9 @@ export function PromotionsPage() {
 
   return (
     <>
-      <Table
-        label="Promotions"
-        isLoading={isFetchingPromotions || isAddingPromotion}
-        headers={headers}
-        rows={promotions || []}
-        parsingConfig={promotionsManagementParsingConfig}
-        rightControls={
+      <PageSubHeader
+        withSearch
+        leftControls={
           <AppButton
             width="fit-content"
             icon={faPlus}
@@ -120,6 +172,26 @@ export function PromotionsPage() {
             Add
           </AppButton>
         }
+      />
+      <Table
+        label="Promotions"
+        isLoading={isFetchingPromotions || isAddingPromotion}
+        headers={headers}
+        rows={promotions || []}
+        parsingConfig={promotionsManagementParsingConfig}
+        menuItems={[
+          {
+            label: 'Edit',
+            action: (value: any) => {
+              setSelectedPromotion(value);
+              setSideModalState({
+                ...sideModalState,
+                open: true,
+                view: MODAL_TYPES.EDIT_PROMOTION,
+              });
+            },
+          },
+        ]}
       />
       <SideModal
         isOpen={sideModalState?.open}

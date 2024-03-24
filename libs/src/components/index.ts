@@ -9,6 +9,7 @@ export * from './menu';
 export * from './modal';
 export * from './navigation';
 export * from './not-found';
+export * from './page-subheader';
 export * from './renderer';
 export * from './stepper';
 export * from './styled';

@@ -6,6 +6,7 @@ import {
   OrderStatus,
   PRODUCT_TYPES,
   PRODUCT_TYPES_OPTIONS,
+  PageSubHeader,
   StyledReactSelect,
   Table,
   actionablesManagementParsingConfig,
@@ -63,28 +64,33 @@ export function ActionablesPage() {
   );
 
   return (
-    <Table
-      label="Actionables"
-      isLoading={isFetchingOrderItems}
-      headers={headers}
-      rows={formattedOrderItems || []}
-      parsingConfig={actionablesManagementParsingConfig}
-      rightControls={
-        <StyledReactSelect
-          name="product_type"
-          isMulti={true}
-          options={types}
-          placeholder="Filter product type"
-          value={selectedProductTypes}
-          onChange={(selected) => {
-            const productTypeValues = selected?.map(
-              (option: any) => option.value,
-            );
+    <>
+      <PageSubHeader
+        withSearch
+        leftControls={
+          <StyledReactSelect
+            name="product_type"
+            isMulti={true}
+            options={types}
+            placeholder="Filter product type"
+            value={selectedProductTypes}
+            onChange={(selected) => {
+              const productTypeValues = selected?.map(
+                (option: any) => option.value,
+              );
 
-            setSelectedProductTypes(productTypeValues);
-          }}
-        />
-      }
-    />
+              setSelectedProductTypes(productTypeValues);
+            }}
+          />
+        }
+      />
+      <Table
+        label="Actionables"
+        isLoading={isFetchingOrderItems}
+        headers={headers}
+        rows={formattedOrderItems || []}
+        parsingConfig={actionablesManagementParsingConfig}
+      />
+    </>
   );
 }
