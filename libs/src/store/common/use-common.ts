@@ -14,9 +14,19 @@ export const useCommon = () => {
     actions.setCenterModalState(payload)(dispatch);
   }
 
+  const setSearchTerm = (payload: any) => {
+    actions.setSearchTerm(payload)(dispatch);
+  }
+
+  const setShowSideNav = (payload: any) => {
+    actions.setShowSideNav(payload)(dispatch);
+  }
+
   return {
     state: state.common,
     setSideModalState,
     setCenterModalState,
+    setSearchTerm,
+    setShowSideNav,
   };
 };
