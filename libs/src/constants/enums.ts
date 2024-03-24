@@ -11,7 +11,6 @@ export enum OrderItemStatus {
   CANCELLED = 'cancelled',
   RECEIVED = 'received',
   LABEL_SENT = 'label-sent',
-  BOX_SENT = 'box-sent',
   EVALUATED = 'evaluated',
   COMPLETED = 'completed',
   FOR_REVISION = 'for-revision',

@@ -67,10 +67,12 @@ const Collection = ({
   };
 
   const getItemShipment = (orderItemId: string) => {
-    if (isSingleOrderFlow) {
-      return shipments[orderItemId];
-    } else if (orderId) {
-      return shipments[orderId];
+    const itemShipments = shipments[orderItemId] || {};
+
+    if (itemShipments['outbound']) {
+      return itemShipments['outbound'];
+    } else {
+      return itemShipments['return'];
     }
   };
 
