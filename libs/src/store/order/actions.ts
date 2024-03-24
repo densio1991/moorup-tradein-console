@@ -442,9 +442,13 @@ export const generateLabels = (payload: any, updateStatus: boolean) => (dispatch
         payload: response?.data,
       });
 
-      const data = response?.data;
-      window.open(data?.data?.returnLabel, '_blank');
-      window.open(data?.data?.outBoundLabel, '_blank');
+      const { data = {} } = response?.data || {};
+      if (data?.return?.label) {
+        window.open(data?.return?.label, '_blank');
+      }
+      if (data?.outbound?.label) {
+        window.open(data?.outbound?.label, '_blank');
+      }
     })
     .catch((error) => {
       dispatch({
