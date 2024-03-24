@@ -2,6 +2,7 @@ export * from './button';
 export * from './checkbox';
 export * from './chip';
 export * from './component-wrapper';
+export * from './dropzone';
 export * from './form';
 export * from './input';
 export * from './loader';
@@ -15,5 +16,6 @@ export * from './stepper';
 export * from './styled';
 export * from './table';
 export * from './tabs';
+export * from './upload';
 export * from './wysiwyg';
 

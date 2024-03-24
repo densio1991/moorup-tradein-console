@@ -19,6 +19,7 @@ import {
   SideModal,
   TEMPLATE_LINK,
   Table,
+  UploadFileModal,
   exportToCSV,
   productManagementParsingConfig,
   useAuth,
@@ -26,7 +27,7 @@ import {
   useProduct,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AddProductForm } from './add-product';
 import { AddProductVariantForm } from './add-product-variant';
@@ -41,7 +42,7 @@ export function ProductManagementPage() {
     getProductStatuses,
     setAddProductPayload,
     setIncludeProductVariant,
-    uploadProductsExcelFile,
+    // uploadProductsExcelFile,
   } = useProduct();
   const { state: authState } = useAuth();
   const { products, isFetchingProducts } = state;
@@ -49,7 +50,8 @@ export function ProductManagementPage() {
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  // const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [isOpenUploadModal, setIsOpenUploadModal] = useState(false);
 
   const headers = [
     ...DEFAULT_COLUMN,
@@ -89,18 +91,20 @@ export function ProductManagementPage() {
     }
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files && e.target.files[0];
+  // const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files && e.target.files[0];
 
-    if (file) {
-      uploadProductsExcelFile(file);
-    }
-  };
+  //   if (file) {
+  //     uploadProductsExcelFile(file);
+  //   }
+  // };
 
   const handleImportClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    // if (fileInputRef.current) {
+    //   fileInputRef.current.click();
+    // }
+
+    setIsOpenUploadModal(true);
   };
 
   const downloadAnchorRef = useRef<HTMLAnchorElement>(null);
@@ -140,13 +144,13 @@ export function ProductManagementPage() {
               >
                 Import
               </AppButton>
-              <input
+              {/* <input
                 type="file"
                 accept=".xls, .xlsx"
                 style={{ display: 'none' }}
                 ref={fileInputRef}
                 onChange={handleFileChange}
-              />
+              /> */}
             </div>
             <AppButton
               width="fit-content"
@@ -193,6 +197,11 @@ export function ProductManagementPage() {
       >
         {renderForm()}
       </SideModal>
+
+      <UploadFileModal
+        isOpen={isOpenUploadModal}
+        closeModal={() => setIsOpenUploadModal(false)}
+      />
     </>
   );
 }
