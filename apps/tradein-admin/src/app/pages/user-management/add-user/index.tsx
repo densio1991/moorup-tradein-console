@@ -86,7 +86,7 @@ export function AddUserForm() {
   );
 
   return (
-    <FormWrapper formTitle="Add User">
+    <FormWrapper formTitle="Add User" subtTitle="Enter User Details">
       <FormContainer onSubmit={formik.handleSubmit}>
         <FormGroup>
           <StyledInput

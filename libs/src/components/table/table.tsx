@@ -51,7 +51,6 @@ const HeaderSection = styled.div`
 
 const LeftSection = styled.div`
   padding-left: 20px;
-  padding-top: 10px;
 `;
 
 const RightSection = styled.div`
@@ -59,7 +58,6 @@ const RightSection = styled.div`
   align-items: center;
   column-gap: 8px;
   padding: 0px 20px;
-  padding-top: 10px;
   flex-wrap: wrap;
   gap: 10px;
 
@@ -89,7 +87,6 @@ const ActionContainer = styled.div`
 
 const TableWrapper = styled.div`
   box-shadow: none;
-  margin-bottom: 16px;
   border-radius: 6px !important;
   overflow-x: auto;
   padding: 0px 20px;
@@ -207,7 +204,7 @@ const LoaderText = styled.div`
 
 const TitleContainer = styled.div`
   font-weight: 600;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: #000;
 `;
 
