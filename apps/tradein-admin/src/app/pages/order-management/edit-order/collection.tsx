@@ -32,7 +32,7 @@ const Collection = ({
     receiveOrderItemById,
     cancelOrderItemById,
     resendShipmentLabel,
-    generateLabels,
+    sendBox,
   } = useOrder();
 
   const {
@@ -46,7 +46,7 @@ const Collection = ({
   };
 
   const handleSendBox = (orderItemId: string) => {
-    generateLabels({ item_id: orderItemId }, true);
+    sendBox(orderId, { item_id: orderItemId });
   };
 
   const handleResendLabel = (orderItemId: any) => {
@@ -69,11 +69,7 @@ const Collection = ({
   const getItemShipment = (orderItemId: string) => {
     const itemShipments = shipments[orderItemId] || {};
 
-    if (itemShipments['outbound']) {
-      return itemShipments['outbound'];
-    } else {
-      return itemShipments['return'];
-    }
+    return itemShipments['return'];
   };
 
   return (
