@@ -3,6 +3,7 @@ import { useContext } from 'react';
 import { OrderItemStatus } from '../../constants';
 import { RootContext } from '../provider';
 import * as actions from './actions';
+import { toast } from 'react-toastify';
 
 export const useOrder = () => {
   const { state, dispatch } = useContext(RootContext);
@@ -49,7 +50,7 @@ export const useOrder = () => {
     actions.deleteOrderById(payload, activePlatform)(dispatch);
   }
 
-  const fetchOrderShipments = (id: any, signal: AbortSignal) => {
+  const fetchOrderShipments = (id: any, signal?: AbortSignal) => {
     actions.getOrderShipments(id, signal)(dispatch);
   };
 
@@ -96,8 +97,16 @@ export const useOrder = () => {
     actions.clearOrders({})(dispatch);
   }
 
-  const generateLabels = (payload: any, updateStatus: boolean = false) => {
-    actions.generateLabels(payload, updateStatus)(dispatch);
+  const sendBox = (orderId: string, payload: any) => {
+    const onSuccess = () => {
+      toast.success('Successfully sent box');
+      fetchOrderShipments(orderId);
+    }
+    actions.generateLabels(payload, onSuccess)(dispatch);
+  }
+
+  const printLabels = (payload: any) => {
+    actions.generateLabels(payload)(dispatch);
   }
 
   const updateOrderItemImeiSerial = (orderItemId: string, orderId: any, payload: any) => {
@@ -129,7 +138,8 @@ export const useOrder = () => {
     closeModal,
     setActiveOrderItem,
     clearOrders,
-    generateLabels,
+    sendBox,
+    printLabels,
     updateOrderItemImeiSerial,
     clearOrder,
   };

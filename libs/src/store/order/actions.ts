@@ -428,14 +428,14 @@ export const clearOrders = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const generateLabels = (payload: any, updateStatus: boolean) => (dispatch: any) => {
+export const generateLabels = (payload: any, onSuccess: any = false) => (dispatch: any) => {
   dispatch({
     type: types.GENERATE_LABELS.baseType,
     payload,
   });
 
   axiosInstance()
-    .post(`/api/shipments/generate-labels?label=return,outbound&update_status=${updateStatus}`, payload)
+    .post('/api/shipments/generate-labels?label=return,outbound&update_status=true', payload)
     .then((response) => {
       dispatch({
         type: types.GENERATE_LABELS.SUCCESS,
@@ -448,6 +448,10 @@ export const generateLabels = (payload: any, updateStatus: boolean) => (dispatch
       }
       if (data?.outbound?.label) {
         window.open(data?.outbound?.label, '_blank');
+      }
+
+      if (onSuccess && typeof onSuccess == 'function') {
+        onSuccess(data);
       }
     })
     .catch((error) => {

@@ -15,7 +15,7 @@ import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
 
 export function ActionablesPage() {
-  const { state, getOrderItems, clearOrderItems, generateLabels } = useOrder();
+  const { state, getOrderItems, clearOrderItems, printLabels } = useOrder();
   const { state: authState } = useAuth();
   const { orderItems, isFetchingOrderItems } = state;
   const { activePlatform } = authState;
@@ -25,8 +25,7 @@ export function ActionablesPage() {
   const addPrintLabelAction = (orderItems: any) => {
     return orderItems.map((orderItem: any) => ({
       ...orderItem,
-      action: () =>
-        generateLabels({ item_id: orderItem?.order_items?._id }, true),
+      action: () => printLabels({ item_id: orderItem?.order_items?._id }),
     }));
   };
 
