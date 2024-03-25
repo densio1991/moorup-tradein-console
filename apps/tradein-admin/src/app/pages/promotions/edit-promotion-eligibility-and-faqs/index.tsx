@@ -59,16 +59,14 @@ const validationSchema = Yup.object().shape({
   faq: Yup.array().of(faqItemSchema).required('FAQ items are required'),
 });
 
-export function AddPromotionEligibilityAndFaqsForm() {
+export function EditPromotionEligibilityAndFaqsForm({ data }: any) {
   const {
     state: commonState,
     setSideModalState,
     setCenterModalState,
   } = useCommon();
   const { sideModalState, centerModalState } = commonState;
-  const { state: promotionState, setAddPromotionEligibilityAndFaqsPayload } =
-    usePromotion();
-  const { addPromotionEligibilityAndFaqsPayload } = promotionState;
+  const { setAddPromotionEligibilityAndFaqsPayload } = usePromotion();
 
   const resetForm = () => {
     formik.resetForm();
@@ -80,8 +78,9 @@ export function AddPromotionEligibilityAndFaqsForm() {
 
     setCenterModalState({
       ...centerModalState,
-      view: MODAL_TYPES.ADD_PROMOTION_PREVIEW,
+      view: MODAL_TYPES.EDIT_PROMOTION_PREVIEW,
       open: true,
+      data: data?._id,
     });
   };
 
@@ -106,7 +105,7 @@ export function AddPromotionEligibilityAndFaqsForm() {
   };
 
   const removeItem = (index: number) => {
-    if (formik.values.faq?.length > 1) {
+    if (formik.values?.faq?.length > 1) {
       const updatedItems = [...formik.values.faq];
       updatedItems.splice(index, 1);
       formik.setValues({ ...formik.values, faq: updatedItems });
@@ -114,8 +113,9 @@ export function AddPromotionEligibilityAndFaqsForm() {
   };
 
   useEffect(() => {
-    formik.setValues(addPromotionEligibilityAndFaqsPayload);
-  }, [addPromotionEligibilityAndFaqsPayload]);
+    const promotionFaqs = data?.eligibility;
+    formik.setValues(promotionFaqs);
+  }, [data]);
 
   return (
     <FormWrapper
@@ -131,7 +131,7 @@ export function AddPromotionEligibilityAndFaqsForm() {
             name="title"
             placeholder="Section Title"
             onChange={formik.handleChange}
-            value={formik.values.title}
+            value={formik.values?.title}
             onBlur={formik.handleBlur}
             error={Boolean(formik.touched.title && formik.errors.title)}
             errorMessage={formik.errors.title}
@@ -143,12 +143,12 @@ export function AddPromotionEligibilityAndFaqsForm() {
             type="button"
             width="fit-content"
             onClick={() => addItem()}
-            disabled={hasEmptyValueInArray(formik.values.faq)}
+            disabled={hasEmptyValueInArray(formik.values?.faq)}
           >
             Add FAQ Item
           </AppButton>
         </FormGroup>
-        {formik.values.faq?.map((faq: FaqInterface, index: number) => {
+        {formik.values?.faq?.map((faq: FaqInterface, index: number) => {
           return (
             <ItemsContainer key={index}>
               <FormGroupWithIcon>
@@ -176,7 +176,7 @@ export function AddPromotionEligibilityAndFaqsForm() {
                   icon={faTrash}
                   color="#ccc"
                   hovercolor="#f44336"
-                  disabled={formik.values.faq?.length <= 1}
+                  disabled={formik.values?.faq?.length <= 1}
                   onClick={() => removeItem(index)}
                 />
               </FormGroupWithIcon>
@@ -219,7 +219,7 @@ export function AddPromotionEligibilityAndFaqsForm() {
                 setSideModalState({
                   ...sideModalState,
                   open: true,
-                  view: MODAL_TYPES.ADD_PROMOTION_CONDITION,
+                  view: MODAL_TYPES.EDIT_PROMOTION_CONDITION,
                 });
               }}
             >

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
+import { StyledMenuIcon } from '../components';
 import { parseDateString, parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
@@ -41,8 +42,8 @@ export const promotionsManagementParsingConfig = {
     if (products.length <= maxItems) {
       return (
         <ProductChipsContainer>
-          {products.map((product: { name: any; product_name: any }) => (
-            <StyledChip key={product.product_name || product.name} bgColor='#216A4C' textColor='white'>{product.product_name || product.name}</StyledChip>
+          {products.map((product: { name: any; product_name: any }, index: number) => (
+            <StyledChip key={index} bgColor='#216A4C' textColor='white'>{product.product_name || product.name}</StyledChip>
           ))}
         </ProductChipsContainer>
       );
@@ -52,8 +53,8 @@ export const promotionsManagementParsingConfig = {
 
       return (
         <ProductChipsContainer>
-          {visibleProducts.map((product: { name: any; product_name: any }) => (
-            <StyledChip key={product.product_name || product.name} bgColor='#216A4C' textColor='white'>{product.product_name || product.name}</StyledChip>
+          {visibleProducts.map((product: { name: any; product_name: any }, index: number) => (
+            <StyledChip key={index} bgColor='#216A4C' textColor='white'>{product.product_name || product.name}</StyledChip>
           ))}
           <StyledChip key="more" bgColor='#216A4C' textColor='white'>{`+${remainingCount} more`}</StyledChip>
         </ProductChipsContainer>
@@ -71,5 +72,9 @@ export const promotionsManagementParsingConfig = {
   'Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['status'])) return '--';
     return parseStatus(row['status']);
+  },
+  'Actions': ({ row, menuItems }: ParsingFunctionParams) => {
+    if (!row || isEmpty(menuItems)) return '--';
+    return <StyledMenuIcon menuItems={menuItems} rowData={row} />;
   },
 };

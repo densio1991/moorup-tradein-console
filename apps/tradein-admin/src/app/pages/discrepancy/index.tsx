@@ -3,19 +3,22 @@
 import {
   DISCREPANCY_MANAGEMENT_COLUMNS,
   PRODUCT_TYPES,
+  PageSubHeader,
   Table,
   discrepancyManagementParsingConfig,
   useAuth,
+  useCommon,
   useOrder,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
 
 export function DiscrepancyPage() {
-  const { state, getOrderItems, clearOrderItems } = useOrder();
   const { state: authState } = useAuth();
-  const { orderItems, isFetchingOrderItems } = state;
   const { activePlatform } = authState;
+  const { state, getOrderItems, clearOrderItems } = useOrder();
+  const { orderItems, isFetchingOrderItems } = state;
+  const { setSearchTerm } = useCommon();
 
   const headers = [...DISCREPANCY_MANAGEMENT_COLUMNS];
 
@@ -42,16 +45,20 @@ export function DiscrepancyPage() {
 
       // Clear data on unmount
       clearOrderItems({});
+      setSearchTerm('');
     };
   }, [activePlatform]);
 
   return (
-    <Table
-      label="Discrepancy"
-      isLoading={isFetchingOrderItems}
-      headers={headers}
-      rows={orderItems || []}
-      parsingConfig={discrepancyManagementParsingConfig}
-    />
+    <>
+      <PageSubHeader withSearch />
+      <Table
+        label="Discrepancy"
+        isLoading={isFetchingOrderItems}
+        headers={headers}
+        rows={orderItems || []}
+        parsingConfig={discrepancyManagementParsingConfig}
+      />
+    </>
   );
 }

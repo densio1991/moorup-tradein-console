@@ -7,13 +7,12 @@ interface CardContainerProps {
 }
 
 const CardContainerWrapper = styled.div<{ direction?: string }>`
-  height: calc(100vh - 50px);
+  height: 100vh;
   display: flex;
   flex-direction: column;
   width: 100%;
   background-color: #F4F4F5;
   overflow: auto;
-  padding: 10px;
 `;
 
 export function CardContainer({ children, direction }: CardContainerProps): JSX.Element {

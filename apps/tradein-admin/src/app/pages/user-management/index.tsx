@@ -6,6 +6,7 @@ import {
   AppButton,
   DEFAULT_COLUMN,
   MODAL_TYPES,
+  PageSubHeader,
   SideModal,
   Table,
   USER_MANAGEMENT_COLUMNS,
@@ -22,7 +23,7 @@ import { EditUserForm } from './edit-user';
 export function UserManagementPage() {
   const { state, getUsers, clearUsers } = useUser();
   const { users, isFetchingUsers, isCreatingUser, isUpdatingUser } = state;
-  const { state: commonState, setSideModalState } = useCommon();
+  const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
@@ -48,6 +49,7 @@ export function UserManagementPage() {
 
       // Clear data on unmount
       clearUsers({});
+      setSearchTerm('');
     };
   }, [activePlatform]);
 
@@ -70,6 +72,25 @@ export function UserManagementPage() {
 
   return (
     <>
+      <PageSubHeader
+        withSearch
+        leftControls={
+          <AppButton
+            width="fit-content"
+            icon={faPlus}
+            onClick={() => {
+              setSideModalState({
+                ...sideModalState,
+                open: true,
+                view: MODAL_TYPES.ADD_USER,
+              });
+            }}
+            disabled
+          >
+            Add
+          </AppButton>
+        }
+      />
       <Table
         label="Users"
         isLoading={isFetchingUsers || isCreatingUser || isUpdatingUser}
@@ -89,22 +110,6 @@ export function UserManagementPage() {
             },
           },
         ]}
-        rightControls={
-          <AppButton
-            width="fit-content"
-            icon={faPlus}
-            onClick={() => {
-              setSideModalState({
-                ...sideModalState,
-                open: true,
-                view: MODAL_TYPES.ADD_USER,
-              });
-            }}
-            disabled
-          >
-            Add
-          </AppButton>
-        }
       />
       <SideModal
         isOpen={sideModalState?.open}

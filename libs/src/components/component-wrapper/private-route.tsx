@@ -38,15 +38,15 @@ export function PrivateRoute(): JSX.Element {
         case REGULAR:
           setLoading(false);
 
-          activeUrl = /^\/dashboard\/claims/;
+          activeUrl = /^\/dashboard\/promotion/;
           if (!activeUrl?.test(pathname)) {
-            navigate('/dashboard/claims');
+            navigate('/dashboard/promotion/list');
           }
           break;
   
         case ADMIN:
           setLoading(false);
-          activeUrl = /^\/dashboard\/(product|order|promotion)/;
+          activeUrl = /^\/dashboard\/(product|order|promotion|actionables)/;
           if (!activeUrl?.test(pathname)) {
             navigate('/dashboard/product');
           }
@@ -56,7 +56,7 @@ export function PrivateRoute(): JSX.Element {
           setLoading(false);
           activeUrl = /^\/dashboard\/order/;
           if (!activeUrl?.test(pathname)) {
-            navigate('/dashboard/order');
+            navigate('/dashboard/order/list');
           }
           break;
   
@@ -99,10 +99,10 @@ export function PrivateRoute(): JSX.Element {
   
   return (
     <ComponentWrapper>
-      <TopNavBar />
       <PageContainer>
         <SideBar />
         <CardContainer>
+          <TopNavBar />
           <Outlet />
         </CardContainer>
       </PageContainer>

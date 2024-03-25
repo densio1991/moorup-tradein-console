@@ -101,16 +101,6 @@ export const EditOrderPage = () => {
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
 
-  const {
-    order = {},
-    shipments = [],
-    isUpdatingOrder,
-    isFetchingOrder,
-    isUpdatingImeiSerial,
-  } = state;
-
-  const { user_id = {}, payment = {}, address = {}, order_items = [] } = order;
-
   const [accordionState, setAccordionState] = useState<AccordionStates>({
     quote: true,
     collection: true,
@@ -120,6 +110,22 @@ export const EditOrderPage = () => {
 
   const [statusModal, setStatusModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState({} as OrderItems);
+  const [parsedShipments, setParsedShipments] = useState({});
+
+  const {
+    order = {},
+    shipments = [],
+    isUpdatingOrder,
+    isFetchingOrder,
+    isUpdatingImeiSerial,
+  } = state;
+
+  const user_id = order?.user_id || {};
+  const address = order?.address || {};
+  const order_items = order?.order_items || [];
+  const payment = order?.payment || {};
+  const { bank_details = {} } = user_id;
+
   const isSingleOrderFlow = order?.order_flow === 'single';
 
   useEffect(() => {
@@ -156,6 +162,11 @@ export const EditOrderPage = () => {
     }
   }, [activePlatform]);
 
+  useEffect(() => {
+    const formattedShipments = parseShipments();
+    setParsedShipments(formattedShipments);
+  }, [shipments]);
+
   const onUpdateStatus = (newValue: any) => {
     if (newValue.status === OrderItemStatus.FOR_REVISION) {
       const payload = {
@@ -182,22 +193,33 @@ export const EditOrderPage = () => {
   };
 
   const parseShipments = () => {
-    const items: any = {};
-    const itemShipments = Array.isArray(shipments)
-      ? [...shipments]
-      : [shipments];
+    const shippingItems: any = {};
 
-    if (isSingleOrderFlow) {
-      itemShipments?.forEach((item: Shipments) => {
-        if (isSingleOrderFlow) {
-          items[item.item_id] = item;
+    if (Array.isArray(shipments)) {
+      shipments?.forEach((shipment: Shipments) => {
+        if (shippingItems[shipment.item_id]) {
+          shippingItems[shipment.item_id][shipment.direction] = shipment;
+        } else {
+          shippingItems[shipment.item_id] = {
+            [shipment.direction]: shipment,
+          };
         }
       });
-    } else if (itemShipments?.length > 0) {
-      items[order._id] = itemShipments[0];
+    } else if (Array.isArray(shipments?.item_id)) {
+      shipments?.item_id?.forEach((item_id: string) => {
+        shippingItems[item_id] = {
+          [shipments.direction]: shipments,
+        };
+      });
+    } else {
+      order_items?.forEach((item: OrderItems) => {
+        shippingItems[item?._id] = {
+          [shipments.direction]: shipments,
+        };
+      });
     }
 
-    return items;
+    return shippingItems;
   };
 
   const creditType: any = {
@@ -206,10 +228,6 @@ export const EditOrderPage = () => {
     upfront: 'Upfront',
     online: 'Online',
   };
-
-  const parsedShipments = parseShipments();
-
-  const { bank_details = {} } = user_id;
 
   const completeAddress = [
     address?.line_1,
@@ -293,9 +311,9 @@ export const EditOrderPage = () => {
                 <CardItem label="Email" value={user_id?.email} copy />
                 <CardItem
                   label="Email Verified"
-                  value={user_id.is_verified ? 'Yes' : 'No'}
+                  value={user_id?.is_verified ? 'Yes' : 'No'}
                 />
-                <CardItem label="Mobile" value={user_id.mobile_number} copy />
+                <CardItem label="Mobile" value={user_id?.mobile_number} copy />
                 <CardItem label="Account" value={accountName} copy />
               </DetailCardContainer>
               <DetailCardContainer className="lg:col-span-1">
@@ -308,10 +326,10 @@ export const EditOrderPage = () => {
                   label="Payment Status"
                   value={payment.payment_status}
                 />
-                <CardItem label="Payment Type" value={payment.payment_type} />
+                <CardItem label="Payment Type" value={payment?.payment_type} />
                 <CardItem
                   label="BSB & Account"
-                  value={user_id.bsb_account}
+                  value={user_id?.bsb_account}
                   copy
                 />
               </DetailCardContainer>

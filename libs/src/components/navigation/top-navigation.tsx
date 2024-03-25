@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 import { useEffect } from 'react'
 import { default as Select } from 'react-select'
 import styled from 'styled-components'
 import { ACTIVE_PLATFORM, PLATFORMS } from '../../constants'
-import { capitalizeFirstLetter, getInitials } from '../../helpers'
-import { useAuth } from '../../store'
-import { Avatar } from '../avatar'
+import { capitalizeFirstLetter } from '../../helpers'
+import { useAuth, useCommon } from '../../store'
+import { StyledIcon } from '../styled'
 
 const NavbarContainer = styled.div`
   width: 100%;
@@ -15,6 +16,7 @@ const NavbarContainer = styled.div`
   position: sticky;
   top: 0;
   z-index: 998;
+  margin-bottom: 10px;
 `
 const NavbarWrapper = styled.div`
   height: 100%;
@@ -36,6 +38,11 @@ const StyledText = styled.span`
   font-weight: 700;
   color: #01463A;
 `
+
+const HamburgerIconContainer = styled.div`
+  cursor: pointer;
+  margin-right: 10px;
+`;
 
 const customStyles = () => ({
   control: (provided: any) => ({
@@ -63,7 +70,7 @@ const customStyles = () => ({
   menu: (provided: any) => ({
     ...provided,
     borderRadius: '4px',
-    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+    boxShadow: 'rgba(0, 0, 0, 0.2) 8px 8px 16px 0px;',
   }),
   placeholder: (provided: any) => ({
     ...provided,
@@ -81,6 +88,9 @@ const customStyles = () => ({
 export function TopNavBar(): JSX.Element {
   const { state, getPlatformConfig,  setActivePlatform } = useAuth()
   const { activePlatform, userDetails } = state
+
+  const { state: commonState, setShowSideNav } = useCommon();
+  const { showSideNav } = commonState;
 
   useEffect(() => {
     if(activePlatform) {
@@ -102,6 +112,15 @@ export function TopNavBar(): JSX.Element {
       <NavbarWrapper>
         <TopLeft>
           {
+            !showSideNav && (
+              <HamburgerIconContainer onClick={() => setShowSideNav(!showSideNav)}>
+                <StyledIcon icon={faBars} color='#ccc' hovercolor='#01463a' />
+              </HamburgerIconContainer>
+            )
+          }
+        </TopLeft>
+        <TopRight>
+          {
             platforms?.length > 1 ? (
               <Select
                 name="activePlatform"
@@ -121,13 +140,11 @@ export function TopNavBar(): JSX.Element {
               </StyledText>
             )
           }
-        </TopLeft>
-        <TopRight>
-          <Avatar
+          {/* <Avatar
             initials={getInitials(
               userDetails?.first_name + ' ' + userDetails?.last_name,
             )}
-          />
+          /> */}
         </TopRight>
       </NavbarWrapper>
     </NavbarContainer>

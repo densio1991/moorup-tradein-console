@@ -1,112 +1,45 @@
-import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { isEmpty } from 'lodash'
-import { useLocation, useNavigate } from 'react-router-dom'
-import styled from 'styled-components'
-import { ADMIN, CUSTOMER_SERVICE, PRODUCTS, REGULAR, SIDENAV_ITEMS, SUPERADMIN, WAREHOUSE } from '../../constants'
-import { useAuth } from '../../store'
-import { LoaderContainer } from '../loader'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { faAngleDown, faAngleRight, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Menu, MenuItem, MenuItemStyles, Sidebar, SubMenu } from 'react-pro-sidebar';
+import { useLocation, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import {
+  ADMIN,
+  CUSTOMER_SERVICE,
+  PRODUCTS,
+  REGULAR,
+  SIDENAV_ITEMS,
+  SUPERADMIN,
+  WAREHOUSE,
+} from '../../constants';
+import { hexToRgba } from '../../helpers';
+import { useAuth, useCommon } from '../../store';
+import { Typography } from '../typography';
 
-interface NavLinkProps {
-  active?: boolean
-  disabled?: boolean;
-}
-
-const SidebarContainer = styled.div`
-  height: calc(100vh - 52px);
-  background-color: white;
-  position: sticky;
-  top: 52px;
-  margin-top: 1px;
-  border-top: 1px solid #f4f4f5;
-  width: auto;
-  min-width: 240px;
-
-  @media screen and (max-width: 768px) {
-    min-width: auto;
-  }
-`
-
-const SidebarWrapper = styled.div`
-  padding: 0 20px;
-  color: #555;
-
-  @media screen and (max-width: 768px) {
-    padding: 0px;
-  }
-`
-
-const SidebarList = styled.ul`
-  list-style: none;
-  padding: 0px;
-  border-bottom: 1px solid #e0e0e0;
-`
-
-const StyledIcon = styled(FontAwesomeIcon)`
-  color: #01463a;
-  width: 14px;
-  height: 14px;
-`
-
-const NavLink = styled.a<NavLinkProps>`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0.6rem 1rem;
-  border-radius: 0.5rem;
-  color: ${(props) => (props.active ? 'white' : props.disabled ? '#ccc' : '#01463a')};
-  background: ${(props) => (props.active ? 'linear-gradient(to right, #216A4C, #01463A)' : props.disabled ? 'transparent' : 'transparent')};
-  text-decoration: none;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
-  justify-content: start;
-  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
-
-  @media screen and (max-width: 768px) {
-    #label {
-      display: none;
-    }
-
-    border-radius: ${(props) => (props.disabled ? '0px' : '0.5rem')};
-  }
-
-  &:hover {
-    background: ${(props) => (props.disabled ? 'transparent' : 'linear-gradient(to right, #216A4C, #01463A)')};
-    color: ${(props) => (props.disabled ? '#ccc' : 'white')};
-
-    svg {
-      color: ${(props) => (props.disabled ? '#ccc' : 'white')};
-    }
-  }
-
-  svg {
-    color: ${(props) => (props.active ? 'white' : props.disabled ? '#ccc' : '#01463a')};
-  }
-
-  #label {
-    margin-left: 8px;
-  }
-`;
+const StyledIcon = styled(FontAwesomeIcon)``;
 
 export function SideBar(): JSX.Element {
-  const { pathname } = useLocation()
-  const navigate = useNavigate()
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const { state: authState, logoutUser } = useAuth();
-  const { isFetchingUserDetails, userDetails } = authState;
+  const { userDetails } = authState;
 
-  const filteredSideNavItems = SIDENAV_ITEMS.filter(item => {
+  const { state: commonState, setShowSideNav } = useCommon();
+  const { showSideNav } = commonState;
+
+  const filteredSideNavItems = SIDENAV_ITEMS.filter((item) => {
     switch (userDetails?.role) {
       case REGULAR:
-        return item.title === 'Claims';
+        return item.title === 'Promotions';
 
       case ADMIN:
         return [
-          'Product Management', 
+          'Product Management',
           'Order Management',
           'Promotions',
+          'Actionables',
         ].includes(item.title);
 
       case WAREHOUSE:
@@ -119,41 +52,152 @@ export function SideBar(): JSX.Element {
         return item.title === 'Product Management';
 
       case SUPERADMIN:
-        // Show all items for superadmin and other roles
         return true;
 
       default:
         return false;
     }
   });
-  
+
+  const menuItemStyles: MenuItemStyles = {
+    root: {
+      fontSize: '14px',
+      fontWeight: 600,
+    },
+    icon: {
+      color: '#216A4C',
+      '&.disabled': {
+        color: '#ccc',
+      },
+      '&:hover': {
+        color: 'white',
+      },
+      '&.ps-active': {
+        color: 'white'
+      }
+    },
+    SubMenuExpandIcon: {
+      color: '#b6b7b9',
+    },
+    subMenuContent: ({ level }) => ({
+      backgroundColor:
+        level === 0
+          ? hexToRgba('#fbfcfd', 1)
+          : 'transparent',
+    }),
+    button: {
+      '&.disabled': {
+        color: '#9fb6cf',
+      },
+      '&:hover': {
+        background: 'linear-gradient(to right, #216A4C, #01463A)',
+        color: 'white',
+
+        '& svg': {
+          color: 'white'
+        }
+      },
+      '&.ps-active': {
+        background: 'linear-gradient(to right, #216A4C, #01463A)',
+        color: 'white',
+
+        '& svg': {
+          color: 'white'
+        }
+      }
+    },
+  };
+
+
   return (
-    <SidebarContainer>
-      <LoaderContainer loading={isFetchingUserDetails || isEmpty(userDetails)}>
-        <SidebarWrapper>
-          <SidebarList>
-            {filteredSideNavItems?.map((item) => (
-              <NavLink
-                key={item.url}
-                active={item.activeUrl?.test(pathname)}
-                onClick={() => navigate(item.url)}
-                disabled={item.disabled}
+    <div style={{ display: 'flex', height: '100vh', zIndex: '999'}}>
+      <Sidebar 
+        toggled={showSideNav}
+        onBackdropClick={() => setShowSideNav(false)}
+        onBreakPoint={(broken) => setShowSideNav(!broken)}
+        breakPoint="md"
+        backgroundColor='white'
+        rootStyles={{
+          color: '#607489'
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <div style={{ flex: 1, marginBottom: '32px', marginTop: '32px' }}>
+            <div style={{ padding: '0 24px', marginBottom: '8px' }}>
+              <Typography
+                variant="body2"
+                fontWeight={600}
+                style={{ letterSpacing: '0.5px' }}
               >
-                <span>
-                  <StyledIcon icon={item.icon} />
-                </span>
-                <span id="label" className="font-semibold flex">{item.title}</span>
-              </NavLink>
-            ))}
-          </SidebarList>
-          <NavLink onClick={() => logoutUser()}>
-            <span>
-              <StyledIcon icon={faRightFromBracket} />
-            </span>
-            <span id="label" className="font-semibold flex">Logout</span>
-          </NavLink>
-        </SidebarWrapper>
-      </LoaderContainer>
-    </SidebarContainer>
-  )
+                General
+              </Typography>
+            </div>
+            <Menu
+              menuItemStyles={menuItemStyles}
+              renderExpandIcon={(params) => <StyledIcon icon={params.open ? faAngleDown : faAngleRight} />}
+              transitionDuration={400}
+            >
+              {
+                filteredSideNavItems?.map((item, index) => {
+                  if (item.submenu) {
+                    return (
+                      <SubMenu 
+                        label={item.title} 
+                        key={index} 
+                        icon={<StyledIcon icon={item.icon} />}
+                        disabled={item.disabled}
+                        defaultOpen
+                      >
+                        {item.submenu.map((subItem, subIndex) => (
+                          <MenuItem 
+                            key={subIndex} 
+                            onClick={() => navigate(subItem.url)} 
+                            active={subItem.activeUrl?.test(pathname)}
+                            disabled={subItem.disabled}
+                            icon={<StyledIcon icon={subItem.icon} />}
+                          >
+                            {subItem.title}
+                          </MenuItem>
+                        ))}
+                      </SubMenu>
+                    );
+                  } else {
+                    return (
+                      <MenuItem 
+                        key={index} 
+                        onClick={() => navigate(item.url)} 
+                        active={item.activeUrl?.test(pathname)}
+                        icon={<StyledIcon icon={item.icon} />}
+                        disabled={item.disabled}
+                      >
+                        {item.title}
+                      </MenuItem>
+                    )
+                  }
+                })
+              }
+            </Menu>
+            <div style={{ padding: '0 24px', marginBottom: '8px', marginTop: '16px' }}>
+              <Typography
+                variant="body2"
+                fontWeight={600}
+                style={{ letterSpacing: '0.5px', opacity: 0.7 }}
+              >
+                Account
+              </Typography>
+            </div>
+            <Menu menuItemStyles={menuItemStyles}>
+              <MenuItem 
+                key='logout' 
+                onClick={() => logoutUser()} 
+                icon={<StyledIcon icon={faArrowRightFromBracket} />}
+              >
+                Logout
+              </MenuItem>
+            </Menu>
+          </div>
+        </div>
+      </Sidebar>
+    </div>
+  );
 }

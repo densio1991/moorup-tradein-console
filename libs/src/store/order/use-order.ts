@@ -96,8 +96,8 @@ export const useOrder = () => {
     actions.clearOrders({})(dispatch);
   }
 
-  const generateLabels = (payload: any) => {
-    actions.generateLabels(payload)(dispatch);
+  const generateLabels = (payload: any, updateStatus: boolean = false) => {
+    actions.generateLabels(payload, updateStatus)(dispatch);
   }
 
   const updateOrderItemImeiSerial = (orderItemId: string, orderId: any, payload: any) => {

@@ -14,3 +14,17 @@ export const setCenterModalState = (payload: any) => (dispatch: any) => {
     payload,
   });
 };
+
+export const setSearchTerm = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_SEARCH_TERM,
+    payload,
+  });
+};
+
+export const setShowSideNav = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_SHOW_SIDE_NAV,
+    payload,
+  });
+};

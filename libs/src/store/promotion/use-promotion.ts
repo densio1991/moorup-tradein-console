@@ -49,6 +49,18 @@ export const usePromotion = () => {
     actions.clearPromotionClaims(payload)(dispatch);
   }
 
+  const getPromotionById = (payload: any, signal: AbortSignal) => {
+    actions.getPromotionById(payload, signal)(dispatch);
+  }
+
+  const clearPromotion = (payload: any) => {
+    actions.clearPromotion(payload)(dispatch);
+  }
+
+  const updatePromotion = (payload: any, promotionId: string) => {
+    actions.updatePromotion(payload, promotionId, activePlatform)(dispatch);
+  }
+
   return {
     state: state.promotion,
     getPromotions,
@@ -61,5 +73,8 @@ export const usePromotion = () => {
     setAddPromotionEligibilityAndFaqsPayload,
     getPromotionClaims,
     clearPromotionClaims,
+    getPromotionById,
+    clearPromotion,
+    updatePromotion,
   };
 };

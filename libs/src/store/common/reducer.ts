@@ -11,6 +11,8 @@ const commonState = {
     open: false,
     view: null,
   },
+  searchTerm: '',
+  showSideNav: true,
 };
 
 const commonReducer = (state: any, action: any) => {
@@ -25,6 +27,18 @@ const commonReducer = (state: any, action: any) => {
       return {
         ...state,
         centerModalState: action.payload,
+      };
+
+    case types.SET_SEARCH_TERM:
+      return {
+        ...state,
+        searchTerm: action.payload,
+      };
+
+    case types.SET_SHOW_SIDE_NAV:
+      return {
+        ...state,
+        showSideNav: action.payload,
       };
 
     default:
