@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faBars } from '@fortawesome/free-solid-svg-icons'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { default as Select } from 'react-select'
 import styled from 'styled-components'
 import { ACTIVE_PLATFORM, PLATFORMS } from '../../constants'
@@ -16,6 +16,7 @@ const NavbarContainer = styled.div`
   position: sticky;
   top: 0;
   z-index: 998;
+  margin-bottom: 10px;
 `
 const NavbarWrapper = styled.div`
   height: 100%;
@@ -90,7 +91,6 @@ export function TopNavBar(): JSX.Element {
 
   const { state: commonState, setShowSideNav } = useCommon();
   const { showSideNav } = commonState;
-  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     if(activePlatform) {
@@ -107,30 +107,17 @@ export function TopNavBar(): JSX.Element {
       a.label.localeCompare(b.label),
     );
 
-  useEffect(() => {
-    const handleResize = () => {
-      setViewportWidth(window.innerWidth);
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  useEffect(() => {
-    // Automatically toggle showSideNav based on viewport width
-    setShowSideNav(viewportWidth > 1200);
-  }, [viewportWidth]);
-
   return (
     <NavbarContainer>
       <NavbarWrapper>
         <TopLeft>
-          <HamburgerIconContainer onClick={() => setShowSideNav(!showSideNav)}>
-            <StyledIcon icon={faBars} color='#ccc' hovercolor='#01463a' />
-          </HamburgerIconContainer>
+          {
+            !showSideNav && (
+              <HamburgerIconContainer onClick={() => setShowSideNav(!showSideNav)}>
+                <StyledIcon icon={faBars} color='#ccc' hovercolor='#01463a' />
+              </HamburgerIconContainer>
+            )
+          }
         </TopLeft>
         <TopRight>
           {

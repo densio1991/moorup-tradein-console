@@ -41,12 +41,6 @@ const HeaderSection = styled.div`
   width: 100%;
   padding: 12px 0px;
   flex-wrap: wrap;
-
-  @media screen and (max-width: 425px) {
-    flex-direction: column;
-    gap: 10px;
-    align-items: start;
-  }
 `;
 
 const LeftSection = styled.div`

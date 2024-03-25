@@ -1,12 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  faAngleRight,
-  faAngleUp,
-  faRightFromBracket,
-} from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleRight, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isEmpty } from 'lodash';
-import { Fragment, useEffect, useState } from 'react';
+import { Menu, MenuItem, MenuItemStyles, Sidebar, SubMenu } from 'react-pro-sidebar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
@@ -18,195 +13,26 @@ import {
   SUPERADMIN,
   WAREHOUSE,
 } from '../../constants';
+import { hexToRgba } from '../../helpers';
 import { useAuth, useCommon } from '../../store';
-import { LoaderContainer } from '../loader';
+import { Typography } from '../typography';
 
-interface NavLinkProps {
-  active?: boolean;
-  disabled?: boolean;
-}
-
-const SidebarContainer = styled.div`
-  position: sticky;
-  top: 50px;
-  height: calc(100vh - 52px);
-  background-color: white;
-  border-top: 1px solid #f4f4f5;
-  width: auto;
-  min-width: 240px;
-  z-index: 99;
-
-  @media screen and (max-width: 1200px) {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    height: auto;
-  }
-`;
-
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: calc(100vh - 52px);
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 98;
-  display: none;
-
-  @media screen and (max-width: 1200px) {
-    display: block;
-    height: 100%;
-  }
-`;
-
-const SidebarWrapper = styled.div`
-  padding: 0px;
-  color: #555;
-`;
-
-const SidebarList = styled.ul`
-  list-style: none;
-  padding: 0px;
-  border-bottom: 1px solid #e0e0e0;
-`;
-
-const StyledIcon = styled(FontAwesomeIcon)`
-  color: #01463a;
-  width: 14px;
-  height: 14px;
-  margin-left: auto;
-`;
-
-const NavLink = styled.a<NavLinkProps>`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0.8rem 1rem;
-  color: ${(props) =>
-    props.active ? 'white' : props.disabled ? '#ccc' : '#01463a'};
-  background: ${(props) =>
-    props.active
-      ? 'linear-gradient(to right, #216A4C, #01463A)'
-      : props.disabled
-        ? 'transparent'
-        : 'transparent'};
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
-  justify-content: start;
-  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
-  position: relative;
-
-  &:hover {
-    background: ${(props) =>
-      props.disabled
-        ? 'transparent'
-        : 'linear-gradient(to right, #216A4C, #01463A)'};
-    color: ${(props) => (props.disabled ? '#ccc' : 'white')};
-
-    svg {
-      color: ${(props) => (props.disabled ? '#ccc' : 'white')};
-    }
-  }
-
-  svg {
-    color: ${(props) =>
-      props.active ? 'white' : props.disabled ? '#ccc' : '#01463a'};
-  }
-
-  #label {
-    margin-left: 8px;
-  }
-`;
-
-const SubMenu = styled.ul<{ active?: boolean }>`
-  list-style: none;
-  margin: 0px;
-  padding: 0px 20px;
-`;
-
-const SubLink = styled.a<NavLinkProps>`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0.8rem 1rem;
-  color: ${(props) =>
-    props.active ? 'white' : props.disabled ? '#ccc' : '#01463a'};
-  background: ${(props) =>
-    props.active
-      ? 'linear-gradient(to right, rgba(33, 106, 76, 0.7), rgba(1, 70, 58, 0.7))'
-      : props.disabled
-        ? 'transparent'
-        : 'transparent'};
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
-  justify-content: start;
-  pointer-events: ${(props) => (props.disabled ? 'none' : 'auto')};
-  position: relative;
-
-  &:hover {
-    background: ${(props) =>
-      props.disabled
-        ? 'transparent'
-        : 'linear-gradient(to right, rgba(33, 106, 76, 0.7), rgba(1, 70, 58, 0.7))'};
-    color: ${(props) => (props.disabled ? '#ccc' : 'white')};
-
-    svg {
-      color: ${(props) => (props.disabled ? '#ccc' : 'white')};
-    }
-  }
-
-  svg {
-    color: ${(props) =>
-      props.active ? 'white' : props.disabled ? '#ccc' : '#01463a'};
-  }
-
-  #label {
-    margin-left: 8px;
-  }
-`;
+const StyledIcon = styled(FontAwesomeIcon)``;
 
 export function SideBar(): JSX.Element {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const { state: authState, logoutUser } = useAuth();
-  const { isFetchingUserDetails, userDetails } = authState;
+  const { userDetails } = authState;
 
   const { state: commonState, setShowSideNav } = useCommon();
   const { showSideNav } = commonState;
 
-  const [expandedItems, setExpandedItems] = useState<string[]>([]);
-  const [viewportWidth, setViewportWidth] = useState(window.innerWidth);
-
-  const toggleExpanded = (url: string) => {
-    setExpandedItems((prevItems) =>
-      prevItems.includes(url)
-        ? prevItems.filter((item) => item !== url)
-        : [...prevItems, url],
-    );
-  };
-
-  useEffect(() => {
-    const handleResize = () => {
-      setViewportWidth(window.innerWidth);
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   const filteredSideNavItems = SIDENAV_ITEMS.filter((item) => {
     switch (userDetails?.role) {
       case REGULAR:
-        return item.title === 'Claims';
+        return item.title === 'Promotions';
 
       case ADMIN:
         return [
@@ -233,91 +59,145 @@ export function SideBar(): JSX.Element {
     }
   });
 
-  const handleOnClick = (item: any) => {
-    if (!isEmpty(item.submenu)) {
-      toggleExpanded(item.url);
-    } else {
-      navigate(item.url);
-
-      if (viewportWidth <= 1200) {
-        setShowSideNav(false);
+  const menuItemStyles: MenuItemStyles = {
+    root: {
+      fontSize: '14px',
+      fontWeight: 600,
+    },
+    icon: {
+      color: '#216A4C',
+      '&.disabled': {
+        color: '#ccc',
+      },
+      '&:hover': {
+        color: 'white',
+      },
+      '&.ps-active': {
+        color: 'white'
       }
-    }
-  }
+    },
+    SubMenuExpandIcon: {
+      color: '#b6b7b9',
+    },
+    subMenuContent: ({ level }) => ({
+      backgroundColor:
+        level === 0
+          ? hexToRgba('#fbfcfd', 1)
+          : 'transparent',
+    }),
+    button: {
+      '&.disabled': {
+        color: '#9fb6cf',
+      },
+      '&:hover': {
+        background: 'linear-gradient(to right, #216A4C, #01463A)',
+        color: 'white',
+
+        '& svg': {
+          color: 'white'
+        }
+      },
+      '&.ps-active': {
+        background: 'linear-gradient(to right, #216A4C, #01463A)',
+        color: 'white',
+
+        '& svg': {
+          color: 'white'
+        }
+      }
+    },
+  };
+
 
   return (
-    showSideNav && (
-      <>
-        <SidebarContainer>
-          <LoaderContainer
-            loading={isFetchingUserDetails || isEmpty(userDetails)}
-          >
-            <SidebarWrapper>
-              <SidebarList>
-                {filteredSideNavItems?.map((item) => (
-                  <Fragment key={item.url}>
-                    <NavLink
-                      onClick={() => handleOnClick(item)}
-                      active={item.activeUrl?.test(pathname)}
-                      disabled={item.disabled}
-                    >
-                      <span>
-                        <StyledIcon icon={item.icon} />
-                      </span>
-                      <span id="label" className="font-semibold flex">
-                        {item.title}
-                      </span>
-                      {item.submenu && (
-                        <StyledIcon
-                          icon={
-                            expandedItems.includes(item.url)
-                              ? faAngleUp
-                              : faAngleRight
-                          }
-                        />
-                      )}
-                    </NavLink>
-                    {expandedItems.includes(item.url) && item.submenu && (
-                      <SubMenu>
-                        {item.submenu.map((subItem: any, index: number) => (
-                          <SubLink
-                            key={index}
+    <div style={{ display: 'flex', height: '100vh', zIndex: '999'}}>
+      <Sidebar 
+        toggled={showSideNav}
+        onBackdropClick={() => setShowSideNav(false)}
+        onBreakPoint={(broken) => setShowSideNav(!broken)}
+        breakPoint="md"
+        backgroundColor='white'
+        rootStyles={{
+          color: '#607489'
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <div style={{ flex: 1, marginBottom: '32px', marginTop: '32px' }}>
+            <div style={{ padding: '0 24px', marginBottom: '8px' }}>
+              <Typography
+                variant="body2"
+                fontWeight={600}
+                style={{ letterSpacing: '0.5px' }}
+              >
+                General
+              </Typography>
+            </div>
+            <Menu
+              menuItemStyles={menuItemStyles}
+              renderExpandIcon={(params) => <StyledIcon icon={params.open ? faAngleDown : faAngleRight} />}
+              transitionDuration={400}
+            >
+              {
+                filteredSideNavItems?.map((item, index) => {
+                  if (item.submenu) {
+                    return (
+                      <SubMenu 
+                        label={item.title} 
+                        key={index} 
+                        icon={<StyledIcon icon={item.icon} />}
+                        disabled={item.disabled}
+                        defaultOpen
+                      >
+                        {item.submenu.map((subItem, subIndex) => (
+                          <MenuItem 
+                            key={subIndex} 
+                            onClick={() => navigate(subItem.url)} 
                             active={subItem.activeUrl?.test(pathname)}
-                            onClick={() => {
-                              navigate(subItem.url);
-
-                              if (viewportWidth <= 1200) {
-                                setShowSideNav(false);
-                              }
-                            }}
                             disabled={subItem.disabled}
+                            icon={<StyledIcon icon={subItem.icon} />}
                           >
-                            <span>
-                              <StyledIcon icon={subItem.icon} />
-                            </span>
-                            <span id="label" className="font-semibold flex">
-                              {subItem.title}
-                            </span>
-                          </SubLink>
+                            {subItem.title}
+                          </MenuItem>
                         ))}
                       </SubMenu>
-                    )}
-                  </Fragment>
-                ))}
-              </SidebarList>
-              <NavLink onClick={() => logoutUser()}>
-                <span>
-                  <StyledIcon icon={faRightFromBracket} />
-                </span>
-                <span id="label" className="font-semibold flex">
-                  Logout
-                </span>
-              </NavLink>
-            </SidebarWrapper>
-          </LoaderContainer>
-        </SidebarContainer>
-        <Overlay onClick={() => setShowSideNav(false)} />
-      </>
-    )
+                    );
+                  } else {
+                    return (
+                      <MenuItem 
+                        key={index} 
+                        onClick={() => navigate(item.url)} 
+                        active={item.activeUrl?.test(pathname)}
+                        icon={<StyledIcon icon={item.icon} />}
+                        disabled={item.disabled}
+                      >
+                        {item.title}
+                      </MenuItem>
+                    )
+                  }
+                })
+              }
+            </Menu>
+            <div style={{ padding: '0 24px', marginBottom: '8px', marginTop: '16px' }}>
+              <Typography
+                variant="body2"
+                fontWeight={600}
+                style={{ letterSpacing: '0.5px', opacity: 0.7 }}
+              >
+                Account
+              </Typography>
+            </div>
+            <Menu menuItemStyles={menuItemStyles}>
+              <MenuItem 
+                key='logout' 
+                onClick={() => logoutUser()} 
+                icon={<StyledIcon icon={faArrowRightFromBracket} />}
+              >
+                Logout
+              </MenuItem>
+            </Menu>
+          </div>
+        </div>
+      </Sidebar>
+    </div>
   );
 }

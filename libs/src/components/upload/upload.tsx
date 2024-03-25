@@ -14,7 +14,7 @@ const ModalOverlay = styled.div<{ isOpen: boolean }>`
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
   z-index: 98;
@@ -43,6 +43,7 @@ const ModalFooter = styled.div`
   display: flex;
   justify-content: center;
   gap: 10px;
+  width: 100%;
 `;
 
 const DropzoneContainer = styled.div`
@@ -167,7 +168,6 @@ export function UploadFileModal({ isOpen, closeModal }: UploadInvoiceModalProps)
           <ModalFooter>
             <AppButton
               type="button"
-              width="fit-content"
               variant='outlined'
               onClick={() =>closeModal()}
             >
@@ -175,7 +175,6 @@ export function UploadFileModal({ isOpen, closeModal }: UploadInvoiceModalProps)
             </AppButton>
             <AppButton
               type="button"
-              width="fit-content"
               variant='fill'
               onClick={() => {
                 uploadProductsExcelFile(fileToUpload)
