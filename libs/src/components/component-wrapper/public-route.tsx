@@ -31,7 +31,7 @@ export function PublicRoute(): JSX.Element {
       switch (userDetails?.role) {
         case REGULAR:
           setLoading(false);
-          navigate('/dashboard/promotion');
+          navigate('/dashboard/promotion/list');
           break;
   
         case ADMIN:
@@ -41,7 +41,7 @@ export function PublicRoute(): JSX.Element {
   
         case WAREHOUSE:
           setLoading(false);
-          navigate('/dashboard/order');
+          navigate('/dashboard/order/list');
           break;
   
         case PRODUCTS:

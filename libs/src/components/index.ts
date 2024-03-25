@@ -16,6 +16,7 @@ export * from './stepper';
 export * from './styled';
 export * from './table';
 export * from './tabs';
+export * from './typography';
 export * from './upload';
 export * from './wysiwyg';
 
