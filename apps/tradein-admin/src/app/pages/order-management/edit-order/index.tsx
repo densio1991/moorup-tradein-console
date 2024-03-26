@@ -435,7 +435,7 @@ export const EditOrderPage = () => {
           )}
         </AccordionInnerContainer>
       </AccordionContainer>
-      <StatusModal isOpen={statusModal}>
+      <StatusModal isOpen={statusModal} onClose={() => setStatusModal(false)}>
         {!isEmpty(selectedItem) && (
           <EditForm
             setStatusModal={(value) => {

@@ -16,7 +16,7 @@ const NavbarContainer = styled.div`
   position: sticky;
   top: 0;
   z-index: 998;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `
 const NavbarWrapper = styled.div`
   height: 100%;

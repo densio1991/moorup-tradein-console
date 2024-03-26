@@ -17,7 +17,7 @@ const ModalOverlay = styled.div<{ isOpen: boolean }>`
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.5);
   display: ${({ isOpen }) => (isOpen ? 'block' : 'none')};
-  z-index: 98;
+  z-index: 1111;
 `;
 
 const ModalContent = styled.div`
@@ -131,7 +131,7 @@ export function UploadFileModal({ isOpen, closeModal }: UploadInvoiceModalProps)
   }, [isOpen]);
 
   return (
-    <ModalOverlay isOpen={isOpen}>
+    <ModalOverlay isOpen={isOpen} onClick={() => closeModal()}>
       <ModalContent>
         <ModalBody>
           <ModalTitle>
