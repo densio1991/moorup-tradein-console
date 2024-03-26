@@ -1113,6 +1113,7 @@ export const ADD_PROMOTION_DETAILS_PAYLOAD = {
   start_date: null,
   end_date: null,
   image_url: '',
+  show_banner: false,
 }
 
 export const ADD_PROMOTION_PRODUCTS_PAYLOAD = {
