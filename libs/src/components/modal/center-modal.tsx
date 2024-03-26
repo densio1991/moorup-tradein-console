@@ -15,7 +15,7 @@ const Overlay = styled.div<{ isOpen: boolean }>`
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   display: ${(props) => (props.isOpen ? 'block' : 'none')};
-  z-index: 999; /* Higher z-index than side modal */
+  z-index: 1002; /* Higher z-index than side modal */
 `;
 
 const CenterModalWrapper = styled.div<{ isOpen: boolean }>`
@@ -27,7 +27,7 @@ const CenterModalWrapper = styled.div<{ isOpen: boolean }>`
   max-width: calc(100% - 100px);
   background-color: #fff;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-  z-index: 999;
+  z-index: 1003;
   transition: opacity 0.3s ease-in-out;
   opacity: ${(props) => (props.isOpen ? '1' : '0')};
   pointer-events: ${(props) => (props.isOpen ? 'auto' : 'none')};

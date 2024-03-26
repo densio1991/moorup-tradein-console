@@ -11,6 +11,7 @@ import {
   StyledDateRangePicker,
   StyledInput,
   StyledReactSelect,
+  ToggleButton,
   hasEmptyValue,
   useAuth,
   useCommon,
@@ -29,6 +30,7 @@ interface FormValues {
   start_date: Date | null;
   end_date: Date | null;
   image_url: string;
+  show_banner: boolean;
   [key: string]: any; // Index signature to allow dynamic access
 }
 
@@ -39,6 +41,7 @@ const validationSchema = Yup.object().shape({
   image_url: Yup.string()
     .required('Image URL is required')
     .url('Enter a valid URL'),
+  show_banner: Yup.boolean().required('Show Banner is required'),
 });
 
 export function AddPromotionForm() {
@@ -194,6 +197,16 @@ export function AddPromotionForm() {
             error={Boolean(formik.touched.image_url && formik.errors.image_url)}
             errorMessage={formik.errors.image_url}
             enableHoverImage={true}
+          />
+        </FormGroup>
+        <FormGroup>
+          <ToggleButton
+            label="Show Banner"
+            name="show_banner"
+            isOn={formik.values.show_banner}
+            onToggle={() =>
+              formik.setFieldValue('show_banner', !formik.values.show_banner)
+            }
           />
         </FormGroup>
         <FormGroup>
