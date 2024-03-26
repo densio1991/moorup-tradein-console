@@ -5,13 +5,15 @@ import { StyledInput } from '../input';
 
 const StyledContainer = styled.div`
   height: 54px;
-  width: 100%;
+  width: calc(100% - 20px);
   padding: 4px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: white;
   margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
   overflow-x: auto;
   gap: 8px;
 `;
