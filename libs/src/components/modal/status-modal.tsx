@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 interface CenterModalProps {
   isOpen: boolean;
-  onClose?: () => void;
+  onClose: () => void;
   children?: ReactNode;
 }
 
@@ -37,7 +37,7 @@ const CenterModalWrapper = styled.div<{ isOpen: boolean }>`
 export function StatusModal({ isOpen, onClose, children }: CenterModalProps): JSX.Element {
   return (
     <>
-      <Overlay isOpen={isOpen} />
+      <Overlay isOpen={isOpen} onClick={() => onClose()}/>
       <CenterModalWrapper isOpen={isOpen}>
         {children}
       </CenterModalWrapper>

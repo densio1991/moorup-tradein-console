@@ -83,7 +83,7 @@ const TableWrapper = styled.div`
   box-shadow: none;
   border-radius: 6px !important;
   overflow-x: auto;
-  padding: 0px 20px;
+  margin: 0px 20px;
 `;
 
 const TableStyled = styled.table`
@@ -363,7 +363,7 @@ export function Table({
   const itemsToDisplay = filteredRows.slice(startIndex, endIndex);
 
   return (
-    <div style={{ backgroundColor: 'white', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 8px 16px 0px', margin: '10px' }}>
+    <div style={{ backgroundColor: 'white', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 8px 16px 0px', margin: '20px' }}>
       <HeaderSection>
         <LeftSection>
           <TitleContainer>
