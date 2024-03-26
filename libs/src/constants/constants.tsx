@@ -831,7 +831,7 @@ export const CURRENCIES = [
   { value: 'TJS', label: 'Tajikistani Somoni (TJS)' },
   { value: 'TMT', label: 'Turkmenistani Manat (TMT)' },
   { value: 'TND', label: 'Tunisian Dinar (TND)' },
-  { value: 'TOP', label: "Tongan Pa'anga (TOP)" },
+  { value: 'TOP', label: 'Tongan Pa\'anga (TOP)' },
   { value: 'TRY', label: 'Turkish Lira (TRY)' },
   { value: 'TTD', label: 'Trinidad and Tobago Dollar (TTD)' },
   { value: 'TVD', label: 'Tuvaluan Dollar (TVD)' },
@@ -1111,7 +1111,8 @@ export const ADD_PROMOTION_DETAILS_PAYLOAD = {
   start_date: null,
   end_date: null,
   image_url: '',
-};
+  show_banner: false,
+}
 
 export const ADD_PROMOTION_PRODUCTS_PAYLOAD = {
   product_name: '',
