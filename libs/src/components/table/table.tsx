@@ -363,7 +363,7 @@ export function Table({
   const itemsToDisplay = filteredRows.slice(startIndex, endIndex);
 
   return (
-    <div style={{ backgroundColor: 'white', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 8px 16px 0px' }}>
+    <div style={{ backgroundColor: 'white', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 8px 16px 0px', margin: '10px' }}>
       <HeaderSection>
         <LeftSection>
           <TitleContainer>

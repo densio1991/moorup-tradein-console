@@ -22,9 +22,9 @@ import {
   StyledIcon,
   VALIDATION_ORDER_ITEM_STATUS,
   formatDate,
+  parseStatus,
   useAuth,
   useOrder,
-  parseStatus,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -157,7 +157,7 @@ export const EditOrderPage = () => {
     if (!isEmpty(order)) {
       if (order.platform !== activePlatform) {
         clearOrder();
-        navigate('/dashboard/order');
+        navigate('/dashboard/order/list');
       }
     }
   }, [activePlatform]);
