@@ -491,6 +491,31 @@ export const updateOrderItemImeiSerial = (orderItemId: string, orderId: string, 
     });
 };
 
+export const getGiftCardStatus =
+  (orderId: any, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.FETCH_GIFT_CARD_STATUS.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .patch(`/api/orders/${orderId}/status`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_GIFT_CARD_STATUS.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.FETCH_GIFT_CARD_STATUS.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to update order item status.');
+      });
+  };
+
 export const clearOrder = (payload: any) => (dispatch: any) => {
   dispatch({
     type: types.CLEAR_ORDER,payload,

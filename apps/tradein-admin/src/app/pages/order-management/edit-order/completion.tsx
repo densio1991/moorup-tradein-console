@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  DetailCardContainer,
-  OrderItems,
-  amountFormatter,
-} from '@tradein-admin/libs';
+import { DetailCardContainer, OrderItems } from '@tradein-admin/libs';
 import { CardDetail, DeviceSection } from './sections';
 import OfferSection from './sections/offer-section';
 

@@ -13,18 +13,19 @@ const orderState = {
   isFetchingOrderItem: true,
   isUpdatingOrderItem: false,
   orderItems: [],
+  activeOrderItem: {},
   isFetchingOrderItems: true,
   shipments: [],
   isFetchingShipments: true,
   orderStatuses: [],
   isFetchingOrderStatuses: false,
-  isResendingLabel: false,
-  variants: [],
-  isModalOpen: false,
-  activeOrderItem: {},
   generatedLabels: {},
+  isResendingLabel: false,
   isGeneratingLabels: false,
   isUpdatingImeiSerial: false,
+  giftCard: {},
+  isFetchingGiftCard: true,
+  isModalOpen: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -281,6 +282,26 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isUpdatingOrderItem: false,
+      };
+    }
+
+    case types.FETCH_GIFT_CARD_STATUS.baseType: {
+      return {
+        ...state,
+        isFetchingGiftCard: true,
+      };
+    }
+    case types.FETCH_GIFT_CARD_STATUS.SUCCESS: {
+      return {
+        ...state,
+        isFetchingGiftCard: false,
+        giftCard: action.payload?.data,
+      };
+    }
+    case types.FETCH_GIFT_CARD_STATUS.FAILED: {
+      return {
+        ...state,
+        isFetchingGiftCard: false,
       };
     }
 
