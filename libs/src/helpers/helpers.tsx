@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 import { jwtDecode } from 'jwt-decode';
 import { capitalize, isEmpty } from 'lodash';
-import { Chip } from '../components';
-import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes } from '../constants';
+import { Chip, StyledIcon } from '../components';
+import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes } from '../constants';
+import { defaultTheme } from './theme';
 
 export function createActionTypes(baseType: string) {
   return {
@@ -366,105 +368,111 @@ export const formatDate = (date: Date, format='MM/DD/YYYY') => {
 
 export const parseStatus = (value: string) => {
   let text = value;
-  let textColor = 'white';
-  let bgColor = '#5e5d5d';
+  let textColor = defaultTheme.disabled.text;
+  let bgColor = defaultTheme.disabled.background;
 
   switch (value) {
     case OrderStatus.PROCESSING:
       text = 'Processing';
-      textColor = 'white';
-      bgColor = '#f28933';
+      textColor = defaultTheme.warning.text;
+      bgColor = defaultTheme.warning.background;
       break;
 
     case OrderStatus.COMPLETED:
       text = 'Completed';
-      textColor = 'white';
-      bgColor = '#216A4C';
+      textColor = defaultTheme.success.text;
+      bgColor = defaultTheme.success.background;
       break;
 
     case OrderStatus.CREATED:
       text = 'Created';
-      textColor = 'white';
-      bgColor = '#216A4C';
+      textColor = defaultTheme.success.text;
+      bgColor = defaultTheme.success.background;
       break;
 
     case OrderStatus.DELETED:
       text = 'Deleted';
-      textColor = 'white';
-      bgColor = '#f7564a';
+      textColor = defaultTheme.danger.text;
+      bgColor = defaultTheme.danger.background;
+      break;
+
+    case OrderStatus.CANCELLED:
+      text = 'Cancelled';
+      textColor = defaultTheme.disabled.text;
+      bgColor = defaultTheme.disabled.background;
       break;
 
     case OrderPaymentStatus.PENDING:
       text = 'Pending';
-      textColor = 'white';
-      bgColor = '#f28933';
+      textColor = defaultTheme.warning.text;
+      bgColor = defaultTheme.warning.background;
       break;
 
     case OrderTypes.ONLINE:
       text = 'Online';
-      textColor = 'white';
-      bgColor = '#01463A';
+      textColor = defaultTheme.success.text;
+      bgColor = defaultTheme.success.background;
       break;
 
     case OrderTypes.INSTORE:
     case OrderTypes.IN_STORE:
       text = 'In-Store'
-      textColor = 'white';
-      bgColor = '#216A4C';
+      textColor = defaultTheme.primary.text;
+      bgColor = defaultTheme.primary.background;
       break;
 
     case CreditTypes.UPFRONT:
       text = 'Upfront';
-      textColor = 'white';
-      bgColor = '#01463A';
+      textColor = defaultTheme.primary.text;
+      bgColor = defaultTheme.primary.background;
       break;
 
     case CreditTypes.POSTASSESSMENT:
     case CreditTypes.POST_ASSESSMENT:
       text = 'Post Assessment';
-      textColor = 'white';
-      bgColor = '#216A4C';
+      textColor = defaultTheme.success.text;
+      bgColor = defaultTheme.success.background;
       break;
   
     case ClaimStatus.PENDING:
       text = 'Pending';
-      textColor = 'white';
-      bgColor = '#f28933';
+      textColor = defaultTheme.warning.text;
+      bgColor = defaultTheme.warning.background;
       break;
 
     case ClaimStatus.APPROVED:
       text = 'Approved';
-      textColor = 'white';
-      bgColor = '#216A4C';
+      textColor = defaultTheme.primary.text;
+      bgColor = defaultTheme.primary.background;
       break;
 
     case ClaimStatus.REJECT:
       text = 'Rejected';
-      textColor = 'white';
-      bgColor = '#f7564a';
+      textColor = defaultTheme.danger.text;
+      bgColor = defaultTheme.danger.background;
       break;
 
     case ClaimStatus.DELETED:
       text = 'Deleted';
-      textColor = 'white';
-      bgColor = '#f7564a';
+      textColor = defaultTheme.danger.text;
+      bgColor = defaultTheme.danger.background;
       break;
 
     case DefaultStatus.ACTIVE:
       text = 'Active';
-      textColor = 'white';
-      bgColor = '#216A4C';
+      textColor = defaultTheme.success.text;
+      bgColor = defaultTheme.success.background;
       break;
 
     case DefaultStatus.INACTIVE:
       text = 'Inactive';
-      textColor = 'white';
-      bgColor = '#f7564a';
+      textColor = defaultTheme.disabled.text;
+      bgColor = defaultTheme.disabled.background;
       break;
 
     default:
-      textColor = 'white';
-      bgColor = '#5e5d5d';
+      textColor = defaultTheme.primary.text;
+      bgColor = defaultTheme.primary.background;
       break;
   }
 
@@ -478,3 +486,61 @@ export const hexToRgba = (hex: string, alpha: number) => {
 
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
+
+export const parseTypes = (type: string) => {
+  let color = defaultTheme.primary.text;
+  let text = type;
+  switch (type) {
+    case OrderTypes.ONLINE:
+      color = defaultTheme.success.text;
+      text = 'Online';
+      break;
+
+    case OrderTypes.INSTORE:
+      case OrderTypes.IN_STORE:
+      color = defaultTheme.primary.text;
+      text = 'In-Store';
+      break;
+
+    case CreditTypes.POSTASSESSMENT:
+      case CreditTypes.POST_ASSESSMENT:
+      color = defaultTheme.success.text;
+      text = 'Post Assessment';
+      break;
+
+    case CreditTypes.UPFRONT:
+      color = defaultTheme.primary.text;
+      text = 'Upfront';
+      break;
+
+    case ProductTypes.LAPTOPS:
+      color = defaultTheme.warning.text;
+      text = 'Laptops';
+      break;
+
+    case ProductTypes.TABLETS:
+      color = defaultTheme.primary.text;
+      text = 'Tablets';
+      break;
+
+    case ProductTypes.PHONES:
+      color = defaultTheme.success.text;
+      text = 'Phones';
+      break;
+
+    case ProductTypes.WATCHES:
+      color = defaultTheme.danger.text;
+      text = 'Watches';
+      break;
+  
+    default:
+      break;
+  }
+
+  return (
+    <span>
+      <StyledIcon icon={faCircle} color={color} disabled />
+      <span style={{ color: color, marginLeft: '2px' }}>{text}</span>
+    </span>
+  )
+}

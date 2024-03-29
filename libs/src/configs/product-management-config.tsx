@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
 import { StyledMenuIcon } from '../components';
-import { capitalizeFirstLetter } from '../helpers';
+import { capitalizeFirstLetter, parseTypes } from '../helpers';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
@@ -25,8 +25,12 @@ export const productManagementParsingConfig = {
     if (!row || isEmpty(row['year'])) return '--';
     return row['year'];
   },
+  'Type': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['type'])) return '--';
+    return parseTypes(row['type']);
+  },
   'Actions': ({ row, menuItems }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['status'])) return '--';
+    if (!row || isEmpty(menuItems)) return '--';
     return <StyledMenuIcon menuItems={menuItems} rowData={row} />;
   },
 };

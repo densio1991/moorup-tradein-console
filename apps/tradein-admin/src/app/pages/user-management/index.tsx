@@ -26,7 +26,7 @@ export function UserManagementPage() {
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
   const { state: authState } = useAuth();
-  const { activePlatform } = authState;
+  const { activePlatform, userDetails } = authState;
 
   const headers = [
     ...DEFAULT_COLUMN,
@@ -41,7 +41,7 @@ export function UserManagementPage() {
     const signal = controller.signal;
 
     if (!isEmpty(activePlatform)) {
-      getUsers({}, signal);
+      getUsers(userDetails?._id, signal);
     }
 
     return () => {
@@ -65,10 +65,6 @@ export function UserManagementPage() {
         break;
     }
   };
-
-  const filteredUsers = users?.filter((obj: any) =>
-    obj.platforms.includes(activePlatform),
-  );
 
   return (
     <>
@@ -95,7 +91,7 @@ export function UserManagementPage() {
         label="Users"
         isLoading={isFetchingUsers || isCreatingUser || isUpdatingUser}
         headers={headers}
-        rows={filteredUsers || []}
+        rows={users || []}
         parsingConfig={userManagementParsingConfig}
         menuItems={[
           {

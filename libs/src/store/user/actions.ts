@@ -11,7 +11,7 @@ export const getUsers = (payload: any, platform: string, signal?: AbortSignal) =
   });
 
   axiosInstance()
-    .get(`/api/admins?platform=${platform}`, { signal: signal })
+    .get(`/api/admins?platform=${platform}&exclude=${payload}`, { signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_USERS.SUCCESS,
