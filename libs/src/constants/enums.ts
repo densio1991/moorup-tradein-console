@@ -53,3 +53,10 @@ export enum CreditTypes {
   POSTASSESSMENT = 'post-assessment',
   POST_ASSESSMENT = 'post_assessment',
 }
+
+export enum ProductTypes {
+  LAPTOPS = 'laptops',
+  TABLETS = 'tablets',
+  PHONES = 'phones',
+  WATCHES = 'watches',
+}

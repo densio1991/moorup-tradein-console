@@ -149,6 +149,12 @@ export const PRODUCT_MANAGEMENT_COLUMNS = [
     enableSort: true,
     keyName: 'year',
   },
+  {
+    label: 'Type',
+    order: 6,
+    enableSort: true,
+    keyName: 'type',
+  }
 ]
 
 export const ORDER_MANAGEMENT_COLUMNS = [
@@ -332,26 +338,32 @@ export const DISCREPANCY_MANAGEMENT_COLUMNS = [
 
 export const USER_MANAGEMENT_COLUMNS = [
   {
-    label: 'First Name',
+    label: 'Role',
     order: 2,
+    enableSort: true,
+    keyName: 'role',
+  },
+  {
+    label: 'First Name',
+    order: 3,
     enableSort: true,
     keyName: 'first_name',
   },
   {
     label: 'Last Name',
-    order: 3,
+    order: 4,
     enableSort: true,
     keyName: 'last_name',
   },
   {
     label: 'Email',
-    order: 4,
+    order: 5,
     enableSort: true,
     keyName: 'email',
   },
   {
     label: 'Status',
-    order: 5,
+    order: 6,
     enableSort: true,
     keyName: 'status',
   },
@@ -438,28 +450,27 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     keyName: 'receipt_number',
   },
   {
-    label: 'Claimed By',
+    label: 'Claim Number',
     order: 6,
+    enableSort: true,
+    keyName: 'claim_number',
+  },
+  {
+    label: 'Claimed By',
+    order: 7,
     enableSort: true,
     keyName: 'user_details.first_name',
   },
   {
     label: 'Claimed Date',
-    order: 7,
+    order: 8,
     enableSort: true,
     keyName: 'createdAt',
   },
   {
-    label: 'Moorup Status',
-    order: 8,
-    enableSort: true,
-    keyName: 'moorup_status',
-  },
-  {
-    label: 'Claim Status',
-    order: 9,
-    enableSort: true,
-    keyName: 'status',
+    label: 'Order Count',
+    order: 10,
+    enableSort: false,
   },
 ]
 
@@ -513,6 +524,7 @@ export const ACTIONS_COLUMN = [
     label: 'Actions',
     order: 99,
     enableSort: false,
+    keyName: ''
   },
 ]
 
