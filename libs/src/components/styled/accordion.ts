@@ -49,7 +49,7 @@ export const StyledIcon = styled(FontAwesomeIcon)<{
   margin: 0 4px;
 
   &:hover {
-    color: ${(props) => (props.hovercolor ? props.hovercolor : 'inherit')};
-    cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+    color: ${(props) => (props.disabled ? props.color : props.hovercolor ? props.hovercolor : 'inherit')};
+    cursor: ${(props) => (props.disabled ? '' : 'pointer')};
   }
 `;

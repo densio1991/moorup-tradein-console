@@ -25,6 +25,7 @@ interface TableProps {
     label: string;
     order: number;
     enableSort?: boolean;
+    keyName?: any;
   }>;
   rows: Array<{ [key: string]: string }>;
   isLoading: boolean;
@@ -169,7 +170,7 @@ const Th = styled.th<ThProps>`
 const Tr = styled.tr<{ hover?: boolean }>`
   transition: background-color 0.3s ease;
   &:hover {
-    ${(props) => props.hover && 'background-color: #dff1f0;'}
+    ${(props) => props.hover && 'background-color: #f5f6f6;'}
     ${(props) => props.hover && 'cursor: pointer;'}
   }
 `;
