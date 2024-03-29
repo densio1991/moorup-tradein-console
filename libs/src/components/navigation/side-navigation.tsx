@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, MenuItem, MenuItemStyles, Sidebar, SubMenu } from 'react-pro-sidebar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Logo from '../../../../apps/tradein-admin/public/Moorup.png';
 import {
   ADMIN,
   CUSTOMER_SERVICE,
@@ -16,6 +17,17 @@ import {
 import { hexToRgba } from '../../helpers';
 import { useAuth, useCommon } from '../../store';
 import { Typography } from '../typography';
+
+const Image = styled.img`
+  height: 6rem;
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+  padding: 0px 60px;
+`;
 
 const StyledIcon = styled(FontAwesomeIcon)``;
 
@@ -108,7 +120,6 @@ export function SideBar(): JSX.Element {
     },
   };
 
-
   return (
     <div style={{ display: 'flex', height: '100vh', zIndex: '999'}}>
       <Sidebar 
@@ -122,7 +133,8 @@ export function SideBar(): JSX.Element {
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <div style={{ flex: 1, marginBottom: '32px', marginTop: '32px' }}>
+          <Image src={Logo} alt="" />
+          <div style={{ flex: 1, marginBottom: '32px' }}>
             <div style={{ padding: '0 24px', marginBottom: '8px' }}>
               <Typography
                 variant="body2"
