@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, MenuItem, MenuItemStyles, Sidebar, SubMenu } from 'react-pro-sidebar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Logo from '../../../../apps/tradein-admin/public/Moorup.png';
+import Logo from '../../Moorup.png';
 import {
   ADMIN,
   CUSTOMER_SERVICE,

@@ -9,7 +9,7 @@ import {
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Logo from '../../../../public/Moorup.png';
+import Logo from '../../../Moorup.png';
 
 const Container = styled.div`
   display: flex;
