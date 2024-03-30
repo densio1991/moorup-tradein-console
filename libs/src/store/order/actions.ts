@@ -492,14 +492,13 @@ export const updateOrderItemImeiSerial = (orderItemId: string, orderId: string, 
 };
 
 export const getGiftCardStatus =
-  (orderId: any, payload: any) => (dispatch: any) => {
+  (orderId: any, signal?: AbortSignal) => (dispatch: any) => {
     dispatch({
       type: types.FETCH_GIFT_CARD_STATUS.baseType,
-      payload,
     });
 
     axiosInstance()
-      .patch(`/api/orders/${orderId}/status`, payload)
+      .get(`/api/orders/${orderId}/status`, { signal: signal })
       .then((response) => {
         dispatch({
           type: types.FETCH_GIFT_CARD_STATUS.SUCCESS,
@@ -512,7 +511,7 @@ export const getGiftCardStatus =
           payload: error,
         });
 
-        toast.error('Failed to update order item status.');
+        toast.error('Failed to check gift card status.');
       });
   };
 

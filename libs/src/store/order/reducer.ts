@@ -302,6 +302,7 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isFetchingGiftCard: false,
+        giftCard: {},
       };
     }
 
