@@ -43,7 +43,7 @@ const ValidationOffer = ({
   );
 
   return (
-    <div className="flex gap-2 p-2.5">
+    <div className="flex gap-2 p-2.5 items-start">
       {orderItems?.map((item: OrderItems, idx) => {
         const { questions_answered = [] } = item;
 
@@ -79,7 +79,7 @@ const ValidationOffer = ({
             <hr />
             <button
               onClick={() => handleStatus(item)}
-              className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
+              className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
             >
               Update Status
             </button>

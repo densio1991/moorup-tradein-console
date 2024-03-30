@@ -70,6 +70,7 @@ export const EditOrderPage = () => {
     patchOrderItemById,
     evaluateOrderItemById,
     resendShipmentLabel,
+    getGiftCardStatus,
     clearOrder,
     // closeModal,
   } = useOrder();
@@ -96,7 +97,7 @@ export const EditOrderPage = () => {
     isUpdatingImeiSerial,
   } = state;
 
-  const order_items = order?.order_items || [];
+  const orderItems = order?.order_items || [];
 
   const isSingleOrderFlow = order?.order_flow === 'single';
 
@@ -105,25 +106,13 @@ export const EditOrderPage = () => {
     const signal = controller.signal;
 
     fetchOrderById(orderId, signal);
-    // fetchOrderShipments(order._id, signal);
+    fetchOrderShipments(orderId, signal);
+    getGiftCardStatus(orderId, signal);
 
     return () => {
       controller.abort();
     };
   }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    if (order._id) {
-      fetchOrderShipments(order._id, signal);
-    }
-
-    return () => {
-      controller.abort();
-    };
-  }, [order._id]);
 
   useEffect(() => {
     if (!isEmpty(order)) {
@@ -184,7 +173,7 @@ export const EditOrderPage = () => {
         };
       });
     } else {
-      order_items?.forEach((item: OrderItems) => {
+      orderItems?.forEach((item: OrderItems) => {
         shippingItems[item?._id] = {
           [shipments.direction]: shipments,
         };
@@ -194,15 +183,15 @@ export const EditOrderPage = () => {
     return shippingItems;
   };
 
-  const collectionOrderItems = order_items.filter((item: OrderItems) =>
+  const collectionOrderItems = orderItems.filter((item: OrderItems) =>
     COLLECTION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
   );
 
-  const validationOrderItems = order_items.filter((item: OrderItems) =>
+  const validationOrderItems = orderItems.filter((item: OrderItems) =>
     VALIDATION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
   );
 
-  const completionOrderItems = order_items.filter((item: OrderItems) =>
+  const completionOrderItems = orderItems.filter((item: OrderItems) =>
     COMPLETION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
   );
 
