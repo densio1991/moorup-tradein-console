@@ -12,6 +12,8 @@ import {
   StyledIcon,
 } from '@tradein-admin/libs';
 import { faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { useEffect, useState } from 'react';
+import { isEmpty } from 'lodash';
 
 type CardItemProps = {
   label: string;
@@ -46,6 +48,7 @@ const CREDIT_TYPE: any = {
 
 const QuoteDetails = () => {
   const { state, cancelOrderById, getGiftCardStatus } = useOrder();
+  const [voucherDetails, setVoucherDetails] = useState({});
   const {
     order = {},
     giftCard = {},
@@ -57,7 +60,7 @@ const QuoteDetails = () => {
   const address = order?.address || {};
   const orderItems = order?.order_items || [];
   const payment = order?.payment || {};
-  const voucher = order?.voucher_links || [];
+  const voucherLinks = order?.voucher_links || [];
   const bankDetails = userId?.bank_details || [];
 
   const completeAddress = [
@@ -72,13 +75,14 @@ const QuoteDetails = () => {
   const products = orderItems.map((item: OrderItems, idx: number) => {
     return <Badge key={idx}>{item?.product_name}</Badge>;
   });
+  const hasGiftCard = payment?.payment_type === 'voucher' || !isEmpty(voucherDetails);
 
-  if (voucher.length > 1) {
-    const voucherDetails = voucher[1];
-    console.log(JSON.parse(voucherDetails));
+  const refreshGiftCardStatus = () => {
+    const params: any = Object.assign({}, voucherDetails);
+    delete params['amount'];
+
+    getGiftCardStatus(order?._id, params);
   }
-
-  const hasGiftCard = payment?.payment_type === 'voucher';
 
   const giftCardStatus = () => {
     return (
@@ -91,7 +95,7 @@ const QuoteDetails = () => {
             <StyledIcon
               icon={faRefresh}
               color="#666666"
-              onClick={() => getGiftCardStatus(order?._id)}
+              onClick={() => refreshGiftCardStatus()}
             />
           </>
         )}
@@ -99,7 +103,26 @@ const QuoteDetails = () => {
     );
   };
 
-  giftCard['status'] = 'Unpaid';
+  useEffect(() => {
+    if (voucherLinks && voucherLinks.length > 1) {
+      let voucher = JSON.parse(voucherLinks[1]);
+      const params = {
+        pan: voucher?.pincredentials?.pin,
+        pin: voucher?.pincredentials?.scode,
+        txId: voucher?.txid,
+        currency: voucher?.currency,
+      }
+      if (isEmpty(voucherDetails)) {
+        getGiftCardStatus(order?._id, params);
+      }
+      setVoucherDetails({
+        amount: voucher?.balance?.currency?.balance,
+        ...params,
+      });
+
+      console.log(voucher)
+    }
+  }, [voucherLinks]);
 
   return (
     <div className="grid md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-2">

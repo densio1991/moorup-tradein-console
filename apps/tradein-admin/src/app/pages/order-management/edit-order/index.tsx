@@ -70,7 +70,6 @@ export const EditOrderPage = () => {
     patchOrderItemById,
     evaluateOrderItemById,
     resendShipmentLabel,
-    getGiftCardStatus,
     clearOrder,
     // closeModal,
   } = useOrder();
@@ -107,7 +106,6 @@ export const EditOrderPage = () => {
 
     fetchOrderById(orderId, signal);
     fetchOrderShipments(orderId, signal);
-    getGiftCardStatus(orderId, signal);
 
     return () => {
       controller.abort();
