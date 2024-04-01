@@ -17,7 +17,7 @@ const MenuIcon = styled(FontAwesomeIcon)`
 
 const MenuList = styled.div`
   position: absolute;
-  right: 50px;
+  right: 100px;
   background-color: #fff;
   border: 0px;
   border-radius: 5px;

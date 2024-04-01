@@ -41,6 +41,8 @@ export function EditProductPage() {
 
   return (
     <LoaderContainer
+      margin="20px"
+      padding="10px"
       color="#01463a"
       loading={
         isFetchingProduct ||

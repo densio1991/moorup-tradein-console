@@ -257,6 +257,8 @@ export const EditOrderPage = () => {
 
   return (
     <LoaderContainer
+      margin="20px"
+      padding="10px"
       title="Order Details"
       loading={isFetchingOrder || isUpdatingOrder || isUpdatingImeiSerial}
     >
