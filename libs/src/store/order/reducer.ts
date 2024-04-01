@@ -295,7 +295,7 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isFetchingGiftCard: false,
-        giftCard: action.payload?.data,
+        giftCard: action.payload?.data?.response,
       };
     }
     case types.FETCH_GIFT_CARD_STATUS.FAILED: {

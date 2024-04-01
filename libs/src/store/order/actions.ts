@@ -492,13 +492,13 @@ export const updateOrderItemImeiSerial = (orderItemId: string, orderId: string, 
 };
 
 export const getGiftCardStatus =
-  (orderId: any, signal?: AbortSignal) => (dispatch: any) => {
+  (orderId: any, payload: any, signal?: AbortSignal) => (dispatch: any) => {
     dispatch({
       type: types.FETCH_GIFT_CARD_STATUS.baseType,
     });
 
     axiosInstance()
-      .get(`/api/orders/${orderId}/status`, { signal: signal })
+      .get(`/api/epay/balance-inquiry`, { params: payload, signal: signal })
       .then((response) => {
         dispatch({
           type: types.FETCH_GIFT_CARD_STATUS.SUCCESS,

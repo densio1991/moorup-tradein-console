@@ -113,8 +113,8 @@ export const useOrder = () => {
     actions.updateOrderItemImeiSerial(orderItemId, orderId, payload)(dispatch);
   }
 
-  const getGiftCardStatus = (id: any, signal?: AbortSignal) => {
-    actions.getGiftCardStatus(id, signal)(dispatch);
+  const getGiftCardStatus = (id: any, payload: any, signal?: AbortSignal) => {
+    actions.getGiftCardStatus(id, payload, signal)(dispatch);
   };
 
   const clearOrder = () => {
