@@ -175,7 +175,7 @@ const Tr = styled.tr<{ hover?: boolean }>`
   }
 `;
 
-const Td = styled.td<{ alignRight: boolean }>`
+const Td = styled.td<{ alignRight?: boolean }>`
   padding: 12px 10px;
   border-bottom: 1px solid #e1e4e8;
   color: #333;
@@ -386,7 +386,6 @@ export function Table({
                   key={header.label}
                   onClick={() => header.enableSort && handleSort(header.keyName)}
                   className={header.enableSort ? 'enableSort' : ''}
-                  alignRight={header.label === 'Actions'}
                 >
                   {header.label}
                   {header.enableSort && (
@@ -407,7 +406,7 @@ export function Table({
             {itemsToDisplay?.map((row: any, index: any) => (
               <Tr key={index} onClick={() => handleRowClick(row)} hover={!isEmpty(row?.viewURL)}>
                 {sortedHeaders?.map((header) => (
-                  <Td key={`${index}-${header.label}`} alignRight={header.label === 'Actions'}>
+                  <Td key={`${index}-${header.label}`}>
                     <span>{parseRowValue(header, row)}</span>
                   </Td>
                 ))}

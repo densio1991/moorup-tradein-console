@@ -11,6 +11,7 @@ const StyledContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   background-color: white;
+  margin-top: 20px;
   margin-bottom: 10px;
   margin-left: 20px;
   margin-right: 20px;
