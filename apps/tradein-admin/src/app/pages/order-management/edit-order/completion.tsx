@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  DetailCardContainer,
-  OrderItems,
-  amountFormatter,
-} from '@tradein-admin/libs';
+import { DetailCardContainer, OrderItems } from '@tradein-admin/libs';
 import { CardDetail, DeviceSection } from './sections';
 import OfferSection from './sections/offer-section';
 
@@ -47,7 +43,7 @@ const Completion = ({
   );
 
   return (
-    <div className="flex gap-2 p-2.5">
+    <div className="flex gap-2 p-2.5 items-start">
       {orderItems?.map((item: OrderItems, idx) => {
         const { questions_answered = [] } = item;
 

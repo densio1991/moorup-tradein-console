@@ -27,7 +27,7 @@ export const DataLine = styled.div`
   grid-template-columns: 3fr 5fr;
   box-sizing: content-box;
   gap: 16px;
-  padding: 6px 0;
+  padding: 8px 0;
   border-top: 1px solid #eee;
   font-size: 14px;
   

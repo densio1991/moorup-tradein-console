@@ -491,6 +491,30 @@ export const updateOrderItemImeiSerial = (orderItemId: string, orderId: string, 
     });
 };
 
+export const getGiftCardStatus =
+  (orderId: any, payload: any, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.FETCH_GIFT_CARD_STATUS.baseType,
+    });
+
+    axiosInstance()
+      .get(`/api/epay/balance-inquiry`, { params: payload, signal: signal })
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_GIFT_CARD_STATUS.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.FETCH_GIFT_CARD_STATUS.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to check gift card status.');
+      });
+  };
+
 export const clearOrder = (payload: any) => (dispatch: any) => {
   dispatch({
     type: types.CLEAR_ORDER,payload,
