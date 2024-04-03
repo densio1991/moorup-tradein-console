@@ -362,7 +362,7 @@ export function getCurrencySymbol(currencyCode: string) {
   return CURRENCY_SYMBOLS[currencyCode] || null;
 }
 
-export const formatDate = (date: Date, format='MM/DD/YYYY') => {
+export const formatDate = (date: Date, format='DD/MM/YYYY') => {
   return dayjs(date).format(format);
 }
 
