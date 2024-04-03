@@ -20,6 +20,7 @@ type CardItemProps = {
   value: any;
   defaultValue?: string;
   copy?: boolean;
+  capitalize?: boolean;
 };
 
 export const CardItem = ({
@@ -27,11 +28,12 @@ export const CardItem = ({
   value,
   defaultValue = '---',
   copy,
+  capitalize = false,
 }: CardItemProps) => {
   return (
     <DataLine>
       <dl>{label}</dl>
-      <dt>
+      <dt className={capitalize ? 'capitalize' : ''}>
         {value || defaultValue}
         {copy && value && <CopyToClipboardButton textToCopy={value} />}
       </dt>
@@ -46,9 +48,20 @@ const CREDIT_TYPE: any = {
   online: 'Online',
 };
 
+const PAYMENT_TYPE: any = {
+  voucher: 'Gift Card',
+  bank: 'Bank',
+};
+
+const PAYMENT_STATUS: any = {
+  unpaid: 'Unpaid',
+  paid: 'paid',
+  redeemed: 'Redeemed',
+};
+
 const QuoteDetails = () => {
   const { state, cancelOrderById, getGiftCardStatus } = useOrder();
-  const [voucherDetails, setVoucherDetails] = useState({});
+  const [voucherDetails, setVoucherDetails] = useState<any>({});
   const {
     order = {},
     giftCard = {},
@@ -75,23 +88,25 @@ const QuoteDetails = () => {
   const products = orderItems.map((item: OrderItems, idx: number) => {
     return <Badge key={idx}>{item?.product_name}</Badge>;
   });
-  const hasGiftCard = payment?.payment_type === 'voucher' || !isEmpty(voucherDetails);
+  const hasGiftCard =
+    payment?.payment_type === 'voucher' || !isEmpty(voucherDetails);
 
   const refreshGiftCardStatus = () => {
     const params: any = Object.assign({}, voucherDetails);
     delete params['amount'];
 
     getGiftCardStatus(order?._id, params);
-  }
+  };
 
   const giftCardStatus = () => {
+    const status = giftCard?.status || voucherDetails?.status;
     return (
       <div className="flex items-center gap-2">
         {isFetchingGiftCard ? (
           'Loading...'
         ) : (
           <>
-            {giftCard?.status || '---'}
+            {status || '---'}
             <StyledIcon
               icon={faRefresh}
               color="#666666"
@@ -104,23 +119,23 @@ const QuoteDetails = () => {
   };
 
   useEffect(() => {
-    if (voucherLinks && voucherLinks.length > 1) {
-      let voucher = JSON.parse(voucherLinks[1]);
+    if (payment?.additional_info && payment?.additional_info?.length > 1) {
+      // clarify how to handle multiple vouchers
+      const voucher = payment?.additional_info[0];
       const params = {
-        pan: voucher?.pincredentials?.pin,
-        pin: voucher?.pincredentials?.scode,
-        txId: voucher?.txid,
-        currency: voucher?.currency,
-      }
+        pan: voucher?.voucherPan,
+        pin: voucher?.voucherPin,
+        txId: voucher?.voucherReference,
+        currency: voucher?.voucherCurrency,
+      };
       if (isEmpty(voucherDetails)) {
         getGiftCardStatus(order?._id, params);
       }
       setVoucherDetails({
-        amount: voucher?.balance?.currency?.balance,
+        amount: voucher?.voucherAmount,
+        status: voucher?.voucherStatus,
         ...params,
       });
-
-      console.log(voucher)
     }
   }, [voucherLinks]);
 
@@ -157,10 +172,15 @@ const QuoteDetails = () => {
         />
         <CardItem
           label="Payment Status"
-          value={payment.payment_status}
-          defaultValue="Unpaid"
+          value={PAYMENT_STATUS[payment.payment_status]}
+          defaultValue={PAYMENT_STATUS.unpaid}
+          capitalize
         />
-        <CardItem label="Payment Type" value={payment?.payment_type} />
+        <CardItem
+          label="Payment Type"
+          value={PAYMENT_TYPE[payment?.payment_type]}
+          capitalize
+        />
         <CardItem label="BSB & Account" value={userId?.bsb_account} copy />
         {hasGiftCard && (
           <CardItem
