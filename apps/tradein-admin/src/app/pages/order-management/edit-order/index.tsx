@@ -232,7 +232,7 @@ export const EditOrderPage = () => {
                   order?.status !== OrderItemStatus.CANCELLED && (
                     <div className="flex justify-end gap-2 mb-2">
                       <button
-                        className="text-md font-medium text-white bg-emerald-500 py-1 px-3 rounded-md hover:bg-emerald-600"
+                        className="text-md text-white bg-emerald-500 py-1 px-3 rounded-md hover:bg-emerald-600"
                         onClick={() => resendShipmentLabel(order?._id)}
                         disabled={isUpdatingOrder}
                       >

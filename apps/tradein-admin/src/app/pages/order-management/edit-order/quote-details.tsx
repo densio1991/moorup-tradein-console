@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   DetailCardContainer,
-  OrderItemStatus,
   OrderItems,
   Badge,
   parseStatus,
@@ -60,14 +59,9 @@ const PAYMENT_STATUS: any = {
 };
 
 const QuoteDetails = () => {
-  const { state, cancelOrderById, getGiftCardStatus } = useOrder();
+  const { state, getGiftCardStatus } = useOrder();
   const [voucherDetails, setVoucherDetails] = useState<any>({});
-  const {
-    order = {},
-    giftCard = {},
-    isUpdatingOrder,
-    isFetchingGiftCard,
-  } = state;
+  const { order = {}, giftCard = {}, isFetchingGiftCard } = state;
 
   const userId = order?.user_id || {};
   const address = order?.address || {};
@@ -189,17 +183,17 @@ const QuoteDetails = () => {
             defaultValue="Unpaid"
           />
         )}
-        {order?.status !== OrderItemStatus.CANCELLED && (
+        {/* {order?.status !== OrderItemStatus.CANCELLED && (
           <div className="flex gap-2 pt-2 mt-auto">
             <button
-              className="text-md font-medium text-white bg-red-500 py-1 px-3 rounded-md hover:bg-red-600"
+              className="text-md text-white bg-red-500 py-1 px-3 rounded-md hover:bg-red-600"
               onClick={() => cancelOrderById(order?._id)}
               disabled={isUpdatingOrder}
             >
               Cancel Order
             </button>
           </div>
-        )}
+        )} */}
       </DetailCardContainer>
     </div>
   );

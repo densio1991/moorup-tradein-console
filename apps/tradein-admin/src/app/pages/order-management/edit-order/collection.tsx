@@ -73,13 +73,13 @@ const Collection = ({
   };
 
   return (
-    <div className="flex gap-2 p-2.5 items-end">
+    <div className="flex gap-2 p-2.5 items-start">
       {orderItems?.map((item: OrderItems, idx) => {
         const shipment = getItemShipment(item._id);
 
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
-            <DeviceSection order={item} orderId={orderId} />
+            <DeviceSection orderItem={item} orderId={orderId} />
             <OfferSection orderItem={item} />
             <hr />
             <div className="flex flex-col mb-2">
@@ -111,7 +111,7 @@ const Collection = ({
             {!isEmpty(shipment) ? (
               <>
                 <hr />
-                <div className="flex flex-row flex-wrap gap-2 pt-1 font-medium">
+                <div className="flex flex-row flex-wrap gap-2 pt-1">
                   <button
                     onClick={() => handleReceiveOrderItem(item._id)}
                     className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
@@ -132,30 +132,32 @@ const Collection = ({
               isSingleOrderFlow && (
                 <>
                   <hr />
-                  <div className="flex flex-row flex-wrap gap-2 pt-1 font-medium">
-                    <button
-                      className="font-medium flex-1 text-white bg-emerald-800 py-1 px-3 rounded-md hover:bg-emerald-900"
-                      disabled={isResendingLabel}
-                      onClick={() => handleResendLabel(item._id)}
-                    >
-                      Resend Label
-                    </button>
-                    <button
-                      onClick={() => handleCancelOrderItem(item._id)}
-                      className="px-3 py-1 flex-1 text-white bg-red-700 hover:bg-red-800 rounded-md"
-                    >
-                      Cancel Order
-                    </button>
-                  </div>
+                  <button
+                    className="flex-1 text-white bg-emerald-800 py-1 px-3 rounded-md hover:bg-emerald-900"
+                    disabled={isResendingLabel}
+                    onClick={() => handleResendLabel(item._id)}
+                  >
+                    Resend Label
+                  </button>
                 </>
               )
             )}
-            <button
-              onClick={() => handleUpdateStatus(item)}
-              className="font-medium px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
-            >
-              Update Status
-            </button>
+            <div className="flex flex-row flex-wrap gap-2">
+              <button
+                onClick={() => handleUpdateStatus(item)}
+                className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
+              >
+                Update Status
+              </button>
+              {isSingleOrderFlow && (
+                <button
+                  onClick={() => handleCancelOrderItem(item._id)}
+                  className="px-3 py-1 flex-1 text-white bg-red-700 hover:bg-red-800 rounded-md"
+                >
+                  Cancel Item
+                </button>
+              )}
+            </div>
           </DetailCardContainer>
         );
       })}
