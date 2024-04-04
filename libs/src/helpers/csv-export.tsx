@@ -3,12 +3,6 @@ interface Data {
   platform: string;
   order_id: {
     _id: string;
-    user_id: {
-      _id: string;
-      first_name: string;
-      last_name: string;
-      email: string;
-    };
     order_items: {
       line_item_number: string;
       original_offer: number;
@@ -21,7 +15,13 @@ interface Data {
   promotion_id: {
     name: string;
   } | null;
-  email: string;
+  user_id: {
+    _id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    mobile: string;
+  };
   receipt_number: string;
   status: string;
   createdAt: string;
@@ -38,14 +38,14 @@ export function exportPromotionClaims(data: Data[]) {
     'First Name',
     'Last Name',
     'Email',
-    'Mobile',
+    // 'Mobile',
     'Order ID',
     'Order Line Item ID',
-    'Original Offer',
-    'Trade-in SKU',
-    'Current Status',
-    'Order Created Date',
-    'Barcode Serial',
+    // 'Original Offer',
+    // 'Trade-in SKU',
+    // 'Current Status',
+    // 'Order Created Date',
+    // 'Barcode Serial',
     'Claim Status',
     'Claim Created Date',
     'Claim Updated Date',
@@ -61,17 +61,17 @@ export function exportPromotionClaims(data: Data[]) {
         const row = [
           promotionName,
           item._id || '',
-          item.order_id.user_id.first_name || '',
-          item.order_id.user_id.last_name || '',
-          item.order_id.user_id.email || '',
-          '',
+          item.user_id.first_name || '',
+          item.user_id.last_name || '',
+          item.user_id.email || '',
+          // item.user_id.mobile || '',
           item.order_id._id || '',
           orderItem.line_item_number || '',
-          orderItem.original_offer ? orderItem.original_offer.toString() : '',
-          orderItem.sku || '',
-          item.order_id.status || '',
-          item.order_id.createdAt || '',
-          '',
+          // orderItem.original_offer ? orderItem.original_offer.toString() : '',
+          // orderItem.sku || '',
+          // item.order_id.status || '',
+          // item.order_id.createdAt || '',
+          // '',
           item.status || '',
           item.createdAt || '',
           item.updatedAt || '',
