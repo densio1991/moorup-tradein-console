@@ -24,7 +24,7 @@ const orderState = {
   isGeneratingLabels: false,
   isUpdatingImeiSerial: false,
   giftCard: {},
-  isFetchingGiftCard: true,
+  isFetchingGiftCard: false,
   isModalOpen: false,
 };
 
