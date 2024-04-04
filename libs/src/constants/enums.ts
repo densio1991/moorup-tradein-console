@@ -34,9 +34,10 @@ export enum OrderPaymentStatus {
 export enum ClaimStatus {
   PENDING = 'pending',
   APPROVED = 'approved',
-  REJECT = 'reject',
+  REJECTED = 'rejected',
   CANCELLED = 'cancelled',
-  DELETED = 'deleted'
+  FAILED = 'failed',
+  COMPLETED = 'completed'
 }
 
 export enum DefaultStatus {

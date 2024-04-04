@@ -97,7 +97,14 @@ export const SIDENAV_ITEMS = [
         icon: faCheckToSlot,
         disabled: false,
       },
-    ],
+      {
+        title: 'Payment',
+        url: '/dashboard/promotion/payment',
+        activeUrl: /^\/dashboard\/promotion\/payment/,
+        icon: faCreditCard,
+        disabled: true,
+      }
+    ]
   },
   {
     title: 'User Management',
@@ -106,14 +113,7 @@ export const SIDENAV_ITEMS = [
     icon: faUsers,
     disabled: false,
   },
-  {
-    title: 'Payment',
-    url: '/dashboard/payment',
-    activeUrl: /^\/dashboard\/payment/,
-    icon: faCreditCard,
-    disabled: true,
-  },
-];
+]
 
 export const DEFAULT_COLUMN = [
   {
@@ -444,35 +444,42 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     keyName: 'promotion_details.slug',
   },
   {
-    label: 'Receipt Number',
+    label: 'Device Model',
     order: 5,
+    enableSort: false,
+    keyName: 'device_model',
+  },
+  {
+    label: 'Receipt Number',
+    order: 6,
     enableSort: true,
     keyName: 'receipt_number',
   },
   {
     label: 'Claim Number',
-    order: 6,
+    order: 7,
     enableSort: true,
     keyName: 'claim_number',
   },
   {
     label: 'Claimed By',
-    order: 7,
+    order: 8,
     enableSort: true,
     keyName: 'user_details.first_name',
   },
   {
     label: 'Claimed Date',
-    order: 8,
+    order: 9,
     enableSort: true,
     keyName: 'createdAt',
   },
   {
-    label: 'Order Count',
+    label: 'Claim Status',
     order: 10,
-    enableSort: false,
-  },
-];
+    enableSort: true,
+    keyName: 'status',
+  }
+]
 
 export const ACTIONABLES_MANAGEMENT_COLUMNS = [
   {
