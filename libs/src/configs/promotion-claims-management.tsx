@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
+import { AppButton } from '../components';
 import { formatDate, parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
@@ -13,11 +14,28 @@ const StyledLink = styled.a`
   color: #216A4C;
 `
 
-// const StyledDiv = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   gap: 10px;
-// `
+const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+`
+
+const StyledChip = styled.span<{ value?: string; width?: string; bgColor?: string; textColor?: string }>`
+  display: inline-block;
+  border-radius: 4px;
+  padding: 2px 20px;
+  text-decoration: none;
+  width: ${(props) => props.width ?? 'auto'};
+  text-align: center;
+  background-color: ${(props) => props.bgColor ?? (props.value === 'active' ? '#b0d6d0' : '#ffdbd9')};
+  color: ${(props) => props.textColor ?? (props.value === 'active' ? '#01463A' : '#f7564a')};
+`;
+
+const ProductChipsContainer = styled.div`
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+`;
 
 export const promotionClaimsManagementParsingConfig = {
   'Order Number': ({ row }: ParsingFunctionParams) => {
@@ -67,35 +85,91 @@ export const promotionClaimsManagementParsingConfig = {
 
     return parseStatus(row['status']);
   },
-  'Order Count': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['order_id'])) return '--';
+  'Device Model': ({ row }: ParsingFunctionParams) => {
     const orderDetails = row ? row['order_id'] : null;
-    const orderCount = orderDetails?.order_items?.length;
-    return orderCount;
+    if (!orderDetails || isEmpty(orderDetails['order_number'])) return '--';
+  
+    const orderItems = Array.isArray(orderDetails?.order_items) && orderDetails?.order_items?.length > 0 ? orderDetails.order_items : [];
+    const maxItems = 2;
+  
+    if (orderItems.length <= maxItems) {
+      return (
+        <ProductChipsContainer>
+          {orderItems.map((item: { product_variant_id: { product_id: { model: any } } }, index: number) => (
+            item.product_variant_id ? (
+              <StyledChip key={index} bgColor='#216A4C' textColor='white'>{item?.product_variant_id?.product_id?.model}</StyledChip>
+            ) : (
+              '--'
+            )
+          ))}
+        </ProductChipsContainer>
+      );
+    } else {
+      const visibleItems = orderItems.slice(0, maxItems);
+      const remainingCount = orderItems.length - maxItems;
+  
+      return (
+        <ProductChipsContainer>
+          {visibleItems?.map((item: { product_variant_id: { product_id: { model: any } } }, index: number) => (
+            item.product_variant_id ? (
+              <StyledChip key={index} bgColor='#216A4C' textColor='white'>{item?.product_variant_id?.product_id?.model}</StyledChip>
+            ) : (
+              '--'
+            )
+          ))}
+          <StyledChip key="more" bgColor='#216A4C' textColor='white'>{`+${remainingCount} more`}</StyledChip>
+        </ProductChipsContainer>
+      );
+    }
   },
-  // Action: ({ row }: ParsingFunctionParams) => {
-  //   if (!row || isEmpty(row['_id'])) return '--';
-  //   return (
-  //     <StyledDiv>
-  //       <AppButton
-  //         type="button"
-  //         variant="fill"
-  //         width="fit-content"
-  //         padding='4px 20px'
-  //         onClick={() => console.log('Approved')}
-  //       >
-  //         Approve
-  //       </AppButton>
-  //       <AppButton
-  //         type="button"
-  //         variant="error"
-  //         width="fit-content"
-  //         padding='4px 20px'
-  //         onClick={() => console.log('Rejected')}
-  //       >
-  //         Reject
-  //       </AppButton>
-  //     </StyledDiv>
-  //   );
-  // },
+  Action: ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['_id'])) return '--';
+    return (
+      <StyledDiv>
+        <AppButton
+          type="button"
+          variant="fill"
+          width="fit-content"
+          padding='4px 20px'
+          onClick={() => console.log('Approved')}
+        >
+          Approve
+        </AppButton>
+        <AppButton
+          type="button"
+          variant="error"
+          width="fit-content"
+          padding='4px 20px'
+          onClick={() => console.log('Rejected')}
+        >
+          Reject
+        </AppButton>
+      </StyledDiv>
+    );
+  },
+  Actions: ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['_id'])) return '--';
+    return (
+      <StyledDiv>
+        <AppButton
+          type="button"
+          variant="fill"
+          width="fit-content"
+          padding='4px 20px'
+          onClick={() => console.log('Approved')}
+        >
+          Approve
+        </AppButton>
+        <AppButton
+          type="button"
+          variant="error"
+          width="fit-content"
+          padding='4px 20px'
+          onClick={() => console.log('Rejected')}
+        >
+          Reject
+        </AppButton>
+      </StyledDiv>
+    );
+  },
 };

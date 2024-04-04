@@ -152,7 +152,7 @@ export function SideBar(): JSX.Element {
                         key={index} 
                         icon={<StyledIcon icon={item.icon} />}
                         disabled={item.disabled}
-                        // defaultOpen
+                        defaultOpen={item.activeUrl?.test(pathname)}
                       >
                         {item.submenu.map((subItem, subIndex) => (
                           <MenuItem 

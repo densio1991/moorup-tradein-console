@@ -451,16 +451,22 @@ export const parseStatus = (value: string) => {
       bgColor = defaultTheme.primary.background;
       break;
 
-    case ClaimStatus.REJECT:
+    case ClaimStatus.REJECTED:
       text = 'Rejected';
       textColor = defaultTheme.danger.text;
       bgColor = defaultTheme.danger.background;
       break;
 
-    case ClaimStatus.DELETED:
-      text = 'Deleted';
+    case ClaimStatus.FAILED:
+      text = 'Failed';
       textColor = defaultTheme.danger.text;
       bgColor = defaultTheme.danger.background;
+      break;
+
+    case ClaimStatus.COMPLETED:
+      text = 'Completed';
+      textColor = defaultTheme.success.text;
+      bgColor = defaultTheme.success.background;
       break;
 
     case DefaultStatus.ACTIVE:
