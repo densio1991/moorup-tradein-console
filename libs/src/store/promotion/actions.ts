@@ -110,7 +110,7 @@ export const getPromotionClaims = (payload: any, platform: string, signal?: Abor
   });
 
   axiosInstance()
-    .get(`/api/claims?platform=${platform}`, { signal: signal })
+    .get(`/api/claims?platform=${platform}`, { params: payload, signal: signal })
     .then((response) => {
       dispatch({
         type: types.FETCH_PROMOTION_CLAIMS.SUCCESS,
