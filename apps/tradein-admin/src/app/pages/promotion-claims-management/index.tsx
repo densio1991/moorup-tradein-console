@@ -4,6 +4,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import {
   ADMIN,
   AppButton,
+  ClaimStatus,
   PROMOTION_CLAIMS_MANAGEMENT_COLUMNS,
   PageSubHeader,
   REGULAR,
@@ -25,23 +26,15 @@ export function PromotionClaimsPage() {
   const { activePlatform, userDetails } = authState;
   const { setSearchTerm } = useCommon();
 
-  const headers = [
-    ...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS,
-    // {
-    //   label: 'Action',
-    //   order: 98,
-    //   enableSort: false,
-    //   keyName: '',
-    // },
-  ];
+  const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
 
   switch (userDetails.role) {
     case REGULAR:
       headers.push({
-        label: 'Claim Status',
-        order: 9,
-        enableSort: true,
-        keyName: 'status',
+        label: 'Action',
+        order: 98,
+        enableSort: false,
+        keyName: '',
       });
       break;
 
@@ -49,9 +42,16 @@ export function PromotionClaimsPage() {
     case SUPERADMIN:
       headers.push({
         label: 'Moorup Status',
-        order: 8,
+        order: 11,
         enableSort: true,
         keyName: 'moorup_status',
+      });
+
+      headers.push({
+        label: 'Actions',
+        order: 99,
+        enableSort: false,
+        keyName: '',
       });
       break;
 
@@ -64,7 +64,16 @@ export function PromotionClaimsPage() {
     const signal = controller.signal;
 
     if (!isEmpty(activePlatform)) {
-      getPromotionClaims({}, signal);
+      if (userDetails?.role === REGULAR) {
+        const filters = {
+          status: ClaimStatus.PENDING,
+          moorup_status: ClaimStatus.APPROVED,
+        };
+
+        getPromotionClaims(filters, signal);
+      } else {
+        getPromotionClaims({}, signal);
+      }
     }
 
     return () => {
