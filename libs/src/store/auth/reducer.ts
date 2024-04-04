@@ -16,6 +16,7 @@ const authState = {
   isFetchingPlatformConfig: false,
   activePlatform: localStorage.getItem(ACTIVE_PLATFORM) || null,
   isPageLoading: true,
+  isUpdatingPlatformConfig: false,
 };
 
 const authReducer = (state: any, action: any) => {
@@ -117,13 +118,20 @@ const authReducer = (state: any, action: any) => {
       return {
         ...state,
         isFetchingPlatformConfig: false,
-        platformConfig: action.payload.data,
+        platformConfig: action.payload?.data[0] || {},
       };
     }
     case types.GET_PLATFORM_CONFIG.FAILED: {
       return {
         ...state,
         isFetchingPlatformConfig: false,
+        platformConfig: {},
+      };
+    }
+    case types.GET_PLATFORM_CONFIG.CANCELLED: {
+      return {
+        ...state,
+        isFetchingPlatformConfig: true,
         platformConfig: {},
       };
     }
@@ -139,6 +147,36 @@ const authReducer = (state: any, action: any) => {
         ...state,
         isPageLoading: action.payload,
       };
+
+    case types.CLEAR_PLATFORM_CONFIG:
+      return {
+        ...state,
+        isFetchingPlatformConfig: true,
+        platformConfig: action.payload,
+      };
+
+    case types.UPDATE_PLATFORM_CONFIG.baseType: {
+      return {
+        ...state,
+        isUpdatingPlatformConfig: true,
+      };
+    }
+    case types.UPDATE_PLATFORM_CONFIG.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingPlatformConfig: false,
+        platformConfig: {},
+        isFetchingPlatformConfig: true,
+      };
+    }
+    case types.UPDATE_PLATFORM_CONFIG.FAILED: {
+      return {
+        ...state,
+        isUpdatingPlatformConfig: false,
+        platformConfig: {},
+        isFetchingPlatformConfig: false,
+      };
+    }
 
     default:
       return state;
