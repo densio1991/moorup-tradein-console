@@ -192,7 +192,7 @@ export function SideBar(): JSX.Element {
                 Settings
               </Typography>
             </div> */}
-            <Menu menuItemStyles={menuItemStyles}>
+            {/* <Menu menuItemStyles={menuItemStyles}>
               <MenuItem 
                 key='configs'
                 onClick={() => navigate('/dashboard/configurations')} 
@@ -201,7 +201,7 @@ export function SideBar(): JSX.Element {
               >
                 Configurations
               </MenuItem>
-            </Menu>
+            </Menu> */}
             {/* <div style={{ padding: '0 24px', marginBottom: '8px', marginTop: '16px' }}>
               <Typography
                 variant="body2"
@@ -211,7 +211,7 @@ export function SideBar(): JSX.Element {
                 Account
               </Typography>
             </div> */}
-            <Menu menuItemStyles={menuItemStyles}>
+            {/* <Menu menuItemStyles={menuItemStyles}>
               <MenuItem 
                 key='logout' 
                 onClick={() => logoutUser()} 
@@ -219,8 +219,28 @@ export function SideBar(): JSX.Element {
               >
                 Logout
               </MenuItem>
-            </Menu>
+            </Menu> */}
           </div>
+          <Menu menuItemStyles={menuItemStyles}>
+            <MenuItem 
+              key='configs'
+              onClick={() => navigate('/dashboard/configurations')} 
+              active={/^\/dashboard\/configurations/?.test(pathname)}
+              icon={<StyledIcon icon={faGears} />}
+            >
+              Configurations
+            </MenuItem>
+          </Menu>
+          <hr style={{ margin: '20px 0px', width: '80%', alignSelf: 'center' }}/>
+          <Menu menuItemStyles={menuItemStyles}>
+            <MenuItem 
+              key='logout' 
+              onClick={() => logoutUser()} 
+              icon={<StyledIcon icon={faArrowRightFromBracket} />}
+            >
+              Logout
+            </MenuItem>
+          </Menu>
         </div>
       </Sidebar>
     </div>
