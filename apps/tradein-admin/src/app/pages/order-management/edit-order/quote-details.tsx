@@ -11,6 +11,7 @@ import {
   StyledIcon,
 } from '@tradein-admin/libs';
 import { faRefresh } from '@fortawesome/free-solid-svg-icons';
+import { cancel } from '@fortawesome/typicons';
 import { useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
 
@@ -60,8 +61,9 @@ const PAYMENT_STATUS: any = {
 
 const QuoteDetails = () => {
   const { state, getGiftCardStatus } = useOrder();
-  const [voucherDetails, setVoucherDetails] = useState<any>({});
+  const [voucherDetails, setVoucherDetails] = useState<any>([]);
   const { order = {}, giftCard = {}, isFetchingGiftCard } = state;
+  const [activeGiftCard, setActiveGiftCard] = useState();
 
   const userId = order?.user_id || {};
   const address = order?.address || {};
@@ -85,27 +87,36 @@ const QuoteDetails = () => {
   const hasGiftCard =
     payment?.payment_type === 'voucher' || !isEmpty(voucherDetails);
 
-  const refreshGiftCardStatus = () => {
-    const params: any = Object.assign({}, voucherDetails);
+  const refreshGiftCardStatus = (voucher: any) => {
+    const params: any = Object.assign({}, voucher);
     delete params['amount'];
+    delete params['status'];
 
+    setActiveGiftCard(voucher?.pan);
     getGiftCardStatus(order?._id, params);
   };
 
-  const giftCardStatus = () => {
-    const status = giftCard?.status || voucherDetails?.status;
+  const giftCardStatus = (voucher: any) => {
     return (
-      <div className="flex items-center gap-2">
-        {isFetchingGiftCard ? (
+      <div className="flex items-center justify-between gap-2">
+        {isFetchingGiftCard && voucher.pan === activeGiftCard ? (
           'Loading...'
         ) : (
           <>
-            {status || '---'}
-            <StyledIcon
-              icon={faRefresh}
-              color="#666666"
-              onClick={() => refreshGiftCardStatus()}
-            />
+            {voucher?.status || '---'}
+            <div className="flex items-center gap-2">
+              <StyledIcon
+                icon={faRefresh}
+                color="#666666"
+                onClick={() => refreshGiftCardStatus(voucher)}
+              />
+              <button
+                className="bg-red-500 py-[2px] px-2 rounded text-xs text-white place-self-end self-end"
+                onClick={() => refreshGiftCardStatus(voucher)}
+              >
+                Cancel
+              </button>
+            </div>
           </>
         )}
       </div>
@@ -115,23 +126,42 @@ const QuoteDetails = () => {
   useEffect(() => {
     if (payment?.additional_info && payment?.additional_info?.length > 1) {
       // clarify how to handle multiple vouchers
-      const voucher = payment?.additional_info[0];
-      const params = {
-        pan: voucher?.voucherPan,
-        pin: voucher?.voucherPin,
-        txId: voucher?.voucherReference,
-        currency: voucher?.voucherCurrency,
-      };
-      if (isEmpty(voucherDetails)) {
-        getGiftCardStatus(order?._id, params);
-      }
-      setVoucherDetails({
-        amount: voucher?.voucherAmount,
-        status: voucher?.voucherStatus,
-        ...params,
+      const vouchers: any = [];
+      payment?.additional_info.forEach((voucher: any) => {
+        const params = {
+          pan: voucher?.voucherPan,
+          pin: voucher?.voucherPin,
+          txId: voucher?.voucherReference,
+          currency: voucher?.voucherCurrency,
+          amount: voucher?.voucherAmount,
+          status: voucher?.voucherStatus,
+          itemNumber: voucher?.voucherOrderNumber,
+        };
+        vouchers.push(params);
       });
+      setVoucherDetails(vouchers);
     }
   }, [voucherLinks]);
+
+  useEffect(() => {
+    if (!isEmpty(giftCard)) {
+      let voucher = {};
+      let index = -1;
+      voucherDetails.forEach((item: any, idx: number) => {
+        if (item.pan === activeGiftCard) {
+          voucher = item;
+          index = idx;
+        }
+      });
+      const vouchers = [...voucherDetails];
+      vouchers[index] = {
+        ...voucher,
+        amount: giftCard?.balance?.currency?.balance,
+        status: giftCard?.status,
+      };
+      setVoucherDetails(vouchers);
+    }
+  }, [giftCard]);
 
   return (
     <div className="grid md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-2">
@@ -176,13 +206,15 @@ const QuoteDetails = () => {
           capitalize
         />
         <CardItem label="BSB & Account" value={userId?.bsb_account} copy />
-        {hasGiftCard && (
+        {hasGiftCard && <h4>Gift Card</h4>}
+        {voucherDetails.map((voucher: any, idx: number) => (
           <CardItem
-            label="Gift Card Status"
-            value={giftCardStatus()}
+            // label={`Gift Card ${idx + 1}`}
+            label={voucher.pan}
+            value={giftCardStatus(voucher)}
             defaultValue="Unpaid"
           />
-        )}
+        ))}
         {/* {order?.status !== OrderItemStatus.CANCELLED && (
           <div className="flex gap-2 pt-2 mt-auto">
             <button
