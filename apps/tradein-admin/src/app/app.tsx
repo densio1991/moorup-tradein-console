@@ -14,6 +14,7 @@ import {
   PromotionsPage,
   UserManagementPage,
 } from './pages';
+import { ConfigurationsPage } from './pages/configurations';
 
 export function App() {
   return (
@@ -50,6 +51,10 @@ export function App() {
             element={<PromotionClaimsPage />}
           />
           <Route path="/dashboard/payment" element={<PaymentsPage />} />
+          <Route
+            path="/dashboard/configurations"
+            element={<ConfigurationsPage />}
+          />
         </Route>
 
         {/* Will redirect authenticated users to /dashboard */}

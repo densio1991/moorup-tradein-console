@@ -488,7 +488,7 @@ export const hexToRgba = (hex: string, alpha: number) => {
 };
 
 export const parseTypes = (type: string) => {
-  let color = defaultTheme.primary.text;
+  let color = defaultTheme.disabled.text;
   let text = type;
   switch (type) {
     case OrderTypes.ONLINE:
@@ -498,7 +498,7 @@ export const parseTypes = (type: string) => {
 
     case OrderTypes.INSTORE:
       case OrderTypes.IN_STORE:
-      color = defaultTheme.primary.text;
+      color = defaultTheme.warning.text;
       text = 'In-Store';
       break;
 
@@ -509,7 +509,7 @@ export const parseTypes = (type: string) => {
       break;
 
     case CreditTypes.UPFRONT:
-      color = defaultTheme.primary.text;
+      color = defaultTheme.warning.text;
       text = 'Upfront';
       break;
 

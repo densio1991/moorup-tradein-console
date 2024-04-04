@@ -40,7 +40,7 @@ export const clearUsers = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const createUser = (payload: any, platform: string) => (dispatch: any) => {
+export const createUser = (payload: any, currentUserId: string, platform: string) => (dispatch: any) => {
   dispatch({
     type: types.CREATE_USER.baseType,
     payload,
@@ -54,7 +54,7 @@ export const createUser = (payload: any, platform: string) => (dispatch: any) =>
         payload: response?.data,
       });
 
-      getUsers({}, platform)(dispatch);
+      getUsers(currentUserId, platform)(dispatch);
       toast.success('User successfully added!');
     })
     .catch((error) => {
@@ -63,7 +63,7 @@ export const createUser = (payload: any, platform: string) => (dispatch: any) =>
         payload: error,
       });
 
-      getUsers({}, platform)(dispatch);
+      getUsers(currentUserId, platform)(dispatch);
       toast.error('Failed to add user!');
     });
 };
