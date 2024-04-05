@@ -11,7 +11,6 @@ import {
   StyledIcon,
 } from '@tradein-admin/libs';
 import { faRefresh } from '@fortawesome/free-solid-svg-icons';
-import { cancel } from '@fortawesome/typicons';
 import { useEffect, useState } from 'react';
 import { isEmpty } from 'lodash';
 

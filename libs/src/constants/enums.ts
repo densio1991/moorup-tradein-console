@@ -18,7 +18,6 @@ export enum OrderItemStatus {
 }
 
 export enum DropdownOrderItemStatus {
-  CANCELLED = 'cancelled',
   RECEIVED = 'received',
   EVALUATED = 'evaluated',
   COMPLETED = 'completed',
