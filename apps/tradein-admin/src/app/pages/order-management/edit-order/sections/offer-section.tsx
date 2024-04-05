@@ -1,8 +1,9 @@
+import { isEmpty } from 'lodash';
 import { CardDetail } from './card-detail';
 import { amountFormatter, OrderItems } from '@tradein-admin/libs';
 
 const OfferSection = ({ orderItem }: { orderItem: OrderItems }) => {
-  const { original_offer, revised_offer } = orderItem;
+  const { original_offer, revision = {} } = orderItem;
   return (
     <div>
       <hr />
@@ -14,8 +15,8 @@ const OfferSection = ({ orderItem }: { orderItem: OrderItems }) => {
         <CardDetail
           label="Final Offer"
           value={
-            revised_offer
-              ? `$ ${amountFormatter(revised_offer)}`
+            !isEmpty(revision)
+              ? `$ ${amountFormatter(revision?.price)}`
               : `$ ${amountFormatter(original_offer)}`
           }
         />
