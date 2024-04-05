@@ -117,6 +117,10 @@ export const useOrder = () => {
     actions.getGiftCardStatus(id, payload, signal)(dispatch);
   };
 
+  const cancelGiftCard = (id: any, payload: any, signal?: AbortSignal) => {
+    actions.cancelGiftCard(id, payload, signal)(dispatch);
+  };
+
   const clearOrder = () => {
     actions.clearOrder({})(dispatch);
   }
@@ -146,6 +150,7 @@ export const useOrder = () => {
     printLabels,
     updateOrderItemImeiSerial,
     getGiftCardStatus,
+    cancelGiftCard,
     clearOrder,
   };
 };

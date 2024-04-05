@@ -498,7 +498,7 @@ export const getGiftCardStatus =
     });
 
     axiosInstance()
-      .get(`/api/epay/balance-inquiry`, { params: payload, signal: signal })
+      .get('/api/epay/balance-inquiry', { params: payload, signal: signal })
       .then((response) => {
         dispatch({
           type: types.FETCH_GIFT_CARD_STATUS.SUCCESS,
@@ -508,6 +508,30 @@ export const getGiftCardStatus =
       .catch((error) => {
         dispatch({
           type: types.FETCH_GIFT_CARD_STATUS.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to check gift card status.');
+      });
+  };
+
+export const cancelGiftCard =
+  (txId: any, payload: any, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.CANCEL_GIFT_CARD.baseType,
+    });
+
+    axiosInstance()
+      .post(`/api/voucher/${txId}/cancel`, { params: payload, signal: signal })
+      .then((response) => {
+        dispatch({
+          type: types.CANCEL_GIFT_CARD.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.CANCEL_GIFT_CARD.FAILED,
           payload: error,
         });
 
