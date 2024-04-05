@@ -172,8 +172,14 @@ const QuoteDetails = () => {
           label="Products"
           value={<div className="flex flex-wrap gap-1">{products}</div>}
         />
-        <CardItem label="Date Created" value={formatDate(order.createdAt, 'DD/MM/YYYY HH:mm A')} />
-        <CardItem label="Last Updated" value={formatDate(order.updatedAt, 'DD/MM/YYYY HH:mm A')} />
+        <CardItem
+          label="Date Created"
+          value={formatDate(order.createdAt, 'DD/MM/YYYY HH:mm A')}
+        />
+        <CardItem
+          label="Last Updated"
+          value={formatDate(order.updatedAt, 'DD/MM/YYYY HH:mm A')}
+        />
       </DetailCardContainer>
       <DetailCardContainer className="lg:col-span-1">
         <h4>Account Information</h4>

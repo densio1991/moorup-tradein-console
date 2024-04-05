@@ -1223,3 +1223,5 @@ export const COMPLETION_ORDER_ITEM_STATUS = [
   OrderItemStatus.REVISED,
   OrderItemStatus.COMPLETED,
 ];
+
+export const TIMEZONE = 'Australia/Sydney';
