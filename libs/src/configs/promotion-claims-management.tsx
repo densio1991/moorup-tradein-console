@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
-import { formatDate, parseStatus } from '../helpers';
+import { parseDateString, parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
@@ -56,7 +56,7 @@ export const promotionClaimsManagementParsingConfig = {
   },
   'Claimed Date': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['createdAt'])) return '--';
-    return formatDate(row['createdAt']);
+    return parseDateString(row['createdAt']);
   },
   'Moorup Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['moorup_status'])) return '--';

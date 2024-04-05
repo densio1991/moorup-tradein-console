@@ -2,7 +2,7 @@
 import { faPrint } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty } from 'lodash';
 import { AppButton } from '../components';
-import { capitalizeFirstLetter, formatDate, parseStatus } from '../helpers';
+import { capitalizeFirstLetter, parseDateString, parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
@@ -41,11 +41,11 @@ export const actionablesManagementParsingConfig = {
   },
   Created: ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['createdAt'])) return '--';
-    return formatDate(row['createdAt']);
+    return parseDateString(row['createdAt']);
   },
   Updated: ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['updatedAt'])) return '--';
-    return formatDate(row['updatedAt']);
+    return parseDateString(row['updatedAt']);
   },
   Actions: ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['_id'])) return '--';

@@ -1,16 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
 import { jwtDecode } from 'jwt-decode';
 import { capitalize, isEmpty } from 'lodash';
 import { Chip, StyledIcon } from '../components';
 import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes } from '../constants';
 import { defaultTheme } from './theme';
-
-dayjs.extend(utc)
-dayjs.extend(timezone)
 
 export function createActionTypes(baseType: string) {
   return {
@@ -367,9 +362,8 @@ export function getCurrencySymbol(currencyCode: string) {
   return CURRENCY_SYMBOLS[currencyCode] || null;
 }
 
-export const formatDate = (date: Date, format='DD/MM/YYYY') => {
-  const tz = "Australia/Sydney";
-  return dayjs(date).tz(tz).format(format);
+export const formatDate = (date: Date, format='MM/DD/YYYY') => {
+  return dayjs(date).format(format);
 }
 
 export const parseStatus = (value: string) => {

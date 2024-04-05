@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
-import { formatDate, parseStatus, parseTypes } from '../helpers';
+import { parseDateString, parseStatus, parseTypes } from '../helpers';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
@@ -42,6 +42,6 @@ export const orderManagementParsingConfig = {
   },
   'Updated': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['updatedAt'])) return '--';
-    return formatDate(row['updatedAt']);
+    return parseDateString(row['updatedAt']);
   },
 };
