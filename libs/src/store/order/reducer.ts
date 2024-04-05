@@ -25,6 +25,7 @@ const orderState = {
   isUpdatingImeiSerial: false,
   giftCard: {},
   isFetchingGiftCard: false,
+  isUpdatingGiftCard: false,
   isModalOpen: false,
 };
 
@@ -303,6 +304,25 @@ const orderReducer = (state = orderState, action: any) => {
         ...state,
         isFetchingGiftCard: false,
         giftCard: {},
+      };
+    }
+
+    case types.CANCEL_GIFT_CARD.baseType: {
+      return {
+        ...state,
+        isUpdatingGiftCard: true,
+      };
+    }
+    case types.CANCEL_GIFT_CARD.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingGiftCard: false,
+      };
+    }
+    case types.CANCEL_GIFT_CARD.FAILED: {
+      return {
+        ...state,
+        isUpdatingGiftCard: false,
       };
     }
 

@@ -59,9 +59,14 @@ const PAYMENT_STATUS: any = {
 };
 
 const QuoteDetails = () => {
-  const { state, getGiftCardStatus } = useOrder();
+  const { state, getGiftCardStatus, cancelGiftCard } = useOrder();
   const [voucherDetails, setVoucherDetails] = useState<any>([]);
-  const { order = {}, giftCard = {}, isFetchingGiftCard } = state;
+  const {
+    order = {},
+    giftCard = {},
+    isFetchingGiftCard,
+    isUpdatingGiftCard,
+  } = state;
   const [activeGiftCard, setActiveGiftCard] = useState();
 
   const userId = order?.user_id || {};
@@ -87,18 +92,34 @@ const QuoteDetails = () => {
     payment?.payment_type === 'voucher' || !isEmpty(voucherDetails);
 
   const refreshGiftCardStatus = (voucher: any) => {
-    const params: any = Object.assign({}, voucher);
-    delete params['amount'];
-    delete params['status'];
-
+    const params = {
+      pan: voucher?.pan,
+      pin: voucher?.pin,
+      txId: voucher?.txId,
+      currency: voucher?.currency,
+    };
     setActiveGiftCard(voucher?.pan);
     getGiftCardStatus(order?._id, params);
   };
 
+  const onCancelGiftCard = (voucher: any) => {
+    const orderItem = orderItems.find(
+      (item: OrderItems) => item.line_item_number === voucher?.itemNumber,
+    );
+    const payload = {
+      voucherOrderNumber: voucher?.itemNumber,
+      orderItemId: orderItem?._id,
+    };
+    setActiveGiftCard(voucher?.pan);
+    cancelGiftCard(voucher?.txId, payload);
+  };
+
   const giftCardStatus = (voucher: any) => {
+    console.log(activeGiftCard, voucher);
     return (
       <div className="flex items-center justify-between gap-2">
-        {isFetchingGiftCard && voucher.pan === activeGiftCard ? (
+        {(isFetchingGiftCard || isUpdatingGiftCard) &&
+        voucher.pan === activeGiftCard ? (
           'Loading...'
         ) : (
           <>
@@ -109,12 +130,15 @@ const QuoteDetails = () => {
                 color="#666666"
                 onClick={() => refreshGiftCardStatus(voucher)}
               />
-              <button
-                className="bg-red-500 py-[2px] px-2 rounded text-xs text-white place-self-end self-end"
-                onClick={() => refreshGiftCardStatus(voucher)}
-              >
-                Cancel
-              </button>
+              {voucher?.provider === 'ezipay' && (
+                <button
+                  className="bg-red-500 py-[2px] px-2 rounded text-xs text-white place-self-end self-end"
+                  onClick={() => onCancelGiftCard(voucher)}
+                  disabled={isUpdatingGiftCard}
+                >
+                  Cancel
+                </button>
+              )}
             </div>
           </>
         )}
@@ -123,7 +147,7 @@ const QuoteDetails = () => {
   };
 
   useEffect(() => {
-    if (payment?.additional_info && payment?.additional_info?.length > 1) {
+    if (payment?.additional_info && payment?.additional_info?.length > 0) {
       // clarify how to handle multiple vouchers
       const vouchers: any = [];
       payment?.additional_info.forEach((voucher: any) => {
@@ -132,9 +156,10 @@ const QuoteDetails = () => {
           pin: voucher?.voucherPin,
           txId: voucher?.voucherReference,
           currency: voucher?.voucherCurrency,
-          amount: voucher?.voucherAmount,
+          amount: voucher?.voucherBalance,
           status: voucher?.voucherStatus,
           itemNumber: voucher?.voucherOrderNumber,
+          provider: voucher?.voucherProvider,
         };
         vouchers.push(params);
       });
@@ -217,7 +242,6 @@ const QuoteDetails = () => {
             // label={`Gift Card ${idx + 1}`}
             label={voucher.pan}
             value={giftCardStatus(voucher)}
-            defaultValue="Unpaid"
           />
         ))}
         {/* {order?.status !== OrderItemStatus.CANCELLED && (
