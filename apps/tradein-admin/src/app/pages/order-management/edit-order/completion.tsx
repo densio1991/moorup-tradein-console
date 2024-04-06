@@ -49,7 +49,7 @@ const Completion = ({
 
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
-            <DeviceSection order={item} orderId={orderId} />
+            <DeviceSection orderItem={item} orderId={orderId} />
             <OfferSection orderItem={item} />
             <hr />
             <div>

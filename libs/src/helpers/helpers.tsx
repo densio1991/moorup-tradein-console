@@ -6,7 +6,7 @@ import timezone from 'dayjs/plugin/timezone';
 import { jwtDecode } from 'jwt-decode';
 import { capitalize, isEmpty } from 'lodash';
 import { Chip, StyledIcon } from '../components';
-import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes } from '../constants';
+import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes, TIMEZONE } from '../constants';
 import { defaultTheme } from './theme';
 
 dayjs.extend(utc)
@@ -368,8 +368,7 @@ export function getCurrencySymbol(currencyCode: string) {
 }
 
 export const formatDate = (date: Date, format='DD/MM/YYYY') => {
-  const tz = "Australia/Sydney";
-  return dayjs(date).tz(tz).format(format);
+  return dayjs(date).tz(TIMEZONE).format(format);
 }
 
 export const parseStatus = (value: string) => {

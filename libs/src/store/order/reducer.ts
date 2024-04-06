@@ -24,7 +24,8 @@ const orderState = {
   isGeneratingLabels: false,
   isUpdatingImeiSerial: false,
   giftCard: {},
-  isFetchingGiftCard: true,
+  isFetchingGiftCard: false,
+  isUpdatingGiftCard: false,
   isModalOpen: false,
 };
 
@@ -306,6 +307,25 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.CANCEL_GIFT_CARD.baseType: {
+      return {
+        ...state,
+        isUpdatingGiftCard: true,
+      };
+    }
+    case types.CANCEL_GIFT_CARD.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingGiftCard: false,
+      };
+    }
+    case types.CANCEL_GIFT_CARD.FAILED: {
+      return {
+        ...state,
+        isUpdatingGiftCard: false,
+      };
+    }
+
     case types.CLEAR_ORDER_ITEMS: {
       return {
         ...state,
@@ -386,6 +406,7 @@ const orderReducer = (state = orderState, action: any) => {
         ...state,
         isFetchingOrder: true,
         order: {},
+        giftCard: {},
       };
     }
 

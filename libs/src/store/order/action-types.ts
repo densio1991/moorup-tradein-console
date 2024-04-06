@@ -20,6 +20,7 @@ export const UPDATE_SHIPPING_STATUS_BY_ID = createActionTypes('UPDATE_SHIPPING_S
 export const GENERATE_LABELS = createActionTypes('GENERATE_LABELS');
 export const UPDATE_ORDER_ITEM_IMEI_SERIAL = createActionTypes('UPDATE_ORDER_ITEM_IMEI_SERIAL');
 export const FETCH_GIFT_CARD_STATUS = createActionTypes('FETCH_GIFT_CARD_STATUS');
+export const CANCEL_GIFT_CARD = createActionTypes('CANCEL_GIFT_CARD');
 
 // Base action types
 export const SET_ORDERS = 'SET_ORDERS';
