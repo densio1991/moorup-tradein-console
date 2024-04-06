@@ -50,7 +50,10 @@ export function App() {
             path="/dashboard/promotion/claims"
             element={<PromotionClaimsPage />}
           />
-          <Route path="/dashboard/payment" element={<PaymentsPage />} />
+          <Route
+            path="/dashboard/promotion/payment"
+            element={<PaymentsPage />}
+          />
           <Route
             path="/dashboard/configurations"
             element={<ConfigurationsPage />}

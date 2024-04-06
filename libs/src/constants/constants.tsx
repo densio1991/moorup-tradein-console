@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   faBullhorn,
   faCheckToSlot,
@@ -10,7 +11,7 @@ import {
   faPenToSquare,
   faUsers
 } from '@fortawesome/free-solid-svg-icons';
-import { OrderItemStatus } from './enums';
+import { ClaimStatus, OrderItemStatus } from './enums';
 import { PlatformType } from './interfaces';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
@@ -49,7 +50,7 @@ export const SIDENAV_ITEMS = [
   {
     title: 'Order Management',
     url: '/dashboard/order',
-    activeUrl: /^\/dashboard\/order/,
+    activeUrl: /\/dashboard\/order/,
     icon: faFileInvoice,
     disabled: false,
     submenu: [
@@ -79,7 +80,7 @@ export const SIDENAV_ITEMS = [
   {
     title: 'Promotions',
     url: '/dashboard/promotion',
-    activeUrl: /^\/dashboard\/promotion/,
+    activeUrl: /\/dashboard\/promotion/,
     icon: faBullhorn,
     disabled: false,
     submenu: [
@@ -96,6 +97,13 @@ export const SIDENAV_ITEMS = [
         activeUrl: /^\/dashboard\/promotion\/claims/,
         icon: faCheckToSlot,
         disabled: false,
+      },
+      {
+        title: 'Payment',
+        url: '/dashboard/promotion/payment',
+        activeUrl: /^\/dashboard\/promotion\/payment/,
+        icon: faCreditCard,
+        disabled: true,
       }
     ]
   },
@@ -105,13 +113,6 @@ export const SIDENAV_ITEMS = [
     activeUrl: /^\/dashboard\/user/,
     icon: faUsers,
     disabled: false,
-  },
-  {
-    title: 'Payment',
-    url: '/dashboard/payment',
-    activeUrl: /^\/dashboard\/payment/,
-    icon: faCreditCard,
-    disabled: true,
   },
 ]
 
@@ -444,34 +445,41 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     keyName: 'promotion_details.slug',
   },
   {
-    label: 'Receipt Number',
+    label: 'Device Model',
     order: 5,
+    enableSort: false,
+    keyName: 'device_model',
+  },
+  {
+    label: 'Receipt Number',
+    order: 6,
     enableSort: true,
     keyName: 'receipt_number',
   },
   {
     label: 'Claim Number',
-    order: 6,
+    order: 7,
     enableSort: true,
     keyName: 'claim_number',
   },
   {
     label: 'Claimed By',
-    order: 7,
+    order: 8,
     enableSort: true,
     keyName: 'user_details.first_name',
   },
   {
     label: 'Claimed Date',
-    order: 8,
+    order: 9,
     enableSort: true,
     keyName: 'createdAt',
   },
   {
-    label: 'Order Count',
+    label: 'Claim Status',
     order: 10,
-    enableSort: false,
-  },
+    enableSort: true,
+    keyName: 'status',
+  }
 ]
 
 export const ACTIONABLES_MANAGEMENT_COLUMNS = [
@@ -600,6 +608,7 @@ export interface OrderItems {
   line_item_number: string;
   reason: string[];
   questions_answered: QuestionAnswered[];
+  revision: any;
 }
 
 export interface Addresses {
@@ -1225,3 +1234,10 @@ export const COMPLETION_ORDER_ITEM_STATUS = [
 ];
 
 export const TIMEZONE = 'Australia/Sydney';
+
+export const OVERRIDE_CLAIM_STATUSES = [
+  { value: ClaimStatus.APPROVED, label: 'Approved' },
+  { value: ClaimStatus.CANCELLED, label: 'Cancelled' },
+  { value: ClaimStatus.PENDING, label: 'Pending' },
+  { value: ClaimStatus.REJECTED, label: 'Rejected' },
+]

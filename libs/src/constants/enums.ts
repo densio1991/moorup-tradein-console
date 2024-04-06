@@ -31,9 +31,10 @@ export enum OrderPaymentStatus {
 export enum ClaimStatus {
   PENDING = 'pending',
   APPROVED = 'approved',
-  REJECT = 'reject',
+  REJECTED = 'rejected',
   CANCELLED = 'cancelled',
-  DELETED = 'deleted'
+  FAILED = 'failed',
+  COMPLETED = 'completed'
 }
 
 export enum DefaultStatus {
@@ -58,4 +59,10 @@ export enum ProductTypes {
   TABLETS = 'tablets',
   PHONES = 'phones',
   WATCHES = 'watches',
+}
+
+export enum ConfirmationModalTypes {
+  APPROVE_CLAIM_REGULAR = 'APPROVE_CLAIM_REGULAR',
+  REJECT_CLAIM_REGULAR = 'REJECT_CLAIM_REGULAR',
+  OVERRIDE_CLAIM_STATUS = 'OVERRIDE_CLAIM',
 }
