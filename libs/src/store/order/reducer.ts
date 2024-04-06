@@ -406,6 +406,7 @@ const orderReducer = (state = orderState, action: any) => {
         ...state,
         isFetchingOrder: true,
         order: {},
+        giftCard: {},
       };
     }
 
