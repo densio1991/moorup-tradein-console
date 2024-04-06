@@ -422,14 +422,14 @@ export const parseStatus = (value: string) => {
     case OrderTypes.INSTORE:
     case OrderTypes.IN_STORE:
       text = 'In-Store'
-      textColor = defaultTheme.primary.text;
-      bgColor = defaultTheme.primary.background;
+      textColor = defaultTheme.default.text;
+      bgColor = defaultTheme.default.background;
       break;
 
     case CreditTypes.UPFRONT:
       text = 'Upfront';
-      textColor = defaultTheme.primary.text;
-      bgColor = defaultTheme.primary.background;
+      textColor = defaultTheme.default.text;
+      bgColor = defaultTheme.default.background;
       break;
 
     case CreditTypes.POSTASSESSMENT:
@@ -447,8 +447,8 @@ export const parseStatus = (value: string) => {
 
     case ClaimStatus.APPROVED:
       text = 'Approved';
-      textColor = defaultTheme.primary.text;
-      bgColor = defaultTheme.primary.background;
+      textColor = defaultTheme.default.text;
+      bgColor = defaultTheme.default.background;
       break;
 
     case ClaimStatus.REJECTED:
@@ -482,8 +482,8 @@ export const parseStatus = (value: string) => {
       break;
 
     default:
-      textColor = defaultTheme.primary.text;
-      bgColor = defaultTheme.primary.background;
+      textColor = defaultTheme.default.text;
+      bgColor = defaultTheme.default.background;
       break;
   }
 
@@ -530,7 +530,7 @@ export const parseTypes = (type: string) => {
       break;
 
     case ProductTypes.TABLETS:
-      color = defaultTheme.primary.text;
+      color = defaultTheme.default.text;
       text = 'Tablets';
       break;
 

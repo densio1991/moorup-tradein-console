@@ -10,7 +10,7 @@ import {
   faPenToSquare,
   faUsers
 } from '@fortawesome/free-solid-svg-icons';
-import { OrderItemStatus } from './enums';
+import { ClaimStatus, OrderItemStatus } from './enums';
 import { PlatformType } from './interfaces';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
@@ -49,7 +49,7 @@ export const SIDENAV_ITEMS = [
   {
     title: 'Order Management',
     url: '/dashboard/order',
-    activeUrl: /^\/dashboard\/order/,
+    activeUrl: /\/dashboard\/order/,
     icon: faFileInvoice,
     disabled: false,
     submenu: [
@@ -79,7 +79,7 @@ export const SIDENAV_ITEMS = [
   {
     title: 'Promotions',
     url: '/dashboard/promotion',
-    activeUrl: /^\/dashboard\/promotion/,
+    activeUrl: /\/dashboard\/promotion/,
     icon: faBullhorn,
     disabled: false,
     submenu: [
@@ -1232,3 +1232,10 @@ export const COMPLETION_ORDER_ITEM_STATUS = [
 ];
 
 export const TIMEZONE = 'Australia/Sydney';
+
+export const OVERRIDE_CLAIM_STATUSES = [
+  { value: ClaimStatus.APPROVED, label: 'Approved' },
+  { value: ClaimStatus.CANCELLED, label: 'Cancelled' },
+  { value: ClaimStatus.PENDING, label: 'Pending' },
+  { value: ClaimStatus.REJECTED, label: 'Rejected' },
+]
