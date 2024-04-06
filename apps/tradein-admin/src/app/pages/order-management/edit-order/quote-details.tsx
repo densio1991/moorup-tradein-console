@@ -9,6 +9,7 @@ import {
   CopyToClipboardButton,
   DataLine,
   StyledIcon,
+  amountFormatter,
 } from '@tradein-admin/libs';
 import { faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
@@ -73,7 +74,6 @@ const QuoteDetails = () => {
   const address = order?.address || {};
   const orderItems = order?.order_items || [];
   const payment = order?.payment || {};
-  const voucherLinks = order?.voucher_links || [];
   const bankDetails = userId?.bank_details || [];
 
   const completeAddress = [
@@ -158,7 +158,7 @@ const QuoteDetails = () => {
       });
       setVoucherDetails(vouchers);
     }
-  }, [voucherLinks]);
+  }, [order, payment]);
 
   useEffect(() => {
     if (!isEmpty(giftCard)) {
@@ -170,18 +170,22 @@ const QuoteDetails = () => {
           index = idx;
         }
       });
-      const vouchers = [...voucherDetails];
-      vouchers[index] = {
-        ...voucher,
-        amount: giftCard?.balance?.currency?.balance,
-        status: giftCard?.status || giftCard?.resulttext,
-      };
-      setVoucherDetails(vouchers);
+      if (index !== -1) {
+        const vouchers = [...voucherDetails];
+        vouchers[index] = {
+          ...voucher,
+          amount: giftCard?.balance?.currency?.balance,
+          status: giftCard?.status || giftCard?.resulttext,
+        };
+        setVoucherDetails(vouchers);
+      }
     }
   }, [giftCard]);
 
   return (
-    <div className="grid md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-2">
+    <div
+      className={`grid md:grid-cols-1 lg:grid-cols-2 gap-2 ${!hasGiftCard && '2xl:grid-cols-3'}`}
+    >
       <DetailCardContainer className="lg:col-span-2 2xl:col-span-1">
         <h4>Quote Information</h4>
         <CardItem label="Quote #" value={order.order_number} copy />
@@ -229,26 +233,34 @@ const QuoteDetails = () => {
           capitalize
         />
         <CardItem label="BSB & Account" value={userId?.bsb_account} copy />
-        {hasGiftCard && <h4>Gift Card</h4>}
-        {voucherDetails.map((voucher: any, idx: number) => (
-          <CardItem
-            // label={`Gift Card ${idx + 1}`}
-            label={voucher.pan}
-            value={giftCardStatus(voucher)}
-          />
-        ))}
-        {/* {order?.status !== OrderItemStatus.CANCELLED && (
-          <div className="flex gap-2 pt-2 mt-auto">
-            <button
-              className="text-md text-white bg-red-500 py-1 px-3 rounded-md hover:bg-red-600"
-              onClick={() => cancelOrderById(order?._id)}
-              disabled={isUpdatingOrder}
-            >
-              Cancel Order
-            </button>
-          </div>
-        )} */}
       </DetailCardContainer>
+      {hasGiftCard && (
+        <DetailCardContainer className="lg:col-span-2 2xl:col-span-1">
+          <h4>Gift Card</h4>
+          <div className="w-full mx-auto">
+            <div className="overflow-x-auto max-w-full pb-2 text-sm">
+              <table className="w-full text-nowrap border-t-[1px]">
+                <thead className="text-left font-semibold text-gray-700">
+                  <td className="p-2">Order Item Number</td>
+                  <td className="p-2">Card PAN</td>
+                  <td className="p-2">Balance</td>
+                  <td className="p-2">Status</td>
+                </thead>
+                {voucherDetails.map((voucher: any, idx: number) => (
+                  <tr className="border-t-[1px]">
+                    <td className="p-2">{voucher?.itemNumber}</td>
+                    <td className="p-2">{voucher?.pan}</td>
+                    <td className="p-2">
+                      {amountFormatter(voucher?.amount / 100)}
+                    </td>
+                    <td className="p-2">{giftCardStatus(voucher)}</td>
+                  </tr>
+                ))}
+              </table>
+            </div>
+          </div>
+        </DetailCardContainer>
+      )}
     </div>
   );
 };

@@ -530,6 +530,8 @@ export const cancelGiftCard =
           type: types.CANCEL_GIFT_CARD.SUCCESS,
           payload: response?.data,
         });
+        getOrderById(orderId)(dispatch);
+        toast.success('Gift card successfully cancelled!');
       })
       .catch((error) => {
         dispatch({

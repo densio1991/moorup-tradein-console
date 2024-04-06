@@ -19,6 +19,7 @@ export const DetailCardContainer = styled.div`
   h4 {
     margin: 16px 0 8px 0;
     line-height: 1.2;
+    color: rgb(155,155,155);
   }
 `;
 
