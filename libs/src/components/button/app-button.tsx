@@ -23,14 +23,14 @@ const StyledButton = styled.button<CustomButtonProps>`
     props.variant === 'text' ? '#01463A' : props.variant === 'outlined' ? '#01463A' : '#fff'};
   background: ${(props) => {
     if (props.variant === 'outlined' || props.variant === 'text') return 'transparent';
-    else if (props.variant === 'error') return 'linear-gradient(to right, #FF0033, #FF0000)';
+    else if (props.variant === 'error') return 'linear-gradient(to right, #ea5455, #d15353)';
     return 'linear-gradient(to right, #216A4C, #01463A)';
   }};
   border: ${(props) =>
     props.variant === 'text'
       ? 'none'
       : props.variant === 'error'
-      ? '1px solid #FF0000'
+      ? '1px solid #d15353'
       : '1px solid #01463A'};
   border-radius: 4px;
   cursor: ${(props) => (props.isLoading ? 'not-allowed' : 'pointer')};

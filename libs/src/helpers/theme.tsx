@@ -16,11 +16,19 @@ export const defaultTheme = {
     background: '#fff1e3'
   },
   primary: {
-    text: '#687c79',
-    background: '#d3dfdc'
+    text: '#01463A',
+    background: '#fafafa'
+  },
+  secondary: {
+    text: '#216A4C',
+    background: '#fafafa'
   },
   disabled: {
     text: '#9e9e9e',
     background: '#e7e7e7'
   },
+  default: {
+    text: '#687c79',
+    background: '#d3dfdc'
+  }
 };

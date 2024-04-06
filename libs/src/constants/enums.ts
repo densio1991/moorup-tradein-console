@@ -63,3 +63,9 @@ export enum ProductTypes {
   PHONES = 'phones',
   WATCHES = 'watches',
 }
+
+export enum ConfirmationModalTypes {
+  APPROVE_CLAIM_REGULAR = 'APPROVE_CLAIM_REGULAR',
+  REJECT_CLAIM_REGULAR = 'REJECT_CLAIM_REGULAR',
+  OVERRIDE_CLAIM_STATUS = 'OVERRIDE_CLAIM',
+}
