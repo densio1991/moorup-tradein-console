@@ -202,3 +202,66 @@ export const updatePromotion = (payload: any, promotionId: string, activePlatfor
       toast.error('Failed to update promotion.');
     });
 };
+
+export const setConfirmationModalState = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_CONFIRMATION_MODAL_STATE,
+    payload,
+  });
+};
+
+export const updatePromotionClaimMoorupStatus = (payload: any, promotionClaimId: string, activePlatform: string) => (dispatch: any) => {
+  dispatch({
+    type: types.UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .patch(`/api/claims/${promotionClaimId}/moorup-status`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.SUCCESS,
+        payload: response?.data,
+      });
+
+      getPromotionClaims({}, activePlatform)(dispatch);
+      toast.success('Moorup status successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.FAILED,
+        payload: error,
+      });
+
+      getPromotionClaims({}, activePlatform)(dispatch);
+      toast.error('Failed to update moorup status.');
+    });
+};
+
+export const updatePromotionClaimStatus = (payload: any, promotionClaimId: string, filter: any, activePlatform: string) => (dispatch: any) => {
+  dispatch({
+    type: types.UPDATE_PROMOTION_CLAIM_STATUS.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .patch(`/api/claims/${promotionClaimId}/status`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.UPDATE_PROMOTION_CLAIM_STATUS.SUCCESS,
+        payload: response?.data,
+      });
+
+      getPromotionClaims(filter, activePlatform)(dispatch);
+      toast.success('Claim status successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.UPDATE_PROMOTION_CLAIM_STATUS.FAILED,
+        payload: error,
+      });
+
+      getPromotionClaims(filter, activePlatform)(dispatch);
+      toast.error('Failed to update claim status.');
+    });
+};

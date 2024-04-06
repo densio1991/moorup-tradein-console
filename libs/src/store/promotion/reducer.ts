@@ -22,6 +22,16 @@ const promotionState = {
   promotion: {},
   isFetchingPromotionById: true,
   isUpdatingPromotion: false,
+  confirmationModalState: {
+    open: false,
+    view: null,
+    title: 'Confirmation',
+    content: 'Are you sure you want to perform this action?',
+    data: {},
+    id: '',
+  },
+  isUpdatingPromotionClaimMoorupStatus: false,
+  isUpdatingPromotionClaimStatus: false,
 };
 
 const promotionReducer = (state: any, action: any) => {
@@ -193,6 +203,54 @@ const promotionReducer = (state: any, action: any) => {
       return {
         ...state,
         isUpdatingPromotion: false,
+      };
+    }
+
+    case types.SET_CONFIRMATION_MODAL_STATE:
+      return {
+        ...state,
+        confirmationModalState: action?.payload,
+      };
+
+    case types.UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.baseType: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimMoorupStatus: true,
+        isFetchingPromotionClaims: true,
+        promotionClaims: [],
+      };
+    }
+    case types.UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimMoorupStatus: false,
+      };
+    }
+    case types.UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.FAILED: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimMoorupStatus: false,
+      };
+    }
+
+    case types.UPDATE_PROMOTION_CLAIM_STATUS.baseType: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimStatus: true,
+        isFetchingPromotionClaims: true,
+        promotionClaims: [],
+      };
+    }
+    case types.UPDATE_PROMOTION_CLAIM_STATUS.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimStatus: false,
+      };
+    }
+    case types.UPDATE_PROMOTION_CLAIM_STATUS.FAILED: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimStatus: false,
       };
     }
 

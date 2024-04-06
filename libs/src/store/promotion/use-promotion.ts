@@ -61,6 +61,18 @@ export const usePromotion = () => {
     actions.updatePromotion(payload, promotionId, activePlatform)(dispatch);
   }
 
+  const setConfirmationModalState = (payload: any) => {
+    actions.setConfirmationModalState(payload)(dispatch);
+  }
+
+  const updatePromotionClaimMoorupStatus = (payload: any, promotionId: string) => {
+    actions.updatePromotionClaimMoorupStatus(payload, promotionId, activePlatform)(dispatch);
+  }
+
+  const updatePromotionClaimStatus = (payload: any, promotionId: string, filter: any) => {
+    actions.updatePromotionClaimStatus(payload, promotionId, filter, activePlatform)(dispatch);
+  }
+
   return {
     state: state.promotion,
     getPromotions,
@@ -76,5 +88,8 @@ export const usePromotion = () => {
     getPromotionById,
     clearPromotion,
     updatePromotion,
+    setConfirmationModalState,
+    updatePromotionClaimMoorupStatus,
+    updatePromotionClaimStatus,
   };
 };
