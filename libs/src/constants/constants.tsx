@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   faBullhorn,
   faCheckToSlot,
@@ -607,6 +608,7 @@ export interface OrderItems {
   line_item_number: string;
   reason: string[];
   questions_answered: QuestionAnswered[];
+  revision: any;
 }
 
 export interface Addresses {
