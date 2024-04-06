@@ -103,15 +103,8 @@ const QuoteDetails = () => {
   };
 
   const onCancelGiftCard = (voucher: any) => {
-    const orderItem = orderItems.find(
-      (item: OrderItems) => item.line_item_number === voucher?.itemNumber,
-    );
-    const payload = {
-      voucherOrderNumber: voucher?.itemNumber,
-      orderItemId: orderItem?._id,
-    };
     setActiveGiftCard(voucher?.pan);
-    cancelGiftCard(voucher?.txId, payload);
+    cancelGiftCard(order?._id, voucher?.itemNumber);
   };
 
   const giftCardStatus = (voucher: any) => {
@@ -181,7 +174,7 @@ const QuoteDetails = () => {
       vouchers[index] = {
         ...voucher,
         amount: giftCard?.balance?.currency?.balance,
-        status: giftCard?.status,
+        status: giftCard?.status || giftCard?.resulttext,
       };
       setVoucherDetails(vouchers);
     }
