@@ -37,7 +37,7 @@ const ProductChipsContainer = styled.div`
   gap: 4px;
 `;
 
-export const promotionClaimsManagementParsingConfig = {
+export const promotionClaimsManagementParsingConfig = {  
   'Order Number': ({ row }: ParsingFunctionParams) => {
     const orderDetails = row ? row['order_id'] : null;
     if (!orderDetails || isEmpty(orderDetails['order_number'])) return '--';
@@ -131,18 +131,9 @@ export const promotionClaimsManagementParsingConfig = {
           variant="fill"
           width="fit-content"
           padding='4px 20px'
-          onClick={() => console.log('Approved')}
+          onClick={() => row.overrideAction()}
         >
-          Approve
-        </AppButton>
-        <AppButton
-          type="button"
-          variant="error"
-          width="fit-content"
-          padding='4px 20px'
-          onClick={() => console.log('Rejected')}
-        >
-          Reject
+          Update Status
         </AppButton>
       </StyledDiv>
     );
@@ -156,7 +147,7 @@ export const promotionClaimsManagementParsingConfig = {
           variant="fill"
           width="fit-content"
           padding='4px 20px'
-          onClick={() => console.log('Approved')}
+          onClick={() => row.approveAction()}
         >
           Approve
         </AppButton>
@@ -165,7 +156,7 @@ export const promotionClaimsManagementParsingConfig = {
           variant="error"
           width="fit-content"
           padding='4px 20px'
-          onClick={() => console.log('Rejected')}
+          onClick={() => row.rejectAction()}
         >
           Reject
         </AppButton>
