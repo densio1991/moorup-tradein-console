@@ -516,13 +516,15 @@ export const getGiftCardStatus =
   };
 
 export const cancelGiftCard =
-  (txId: any, payload: any, signal?: AbortSignal) => (dispatch: any) => {
+  (orderId: any, voucherOrderNumber: any, signal?: AbortSignal) => (dispatch: any) => {
     dispatch({
       type: types.CANCEL_GIFT_CARD.baseType,
     });
 
     axiosInstance()
-      .post(`/api/voucher/${txId}/cancel`, { params: payload, signal: signal })
+      .patch(
+        `/api/payments/cancel-voucher/${orderId}?voucherOrderNumber=${voucherOrderNumber}`,
+        { signal: signal })
       .then((response) => {
         dispatch({
           type: types.CANCEL_GIFT_CARD.SUCCESS,
