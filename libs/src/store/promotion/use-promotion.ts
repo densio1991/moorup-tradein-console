@@ -73,6 +73,10 @@ export const usePromotion = () => {
     actions.updatePromotionClaimStatus(payload, promotionId, filter, activePlatform)(dispatch);
   }
 
+  const processPromotionClaimPayment = (payload: any, promotionId: string, filter: any) => {
+    actions.processPromotionClaimPayment(payload, promotionId, filter, activePlatform)(dispatch);
+  }
+
   return {
     state: state.promotion,
     getPromotions,
@@ -91,5 +95,6 @@ export const usePromotion = () => {
     setConfirmationModalState,
     updatePromotionClaimMoorupStatus,
     updatePromotionClaimStatus,
+    processPromotionClaimPayment,
   };
 };
