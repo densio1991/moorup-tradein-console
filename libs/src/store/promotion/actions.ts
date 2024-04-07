@@ -265,3 +265,31 @@ export const updatePromotionClaimStatus = (payload: any, promotionClaimId: strin
       toast.error('Failed to update claim status.');
     });
 };
+
+export const processPromotionClaimPayment = (payload: any, promotionClaimId: string, filter: any, activePlatform: string) => (dispatch: any) => {
+  dispatch({
+    type: types.PROCESS_PROMOTION_CLAIM_PAYMENT.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .patch(`/api/claims/${promotionClaimId}/payment`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.PROCESS_PROMOTION_CLAIM_PAYMENT.SUCCESS,
+        payload: response?.data,
+      });
+
+      getPromotionClaims(filter, activePlatform)(dispatch);
+      toast.success('Payment successfully processed!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.PROCESS_PROMOTION_CLAIM_PAYMENT.FAILED,
+        payload: error,
+      });
+
+      getPromotionClaims(filter, activePlatform)(dispatch);
+      toast.error('Failed to process claim payment.');
+    });
+};

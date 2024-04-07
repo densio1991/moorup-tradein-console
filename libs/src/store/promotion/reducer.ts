@@ -32,6 +32,7 @@ const promotionState = {
   },
   isUpdatingPromotionClaimMoorupStatus: false,
   isUpdatingPromotionClaimStatus: false,
+  isProcessingPromotionClaimPayment: false,
 };
 
 const promotionReducer = (state: any, action: any) => {
@@ -251,6 +252,27 @@ const promotionReducer = (state: any, action: any) => {
       return {
         ...state,
         isUpdatingPromotionClaimStatus: false,
+      };
+    }
+
+    case types.PROCESS_PROMOTION_CLAIM_PAYMENT.baseType: {
+      return {
+        ...state,
+        isProcessingPromotionClaimPayment: true,
+        isFetchingPromotionClaims: true,
+        promotionClaims: [],
+      };
+    }
+    case types.PROCESS_PROMOTION_CLAIM_PAYMENT.SUCCESS: {
+      return {
+        ...state,
+        isProcessingPromotionClaimPayment: false,
+      };
+    }
+    case types.PROCESS_PROMOTION_CLAIM_PAYMENT.FAILED: {
+      return {
+        ...state,
+        isProcessingPromotionClaimPayment: false,
       };
     }
 
