@@ -1,3 +1,5 @@
+import { formatDate } from './helpers';
+
 interface Data {
   _id: string;
   platform: string;
@@ -73,8 +75,8 @@ export function exportPromotionClaims(data: Data[]) {
           // item.order_id.createdAt || '',
           // '',
           item.status || '',
-          item.createdAt || '',
-          item.updatedAt || '',
+          formatDate(new Date(item.createdAt)) || '',
+          formatDate(new Date(item.updatedAt)) || '',
         ];
 
         // Check for undefined, empty, or null values and replace them with an empty string
