@@ -8,9 +8,9 @@ import {
   EditProductPage,
   LoginPage,
   OrderManagementPage,
-  PaymentsPage,
   ProductManagementPage,
   PromotionClaimsPage,
+  PromotionClaimsPaymentPage,
   PromotionsPage,
   UserManagementPage,
 } from './pages';
@@ -52,7 +52,7 @@ export function App() {
           />
           <Route
             path="/dashboard/promotion/payment"
-            element={<PaymentsPage />}
+            element={<PromotionClaimsPaymentPage />}
           />
           <Route
             path="/dashboard/configurations"

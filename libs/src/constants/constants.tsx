@@ -103,7 +103,7 @@ export const SIDENAV_ITEMS = [
         url: '/dashboard/promotion/payment',
         activeUrl: /^\/dashboard\/promotion\/payment/,
         icon: faCreditCard,
-        disabled: true,
+        disabled: false,
       }
     ]
   },
@@ -436,13 +436,13 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     label: 'Promotion Name',
     order: 3,
     enableSort: true,
-    keyName: 'promotion_details.name',
+    keyName: 'promotion_id.name',
   },
   {
     label: 'Promotion Link',
     order: 4,
     enableSort: true,
-    keyName: 'promotion_details.slug',
+    keyName: 'promotion_id.slug',
   },
   {
     label: 'Device Model',
@@ -526,6 +526,39 @@ export const ACTIONABLES_MANAGEMENT_COLUMNS = [
     keyName: 'updatedAt',
   },
 ];
+
+export const PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Claim Number',
+    order: 2,
+    enableSort: true,
+    keyName: 'claim_number',
+  },
+  {
+    label: 'Order Number',
+    order: 3,
+    enableSort: true,
+    keyName: 'order_number',
+  },
+  {
+    label: 'Promotion Name',
+    order: 4,
+    enableSort: true,
+    keyName: 'promotion_id.name',
+  },
+  {
+    label: 'Claim Amount',
+    order: 5,
+    enableSort: true,
+    keyName: 'amount',
+  },
+  {
+    label: 'Claim Status',
+    order: 6,
+    enableSort: true,
+    keyName: 'status',
+  }
+]
 
 export const ACTIONS_COLUMN = [
   {
