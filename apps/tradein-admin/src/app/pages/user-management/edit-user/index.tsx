@@ -66,7 +66,7 @@ export function EditUserForm({ data }: any) {
   };
 
   const onSubmit = (values: any) => {
-    updateUser(data?._id, values);
+    updateUser(data?._id, userDetails?._id, values);
     setSideModalState({ ...sideModalState, view: null, open: false });
   };
 
