@@ -21,6 +21,7 @@ export const GENERATE_LABELS = createActionTypes('GENERATE_LABELS');
 export const UPDATE_ORDER_ITEM_IMEI_SERIAL = createActionTypes('UPDATE_ORDER_ITEM_IMEI_SERIAL');
 export const FETCH_GIFT_CARD_STATUS = createActionTypes('FETCH_GIFT_CARD_STATUS');
 export const CANCEL_GIFT_CARD = createActionTypes('CANCEL_GIFT_CARD');
+export const GENERATE_OUTBOUND_LABEL = createActionTypes('GENERATE_OUTBOUND_LABEL');
 
 // Base action types
 export const SET_ORDERS = 'SET_ORDERS';
