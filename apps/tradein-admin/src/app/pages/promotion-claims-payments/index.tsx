@@ -60,8 +60,8 @@ export function PromotionClaimsPaymentPage() {
 
   const addActions = (claims: any) => {
     const filters = {
-      status: ClaimStatus.APPROVED,
-      moorup_status: ClaimStatus.APPROVED,
+      status: [ClaimStatus.APPROVED, ClaimStatus.FAILED].join(','),
+      moorup_status: [ClaimStatus.APPROVED, ClaimStatus.FAILED].join(','),
     };
 
     return claims.map((claim: any) => {
@@ -80,8 +80,8 @@ export function PromotionClaimsPaymentPage() {
 
     if (!isEmpty(activePlatform)) {
       const filters = {
-        status: ClaimStatus.APPROVED,
-        moorup_status: ClaimStatus.APPROVED,
+        status: [ClaimStatus.APPROVED, ClaimStatus.FAILED].join(','),
+        moorup_status: [ClaimStatus.APPROVED, ClaimStatus.FAILED].join(','),
       };
 
       getPromotionClaims(filters, signal);
