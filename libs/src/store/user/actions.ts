@@ -68,7 +68,7 @@ export const createUser = (payload: any, currentUserId: string, platform: string
     });
 };
 
-export const updateUser = (id: string, platform: string, payload: any) => (dispatch: any) => {
+export const updateUser = (id: string, currentUserId: string, platform: string, payload: any) => (dispatch: any) => {
   dispatch({
     type: types.UPDATE_USER.baseType,
     payload,
@@ -82,7 +82,7 @@ export const updateUser = (id: string, platform: string, payload: any) => (dispa
         payload: response?.data,
       });
 
-      getUsers({}, platform)(dispatch);
+      getUsers(currentUserId, platform)(dispatch);
       toast.success('User successfully updated!');
     })
     .catch((error) => {
@@ -91,6 +91,7 @@ export const updateUser = (id: string, platform: string, payload: any) => (dispa
         payload: error,
       });
 
+      getUsers(currentUserId, platform)(dispatch);
       toast.error('Failed to update user!');
     });
 };

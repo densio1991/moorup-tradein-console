@@ -21,8 +21,8 @@ export const useUser = () => {
     actions.createUser(payload, currentUserId, activePlatform)(dispatch);
   }
 
-  const updateUser = (id: string, payload: any) => {
-    actions.updateUser(id, activePlatform, payload)(dispatch);
+  const updateUser = (id: string, currentUserId: string, payload: any) => {
+    actions.updateUser(id, currentUserId, activePlatform, payload)(dispatch);
   }
 
   return {
