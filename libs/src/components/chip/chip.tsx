@@ -16,6 +16,7 @@ const StyledChip = styled.span<{ value?: string; width?: string; bgColor?: strin
   text-align: center;
   background-color: ${(props) => props.bgColor ?? '#216A4C'};
   color: ${(props) => props.textColor ?? 'white'};
+  font-weight: 500;
 `;
 
 export function Chip({ value, textColor, bgColor, width }: ChipProps) {
