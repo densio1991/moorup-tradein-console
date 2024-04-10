@@ -13,8 +13,11 @@ export enum OrderItemStatus {
   LABEL_SENT = 'label-sent',
   EVALUATED = 'evaluated',
   COMPLETED = 'completed',
+  DELETED = 'deleted',
   FOR_REVISION = 'for-revision',
   REVISED = 'revised',
+  REVISION_REJECTED = 'revision-rejected',
+  HOLD = 'hold'
 }
 
 export enum DropdownOrderItemStatus {
