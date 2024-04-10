@@ -42,15 +42,12 @@ export function ProductManagementPage() {
     getProductStatuses,
     setAddProductPayload,
     setIncludeProductVariant,
-    // uploadProductsExcelFile,
   } = useProduct();
   const { state: authState } = useAuth();
   const { products, isFetchingProducts } = state;
   const { activePlatform } = authState;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
-
-  // const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isOpenUploadModal, setIsOpenUploadModal] = useState(false);
 
   const headers = [
@@ -91,19 +88,7 @@ export function ProductManagementPage() {
     }
   };
 
-  // const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = e.target.files && e.target.files[0];
-
-  //   if (file) {
-  //     uploadProductsExcelFile(file);
-  //   }
-  // };
-
   const handleImportClick = () => {
-    // if (fileInputRef.current) {
-    //   fileInputRef.current.click();
-    // }
-
     setIsOpenUploadModal(true);
   };
 
@@ -120,6 +105,7 @@ export function ProductManagementPage() {
   return (
     <>
       <PageSubHeader
+        overflowx="auto"
         withSearch
         leftControls={
           <>
@@ -144,13 +130,6 @@ export function ProductManagementPage() {
               >
                 Import
               </AppButton>
-              {/* <input
-                type="file"
-                accept=".xls, .xlsx"
-                style={{ display: 'none' }}
-                ref={fileInputRef}
-                onChange={handleFileChange}
-              /> */}
             </div>
             <AppButton
               width="fit-content"

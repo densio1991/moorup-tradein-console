@@ -1,18 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faFilter } from '@fortawesome/free-solid-svg-icons';
 import {
   ADMIN,
   AppButton,
+  CLAIM_STATUSES,
   ClaimStatus,
   ConfirmationModalTypes,
+  Divider,
   FormGroup,
+  FormWrapper,
   GenericModal,
+  IconButton,
+  MODAL_TYPES,
+  MOORUP_CLAIM_STATUSES,
   OVERRIDE_CLAIM_STATUSES,
   PROMOTION_CLAIMS_MANAGEMENT_COLUMNS,
   PageSubHeader,
   REGULAR,
   SUPERADMIN,
+  SideModal,
   StyledInput,
   StyledReactSelect,
   Table,
@@ -45,7 +52,8 @@ export function PromotionClaimsPage() {
   } = state;
   const { state: authState } = useAuth();
   const { activePlatform, userDetails } = authState;
-  const { setSearchTerm } = useCommon();
+  const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
+  const { sideModalState } = commonState;
 
   const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
 
@@ -96,6 +104,10 @@ export function PromotionClaimsPage() {
     user_id: userDetails?._id,
   });
 
+  const [selectedClaimStatuses, setSelectedClaimStatuses] = useState([]);
+  const [selectedMoorupClaimStatuses, setSelectedMoorupClaimStatuses] =
+    useState([]);
+
   const renderModalContentAndActions = () => {
     switch (confirmationModalState.view) {
       case ConfirmationModalTypes.APPROVE_CLAIM_REGULAR:
@@ -132,6 +144,7 @@ export function PromotionClaimsPage() {
                   const filters = {
                     status: ClaimStatus.PENDING,
                     moorup_status: ClaimStatus.APPROVED,
+                    include_all: true,
                   };
 
                   updatePromotionClaimStatus(
@@ -178,6 +191,7 @@ export function PromotionClaimsPage() {
                   const filters = {
                     status: ClaimStatus.PENDING,
                     moorup_status: ClaimStatus.APPROVED,
+                    include_all: true,
                   };
 
                   updatePromotionClaimStatus(
@@ -316,11 +330,12 @@ export function PromotionClaimsPage() {
         const filters = {
           status: ClaimStatus.PENDING,
           moorup_status: ClaimStatus.APPROVED,
+          include_all: true,
         };
 
         getPromotionClaims(filters, signal);
       } else {
-        getPromotionClaims({}, signal);
+        getPromotionClaims({ include_all: true }, signal);
       }
     }
 
@@ -359,19 +374,131 @@ export function PromotionClaimsPage() {
     });
   };
 
+  const cancelFilters = () => {
+    setSelectedClaimStatuses([]);
+    setSelectedMoorupClaimStatuses([]);
+  };
+
+  const renderSideModalContent = () => {
+    switch (sideModalState.view) {
+      case MODAL_TYPES.FILTER_PROMOTION_CLAIMS:
+        return (
+          <FormWrapper formTitle="Filter By">
+            <FormGroup marginBottom="20px">
+              <StyledReactSelect
+                label="Claim Status"
+                name="claim_status"
+                isMulti={true}
+                options={CLAIM_STATUSES}
+                placeholder="Select claim statuses"
+                value={selectedClaimStatuses}
+                onChange={(selected) => {
+                  const claimStatusValues = selected?.map(
+                    (option: any) => option.value,
+                  );
+
+                  setSelectedClaimStatuses(claimStatusValues);
+                }}
+              />
+            </FormGroup>
+            <FormGroup marginBottom="20px">
+              <StyledReactSelect
+                label="Moorup Status"
+                name="moorup_status"
+                isMulti={true}
+                options={MOORUP_CLAIM_STATUSES}
+                placeholder="Select moorup statuses"
+                value={selectedMoorupClaimStatuses}
+                onChange={(selected) => {
+                  const moorupStatusValues = selected?.map(
+                    (option: any) => option.value,
+                  );
+
+                  setSelectedMoorupClaimStatuses(moorupStatusValues);
+                }}
+              />
+            </FormGroup>
+            <FormGroup>
+              <span />
+              <FormGroup>
+                <AppButton
+                  type="button"
+                  variant="outlined"
+                  width="fit-content"
+                  onClick={() => cancelFilters()}
+                >
+                  Cancel
+                </AppButton>
+                <AppButton
+                  type="button"
+                  width="fit-content"
+                  onClick={() => {
+                    const filter = {
+                      include_all: true,
+                      ...(selectedClaimStatuses?.length
+                        ? { status: selectedClaimStatuses.join(',') }
+                        : {}),
+                      ...(selectedMoorupClaimStatuses?.length
+                        ? {
+                            moorup_status:
+                              selectedMoorupClaimStatuses.join(','),
+                          }
+                        : {}),
+                    };
+
+                    getPromotionClaims(filter);
+
+                    setSideModalState({
+                      ...sideModalState,
+                      open: false,
+                      view: null,
+                    });
+                  }}
+                >
+                  Apply
+                </AppButton>
+              </FormGroup>
+            </FormGroup>
+          </FormWrapper>
+        );
+
+      default:
+        return;
+    }
+  };
+
   return (
     <>
       <PageSubHeader
         withSearch
-        leftControls={
-          <AppButton
-            width="fit-content"
-            icon={faDownload}
-            onClick={() => exportPromotionClaims(promotionClaims)}
-            disabled={isEmpty(promotionClaims)}
-          >
-            Export
-          </AppButton>
+        rightControls={
+          <>
+            <IconButton
+              tooltipLabel="Export"
+              icon={faDownload}
+              onClick={() => exportPromotionClaims(promotionClaims)}
+              disabled={isEmpty(promotionClaims)}
+            />
+            <Divider />
+            {(userDetails?.role === SUPERADMIN ||
+              userDetails.role === ADMIN) && (
+              <>
+                {/* <IconButton tooltipLabel="Customize Columns" icon={faSliders} /> */}
+                <IconButton
+                  tooltipLabel="Filter"
+                  icon={faFilter}
+                  onClick={() => {
+                    setSideModalState({
+                      ...sideModalState,
+                      open: true,
+                      view: MODAL_TYPES.FILTER_PROMOTION_CLAIMS,
+                    });
+                  }}
+                />
+                <Divider />
+              </>
+            )}
+          </>
         }
       />
       <Table
@@ -393,6 +520,19 @@ export function PromotionClaimsPage() {
         isOpen={confirmationModalState.open}
         onClose={() => onCloseModal()}
       />
+
+      <SideModal
+        isOpen={sideModalState?.open}
+        onClose={() => {
+          setSideModalState({
+            ...sideModalState,
+            open: false,
+            view: null,
+          });
+        }}
+      >
+        {renderSideModalContent()}
+      </SideModal>
     </>
   );
 }
