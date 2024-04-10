@@ -1,5 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DetailCardContainer, OrderItems } from '@tradein-admin/libs';
+import {
+  DetailCardContainer,
+  OrderItems,
+  OrderItemStatus,
+  useOrder,
+} from '@tradein-admin/libs';
 import { CardDetail, DeviceSection } from './sections';
 import OfferSection from './sections/offer-section';
 
@@ -16,13 +21,20 @@ const ValidationOffer = ({
   setStatusModal,
   setSelectedItem,
 }: ValidationOfferProps) => {
-  const formatQuestion = (question: string) => {
-    return question?.replace('-', ' ');
+  const { state, printOutboundLabel } = useOrder();
+  const { isGeneratingLabels } = state;
+
+  const handlePrintLabel = (orderItemId: any) => {
+    printOutboundLabel({ item_id: orderItemId });
   };
 
   const handleStatus = (item: OrderItems) => {
     setStatusModal(true);
     setSelectedItem(item);
+  };
+
+  const formatQuestion = (question: string) => {
+    return question?.replace('-', ' ');
   };
 
   const deviceValidation = (item: string) => (
@@ -77,12 +89,22 @@ const ValidationOffer = ({
               </div>
             </div>
             <hr />
-            <button
-              onClick={() => handleStatus(item)}
-              className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
-            >
-              Update Status
-            </button>
+            {item.status === OrderItemStatus.REVISION_REJECTED ? (
+              <button
+                onClick={() => handlePrintLabel(item?._id)}
+                disabled={isGeneratingLabels}
+                className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
+              >
+                Print outbound label
+              </button>
+            ) : (
+              <button
+                onClick={() => handleStatus(item)}
+                className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
+              >
+                Update Status
+              </button>
+            )}
           </DetailCardContainer>
         );
       })}

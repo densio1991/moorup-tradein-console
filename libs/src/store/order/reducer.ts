@@ -360,21 +360,24 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
-    case types.GENERATE_LABELS.baseType: {
+    case types.GENERATE_LABELS.baseType:
+    case types.GENERATE_OUTBOUND_LABEL.baseType: {
       return {
         ...state,
         isGeneratingLabels: true,
         generatedLabels: {},
       };
     }
-    case types.GENERATE_LABELS.SUCCESS: {
+    case types.GENERATE_LABELS.SUCCESS:
+    case types.GENERATE_OUTBOUND_LABEL.SUCCESS: {
       return {
         ...state,
         isGeneratingLabels: false,
         generatedLabels: action.payload,
       };
     }
-    case types.GENERATE_LABELS.FAILED: {
+    case types.GENERATE_LABELS.FAILED:
+    case types.GENERATE_OUTBOUND_LABEL.FAILED: {
       return {
         ...state,
         isGeneratingLabels: false,

@@ -17,7 +17,7 @@ export enum OrderItemStatus {
   FOR_REVISION = 'for-revision',
   REVISED = 'revised',
   REVISION_REJECTED = 'revision-rejected',
-  HOLD = 'hold'
+  HOLD = 'hold',
 }
 
 export enum DropdownOrderItemStatus {
