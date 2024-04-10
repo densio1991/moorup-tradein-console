@@ -16,9 +16,10 @@ import {
 } from '../../constants';
 import { hexToRgba } from '../../helpers';
 import { useAuth, useCommon } from '../../store';
+import { Typography } from '../typography';
 
 const Image = styled.img`
-  height: 6rem;
+  height: 4rem;
   width: 100%;
   display: block;
   object-fit: cover;
@@ -73,7 +74,7 @@ export function SideBar(): JSX.Element {
 
   const menuItemStyles: MenuItemStyles = {
     root: {
-      fontSize: '14px',
+      fontSize: '13.333px',
       fontWeight: 600,
     },
     icon: {
@@ -98,7 +99,7 @@ export function SideBar(): JSX.Element {
     }),
     button: {
       '&:hover': {
-        background: 'linear-gradient(to right, #216A4C, #01463A)',
+        background: 'linear-gradient(to right, #216A4C, #216A4C)',
         color: 'white',
 
         '& svg': {
@@ -106,7 +107,7 @@ export function SideBar(): JSX.Element {
         }
       },
       '&.ps-active': {
-        background: 'linear-gradient(to right, #216A4C, #01463A)',
+        background: 'linear-gradient(to right, #01463A, #01463A)',
         color: 'white',
 
         '& svg': {
@@ -120,7 +121,9 @@ export function SideBar(): JSX.Element {
     <div style={{ display: 'flex', height: '100vh', zIndex: '999'}}>
       <Sidebar 
         onBackdropClick={() => setShowSideNav(false)}
-        collapsed={!showSideNav}
+        breakPoint='lg'
+        onBreakPoint={(broken) => setShowSideNav(!broken)}
+        toggled={showSideNav}
         backgroundColor='white'
         rootStyles={{
           color: '#216A4C'
@@ -129,15 +132,15 @@ export function SideBar(): JSX.Element {
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Image src={Logo} alt="" />
           <div style={{ flex: 1, marginBottom: '32px' }}>
-            {/* <div style={{ padding: '0 24px', marginBottom: '8px' }}>
+            <div style={{ padding: '0 24px', marginBottom: '8px' }}>
               <Typography
-                variant="body2"
+                variant="caption"
                 fontWeight={600}
                 style={{ letterSpacing: '0.5px' }}
               >
                 General
               </Typography>
-            </div> */}
+            </div>
             <Menu
               menuItemStyles={menuItemStyles}
               renderExpandIcon={(params) => <StyledIcon icon={params.open ? faAngleDown : faAngleRight} />}
@@ -183,16 +186,16 @@ export function SideBar(): JSX.Element {
                 })
               }
             </Menu>
-            {/* <div style={{ padding: '0 24px', marginBottom: '8px', marginTop: '16px' }}>
+            <div style={{ padding: '0 24px', marginBottom: '8px', marginTop: '16px' }}>
               <Typography
-                variant="body2"
+                variant="caption"
                 fontWeight={600}
-                style={{ letterSpacing: '0.5px', opacity: 0.7 }}
+                style={{ letterSpacing: '0.5px' }}
               >
                 Settings
               </Typography>
-            </div> */}
-            {/* <Menu menuItemStyles={menuItemStyles}>
+            </div>
+            <Menu menuItemStyles={menuItemStyles}>
               <MenuItem 
                 key='configs'
                 onClick={() => navigate('/dashboard/configurations')} 
@@ -201,37 +204,8 @@ export function SideBar(): JSX.Element {
               >
                 Configurations
               </MenuItem>
-            </Menu> */}
-            {/* <div style={{ padding: '0 24px', marginBottom: '8px', marginTop: '16px' }}>
-              <Typography
-                variant="body2"
-                fontWeight={600}
-                style={{ letterSpacing: '0.5px', opacity: 0.7 }}
-              >
-                Account
-              </Typography>
-            </div> */}
-            {/* <Menu menuItemStyles={menuItemStyles}>
-              <MenuItem 
-                key='logout' 
-                onClick={() => logoutUser()} 
-                icon={<StyledIcon icon={faArrowRightFromBracket} />}
-              >
-                Logout
-              </MenuItem>
-            </Menu> */}
+            </Menu>
           </div>
-          <Menu menuItemStyles={menuItemStyles}>
-            <MenuItem 
-              key='configs'
-              onClick={() => navigate('/dashboard/configurations')} 
-              active={/^\/dashboard\/configurations/?.test(pathname)}
-              icon={<StyledIcon icon={faGears} />}
-            >
-              Configurations
-            </MenuItem>
-          </Menu>
-          <hr style={{ margin: '20px 0px', width: '80%', alignSelf: 'center' }}/>
           <Menu menuItemStyles={menuItemStyles}>
             <MenuItem 
               key='logout' 

@@ -34,15 +34,15 @@ const StyledInputLabel = styled.label`
   color: inherit;
 `;
 
-const StyledInputField = styled.input<{ error?: boolean }>`
+const StyledInputField = styled.input<{ error?: boolean, name?: string }>`
   padding: 10px;
   border: 1px solid ${(props) => (props.error ? '#f44336' : '#ccc')};
-  border-radius: 4px;
+  border-radius: ${(props) => (props.name === 'search' ? '20px' : '4px')}; /* Adjusted border-radius */
   outline: none;
   transition: border-color 0.2s ease-in-out;
   padding-right: 30px; /* Added padding for the icon */
 
-  &:focus,:hover {
+  &:focus, &:hover {
     border-color: #01463a;
   }
 
@@ -145,6 +145,7 @@ export function StyledInput({
         onMouseMove={(enableHoverImage && !isEmpty(value)) ? handleHover : undefined}
         onMouseLeave={(enableHoverImage && !isEmpty(value)) ? handleMouseLeave : undefined}
         value={value}
+        name={name}
         {...inputProps}
       />
       {type === 'password' && (

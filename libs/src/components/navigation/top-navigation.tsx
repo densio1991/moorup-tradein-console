@@ -103,9 +103,13 @@ export function TopNavBar(): JSX.Element {
     <NavbarContainer>
       <NavbarWrapper>
         <TopLeft>
-          <HamburgerIconContainer onClick={() => setShowSideNav(!showSideNav)}>
-            <StyledIcon icon={faBars} color='#ccc' hovercolor='#01463a' />
-          </HamburgerIconContainer>
+          {
+            !showSideNav && (
+              <HamburgerIconContainer onClick={() => setShowSideNav(!showSideNav)}>
+                <StyledIcon icon={faBars} color='#ccc' hovercolor='#01463a' />
+              </HamburgerIconContainer>
+            )
+          }
         </TopLeft>
         <TopRight>
           {
