@@ -9,16 +9,16 @@ import {
   faHouse,
   faList,
   faPenToSquare,
-  faUsers
+  faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { ClaimStatus, OrderItemStatus } from './enums';
 import { PlatformType } from './interfaces';
 
-export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL
-export const TEMPLATE_LINK = import.meta.env.VITE_REACT_APP_TEMPLATE_LINK
-export const ACCESS_TOKEN = 'FTK'
-export const ACCESS_TOKEN_EXPIRY = 'FTKX'
-export const ACTIVE_PLATFORM = 'AP'
+export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
+export const TEMPLATE_LINK = import.meta.env.VITE_REACT_APP_TEMPLATE_LINK;
+export const ACCESS_TOKEN = 'FTK';
+export const ACCESS_TOKEN_EXPIRY = 'FTKX';
+export const ACTIVE_PLATFORM = 'AP';
 
 export const PLATFORMS: PlatformType = {
   binglee: 'Bing Lee',
@@ -74,8 +74,8 @@ export const SIDENAV_ITEMS = [
         activeUrl: /^\/dashboard\/order\/actionables/,
         icon: faFileCircleExclamation,
         disabled: false,
-      }
-    ]
+      },
+    ],
   },
   {
     title: 'Promotions',
@@ -104,8 +104,8 @@ export const SIDENAV_ITEMS = [
         activeUrl: /^\/dashboard\/promotion\/payment/,
         icon: faCreditCard,
         disabled: false,
-      }
-    ]
+      },
+    ],
   },
   {
     title: 'User Management',
@@ -114,7 +114,7 @@ export const SIDENAV_ITEMS = [
     icon: faUsers,
     disabled: false,
   },
-]
+];
 
 export const DEFAULT_COLUMN = [
   {
@@ -123,7 +123,7 @@ export const DEFAULT_COLUMN = [
     enableSort: true,
     keyName: '_id',
   },
-]
+];
 
 export const PRODUCT_MANAGEMENT_COLUMNS = [
   {
@@ -155,8 +155,8 @@ export const PRODUCT_MANAGEMENT_COLUMNS = [
     order: 6,
     enableSort: true,
     keyName: 'type',
-  }
-]
+  },
+];
 
 export const ORDER_MANAGEMENT_COLUMNS = [
   {
@@ -206,7 +206,7 @@ export const ORDER_MANAGEMENT_COLUMNS = [
     enableSort: true,
     keyName: 'updatedAt',
   },
-]
+];
 
 export const DISCREPANCY_MANAGEMENT_COLUMNS = [
   {
@@ -335,7 +335,7 @@ export const DISCREPANCY_MANAGEMENT_COLUMNS = [
     enableSort: true,
     keyName: 'ops_status',
   },
-]
+];
 
 export const USER_MANAGEMENT_COLUMNS = [
   {
@@ -368,7 +368,7 @@ export const USER_MANAGEMENT_COLUMNS = [
     enableSort: true,
     keyName: 'status',
   },
-]
+];
 
 export const PROMOTIONS_MANAGEMENT_COLUMNS = [
   {
@@ -400,7 +400,7 @@ export const PROMOTIONS_MANAGEMENT_COLUMNS = [
     enableSort: true,
     keyName: 'status',
   },
-]
+];
 
 export const PAYMENTS_MANAGEMENT_COLUMNS = [
   {
@@ -423,7 +423,7 @@ export const PAYMENTS_MANAGEMENT_COLUMNS = [
     order: 5,
     enableSort: true,
   },
-]
+];
 
 export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
   {
@@ -479,8 +479,8 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     order: 10,
     enableSort: true,
     keyName: 'status',
-  }
-]
+  },
+];
 
 export const ACTIONABLES_MANAGEMENT_COLUMNS = [
   {
@@ -525,7 +525,7 @@ export const ACTIONABLES_MANAGEMENT_COLUMNS = [
     enableSort: true,
     keyName: 'updatedAt',
   },
-]
+];
 
 export const PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS = [
   {
@@ -557,17 +557,17 @@ export const PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS = [
     order: 6,
     enableSort: true,
     keyName: 'status',
-  }
-]
+  },
+];
 
 export const ACTIONS_COLUMN = [
   {
     label: 'Actions',
     order: 99,
     enableSort: false,
-    keyName: ''
+    keyName: '',
   },
-]
+];
 
 export const ADD_PRODUCT_PAYLOAD = {
   brand: '',
@@ -580,7 +580,7 @@ export const ADD_PRODUCT_PAYLOAD = {
   site_url: '',
   status: '',
   platforms: [],
-}
+};
 
 export const ADD_PRODUCT_VARIANT_PRICING_PAYLOAD = {
   currency: '',
@@ -588,13 +588,13 @@ export const ADD_PRODUCT_VARIANT_PRICING_PAYLOAD = {
   working: 0,
   working_damaged: 0,
   not_working_damaged: 0,
-  not_working: 0
-}
+  not_working: 0,
+};
 
 export const ADD_PRODUCT_VARIANT_ATTRIBUTES_PAYLOAD = {
   id: '',
   name: '',
-}
+};
 
 export interface ProductVariant {
   name: string;
@@ -885,7 +885,7 @@ export const CURRENCIES = [
   { value: 'TJS', label: 'Tajikistani Somoni (TJS)' },
   { value: 'TMT', label: 'Turkmenistani Manat (TMT)' },
   { value: 'TND', label: 'Tunisian Dinar (TND)' },
-  { value: 'TOP', label: 'Tongan Pa\'anga (TOP)' },
+  { value: 'TOP', label: "Tongan Pa'anga (TOP)" },
   { value: 'TRY', label: 'Turkish Lira (TRY)' },
   { value: 'TTD', label: 'Trinidad and Tobago Dollar (TTD)' },
   { value: 'TVD', label: 'Tuvaluan Dollar (TVD)' },
@@ -908,171 +908,171 @@ export const CURRENCIES = [
   { value: 'YER', label: 'Yemeni Rial (YER)' },
   { value: 'ZAR', label: 'South African Rand (ZAR)' },
   { value: 'ZMW', label: 'Zambian Kwacha (ZMW)' },
-  { value: 'ZWL', label: 'Zimbabwean Dollar (ZWL)' }
-]
+  { value: 'ZWL', label: 'Zimbabwean Dollar (ZWL)' },
+];
 
 export const CURRENCY_SYMBOLS: { [key: string]: string } = {
-  'AED': 'د.إ',
-  'AFN': '؋',
-  'ALL': 'L',
-  'AMD': '֏',
-  'ANG': 'ƒ',
-  'AOA': 'Kz',
-  'ARS': '$',
-  'AUD': '$',
-  'AWG': 'ƒ',
-  'AZN': '₼',
-  'BAM': 'КМ',
-  'BBD': '$',
-  'BDT': '৳',
-  'BGN': 'лв',
-  'BHD': 'ب.د',
-  'BIF': 'Fr',
-  'BMD': '$',
-  'BND': '$',
-  'BOB': 'Bs.',
-  'BRL': 'R$',
-  'BSD': '$',
-  'BTN': 'Nu.',
-  'BWP': 'P',
-  'BYN': 'Br',
-  'BZD': 'BZ$',
-  'CAD': '$',
-  'CDF': 'Fr',
-  'CHF': 'Fr',
-  'CLP': '$',
-  'CNY': '¥',
-  'COP': '$',
-  'CRC': '₡',
-  'CUP': '₱',
-  'CVE': '$',
-  'CZK': 'Kč',
-  'DJF': 'Fdj',
-  'DKK': 'kr',
-  'DOP': 'RD$',
-  'DZD': 'د.ج',
-  'EGP': 'ج.م',
-  'ERN': 'Nfk',
-  'ETB': 'Br',
-  'EUR': '€',
-  'FJD': '$',
-  'FKP': '£',
-  'FOK': 'kr',
-  'GBP': '£',
-  'GEL': '₾',
-  'GGP': '£',
-  'GHS': '₵',
-  'GIP': '£',
-  'GMD': 'D',
-  'GNF': 'Fr',
-  'GTQ': 'Q',
-  'GYD': '$',
-  'HKD': '$',
-  'HNL': 'L',
-  'HRK': 'kn',
-  'HTG': 'G',
-  'HUF': 'Ft',
-  'IDR': 'Rp',
-  'ILS': '₪',
-  'IMP': '£',
-  'INR': '₹',
-  'IQD': 'ع.د',
-  'IRR': '﷼',
-  'ISK': 'kr',
-  'JEP': '£',
-  'JMD': 'J$',
-  'JOD': 'د.ا',
-  'JPY': '¥',
-  'KES': 'Ksh',
-  'KGS': 'сом',
-  'KHR': '៛',
-  'KID': '$',
-  'KIN': 'RF',
-  'KIR': '$',
-  'KWD': 'د.ك',
-  'KYD': '$',
-  'KZT': '₸',
-  'LAK': '₭',
-  'LBP': 'ل.ل',
-  'LKR': 'රු',
-  'LRD': '$',
-  'LSL': 'L',
-  'LYD': 'ل.د',
-  'MAD': 'د.م.',
-  'MDL': 'L',
-  'MGA': 'Ar',
-  'MKD': 'ден',
-  'MMK': 'K',
-  'MNT': '₮',
-  'MOP': 'P',
-  'MRU': 'UM',
-  'MUR': '₨',
-  'MVR': 'ރ.',
-  'MWK': 'MK',
-  'MXN': '$',
-  'MYR': 'RM',
-  'MZN': 'MT',
-  'NAD': '$',
-  'NGN': '₦',
-  'NIO': 'C$',
-  'NOK': 'kr',
-  'NPR': '₨',
-  'NZD': '$',
-  'OMR': 'ر.ع.',
-  'PAB': 'B/.',
-  'PEN': 'S/.',
-  'PGK': 'K',
-  'PHP': '₱',
-  'PKR': '₨',
-  'PLN': 'zł',
-  'PYG': '₲',
-  'QAR': 'ر.ق',
-  'RON': 'lei',
-  'RSD': 'дин',
-  'RUB': '₽',
-  'RWF': 'Fr',
-  'SAR': 'ر.س',
-  'SBD': '$',
-  'SCR': '₨',
-  'SDG': 'ج.س.',
-  'SEK': 'kr',
-  'SGD': '$',
-  'SHP': '£',
-  'SLL': 'Le',
-  'SOS': 'Sh',
-  'SRD': '$',
-  'SSP': '£',
-  'STN': 'Db',
-  'SYP': 'ل.س',
-  'SZL': 'L',
-  'THB': '฿',
-  'TJS': 'ЅМ',
-  'TMT': 'm',
-  'TND': 'د.ت',
-  'TOP': 'T$',
-  'TRY': '₺',
-  'TTD': 'TT$',
-  'TVD': '$',
-  'TWD': 'NT$',
-  'TZS': 'Sh',
-  'UAH': '₴',
-  'UGX': 'Sh',
-  'USD': '$',
-  'UYU': '$U',
-  'UZS': 'UZS',
-  'VES': 'Bs',
-  'VND': '₫',
-  'VUV': 'VT',
-  'WST': 'T',
-  'XAF': 'FCFA',
-  'XCD': '$',
-  'XDR': 'SDR',
-  'XOF': 'CFA',
-  'XPF': 'Fr',
-  'YER': '﷼',
-  'ZAR': 'R',
-  'ZMW': 'ZK',
-  'ZWL': '$',
+  AED: 'د.إ',
+  AFN: '؋',
+  ALL: 'L',
+  AMD: '֏',
+  ANG: 'ƒ',
+  AOA: 'Kz',
+  ARS: '$',
+  AUD: '$',
+  AWG: 'ƒ',
+  AZN: '₼',
+  BAM: 'КМ',
+  BBD: '$',
+  BDT: '৳',
+  BGN: 'лв',
+  BHD: 'ب.د',
+  BIF: 'Fr',
+  BMD: '$',
+  BND: '$',
+  BOB: 'Bs.',
+  BRL: 'R$',
+  BSD: '$',
+  BTN: 'Nu.',
+  BWP: 'P',
+  BYN: 'Br',
+  BZD: 'BZ$',
+  CAD: '$',
+  CDF: 'Fr',
+  CHF: 'Fr',
+  CLP: '$',
+  CNY: '¥',
+  COP: '$',
+  CRC: '₡',
+  CUP: '₱',
+  CVE: '$',
+  CZK: 'Kč',
+  DJF: 'Fdj',
+  DKK: 'kr',
+  DOP: 'RD$',
+  DZD: 'د.ج',
+  EGP: 'ج.م',
+  ERN: 'Nfk',
+  ETB: 'Br',
+  EUR: '€',
+  FJD: '$',
+  FKP: '£',
+  FOK: 'kr',
+  GBP: '£',
+  GEL: '₾',
+  GGP: '£',
+  GHS: '₵',
+  GIP: '£',
+  GMD: 'D',
+  GNF: 'Fr',
+  GTQ: 'Q',
+  GYD: '$',
+  HKD: '$',
+  HNL: 'L',
+  HRK: 'kn',
+  HTG: 'G',
+  HUF: 'Ft',
+  IDR: 'Rp',
+  ILS: '₪',
+  IMP: '£',
+  INR: '₹',
+  IQD: 'ع.د',
+  IRR: '﷼',
+  ISK: 'kr',
+  JEP: '£',
+  JMD: 'J$',
+  JOD: 'د.ا',
+  JPY: '¥',
+  KES: 'Ksh',
+  KGS: 'сом',
+  KHR: '៛',
+  KID: '$',
+  KIN: 'RF',
+  KIR: '$',
+  KWD: 'د.ك',
+  KYD: '$',
+  KZT: '₸',
+  LAK: '₭',
+  LBP: 'ل.ل',
+  LKR: 'රු',
+  LRD: '$',
+  LSL: 'L',
+  LYD: 'ل.د',
+  MAD: 'د.م.',
+  MDL: 'L',
+  MGA: 'Ar',
+  MKD: 'ден',
+  MMK: 'K',
+  MNT: '₮',
+  MOP: 'P',
+  MRU: 'UM',
+  MUR: '₨',
+  MVR: 'ރ.',
+  MWK: 'MK',
+  MXN: '$',
+  MYR: 'RM',
+  MZN: 'MT',
+  NAD: '$',
+  NGN: '₦',
+  NIO: 'C$',
+  NOK: 'kr',
+  NPR: '₨',
+  NZD: '$',
+  OMR: 'ر.ع.',
+  PAB: 'B/.',
+  PEN: 'S/.',
+  PGK: 'K',
+  PHP: '₱',
+  PKR: '₨',
+  PLN: 'zł',
+  PYG: '₲',
+  QAR: 'ر.ق',
+  RON: 'lei',
+  RSD: 'дин',
+  RUB: '₽',
+  RWF: 'Fr',
+  SAR: 'ر.س',
+  SBD: '$',
+  SCR: '₨',
+  SDG: 'ج.س.',
+  SEK: 'kr',
+  SGD: '$',
+  SHP: '£',
+  SLL: 'Le',
+  SOS: 'Sh',
+  SRD: '$',
+  SSP: '£',
+  STN: 'Db',
+  SYP: 'ل.س',
+  SZL: 'L',
+  THB: '฿',
+  TJS: 'ЅМ',
+  TMT: 'm',
+  TND: 'د.ت',
+  TOP: 'T$',
+  TRY: '₺',
+  TTD: 'TT$',
+  TVD: '$',
+  TWD: 'NT$',
+  TZS: 'Sh',
+  UAH: '₴',
+  UGX: 'Sh',
+  USD: '$',
+  UYU: '$U',
+  UZS: 'UZS',
+  VES: 'Bs',
+  VND: '₫',
+  VUV: 'VT',
+  WST: 'T',
+  XAF: 'FCFA',
+  XCD: '$',
+  XDR: 'SDR',
+  XOF: 'CFA',
+  XPF: 'Fr',
+  YER: '﷼',
+  ZAR: 'R',
+  ZMW: 'ZK',
+  ZWL: '$',
 };
 
 interface Attribute {
@@ -1088,21 +1088,19 @@ export const ATTRIBUTES: Attributes = {
   laptops: [
     { value: 'processor', label: 'Processor' },
     { value: 'screen-size', label: 'Screen Size' },
-    { value: 'storage', label: 'Storage' },
-    { value: 'memory', label: 'Memory' },
+    { value: 'size', label: 'Storage' },
+    { value: 'ram', label: 'Memory' },
   ],
   watches: [
     { value: 'case-size', label: 'Case Size' },
-    { value: 'case-material', label: 'Material' }
+    { value: 'case-material', label: 'Material' },
   ],
   tablets: [
     { value: 'screen-size', label: 'Screen Size' },
     { value: 'storage', label: 'Storage' },
   ],
-  phones: [
-    { value: 'storage', label: 'Storage' },
-  ]
-}
+  phones: [{ value: 'storage', label: 'Storage' }],
+};
 
 export const SUPERADMIN = 'superadmin';
 export const ADMIN = 'admin';
@@ -1118,7 +1116,7 @@ export const ROLES = [
   { value: WAREHOUSE, label: 'Warehouse' },
   { value: PRODUCTS, label: 'Products' },
   { value: CUSTOMER_SERVICE, label: 'Customer Service' },
-]
+];
 
 export const CANCELLED_AXIOS = 'ERR_CANCELED';
 
@@ -1127,14 +1125,14 @@ export const PRODUCT_TYPES = {
   TABLETS: 'tablets',
   WATCHES: 'watches',
   LAPTOPS: 'laptops',
-}
+};
 
 export const PRODUCT_TYPES_OPTIONS = [
   { value: PRODUCT_TYPES.PHONES, label: 'Phones', disabled: true },
   { value: PRODUCT_TYPES.TABLETS, label: 'Tablets', disabled: false },
   { value: PRODUCT_TYPES.WATCHES, label: 'Watches', disabled: true },
   { value: PRODUCT_TYPES.LAPTOPS, label: 'Laptops', disabled: false },
-]
+];
 
 export const MODAL_TYPES = {
   ADD_PRODUCT: 'ADD_PRODUCT',
@@ -1153,12 +1151,12 @@ export const MODAL_TYPES = {
   EDIT_PROMOTION_ELIGIBILITY_AND_FAQS: 'EDIT_PROMOTION_ELIGIBILITY_AND_FAQS',
   ADD_PROMOTION_PREVIEW: 'ADD_PROMOTION_PREVIEW',
   EDIT_PROMOTION_PREVIEW: 'EDIT_PROMOTION_PREVIEW',
-}
+};
 
 export const PROMOTION_STATUS = [
   { value: 'active', label: 'Active' },
   { value: 'inactive', label: 'Inactive' },
-]
+];
 
 export const ADD_PROMOTION_DETAILS_PAYLOAD = {
   name: '',
@@ -1168,50 +1166,50 @@ export const ADD_PROMOTION_DETAILS_PAYLOAD = {
   end_date: null,
   image_url: '',
   show_banner: false,
-}
+};
 
 export const ADD_PROMOTION_PRODUCTS_PAYLOAD = {
   product_name: '',
   amount: 0,
-  currency: ''
-}
+  currency: '',
+};
 
 export const ADD_PROMOTION_CLAIMS_PAYLOAD = {
   title: '',
   description: '',
   disclaimer: '',
-  products: [ADD_PROMOTION_PRODUCTS_PAYLOAD]
-}
+  products: [ADD_PROMOTION_PRODUCTS_PAYLOAD],
+};
 
 export const ADD_PROMOTION_STEPS_ITEM = {
   order: 1,
   title: '',
-  description: ''
+  description: '',
 };
 
 export const ADD_PROMOTION_STEPS_PAYLOAD = {
   steps: [ADD_PROMOTION_STEPS_ITEM],
-}
+};
 
 export const ADD_PROMOTION_CONDITION_ITEM = {
   order: 1,
-  description: ''
+  description: '',
 };
 
 export const ADD_PROMOTION_CONDITIONS_PAYLOAD = {
   title: '',
-  items: [ADD_PROMOTION_CONDITION_ITEM]
-}
+  items: [ADD_PROMOTION_CONDITION_ITEM],
+};
 
 export const ADD_PROMOTION_FAQ_ITEM = {
   title: '',
-  content: ''
+  content: '',
 };
 
 export const ADD_PROMOTION_ELIGIBILITY_AND_FAQS_PAYLOAD = {
   title: '',
-  faq: [ADD_PROMOTION_FAQ_ITEM]
-}
+  faq: [ADD_PROMOTION_FAQ_ITEM],
+};
 
 export interface Product {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -1254,12 +1252,12 @@ export interface Promotion {
 export const COLLECTION_ORDER_ITEM_STATUS = [
   OrderItemStatus.CREATED,
   OrderItemStatus.CANCELLED,
-]
+];
 export const VALIDATION_ORDER_ITEM_STATUS = [
   OrderItemStatus.RECEIVED,
   OrderItemStatus.LABEL_SENT,
   OrderItemStatus.FOR_REVISION,
-]
+];
 export const COMPLETION_ORDER_ITEM_STATUS = [
   OrderItemStatus.EVALUATED,
   OrderItemStatus.REVISED,
@@ -1273,4 +1271,4 @@ export const OVERRIDE_CLAIM_STATUSES = [
   { value: ClaimStatus.CANCELLED, label: 'Cancelled' },
   { value: ClaimStatus.PENDING, label: 'Pending' },
   { value: ClaimStatus.REJECTED, label: 'Rejected' },
-]
+];
