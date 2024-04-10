@@ -219,19 +219,19 @@ export const DISCREPANCY_MANAGEMENT_COLUMNS = [
     label: 'Customer Name',
     order: 3,
     enableSort: true,
-    keyName: 'first_name',
+    keyName: 'user_details.first_name',
   },
   {
     label: 'Mobile Number',
     order: 4,
     enableSort: true,
-    keyName: 'mobile_number',
+    keyName: 'user_details.mobile_number',
   },
   {
     label: 'Email Address',
     order: 5,
     enableSort: true,
-    keyName: 'email',
+    keyName: 'user_details.email',
   },
   {
     label: 'Credit Timeframe',
@@ -243,19 +243,19 @@ export const DISCREPANCY_MANAGEMENT_COLUMNS = [
     label: 'Device',
     order: 7,
     enableSort: true,
-    keyName: 'product_name',
+    keyName: 'order_items.product_name',
   },
   {
     label: 'Original Offer',
     order: 8,
     enableSort: true,
-    keyName: 'original_offer',
+    keyName: 'order_items.original_offer',
   },
   {
     label: 'IMEI/Serial',
     order: 9,
     enableSort: true,
-    keyName: 'imei_serial',
+    keyName: 'order_items.imei_serial',
   },
   {
     label: 'System Model',
@@ -430,7 +430,7 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     label: 'Order Number',
     order: 2,
     enableSort: true,
-    keyName: 'order_number',
+    keyName: 'order_id.order_number',
   },
   {
     label: 'Promotion Name',
@@ -466,7 +466,7 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     label: 'Claimed By',
     order: 8,
     enableSort: true,
-    keyName: 'user_details.first_name',
+    keyName: 'user_id.first_name',
   },
   {
     label: 'Claimed Date',
@@ -532,7 +532,7 @@ export const PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS = [
     label: 'Claim Number',
     order: 2,
     enableSort: true,
-    keyName: 'claim_number',
+    keyName: 'order_id.claim_number',
   },
   {
     label: 'Order Number',
@@ -1151,7 +1151,8 @@ export const MODAL_TYPES = {
   EDIT_PROMOTION_ELIGIBILITY_AND_FAQS: 'EDIT_PROMOTION_ELIGIBILITY_AND_FAQS',
   ADD_PROMOTION_PREVIEW: 'ADD_PROMOTION_PREVIEW',
   EDIT_PROMOTION_PREVIEW: 'EDIT_PROMOTION_PREVIEW',
-};
+  FILTER_PROMOTION_CLAIMS: 'FILTER_PROMOTION_CLAIMS',
+}
 
 export const PROMOTION_STATUS = [
   { value: 'active', label: 'Active' },
@@ -1273,6 +1274,24 @@ export const TIMEZONE = 'Australia/Sydney';
 export const OVERRIDE_CLAIM_STATUSES = [
   { value: ClaimStatus.APPROVED, label: 'Approved' },
   { value: ClaimStatus.CANCELLED, label: 'Cancelled' },
+  { value: ClaimStatus.PENDING, label: 'Pending' },
+  { value: ClaimStatus.REJECTED, label: 'Rejected' },
+]
+
+export const CLAIM_STATUSES = [
+  { value: ClaimStatus.APPROVED, label: 'Approved' },
+  { value: ClaimStatus.CANCELLED, label: 'Cancelled' },
+  { value: ClaimStatus.COMPLETED, label: 'Completed' },
+  { value: ClaimStatus.FAILED, label: 'Failed' },
+  { value: ClaimStatus.PENDING, label: 'Pending' },
+  { value: ClaimStatus.REJECTED, label: 'Rejected' },
+]
+
+export const MOORUP_CLAIM_STATUSES = [
+  { value: ClaimStatus.APPROVED, label: 'Approved' },
+  { value: ClaimStatus.CANCELLED, label: 'Cancelled' },
+  { value: ClaimStatus.COMPLETED, label: 'Completed' },
+  { value: ClaimStatus.FAILED, label: 'Failed' },
   { value: ClaimStatus.PENDING, label: 'Pending' },
   { value: ClaimStatus.REJECTED, label: 'Rejected' },
 ]
