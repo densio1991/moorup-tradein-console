@@ -5,7 +5,6 @@ import {
   ClaimStatus,
   PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS,
   PageSubHeader,
-  REGULAR,
   SUPERADMIN,
   Table,
   promotionClaimsPaymentManagementParsingConfig,
@@ -35,15 +34,6 @@ export function PromotionClaimsPaymentPage() {
   const headers = [...PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS];
 
   switch (userDetails.role) {
-    case REGULAR:
-      headers.push({
-        label: 'Action',
-        order: 99,
-        enableSort: false,
-        keyName: '',
-      });
-      break;
-
     case ADMIN:
     case SUPERADMIN:
       headers.push({
@@ -51,6 +41,13 @@ export function PromotionClaimsPaymentPage() {
         order: 11,
         enableSort: true,
         keyName: 'moorup_status',
+      });
+
+      headers.push({
+        label: 'Action',
+        order: 99,
+        enableSort: false,
+        keyName: '',
       });
       break;
 
