@@ -95,7 +95,7 @@ const ValidationOffer = ({
                 disabled={isGeneratingLabels}
                 className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
               >
-                Print outbound label
+                Return device
               </button>
             ) : (
               <button
