@@ -41,7 +41,7 @@ export const usePromotion = () => {
     actions.setAddPromotionEligibilityAndFaqsPayload(payload)(dispatch);
   }
 
-  const getPromotionClaims = (payload: any, signal: AbortSignal) => {
+  const getPromotionClaims = (payload: any, signal?: AbortSignal) => {
     actions.getPromotionClaims(payload, activePlatform, signal)(dispatch);
   }
 
