@@ -18,6 +18,11 @@ interface TypographyProps extends React.HTMLAttributes<HTMLParagraphElement> {
     | 'subtitle1'
     | 'subtitle2'
     | 'caption';
+  margin?: string;
+  marginTop?: string;
+  marginBottom?: string;
+  marginLeft?: string;
+  marginRight?: string;
 }
 
 const StyledTypography = styled.p<TypographyProps>`
@@ -93,6 +98,12 @@ const StyledTypography = styled.p<TypographyProps>`
   ${({ fontWeight }) => (fontWeight ? `font-weight: ${fontWeight};` : '')}
   ${({ color }) => (color ? `color: ${color};` : '')}
   ${({ fontSize }) => (fontSize ? `font-size: ${fontSize};` : '')}
+
+  ${(props) => props.margin && `margin: ${props.margin};`}
+  ${(props) => props.marginTop && `margin-top: ${props.marginTop};`}
+  ${(props) => props.marginBottom && `margin-bottom: ${props.marginBottom};`}
+  ${(props) => props.marginLeft && `margin-left: ${props.marginLeft};`}
+  ${(props) => props.marginRight && `margin-right: ${props.marginRight};`}
 `;
 
 export function Typography({ variant = 'body1', children, ...rest }: TypographyProps) {

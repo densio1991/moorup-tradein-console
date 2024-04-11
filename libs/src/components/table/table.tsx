@@ -4,11 +4,10 @@ import { isEmpty } from 'lodash';
 import { ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-import {
-  sortArray,
-  sortByKey
-} from '../../helpers';
+import { PAGE_SIZES } from '../../constants';
+import { sortArray, sortByKey } from '../../helpers';
 import { useCommon } from '../../store';
+import { StyledReactSelect } from '../input';
 import { StyledIcon } from '../styled';
 import Pagination from './pagination';
 
@@ -78,7 +77,7 @@ const ActionContainer = styled.div`
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
-`
+`;
 
 const TableWrapper = styled.div`
   box-shadow: none;
@@ -266,8 +265,6 @@ const Line = styled.div`
   }
 `;
 
-const PAGE_SIZE = 10;
-
 export function Table({
   label,
   headers,
@@ -280,6 +277,7 @@ export function Table({
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(parseInt(PAGE_SIZES[0].value));
   const { state: commonState } = useCommon();
   const { searchTerm } = commonState;
 
@@ -299,9 +297,8 @@ export function Table({
     if (!isEmpty(row?.viewURL)) {
       navigate(row?.viewURL);
     }
-  }
+  };
 
-  // TODO: Make the parser a parameter for Table component
   const parseRowValue = (
     header: any,
     row: { [x: string]: any },
@@ -359,8 +356,8 @@ export function Table({
     return false;
   }
 
-  const startIndex = (currentPage - 1) * PAGE_SIZE;
-  const endIndex = startIndex + PAGE_SIZE;
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
   const itemsToDisplay = filteredRows.slice(startIndex, endIndex);
 
   return (
@@ -373,6 +370,15 @@ export function Table({
         </LeftSection>
         <RightSection>
           <ActionContainer>
+            <StyledReactSelect
+              name="page_size"
+              isMulti={false}
+              options={PAGE_SIZES}
+              value={pageSize.toString()}
+              onChange={(selected) => {
+                setPageSize(parseInt(selected.value));
+              }}
+            />
             {rightControls}
           </ActionContainer>
         </RightSection>
@@ -419,11 +425,11 @@ export function Table({
       </TableWrapper>
       <Pagination
         currentPage={currentPage}
-        totalPages={Math.ceil(filteredRows.length / PAGE_SIZE)}
+        pageSize={pageSize}
+        totalPages={Math.ceil(filteredRows.length / pageSize)}
         totalRows={filteredRows.length}
         paginate={paginate}
       />
     </div>
   );
 }
- 
