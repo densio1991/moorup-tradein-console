@@ -15,6 +15,9 @@ export enum OrderItemStatus {
   COMPLETED = 'completed',
   FOR_REVISION = 'for-revision',
   REVISED = 'revised',
+  REVISION_REJECTED = 'revision-rejected',
+  HOLD = 'hold',
+  DELETED = 'deleted',
 }
 
 export enum DropdownOrderItemStatus {

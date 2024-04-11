@@ -464,6 +464,39 @@ export const generateLabels = (payload: any, onSuccess: any = false) => (dispatc
     });
 };
 
+export const generateOutboundLabel = (payload: any, onSuccess: any = false) => (dispatch: any) => {
+  dispatch({
+    type: types.GENERATE_LABELS.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .post('/api/shipments/generate-labels?label=outbound', payload)
+    .then((response) => {
+      dispatch({
+        type: types.GENERATE_OUTBOUND_LABEL.SUCCESS,
+        payload: response?.data,
+      });
+
+      const { data = {} } = response?.data || {};
+      if (data?.outbound?.label) {
+        window.open(data?.outbound?.label, '_blank');
+      }
+
+      if (onSuccess && typeof onSuccess == 'function') {
+        onSuccess(data);
+      }
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.GENERATE_OUTBOUND_LABEL.FAILED,
+        payload: error,
+      });
+      
+      toast.error('Failed to generate labels.');
+    });
+};
+
 export const updateOrderItemImeiSerial = (orderItemId: string, orderId: string, payload: any) => (dispatch: any) => {
   dispatch({
     type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.baseType,
