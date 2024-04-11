@@ -51,6 +51,7 @@ interface IconButtonProps {
   disabled?: boolean;
   onClick?: () => void;
   tooltipLabel: string;
+  hovercolor?: string;
 }
 
 export function IconButton({
@@ -60,6 +61,7 @@ export function IconButton({
   disabled,
   onClick,
   tooltipLabel,
+  hovercolor = '#01463A',
 }: IconButtonProps) {
   const handleClick = () => {
     if (!disabled && onClick) {
@@ -75,7 +77,7 @@ export function IconButton({
         width={width}
         padding={padding}
       >
-        <StyledIcon icon={icon} color='#9e9e9e' hovercolor='#01463A' />
+        <StyledIcon icon={icon} color='#9e9e9e' hovercolor={hovercolor} />
       </ButtonContainer>
       <Tooltip>{tooltipLabel}</Tooltip>
     </ButtonWrapper>
