@@ -10,6 +10,7 @@ import {
   DataLine,
   StyledIcon,
   amountFormatter,
+  Modal,
 } from '@tradein-admin/libs';
 import { faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
@@ -68,7 +69,8 @@ const QuoteDetails = () => {
     isFetchingGiftCard,
     isUpdatingGiftCard,
   } = state;
-  const [activeGiftCard, setActiveGiftCard] = useState();
+  const [activeGiftCard, setActiveGiftCard] = useState<any>({});
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
   const userId = order?.user_id || {};
   const address = order?.address || {};
@@ -98,13 +100,12 @@ const QuoteDetails = () => {
       txId: voucher?.txId,
       currency: voucher?.currency,
     };
-    setActiveGiftCard(voucher?.pan);
+    setActiveGiftCard(voucher);
     getGiftCardStatus(order?._id, params);
   };
 
-  const onCancelGiftCard = (voucher: any) => {
-    setActiveGiftCard(voucher?.pan);
-    cancelGiftCard(order?._id, voucher?.itemNumber);
+  const onCancelGiftCard = () => {
+    cancelGiftCard(order?._id, activeGiftCard?.itemNumber);
   };
 
   const giftCardStatus = (voucher: any) => {
@@ -112,7 +113,7 @@ const QuoteDetails = () => {
     return (
       <div className="flex items-center justify-between gap-2">
         {(isFetchingGiftCard || isUpdatingGiftCard) &&
-        voucher.pan === activeGiftCard ? (
+        voucher.pan === activeGiftCard?.pan ? (
           'Loading...'
         ) : (
           <>
@@ -126,7 +127,10 @@ const QuoteDetails = () => {
               {voucher?.provider === 'ezipay' && (
                 <button
                   className="bg-red-500 py-[2px] px-2 rounded text-xs text-white place-self-end self-end"
-                  onClick={() => onCancelGiftCard(voucher)}
+                  onClick={() => {
+                    setActiveGiftCard(voucher);
+                    setIsConfirmDialogOpen(true);
+                  }}
                   disabled={isUpdatingGiftCard}
                 >
                   Cancel
@@ -261,6 +265,35 @@ const QuoteDetails = () => {
           </div>
         </DetailCardContainer>
       )}
+      <Modal
+        isOpen={isConfirmDialogOpen}
+        onClose={() => setIsConfirmDialogOpen(false)}
+      >
+        <div className="flex flex-col p-6">
+          <h2 className="mb-6">
+            Are you sure you want to cancel the gift card?
+          </h2>
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              className="bg-transparent hover:bg-red-50 text-red-700 font-medium py-1 px-3 border border-red-500 rounded"
+              onClick={() => setIsConfirmDialogOpen(false)}
+            >
+              No
+            </button>
+            <button
+              type="button"
+              className="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-3 border border-red-500 rounded"
+              onClick={() => {
+                setIsConfirmDialogOpen(false);
+                onCancelGiftCard();
+              }}
+            >
+              Yes, cancel it
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

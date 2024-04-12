@@ -5,10 +5,13 @@ import {
   OrderItems,
   useOrder,
   PRODUCT_TYPES,
+  OrderItemActions,
+  Modal,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { CardDetail, DeviceSection } from './sections';
 import OfferSection from './sections/offer-section';
+import { useMemo, useState } from 'react';
 
 type CollectionProps = {
   orderId: string;
@@ -35,17 +38,17 @@ const Collection = ({
     sendBox,
   } = useOrder();
 
-  const {
-    isResendingLabel,
-    // isUpdatingOrderItem,
-    isFetchingShipments,
-  } = state;
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+  const [activeOrderItem, setActiveOrderItem] = useState<OrderItems>();
+  const [actionType, setActionType] = useState<any>();
 
-  const handleReceiveOrderItem = (orderItemId: string) => {
+  const { isResendingLabel, isFetchingShipments } = state;
+
+  const handleReceiveOrderItem = (orderItemId: any) => {
     receiveOrderItemById(orderItemId);
   };
 
-  const handleSendBox = (orderItemId: string) => {
+  const handleSendBox = (orderItemId: any) => {
     sendBox(orderId, { item_id: orderItemId });
   };
 
@@ -53,13 +56,41 @@ const Collection = ({
     resendShipmentLabel(orderItemId);
   };
 
+  const handleCancelOrderItem = (orderItemId: any) => {
+    cancelOrderItemById(orderItemId);
+  };
+
   const handleUpdateStatus = (orderItem: OrderItems) => {
     setStatusModal(true);
     setSelectedItem(orderItem);
   };
 
-  const handleCancelOrderItem = (orderItemId: string) => {
-    cancelOrderItemById(orderItemId);
+  const onConfirmAction = () => {
+    setIsConfirmDialogOpen(false);
+
+    const orderItemId = activeOrderItem?._id;
+    switch (actionType) {
+      case OrderItemActions.RECEIVE:
+        handleReceiveOrderItem(orderItemId);
+        break;
+      case OrderItemActions.SEND_BOX:
+        handleSendBox(orderItemId);
+        break;
+      case OrderItemActions.CANCEL:
+        handleCancelOrderItem(orderItemId);
+        break;
+      case OrderItemActions.RESEND_LABEL:
+        handleResendLabel(orderItemId);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const openConfirmDialog = (orderItem: OrderItems, action: any) => {
+    setActiveOrderItem(orderItem);
+    setIsConfirmDialogOpen(true);
+    setActionType(action);
   };
 
   const isBoxRequired = (productType: any) => {
@@ -71,6 +102,31 @@ const Collection = ({
 
     return itemShipments['return'];
   };
+
+  const confirmModalLabel = useMemo(() => {
+    switch (actionType) {
+      case OrderItemActions.CANCEL:
+        return {
+          content: 'Are you sure you want to cancel the order item?',
+          confirmLabel: 'Yes, cancel it',
+        };
+      case OrderItemActions.RECEIVE:
+        return {
+          content: 'Are you sure you want to mark this item as "Received"?',
+          confirmLabel: 'Yes, mark it',
+        };
+      case OrderItemActions.SEND_BOX:
+        return {
+          content: 'Are you sure you want to send box for this device?',
+          confirmLabel: 'Yes, send box',
+        };
+      case OrderItemActions.RESEND_LABEL:
+        return {
+          content: 'Are you sure you want to resend label for this order item?',
+          confirmLabel: 'Yes, resend label',
+        };
+    }
+  }, [actionType]);
 
   return (
     <div className="flex gap-2 p-2.5 items-start">
@@ -113,14 +169,18 @@ const Collection = ({
                 <hr />
                 <div className="flex flex-row flex-wrap gap-2 pt-1">
                   <button
-                    onClick={() => handleReceiveOrderItem(item._id)}
+                    onClick={() =>
+                      openConfirmDialog(item, OrderItemActions.RECEIVE)
+                    }
                     className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
                   >
                     Mark as Received
                   </button>
                   {isBoxRequired(item?.product_type) && (
                     <button
-                      onClick={() => handleSendBox(item?._id)}
+                      onClick={() =>
+                        openConfirmDialog(item, OrderItemActions.SEND_BOX)
+                      }
                       className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
                     >
                       Send Box
@@ -151,7 +211,9 @@ const Collection = ({
               </button>
               {isSingleOrderFlow && (
                 <button
-                  onClick={() => handleCancelOrderItem(item._id)}
+                  onClick={() =>
+                    openConfirmDialog(item, OrderItemActions.CANCEL)
+                  }
                   className="px-3 py-1 flex-1 text-white bg-red-700 hover:bg-red-800 rounded-md"
                 >
                   Cancel Item
@@ -161,6 +223,30 @@ const Collection = ({
           </DetailCardContainer>
         );
       })}
+      <Modal
+        isOpen={isConfirmDialogOpen}
+        onClose={() => setIsConfirmDialogOpen(false)}
+      >
+        <div className="flex flex-col p-6">
+          <h2 className="mb-6">{confirmModalLabel?.content}</h2>
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              className="bg-transparent hover:bg-red-50 text-red-700 font-medium py-1 px-3 border border-red-500 rounded"
+              onClick={() => setIsConfirmDialogOpen(false)}
+            >
+              No
+            </button>
+            <button
+              type="button"
+              className="bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-3 border border-red-500 rounded"
+              onClick={onConfirmAction}
+            >
+              {confirmModalLabel?.confirmLabel}
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 };

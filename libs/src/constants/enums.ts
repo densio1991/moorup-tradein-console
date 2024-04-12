@@ -69,3 +69,10 @@ export enum ConfirmationModalTypes {
   REJECT_CLAIM_REGULAR = 'REJECT_CLAIM_REGULAR',
   OVERRIDE_CLAIM_STATUS = 'OVERRIDE_CLAIM',
 }
+
+export enum OrderItemActions {
+  CANCEL = 'cancelOrderItem',
+  RECEIVE = 'receiveOrderItem',
+  SEND_BOX = 'sendDeviceBox',
+  RESEND_LABEL = 'resendLabel',
+}

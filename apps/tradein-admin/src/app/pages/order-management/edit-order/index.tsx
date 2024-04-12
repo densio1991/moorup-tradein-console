@@ -15,7 +15,7 @@ import {
   OrderItemStatus,
   OrderItems,
   Shipments,
-  StatusModal,
+  Modal,
   StyledIcon,
   useAuth,
   useOrder,
@@ -87,6 +87,15 @@ export const EditOrderPage = () => {
   const [statusModal, setStatusModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState({} as OrderItems);
   const [parsedShipments, setParsedShipments] = useState({});
+
+  // const closeModal = () => {
+  //   setIsModalOpen(false);
+  // };
+
+  // const onConfirmDelete = async () => {
+  //   removePromotionById(selectedId);
+  //   closeModal();
+  // }
 
   const {
     order = {},
@@ -313,7 +322,7 @@ export const EditOrderPage = () => {
           )}
         </AccordionInnerContainer>
       </AccordionContainer>
-      <StatusModal isOpen={statusModal} onClose={() => setStatusModal(false)}>
+      <Modal isOpen={statusModal} onClose={() => setStatusModal(false)}>
         {!isEmpty(selectedItem) && (
           <EditForm
             setStatusModal={(value) => {
@@ -324,7 +333,7 @@ export const EditOrderPage = () => {
             orderItem={selectedItem}
           />
         )}
-      </StatusModal>
+      </Modal>
     </LoaderContainer>
   );
 };

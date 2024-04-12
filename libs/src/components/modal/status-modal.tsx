@@ -34,7 +34,7 @@ const CenterModalWrapper = styled.div<{ isOpen: boolean }>`
   max-height: 100%;
 `;
 
-export function StatusModal({ isOpen, onClose, children }: CenterModalProps): JSX.Element {
+export function Modal({ isOpen, onClose, children }: CenterModalProps): JSX.Element {
   return (
     <>
       <Overlay isOpen={isOpen} onClick={() => onClose()}/>
