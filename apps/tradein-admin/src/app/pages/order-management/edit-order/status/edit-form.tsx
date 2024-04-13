@@ -126,10 +126,10 @@ export const EditForm = ({
         <>
           <FormGroup>
             <StyledInput
-              type="text"
+              type="number"
               id="revised_offer"
               label="Revision"
-              name="name"
+              name="revised_offer"
               placeholder="Revision Offer"
               onChange={formik.handleChange}
               value={formik.values.revised_offer}
