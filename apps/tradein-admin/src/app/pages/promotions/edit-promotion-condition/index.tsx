@@ -117,7 +117,8 @@ export function EditPromotionConditionsForm({ data }: any) {
   };
 
   useEffect(() => {
-    const promotionConditions = data?.conditions;
+    const promotionConditions =
+      data?.conditions || ADD_PROMOTION_CONDITIONS_PAYLOAD;
     formik.setValues(promotionConditions);
   }, [data]);
 

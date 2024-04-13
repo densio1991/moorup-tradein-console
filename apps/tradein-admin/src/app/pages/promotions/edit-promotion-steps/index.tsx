@@ -3,6 +3,7 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  ADD_PROMOTION_STEPS_ITEM,
   ADD_PROMOTION_STEPS_PAYLOAD,
   AppButton,
   FormContainer,
@@ -115,7 +116,7 @@ export function EditPromotionStepsForm({ data }: any) {
   };
 
   useEffect(() => {
-    const promotionSteps = data?.steps;
+    const promotionSteps = data?.steps || [ADD_PROMOTION_STEPS_ITEM];
     formik.setValues({ steps: promotionSteps });
   }, [data]);
 

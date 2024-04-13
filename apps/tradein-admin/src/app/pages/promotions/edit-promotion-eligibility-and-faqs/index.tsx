@@ -113,7 +113,8 @@ export function EditPromotionEligibilityAndFaqsForm({ data }: any) {
   };
 
   useEffect(() => {
-    const promotionFaqs = data?.eligibility;
+    const promotionFaqs =
+      data?.eligibility || ADD_PROMOTION_ELIGIBILITY_AND_FAQS_PAYLOAD;
     formik.setValues(promotionFaqs);
   }, [data]);
 
