@@ -266,14 +266,14 @@ export const updatePromotionClaimStatus = (payload: any, promotionClaimId: strin
     });
 };
 
-export const processPromotionClaimPayment = (payload: any, promotionClaimId: string, filter: any, activePlatform: string) => (dispatch: any) => {
+export const processPromotionClaimPayment = (payload: any, filter: any, activePlatform: string) => (dispatch: any) => {
   dispatch({
     type: types.PROCESS_PROMOTION_CLAIM_PAYMENT.baseType,
     payload,
   });
 
   axiosInstance()
-    .patch(`/api/claims/${promotionClaimId}/payment`, payload)
+    .post('/api/claims/payment', payload)
     .then((response) => {
       dispatch({
         type: types.PROCESS_PROMOTION_CLAIM_PAYMENT.SUCCESS,

@@ -64,7 +64,8 @@ export function PromotionClaimsPaymentPage() {
     return claims.map((claim: any) => {
       return {
         ...claim,
-        action: () => processPromotionClaimPayment({}, claim._id, filters),
+        action: () =>
+          processPromotionClaimPayment({ claimId: claim._id }, filters),
       };
     });
   };
