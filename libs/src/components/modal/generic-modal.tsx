@@ -9,25 +9,32 @@ interface ModalProps {
   onClose: () => void;
 }
 
-const ModalWrapper = styled.div`
+const Overlay = styled.div<{ isOpen: boolean }>`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1003;
+  background: rgba(0, 0, 0, 0.5);
+  display: ${(props) => (props.isOpen ? 'block' : 'none')};
+  z-index: 1002; /* Higher z-index than side modal */
 `;
 
-const ModalContent = styled.div`
+const ModalWrapper = styled.div<{ isOpen: boolean }>`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background-color: #fff;
-  border-radius: 5px;
-  padding: 20px;
-  max-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  z-index: 1003;
+  opacity: ${(props) => (props.isOpen ? '1' : '0')};
+  pointer-events: ${(props) => (props.isOpen ? 'auto' : 'none')};
+  max-height: calc(100vh - 100px);
+  border-radius: 4px;
   width: 100%;
+  max-width: 400px;
+  padding: 20px;
 `;
 
 const ModalTitle = styled.h2`
@@ -50,23 +57,20 @@ const ModalFooter = styled.div`
 
 export function GenericModal({ title, subtitle, content, footer, isOpen, onClose }: ModalProps): JSX.Element {
   return (
-    <div>
-      {isOpen && (
-        <ModalWrapper>
-          <ModalContent>
-            <ModalTitle>{title}</ModalTitle>
-            <ModalSubTitle>{subtitle}</ModalSubTitle>
-            {content}
-            {
-              footer && (
-                <ModalFooter>
-                  {footer}
-                </ModalFooter>
-              )
-            }
-          </ModalContent>
-        </ModalWrapper>
-      )}
-    </div>
+    <>
+      <Overlay isOpen={isOpen} onClick={onClose} />
+      <ModalWrapper isOpen={isOpen}>
+        <ModalTitle>{title}</ModalTitle>
+        <ModalSubTitle>{subtitle}</ModalSubTitle>
+        {content}
+        {
+          footer && (
+            <ModalFooter>
+              {footer}
+            </ModalFooter>
+          )
+        }
+      </ModalWrapper>
+    </>
   );
 }
