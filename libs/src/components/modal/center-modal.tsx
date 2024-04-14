@@ -38,7 +38,7 @@ const CenterModalWrapper = styled.div<{ isOpen: boolean }>`
 export function CenterModal({ isOpen, onClose, children }: CenterModalProps): JSX.Element {
   return (
     <>
-      <Overlay isOpen={isOpen} onClick={onClose} />
+      <Overlay isOpen={isOpen} />
       <CenterModalWrapper isOpen={isOpen}>
         {children}
       </CenterModalWrapper>
