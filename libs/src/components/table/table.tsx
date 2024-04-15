@@ -32,6 +32,7 @@ interface TableProps {
   menuItems?: any;
   rightControls?: any;
   parsingConfig?: { [key: string]: (value: any) => any };
+  margin?: string;
 }
 
 const HeaderSection = styled.div`
@@ -274,6 +275,7 @@ export function Table({
   menuItems,
   rightControls,
   parsingConfig = {},
+  margin = '20px',
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
@@ -361,7 +363,11 @@ export function Table({
   const itemsToDisplay = filteredRows.slice(startIndex, endIndex);
 
   return (
-    <div style={{ backgroundColor: 'white', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 8px 16px 0px', margin: '20px' }}>
+    <div style={{ 
+      backgroundColor: 'white', 
+      boxShadow: '0px 0px 8px #eee', 
+      border: '1px solid #eee',
+      margin: margin }}>
       <HeaderSection>
         <LeftSection>
           <TitleContainer>

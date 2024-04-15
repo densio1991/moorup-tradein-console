@@ -28,9 +28,11 @@ import Completion from './completion';
 import { EditForm } from './status/edit-form';
 import ValidationOffer from './validation-offer';
 import QuoteDetails from './quote-details';
+import { ClaimsList } from '../claims-list';
 
 type AccordionStates = {
   quote: boolean;
+  claims: boolean;
   collection: boolean;
   validation: boolean;
   completion: boolean;
@@ -79,6 +81,7 @@ export const EditOrderPage = () => {
 
   const [accordionState, setAccordionState] = useState<AccordionStates>({
     quote: true,
+    claims: true,
     collection: true,
     validation: true,
     completion: true,
@@ -212,6 +215,17 @@ export const EditOrderPage = () => {
           </AccordionHeaderContainer>
           <AccordionContent isOpen={accordionState.quote} key="Quote Creation">
             <QuoteDetails />
+          </AccordionContent>
+          <AccordionHeaderContainer>
+            <AccordionHeading
+              id="claims"
+              title="Claims"
+              isOpen={accordionState.claims}
+              onToggle={() => toggleAccordion('claims')}
+            />
+          </AccordionHeaderContainer>
+          <AccordionContent isOpen={accordionState.claims} key="Claims List">
+            <ClaimsList />
           </AccordionContent>
           {collectionOrderItems.length > 0 && (
             <>
