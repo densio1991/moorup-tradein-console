@@ -2,6 +2,7 @@
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
 import { AppButton } from '../components';
+import { ClaimStatus } from '../constants';
 import { formatDate, parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
@@ -50,9 +51,9 @@ export const promotionClaimsManagementParsingConfig = {
   },
   'Promotion Link': ({ row }: ParsingFunctionParams) => {
     const promotionDetails = row ? row['promotion_id'] : null;
-    if (!promotionDetails || isEmpty(promotionDetails['slug']) || isEmpty(row['platform_domain'])) return '--';
+    if (!promotionDetails || isEmpty(promotionDetails['slug']) || isEmpty(row['platformOrigin'])) return '--';
 
-    const promotionLink = `${row['platform_domain']}promotions/${promotionDetails?.slug}`
+    const promotionLink = `${row['platformOrigin']}/promotions/${promotionDetails?.slug}`
     return <StyledLink href={promotionLink} target="_blank" rel="noopener noreferrer">{promotionLink}</StyledLink>
     ;
   },
@@ -132,8 +133,9 @@ export const promotionClaimsManagementParsingConfig = {
           width="fit-content"
           padding='4px 20px'
           onClick={() => row.overrideAction()}
+          disabled={row['moorup_status'] === ClaimStatus.APPROVED || row['moorup_status'] === ClaimStatus.COMPLETED}
         >
-          Update Status
+          Update
         </AppButton>
       </StyledDiv>
     );

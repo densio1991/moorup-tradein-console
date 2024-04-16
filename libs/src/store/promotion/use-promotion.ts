@@ -73,8 +73,8 @@ export const usePromotion = () => {
     actions.updatePromotionClaimStatus(payload, promotionId, filter, activePlatform)(dispatch);
   }
 
-  const processPromotionClaimPayment = (payload: any, promotionId: string, filter: any) => {
-    actions.processPromotionClaimPayment(payload, promotionId, filter, activePlatform)(dispatch);
+  const processPromotionClaimPayment = (payload: any, filter: any) => {
+    actions.processPromotionClaimPayment(payload, filter, activePlatform)(dispatch);
   }
 
   return {

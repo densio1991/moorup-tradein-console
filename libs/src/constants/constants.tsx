@@ -557,7 +557,13 @@ export const PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS = [
     order: 6,
     enableSort: true,
     keyName: 'status',
-  }
+  },
+  {
+    label: 'Claimed Date',
+    order: 12,
+    enableSort: true,
+    keyName: 'createdAt',
+  },
 ]
 
 export const ACTIONS_COLUMN = [
@@ -1152,6 +1158,7 @@ export const MODAL_TYPES = {
   ADD_PROMOTION_PREVIEW: 'ADD_PROMOTION_PREVIEW',
   EDIT_PROMOTION_PREVIEW: 'EDIT_PROMOTION_PREVIEW',
   FILTER_PROMOTION_CLAIMS: 'FILTER_PROMOTION_CLAIMS',
+  DOWNLOAD_PROMOTION_CLAIMS: 'DOWNLOAD_PROMOTION_CLAIMS',
 }
 
 export const PROMOTION_STATUS = [
@@ -1284,6 +1291,7 @@ export const CLAIM_STATUSES = [
   { value: ClaimStatus.COMPLETED, label: 'Completed' },
   { value: ClaimStatus.FAILED, label: 'Failed' },
   { value: ClaimStatus.PENDING, label: 'Pending' },
+  { value: ClaimStatus.PROCESSING, label: 'Processing Payment' },
   { value: ClaimStatus.REJECTED, label: 'Rejected' },
 ]
 
@@ -1293,6 +1301,7 @@ export const MOORUP_CLAIM_STATUSES = [
   { value: ClaimStatus.COMPLETED, label: 'Completed' },
   { value: ClaimStatus.FAILED, label: 'Failed' },
   { value: ClaimStatus.PENDING, label: 'Pending' },
+  { value: ClaimStatus.PROCESSING, label: 'Processing Payment' },
   { value: ClaimStatus.REJECTED, label: 'Rejected' },
 ]
 

@@ -1,12 +1,21 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import {
   ADMIN,
+  AppButton,
   ClaimStatus,
+  Divider,
+  FormGroup,
+  FormWrapper,
+  IconButton,
+  MODAL_TYPES,
   PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS,
   PageSubHeader,
-  REGULAR,
   SUPERADMIN,
+  SideModal,
+  StyledDateRangePicker,
+  StyledInput,
   Table,
   promotionClaimsPaymentManagementParsingConfig,
   useAuth,
@@ -14,7 +23,8 @@ import {
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect } from 'react';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
 
 export function PromotionClaimsPaymentPage() {
   const {
@@ -30,20 +40,12 @@ export function PromotionClaimsPaymentPage() {
   } = state;
   const { state: authState } = useAuth();
   const { activePlatform, userDetails } = authState;
-  const { setSearchTerm } = useCommon();
+  const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
+  const { sideModalState } = commonState;
 
   const headers = [...PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS];
 
   switch (userDetails.role) {
-    case REGULAR:
-      headers.push({
-        label: 'Action',
-        order: 99,
-        enableSort: false,
-        keyName: '',
-      });
-      break;
-
     case ADMIN:
     case SUPERADMIN:
       headers.push({
@@ -51,6 +53,13 @@ export function PromotionClaimsPaymentPage() {
         order: 11,
         enableSort: true,
         keyName: 'moorup_status',
+      });
+
+      headers.push({
+        label: 'Action',
+        order: 99,
+        enableSort: false,
+        keyName: '',
       });
       break;
 
@@ -67,7 +76,8 @@ export function PromotionClaimsPaymentPage() {
     return claims.map((claim: any) => {
       return {
         ...claim,
-        action: () => processPromotionClaimPayment({}, claim._id, filters),
+        action: () =>
+          processPromotionClaimPayment({ claimId: claim._id }, filters),
       };
     });
   };
@@ -93,12 +103,168 @@ export function PromotionClaimsPaymentPage() {
       // Clear data on unmount
       clearPromotionClaims({});
       setSearchTerm('');
+      cancelFilters();
     };
   }, [activePlatform]);
 
+  const [promotionName, setPromotionName] = useState<string>('');
+  const [createdDateFrom, setCreatedDateFrom] = useState<Date | null>(null);
+  const [createdDateTo, setCreatedDateTo] = useState<Date | null>(null);
+
+  const cancelFilters = () => {
+    setCreatedDateFrom(null);
+    setCreatedDateTo(null);
+    setPromotionName('');
+  };
+
+  const handleStartDateChange = (date: Date | null) => {
+    setCreatedDateFrom(date);
+    setCreatedDateTo(date);
+  };
+
+  const handleEndDateChange = (date: Date | null) => {
+    setCreatedDateTo(date);
+  };
+
+  const renderSideModalContent = () => {
+    switch (sideModalState.view) {
+      case MODAL_TYPES.FILTER_PROMOTION_CLAIMS:
+        return (
+          <FormWrapper formTitle="Filter By">
+            <FormGroup marginBottom="20px">
+              <StyledInput
+                type="text"
+                id="name"
+                label="Promotion Name"
+                name="promotion_name"
+                placeholder="Promotion Name"
+                onChange={(e) => setPromotionName(e.target.value)}
+                value={promotionName}
+              />
+            </FormGroup>
+            <FormGroup marginBottom="20px">
+              <StyledDateRangePicker
+                startDateInput={{
+                  onChange: handleStartDateChange,
+                  placeholder: 'Start Date',
+                  value: createdDateFrom,
+                  name: 'createdDateFrom',
+                  onBlur: () => {},
+                }}
+                endDateInput={{
+                  onChange: handleEndDateChange,
+                  placeholder: 'End Date',
+                  value: createdDateTo,
+                  name: 'createdDateTo',
+                  onBlur: () => {},
+                }}
+                label="Claim Date"
+                onChange={() => {}}
+              />
+            </FormGroup>
+            <FormGroup>
+              <AppButton
+                type="button"
+                variant="outlined"
+                width="fit-content"
+                onClick={() => cancelFilters()}
+              >
+                Reset
+              </AppButton>
+              <FormGroup>
+                <AppButton
+                  type="button"
+                  variant="outlined"
+                  width="fit-content"
+                  onClick={() => {
+                    setSideModalState({
+                      ...sideModalState,
+                      open: false,
+                      view: null,
+                    });
+                  }}
+                >
+                  Cancel
+                </AppButton>
+                <AppButton
+                  type="button"
+                  width="fit-content"
+                  onClick={() => {
+                    const filter = {
+                      status: [ClaimStatus.APPROVED, ClaimStatus.FAILED].join(
+                        ',',
+                      ),
+                      moorup_status: [
+                        ClaimStatus.APPROVED,
+                        ClaimStatus.FAILED,
+                      ].join(','),
+                      ...(createdDateFrom
+                        ? {
+                            start_date: moment(createdDateFrom).format(
+                              'YYYY-MM-DDTHH:mm:ss',
+                            ),
+                          }
+                        : {}),
+                      ...(createdDateTo
+                        ? {
+                            end_date: moment(createdDateTo).format(
+                              'YYYY-MM-DDTHH:mm:ss',
+                            ),
+                          }
+                        : {}),
+                      ...(!isEmpty(promotionName)
+                        ? { promotion_name: promotionName }
+                        : {}),
+                    };
+
+                    getPromotionClaims(filter);
+
+                    setSideModalState({
+                      ...sideModalState,
+                      open: false,
+                      view: null,
+                    });
+                  }}
+                >
+                  Apply
+                </AppButton>
+              </FormGroup>
+            </FormGroup>
+          </FormWrapper>
+        );
+
+      case MODAL_TYPES.DOWNLOAD_PROMOTION_CLAIMS:
+        return <span>Download Claims</span>;
+
+      default:
+        return;
+    }
+  };
+
   return (
     <>
-      <PageSubHeader withSearch />
+      <PageSubHeader
+        withSearch
+        rightControls={
+          (userDetails?.role === SUPERADMIN || userDetails.role === ADMIN) && (
+            <>
+              <IconButton
+                tooltipLabel="Filter"
+                icon={faFilter}
+                onClick={() => {
+                  setSideModalState({
+                    ...sideModalState,
+                    open: true,
+                    view: MODAL_TYPES.FILTER_PROMOTION_CLAIMS,
+                  });
+                }}
+              />
+              <Divider />
+            </>
+          )
+        }
+      />
+
       <Table
         label="Claims Payment"
         isLoading={
@@ -108,6 +274,18 @@ export function PromotionClaimsPaymentPage() {
         rows={promotionClaimsWithActions || []}
         parsingConfig={promotionClaimsPaymentManagementParsingConfig}
       />
+      <SideModal
+        isOpen={sideModalState?.open}
+        onClose={() => {
+          setSideModalState({
+            ...sideModalState,
+            open: false,
+            view: null,
+          });
+        }}
+      >
+        {renderSideModalContent()}
+      </SideModal>
     </>
   );
 }

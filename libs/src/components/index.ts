@@ -13,6 +13,7 @@ export * from './navigation';
 export * from './not-found';
 export * from './page-subheader';
 export * from './pill';
+export * from './radio-group';
 export * from './renderer';
 export * from './stepper';
 export * from './styled';

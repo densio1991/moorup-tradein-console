@@ -34,8 +34,8 @@ const StyledFormGroup = styled.div<{
     align-items: start;
     width: 100%;
 
-    button {
-      width: 100%;
+    button:not(#slider) {
+        width: 100%;
     }
   }
 `;

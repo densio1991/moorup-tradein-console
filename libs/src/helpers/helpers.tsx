@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faCircle } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import utc from 'dayjs/plugin/utc';
 import { jwtDecode } from 'jwt-decode';
 import { capitalize, isEmpty } from 'lodash';
 import { Chip, StyledIcon } from '../components';
@@ -445,10 +445,16 @@ export const parseStatus = (value: string) => {
       bgColor = defaultTheme.warning.background;
       break;
 
+    case ClaimStatus.PROCESSING:
+      text = 'Processing Payment';
+      textColor = defaultTheme.warning.text;
+      bgColor = defaultTheme.warning.background;
+      break;
+
     case ClaimStatus.APPROVED:
       text = 'Approved';
-      textColor = defaultTheme.default.text;
-      bgColor = defaultTheme.default.background;
+      textColor = defaultTheme.success.text;
+      bgColor = defaultTheme.success.background;
       break;
 
     case ClaimStatus.REJECTED:
@@ -487,7 +493,7 @@ export const parseStatus = (value: string) => {
       break;
   }
 
-  return <Chip value={text} textColor={textColor} bgColor={bgColor} />
+  return <Chip value={text} textColor={textColor} bgColor={bgColor} width='100px'/>
 }
 
 export const hexToRgba = (hex: string, alpha: number) => {

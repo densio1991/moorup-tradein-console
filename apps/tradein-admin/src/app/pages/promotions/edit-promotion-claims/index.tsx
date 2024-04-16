@@ -131,7 +131,7 @@ export function EditPromotionClaimsForm({ data }: any) {
   };
 
   useEffect(() => {
-    const promotionClaims = data?.claims;
+    const promotionClaims = data?.claims || ADD_PROMOTION_CLAIMS_PAYLOAD;
     formik.setValues(promotionClaims);
   }, [data]);
 
@@ -198,7 +198,7 @@ export function EditPromotionClaimsForm({ data }: any) {
             Add Product
           </AppButton>
         </FormGroup>
-        {formik.values?.products.map(
+        {formik.values?.products?.map(
           (product: PromotionProductInterface, index: number) => {
             return (
               <ItemsContainer key={index}>

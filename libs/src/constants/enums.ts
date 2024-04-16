@@ -37,7 +37,8 @@ export enum ClaimStatus {
   REJECTED = 'rejected',
   CANCELLED = 'cancelled',
   FAILED = 'failed',
-  COMPLETED = 'completed'
+  COMPLETED = 'completed',
+  PROCESSING = 'processing'
 }
 
 export enum DefaultStatus {

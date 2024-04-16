@@ -46,7 +46,7 @@ export function ToggleButton({ name, label, isOn, onToggle }: ToggleButtonProps)
       <StyledLabel>
         {label}
       </StyledLabel>
-      <ButtonWrapper name={name} isOn={isOn} onClick={onToggle} type='button' />
+      <ButtonWrapper id='slider' name={name} isOn={isOn} onClick={onToggle} type='button' />
     </StyledContainer>
   );
 }

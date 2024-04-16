@@ -55,3 +55,52 @@ export interface PromotionConditionItemInterface {
 export interface PlatformType {
   [key: string]: any;
 }
+
+export interface RadioOption {
+  label: string;
+  value: string;
+};
+
+export interface RadioGroupProps {
+  options: RadioOption[];
+  onChange: (value: string) => void;
+  label: string;
+  defaultValue: string;
+}
+
+export interface ExportOptions {
+  format: 'csv' | 'excel';
+}
+
+export interface PromotionClaimsExportData {
+  _id: string;
+  claim_number: string;
+  platform: string;
+  order_id: {
+    _id: string;
+    order_number: string;
+    order_items: {
+      line_item_number: string;
+      original_offer: number;
+      sku: string;
+      status: string;
+    }[];
+    status: string;
+    createdAt: string;
+  };
+  promotion_id: {
+    name: string;
+  } | null;
+  user_id: {
+    _id: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    mobile: string;
+  };
+  receipt_number: string;
+  status: string;
+  moorup_status: string;
+  createdAt: string;
+  updatedAt: string;
+}

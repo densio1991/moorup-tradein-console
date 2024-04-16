@@ -11,6 +11,7 @@ import {
   AppButton,
   FaqInterface,
   Flex,
+  FormGroup,
   Grid,
   GridItem,
   HTMLRenderer,
@@ -133,6 +134,29 @@ export function PromotionPreview() {
     steps: addPromotionStepsPayload?.steps,
     conditions: addPromotionConditionPayload,
     eligibility: addPromotionEligibilityAndFaqsPayload,
+  };
+
+  const handleCloseModal = () => {
+    setSideModalState({
+      ...sideModalState,
+      open: false,
+      view: null,
+    });
+
+    setCenterModalState({
+      ...centerModalState,
+      open: false,
+      view: null,
+    });
+
+    // Clear forms on submit
+    setAddPromotionDetailsPayload(ADD_PROMOTION_DETAILS_PAYLOAD);
+    setAddPromotionClaimsPayload(ADD_PROMOTION_CLAIMS_PAYLOAD);
+    setAddPromotionStepsPayload(ADD_PROMOTION_STEPS_PAYLOAD);
+    setAddPromotionConditionPayload(ADD_PROMOTION_CONDITIONS_PAYLOAD);
+    setAddPromotionEligibilityAndFaqsPayload(
+      ADD_PROMOTION_ELIGIBILITY_AND_FAQS_PAYLOAD,
+    );
   };
 
   return (
@@ -297,43 +321,34 @@ export function PromotionPreview() {
       </Flex>
 
       <Flex center>
-        <AppButton
-          type="button"
-          variant="fill"
-          width="fit-content"
-          onClick={() => {
-            if (centerModalState.view === MODAL_TYPES.ADD_PROMOTION_PREVIEW) {
-              createPromotion(payload);
-              clearPromotions({});
-            } else {
-              updatePromotion(payload, centerModalState?.data);
-              clearPromotions({});
-            }
+        <FormGroup>
+          <AppButton
+            type="button"
+            variant="outlined"
+            width="fit-content"
+            onClick={() => handleCloseModal()}
+          >
+            Discard
+          </AppButton>
+          <AppButton
+            type="button"
+            variant="fill"
+            width="fit-content"
+            onClick={() => {
+              if (centerModalState.view === MODAL_TYPES.ADD_PROMOTION_PREVIEW) {
+                createPromotion(payload);
+                clearPromotions({});
+              } else {
+                updatePromotion(payload, centerModalState?.data);
+                clearPromotions({});
+              }
 
-            setSideModalState({
-              ...sideModalState,
-              open: false,
-              view: null,
-            });
-
-            setCenterModalState({
-              ...centerModalState,
-              open: false,
-              view: null,
-            });
-
-            // Clear forms on submit
-            setAddPromotionDetailsPayload(ADD_PROMOTION_DETAILS_PAYLOAD);
-            setAddPromotionClaimsPayload(ADD_PROMOTION_CLAIMS_PAYLOAD);
-            setAddPromotionStepsPayload(ADD_PROMOTION_STEPS_PAYLOAD);
-            setAddPromotionConditionPayload(ADD_PROMOTION_CONDITIONS_PAYLOAD);
-            setAddPromotionEligibilityAndFaqsPayload(
-              ADD_PROMOTION_ELIGIBILITY_AND_FAQS_PAYLOAD,
-            );
-          }}
-        >
-          Click to Submit
-        </AppButton>
+              handleCloseModal();
+            }}
+          >
+            Click to Submit
+          </AppButton>
+        </FormGroup>
       </Flex>
     </Flex>
   );
