@@ -445,6 +445,12 @@ export const parseStatus = (value: string) => {
       bgColor = defaultTheme.warning.background;
       break;
 
+    case ClaimStatus.PROCESSING:
+      text = 'Processing Payment';
+      textColor = defaultTheme.warning.text;
+      bgColor = defaultTheme.warning.background;
+      break;
+
     case ClaimStatus.APPROVED:
       text = 'Approved';
       textColor = defaultTheme.success.text;

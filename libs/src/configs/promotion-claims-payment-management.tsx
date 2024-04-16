@@ -2,7 +2,7 @@
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
 import { AppButton } from '../components';
-import { parseStatus } from '../helpers';
+import { formatDate, parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
@@ -38,6 +38,10 @@ export const promotionClaimsPaymentManagementParsingConfig = {
     if (!row || isEmpty(row['status'])) return '--';
 
     return parseStatus(row['status']);
+  },
+  'Claimed Date': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['createdAt'])) return '--';
+    return formatDate(row['createdAt']);
   },
   Action: ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['_id'])) return '--';
