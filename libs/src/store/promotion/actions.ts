@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { isEmpty } from 'lodash';
 import { toast } from 'react-toastify';
 import { CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
@@ -40,14 +41,22 @@ export const clearPromotions = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const createPromotion = (payload: any, activePlatform: string) => (dispatch: any) => {
+export const createPromotion = (payload: any, activePlatform: string, file?: File) => (dispatch: any) => {
   dispatch({
     type: types.CREATE_PROMOTION.baseType,
     payload,
   });
 
+  const formData = new FormData();
+  formData.append('body', JSON.stringify(payload));
+  if (!isEmpty(file)) formData.append('image_file', file);
+
   axiosInstance()
-    .post('/api/promotions', payload)
+    .post('/api/promotions', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
     .then((response) => {
       dispatch({
         type: types.CREATE_PROMOTION.SUCCESS,
@@ -175,14 +184,22 @@ export const clearPromotion = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const updatePromotion = (payload: any, promotionId: string, activePlatform: string) => (dispatch: any) => {
+export const updatePromotion = (payload: any, promotionId: string, activePlatform: string, file?: File, ) => (dispatch: any) => {
   dispatch({
     type: types.UPDATE_PROMOTION.baseType,
     payload,
   });
 
+  const formData = new FormData();
+  formData.append('body', JSON.stringify(payload));
+  if (!isEmpty(file)) formData.append('image_file', file);
+
   axiosInstance()
-    .patch(`/api/promotions/${promotionId}`, payload)
+    .patch(`/api/promotions/${promotionId}`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
     .then((response) => {
       dispatch({
         type: types.UPDATE_PROMOTION.SUCCESS,

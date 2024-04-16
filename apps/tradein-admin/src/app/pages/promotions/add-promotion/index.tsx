@@ -31,6 +31,7 @@ interface FormValues {
   end_date: Date | null;
   image_url: string;
   show_banner: boolean;
+  banner_url?: string;
   [key: string]: any; // Index signature to allow dynamic access
 }
 
@@ -188,7 +189,7 @@ export function AddPromotionForm() {
           <StyledInput
             type="text"
             id="image_url"
-            label="Promotion Image"
+            label="Promotion Image (Recommended Size: 320p x 120p)"
             name="image_url"
             placeholder="Promotion Image"
             onChange={formik.handleChange}
@@ -196,7 +197,7 @@ export function AddPromotionForm() {
             onBlur={formik.handleBlur}
             error={Boolean(formik.touched.image_url && formik.errors.image_url)}
             errorMessage={formik.errors.image_url}
-            enableHoverImage={true}
+            enableHoverImage={false}
           />
         </FormGroup>
         <FormGroup>
@@ -209,6 +210,25 @@ export function AddPromotionForm() {
             }
           />
         </FormGroup>
+        {formik.values.show_banner && (
+          <FormGroup>
+            <StyledInput
+              type="text"
+              id="banner_url"
+              label="Banner Image (Min. Recommended Size: 1080p x 720p)"
+              name="banner_url"
+              placeholder="Banner Image"
+              onChange={formik.handleChange}
+              value={formik.values.banner_url}
+              onBlur={formik.handleBlur}
+              error={Boolean(
+                formik.touched.banner_url && formik.errors.banner_url,
+              )}
+              errorMessage={formik.errors.banner_url}
+              enableHoverImage={false}
+            />
+          </FormGroup>
+        )}
         <FormGroup>
           <span />
           <FormGroup>
