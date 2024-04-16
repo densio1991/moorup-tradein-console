@@ -18,8 +18,11 @@ import {
   PROMOTION_CLAIMS_MANAGEMENT_COLUMNS,
   PageSubHeader,
   REGULAR,
+  RadioGroup,
+  RadioOption,
   SUPERADMIN,
   SideModal,
+  StyledDateRangePicker,
   StyledInput,
   StyledReactSelect,
   Table,
@@ -32,6 +35,7 @@ import {
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 export function PromotionClaimsPage() {
@@ -104,9 +108,15 @@ export function PromotionClaimsPage() {
     user_id: userDetails?._id,
   });
 
-  const [selectedClaimStatuses, setSelectedClaimStatuses] = useState([]);
+  const [selectedClaimStatuses, setSelectedClaimStatuses] = useState<string[]>(
+    [],
+  );
   const [selectedMoorupClaimStatuses, setSelectedMoorupClaimStatuses] =
-    useState([]);
+    useState<string[]>([]);
+  const [promotionName, setPromotionName] = useState<string>('');
+  const [createdDateFrom, setCreatedDateFrom] = useState<Date | null>(null);
+  const [createdDateTo, setCreatedDateTo] = useState<Date | null>(null);
+  const [exportFileFormat, setExportFileFormat] = useState<any>('csv');
 
   const renderModalContentAndActions = () => {
     switch (confirmationModalState.view) {
@@ -345,6 +355,8 @@ export function PromotionClaimsPage() {
       // Clear data on unmount
       clearPromotionClaims({});
       setSearchTerm('');
+      cancelFilters();
+      onCloseModal();
     };
   }, [activePlatform]);
 
@@ -377,6 +389,36 @@ export function PromotionClaimsPage() {
   const cancelFilters = () => {
     setSelectedClaimStatuses([]);
     setSelectedMoorupClaimStatuses([]);
+    setCreatedDateFrom(null);
+    setCreatedDateTo(null);
+    setPromotionName('');
+  };
+
+  const handleStartDateChange = (date: Date | null) => {
+    setCreatedDateFrom(date);
+    setCreatedDateTo(date);
+  };
+
+  const handleEndDateChange = (date: Date | null) => {
+    setCreatedDateTo(date);
+  };
+
+  const options: RadioOption[] = [
+    { label: 'CSV (.csv)', value: 'csv' },
+    { label: 'Excel (.xlsx)', value: 'excel' },
+  ];
+
+  const handleChange = (value: string) => {
+    setExportFileFormat(value);
+  };
+
+  const resetExports = () => {
+    setExportFileFormat('csv');
+    setSideModalState({
+      ...sideModalState,
+      open: false,
+      view: null,
+    });
   };
 
   const renderSideModalContent = () => {
@@ -384,6 +426,17 @@ export function PromotionClaimsPage() {
       case MODAL_TYPES.FILTER_PROMOTION_CLAIMS:
         return (
           <FormWrapper formTitle="Filter By">
+            <FormGroup marginBottom="20px">
+              <StyledInput
+                type="text"
+                id="name"
+                label="Promotion Name"
+                name="promotion_name"
+                placeholder="Promotion Name"
+                onChange={(e) => setPromotionName(e.target.value)}
+                value={promotionName}
+              />
+            </FormGroup>
             <FormGroup marginBottom="20px">
               <StyledReactSelect
                 label="Claim Status"
@@ -418,14 +471,47 @@ export function PromotionClaimsPage() {
                 }}
               />
             </FormGroup>
+            <FormGroup marginBottom="20px">
+              <StyledDateRangePicker
+                startDateInput={{
+                  onChange: handleStartDateChange,
+                  placeholder: 'Start Date',
+                  value: createdDateFrom,
+                  name: 'createdDateFrom',
+                  onBlur: () => {},
+                }}
+                endDateInput={{
+                  onChange: handleEndDateChange,
+                  placeholder: 'End Date',
+                  value: createdDateTo,
+                  name: 'createdDateTo',
+                  onBlur: () => {},
+                }}
+                label="Claim Date"
+                onChange={() => {}}
+              />
+            </FormGroup>
             <FormGroup>
-              <span />
+              <AppButton
+                type="button"
+                variant="outlined"
+                width="fit-content"
+                onClick={() => cancelFilters()}
+              >
+                Reset
+              </AppButton>
               <FormGroup>
                 <AppButton
                   type="button"
                   variant="outlined"
                   width="fit-content"
-                  onClick={() => cancelFilters()}
+                  onClick={() => {
+                    setSideModalState({
+                      ...sideModalState,
+                      open: false,
+                      view: null,
+                    });
+                  }}
                 >
                   Cancel
                 </AppButton>
@@ -444,6 +530,21 @@ export function PromotionClaimsPage() {
                               selectedMoorupClaimStatuses.join(','),
                           }
                         : {}),
+                      ...(createdDateFrom
+                        ? {
+                            start_date:
+                              moment(createdDateFrom).format('YYYY-MM-DD'),
+                          }
+                        : {}),
+                      ...(createdDateTo
+                        ? {
+                            end_date:
+                              moment(createdDateTo).format('YYYY-MM-DD'),
+                          }
+                        : {}),
+                      ...(!isEmpty(promotionName)
+                        ? { promotion_name: promotionName }
+                        : {}),
                     };
 
                     getPromotionClaims(filter);
@@ -456,6 +557,50 @@ export function PromotionClaimsPage() {
                   }}
                 >
                   Apply
+                </AppButton>
+              </FormGroup>
+            </FormGroup>
+          </FormWrapper>
+        );
+
+      case MODAL_TYPES.DOWNLOAD_PROMOTION_CLAIMS:
+        return (
+          <FormWrapper
+            formTitle="Export"
+            subtTitle="Download Promotion Claims Report"
+          >
+            <FormGroup marginBottom="20px">
+              <RadioGroup
+                label="File Format"
+                options={options}
+                onChange={handleChange}
+                defaultValue="csv"
+              />
+            </FormGroup>
+            <FormGroup>
+              <span />
+              <FormGroup>
+                <AppButton
+                  type="button"
+                  variant="outlined"
+                  width="fit-content"
+                  onClick={() => resetExports()}
+                >
+                  Cancel
+                </AppButton>
+                <AppButton
+                  type="button"
+                  width="fit-content"
+                  onClick={() => {
+                    exportPromotionClaims({
+                      data: promotionClaims,
+                      exportOptions: { format: exportFileFormat },
+                    });
+
+                    resetExports();
+                  }}
+                >
+                  Export File
                 </AppButton>
               </FormGroup>
             </FormGroup>
@@ -476,7 +621,13 @@ export function PromotionClaimsPage() {
             <IconButton
               tooltipLabel="Export"
               icon={faDownload}
-              onClick={() => exportPromotionClaims(promotionClaims)}
+              onClick={() => {
+                setSideModalState({
+                  ...sideModalState,
+                  open: true,
+                  view: MODAL_TYPES.DOWNLOAD_PROMOTION_CLAIMS,
+                });
+              }}
               disabled={isEmpty(promotionClaims)}
             />
             <Divider />
@@ -512,7 +663,6 @@ export function PromotionClaimsPage() {
         rows={promotionClaimsWithActions || []}
         parsingConfig={promotionClaimsManagementParsingConfig}
       />
-
       <GenericModal
         title="Confirmation"
         subtitle={confirmationModalState.subtitle}
@@ -520,7 +670,6 @@ export function PromotionClaimsPage() {
         isOpen={confirmationModalState.open}
         onClose={() => onCloseModal()}
       />
-
       <SideModal
         isOpen={sideModalState?.open}
         onClose={() => {
