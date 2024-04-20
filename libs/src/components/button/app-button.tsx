@@ -5,6 +5,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 interface CustomButtonProps {
+  id?: string;
   isLoading?: boolean;
   icon?: any;
   width?: string;
@@ -77,6 +78,7 @@ const LoadingSpinner = styled(FontAwesomeIcon)`
 `;
 
 export function AppButton({
+  id,
   isLoading = false,
   icon,
   width,
@@ -95,6 +97,7 @@ export function AppButton({
 
   return (
     <StyledButton
+      id={id}
       isLoading={isLoading}
       width={width}
       padding={padding}
