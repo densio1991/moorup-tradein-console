@@ -17,8 +17,8 @@ export const usePromotion = () => {
     actions.clearPromotions(payload)(dispatch);
   }
 
-  const createPromotion = (payload: any) => {
-    actions.createPromotion(payload, activePlatform)(dispatch);
+  const createPromotion = (payload: any, cardImageFile: File, bannerImageFile?: File) => {
+    actions.createPromotion(payload, activePlatform, cardImageFile, bannerImageFile)(dispatch);
   }
 
   const setAddPromotionDetailsPayload = (payload: any) => {
@@ -57,8 +57,8 @@ export const usePromotion = () => {
     actions.clearPromotion(payload)(dispatch);
   }
 
-  const updatePromotion = (payload: any, promotionId: string) => {
-    actions.updatePromotion(payload, promotionId, activePlatform)(dispatch);
+  const updatePromotion = (payload: any, promotionId: string, cardImageFile?: File, bannerImageFile?: File) => {
+    actions.updatePromotion(payload, promotionId, activePlatform, cardImageFile, bannerImageFile)(dispatch);
   }
 
   const setConfirmationModalState = (payload: any) => {
@@ -75,6 +75,14 @@ export const usePromotion = () => {
 
   const processPromotionClaimPayment = (payload: any, filter: any) => {
     actions.processPromotionClaimPayment(payload, filter, activePlatform)(dispatch);
+  }
+
+  const setPromotionCardImage = (payload: File) => {
+    actions.setPromotionCardImage(payload)(dispatch);
+  }
+
+  const setPromotionBannerImage = (payload: File) => {
+    actions.setPromotionBannerImage(payload)(dispatch);
   }
 
   return {
@@ -96,5 +104,7 @@ export const usePromotion = () => {
     updatePromotionClaimMoorupStatus,
     updatePromotionClaimStatus,
     processPromotionClaimPayment,
+    setPromotionCardImage,
+    setPromotionBannerImage,
   };
 };

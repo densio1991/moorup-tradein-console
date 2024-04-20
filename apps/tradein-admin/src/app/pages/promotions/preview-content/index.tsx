@@ -113,6 +113,8 @@ export function PromotionPreview() {
     addPromotionStepsPayload,
     addPromotionConditionPayload,
     addPromotionEligibilityAndFaqsPayload,
+    promotionCardImage,
+    promotionBannerImage,
   } = promotionState;
 
   const {
@@ -176,7 +178,11 @@ export function PromotionPreview() {
         {/* Promotion Image */}
         <ImageContainer>
           <Image
-            src={addPromotionDetailsPayload.image_url}
+            src={
+              promotionCardImage
+                ? URL?.createObjectURL(promotionCardImage)
+                : addPromotionDetailsPayload.image_url
+            }
             alt="promotion-image"
           />
         </ImageContainer>
@@ -336,10 +342,19 @@ export function PromotionPreview() {
             width="fit-content"
             onClick={() => {
               if (centerModalState.view === MODAL_TYPES.ADD_PROMOTION_PREVIEW) {
-                createPromotion(payload);
+                createPromotion(
+                  payload,
+                  promotionCardImage,
+                  promotionBannerImage,
+                );
                 clearPromotions({});
               } else {
-                updatePromotion(payload, centerModalState?.data);
+                updatePromotion(
+                  payload,
+                  centerModalState?.data,
+                  promotionCardImage,
+                  promotionBannerImage,
+                );
                 clearPromotions({});
               }
 

@@ -33,6 +33,8 @@ const promotionState = {
   isUpdatingPromotionClaimMoorupStatus: false,
   isUpdatingPromotionClaimStatus: false,
   isProcessingPromotionClaimPayment: false,
+  promotionCardImage: null,
+  promotionBannerImage: null,
 };
 
 const promotionReducer = (state: any, action: any) => {
@@ -275,6 +277,18 @@ const promotionReducer = (state: any, action: any) => {
         isProcessingPromotionClaimPayment: false,
       };
     }
+
+    case types.SET_PROMOTION_CARD_IMAGE:
+      return {
+        ...state,
+        promotionCardImage: action?.payload,
+      };
+
+    case types.SET_PROMOTION_BANNER_IMAGE:
+      return {
+        ...state,
+        promotionBannerImage: action?.payload,
+      };
 
     default:
       return state;

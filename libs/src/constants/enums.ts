@@ -46,6 +46,12 @@ export enum DefaultStatus {
   INACTIVE = 'inactive'
 }
 
+export enum PromotionStatus {
+  ENDED = 'ended',
+  NOT_STARTED = 'not_started',
+  ONGOING = 'ongoing',
+}
+
 export enum OrderTypes {
   ONLINE = 'online',
   INSTORE = 'in-store',

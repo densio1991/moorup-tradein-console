@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import { jwtDecode } from 'jwt-decode';
 import { capitalize, isEmpty } from 'lodash';
 import { Chip, StyledIcon } from '../components';
-import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes, TIMEZONE } from '../constants';
+import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes, PromotionStatus, TIMEZONE } from '../constants';
 import { defaultTheme } from './theme';
 
 dayjs.extend(utc)
@@ -485,6 +485,24 @@ export const parseStatus = (value: string) => {
       text = 'Inactive';
       textColor = defaultTheme.disabled.text;
       bgColor = defaultTheme.disabled.background;
+      break;
+
+    case PromotionStatus.ENDED:
+      text = 'Ended';
+      textColor = defaultTheme.danger.text;
+      bgColor = defaultTheme.danger.background;
+      break;
+
+    case PromotionStatus.ONGOING:
+      text = 'Ongoing';
+      textColor = defaultTheme.success.text;
+      bgColor = defaultTheme.success.background;
+      break;
+
+    case PromotionStatus.NOT_STARTED:
+      text = 'Not Started';
+      textColor = defaultTheme.warning.text;
+      bgColor = defaultTheme.warning.background;
       break;
 
     default:

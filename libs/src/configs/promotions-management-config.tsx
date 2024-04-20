@@ -70,8 +70,8 @@ export const promotionsManagementParsingConfig = {
     return formatDate(row['end_date']);
   },
   'Status': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['status'])) return '--';
-    return parseStatus(row['status']);
+    if (!row || isEmpty(row['promotion_status'])) return '--';
+    return parseStatus(row['promotion_status']);
   },
   'Actions': ({ row, menuItems }: ParsingFunctionParams) => {
     if (!row || isEmpty(menuItems)) return '--';
