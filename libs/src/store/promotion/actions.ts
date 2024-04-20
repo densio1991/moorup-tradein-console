@@ -41,7 +41,7 @@ export const clearPromotions = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const createPromotion = (payload: any, activePlatform: string, file?: File) => (dispatch: any) => {
+export const createPromotion = (payload: any, activePlatform: string, cardImageFile: File, bannerImageFle?: File) => (dispatch: any) => {
   dispatch({
     type: types.CREATE_PROMOTION.baseType,
     payload,
@@ -49,7 +49,8 @@ export const createPromotion = (payload: any, activePlatform: string, file?: Fil
 
   const formData = new FormData();
   formData.append('body', JSON.stringify(payload));
-  if (!isEmpty(file)) formData.append('image_file', file);
+  formData.append('image_file', cardImageFile);
+  if (bannerImageFle) formData.append('banner_image_file', bannerImageFle);
 
   axiosInstance()
     .post('/api/promotions', formData, {
@@ -309,4 +310,18 @@ export const processPromotionClaimPayment = (payload: any, filter: any, activePl
       getPromotionClaims(filter, activePlatform)(dispatch);
       toast.error('Failed to process claim payment.');
     });
+};
+
+export const setPromotionCardImage = (payload: File) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_PROMOTION_CARD_IMAGE,
+    payload,
+  });
+};
+
+export const setPromotionBannerImage = (payload: File) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_PROMOTION_BANNER_IMAGE,
+    payload,
+  });
 };

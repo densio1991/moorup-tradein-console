@@ -17,8 +17,8 @@ export const usePromotion = () => {
     actions.clearPromotions(payload)(dispatch);
   }
 
-  const createPromotion = (payload: any) => {
-    actions.createPromotion(payload, activePlatform)(dispatch);
+  const createPromotion = (payload: any, cardImageFile: File, bannerImageFile?: File) => {
+    actions.createPromotion(payload, activePlatform, cardImageFile, bannerImageFile)(dispatch);
   }
 
   const setAddPromotionDetailsPayload = (payload: any) => {
@@ -77,6 +77,14 @@ export const usePromotion = () => {
     actions.processPromotionClaimPayment(payload, filter, activePlatform)(dispatch);
   }
 
+  const setPromotionCardImage = (payload: File) => {
+    actions.setPromotionCardImage(payload)(dispatch);
+  }
+
+  const setPromotionBannerImage = (payload: File) => {
+    actions.setPromotionBannerImage(payload)(dispatch);
+  }
+
   return {
     state: state.promotion,
     getPromotions,
@@ -96,5 +104,7 @@ export const usePromotion = () => {
     updatePromotionClaimMoorupStatus,
     updatePromotionClaimStatus,
     processPromotionClaimPayment,
+    setPromotionCardImage,
+    setPromotionBannerImage,
   };
 };
