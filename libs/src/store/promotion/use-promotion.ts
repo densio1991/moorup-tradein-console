@@ -57,8 +57,8 @@ export const usePromotion = () => {
     actions.clearPromotion(payload)(dispatch);
   }
 
-  const updatePromotion = (payload: any, promotionId: string) => {
-    actions.updatePromotion(payload, promotionId, activePlatform)(dispatch);
+  const updatePromotion = (payload: any, promotionId: string, cardImageFile?: File, bannerImageFile?: File) => {
+    actions.updatePromotion(payload, promotionId, activePlatform, cardImageFile, bannerImageFile)(dispatch);
   }
 
   const setConfirmationModalState = (payload: any) => {
