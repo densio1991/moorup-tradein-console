@@ -110,7 +110,7 @@ export function ImageEditor({
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
       <StyledInputLabel>{label}</StyledInputLabel>
       <FileSelect error={fieldError} {...getRootProps()} onBlur={() => {
-          if (isEmpty(selectedImageFileName)) {
+          if (isEmpty(selectedImageFileName) && isEmpty(image)) {
             if (isEmpty(fieldErrorMessage)) {
               setFieldError(true);
               setFieldErrorMessage('This field is required.');
@@ -121,8 +121,8 @@ export function ImageEditor({
           }
         }}>
         <input {...getInputProps()} name={name} />
-        <AppButton id='slider' variant='fill' type='button' width='fit-content' padding='4px 12px'>{croppedImage ? 'Replace File' : 'Choose File'}</AppButton>
-        <Typography variant='body2' color='#ccc'>{selectedImageFileName}</Typography>
+        <AppButton id='slider' variant='fill' type='button' width='fit-content' padding='4px 12px'>{croppedImage ? 'Replace' : 'Choose File'}</AppButton>
+        <Typography variant='body2' color='#ccc'>{selectedImageFileName || image}</Typography>
         {
           croppedImage && (
             <div style={{ maxHeight: '36px', marginLeft: 'auto' }}>

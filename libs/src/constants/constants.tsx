@@ -398,7 +398,7 @@ export const PROMOTIONS_MANAGEMENT_COLUMNS = [
     label: 'Status',
     order: 6,
     enableSort: true,
-    keyName: 'status',
+    keyName: 'promotion_status',
   },
 ];
 
@@ -1170,6 +1170,7 @@ export const ADD_PROMOTION_DETAILS_PAYLOAD = {
   name: '',
   description: '',
   status: '',
+  image_url: '-',
   start_date: null,
   end_date: null,
   show_banner: false,

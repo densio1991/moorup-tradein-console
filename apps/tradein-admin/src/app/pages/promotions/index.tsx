@@ -155,7 +155,8 @@ export function PromotionsPage() {
 
   const overrideStatus = (promotions: any) => {
     return promotions?.map((promotion: any) => {
-      let status = promotion.status;
+      const status = promotion.status;
+      let promotion_status = status;
       const currentDate = new Date();
       currentDate.setHours(0, 0, 0, 0);
 
@@ -175,16 +176,16 @@ export function PromotionsPage() {
       const isAfterEnd = currentDate > endDate;
 
       if (status === 'active' && isBetween) {
-        status = 'ongoing';
+        promotion_status = 'ongoing';
       } else if (status === 'active' && isBeforeStart) {
-        status = 'not_started';
+        promotion_status = 'not_started';
       } else if (status === 'active' && isAfterEnd) {
-        status = 'ended';
+        promotion_status = 'ended';
       }
 
       return {
         ...promotion,
-        status,
+        promotion_status,
       };
     });
   };
