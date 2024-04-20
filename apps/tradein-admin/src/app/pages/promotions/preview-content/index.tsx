@@ -179,7 +179,7 @@ export function PromotionPreview() {
         <ImageContainer>
           <Image
             src={
-              centerModalState.view === MODAL_TYPES.ADD_PROMOTION_PREVIEW
+              promotionCardImage
                 ? URL?.createObjectURL(promotionCardImage)
                 : addPromotionDetailsPayload.image_url
             }
@@ -353,6 +353,7 @@ export function PromotionPreview() {
                   payload,
                   centerModalState?.data,
                   promotionCardImage,
+                  promotionBannerImage,
                 );
                 clearPromotions({});
               }

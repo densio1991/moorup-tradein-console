@@ -6,12 +6,14 @@ import {
   FormContainer,
   FormGroup,
   FormWrapper,
+  ImageEditor,
   MODAL_TYPES,
   PROMOTION_STATUS,
   StyledDateRangePicker,
   StyledInput,
   StyledReactSelect,
   ToggleButton,
+  createFileFromImageURL,
   hasEmptyValue,
   useAuth,
   useCommon,
@@ -39,9 +41,6 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   description: Yup.string().required('Description is required'),
   status: Yup.string().required('Status is required'),
-  image_url: Yup.string()
-    .required('Image URL is required')
-    .url('Enter a valid URL'),
   show_banner: Yup.boolean().required('Show Banner is required'),
 });
 
@@ -50,7 +49,13 @@ export function EditPromotionForm({ data }: any) {
   const { sideModalState } = commonState;
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
-  const { setAddPromotionDetailsPayload } = usePromotion();
+  const {
+    state: promotionState,
+    setAddPromotionDetailsPayload,
+    setPromotionCardImage,
+    setPromotionBannerImage,
+  } = usePromotion();
+  const { promotionCardImage, promotionBannerImage } = promotionState;
 
   const resetForm = () => {
     formik.resetForm();
@@ -100,6 +105,20 @@ export function EditPromotionForm({ data }: any) {
       formik.setFieldError('start_date', '');
     }
   };
+
+  const handleCropCardImageComplete = (image: string, fileName: string) => {
+    createFileFromImageURL(image, fileName).then((file) => {
+      setPromotionCardImage(file);
+    });
+  };
+
+  const handleCropBannerImageComplete = (image: string, fileName: string) => {
+    createFileFromImageURL(image, fileName).then((file) => {
+      setPromotionBannerImage(file);
+    });
+  };
+
+  console.log('formik.values: ', formik.values);
 
   useEffect(() => {
     const promotionDetails = {
@@ -191,7 +210,37 @@ export function EditPromotionForm({ data }: any) {
             onChange={() => {}}
           />
         </FormGroup>
+        <FormGroup marginBottom="20px">
+          <ImageEditor
+            name="image_url"
+            aspectRatio={8 / 3}
+            label="Card Image (Recommended Size: 320p x 120p)"
+            onImageChange={handleCropCardImageComplete}
+            image={formik.values.image_url}
+          />
+        </FormGroup>
         <FormGroup>
+          <ToggleButton
+            label="Show Banner"
+            name="show_banner"
+            isOn={formik.values.show_banner}
+            onToggle={() =>
+              formik.setFieldValue('show_banner', !formik.values.show_banner)
+            }
+          />
+        </FormGroup>
+        {formik.values.show_banner && (
+          <FormGroup marginBottom="20px">
+            <ImageEditor
+              name="banner_url"
+              aspectRatio={16 / 9}
+              label="Banner Image (Min. Recommended Size: 1080p x 720p)"
+              onImageChange={handleCropBannerImageComplete}
+              image={formik.values.banner_url}
+            />
+          </FormGroup>
+        )}
+        {/* <FormGroup>
           <StyledInput
             type="text"
             id="image_url"
@@ -234,7 +283,7 @@ export function EditPromotionForm({ data }: any) {
               enableHoverImage={false}
             />
           </FormGroup>
-        )}
+        )} */}
         <FormGroup>
           <span />
           <FormGroup>
@@ -249,7 +298,14 @@ export function EditPromotionForm({ data }: any) {
             <AppButton
               type="submit"
               width="fit-content"
-              disabled={hasEmptyValue(formik.values) || !isEmpty(formik.errors)}
+              disabled={
+                hasEmptyValue(formik.values) ||
+                !isEmpty(formik.errors) ||
+                (isEmpty(formik.values.image_url) && !promotionCardImage) ||
+                (formik.values.show_banner &&
+                  !promotionBannerImage &&
+                  isEmpty(formik.values.banner_url))
+              }
             >
               Next
             </AppButton>
