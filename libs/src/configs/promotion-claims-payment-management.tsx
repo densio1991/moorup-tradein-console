@@ -53,6 +53,7 @@ export const promotionClaimsPaymentManagementParsingConfig = {
           width="fit-content"
           padding='4px 20px'
           onClick={() => row.action()}
+          disabled={isEmpty(row['amount'])}
         >
           Pay Now
         </AppButton>

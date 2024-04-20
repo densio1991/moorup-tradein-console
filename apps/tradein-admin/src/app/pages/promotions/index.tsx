@@ -157,8 +157,13 @@ export function PromotionsPage() {
     return promotions?.map((promotion: any) => {
       let status = promotion.status;
       const currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+
       const startDate = new Date(promotion['start_date']);
+      startDate.setHours(0, 0, 0, 0);
+
       const endDate = new Date(promotion['end_date']);
+      endDate.setHours(0, 0, 0, 0);
 
       // Check if current date falls between the start date and end date
       const isBetween = currentDate >= startDate && currentDate <= endDate;

@@ -1172,7 +1172,6 @@ export const ADD_PROMOTION_DETAILS_PAYLOAD = {
   status: '',
   start_date: null,
   end_date: null,
-  image_url: '',
   show_banner: false,
 }
 
