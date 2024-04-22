@@ -34,6 +34,10 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
   const [claims, setClaims] = useState([]);
   const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
 
+  const handleAddClaim = () => {
+    console.log('ADD CLAIM');
+  };
+
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -71,18 +75,27 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
   }, [promotionClaims]);
 
   return (
-    !isFetchingPromotionClaims &&
-    claims.length > 0 && (
-      <>
-        <AccordionHeaderContainer>
-          <AccordionHeading
-            id="claims"
-            title="Claims"
-            isOpen={isOpen}
-            onToggle={onToggle}
-          />
-        </AccordionHeaderContainer>
-        <AccordionContent isOpen={isOpen} key="Claims List">
+    <>
+      <AccordionHeaderContainer>
+        <AccordionHeading
+          id="claims"
+          title="Claims"
+          isOpen={isOpen}
+          onToggle={onToggle}
+        />
+      </AccordionHeaderContainer>
+      <AccordionContent isOpen={isOpen} key="Claims List">
+        <div className="flex justify-end mb-2">
+          <button
+            className="text-md text-white bg-emerald-600 py-1 px-3 rounded-md hover:bg-emerald-700"
+            onClick={handleAddClaim}
+          >
+            Add Claim
+          </button>
+        </div>
+        {isFetchingPromotionClaims ? (
+          <h6 className="text-center text-gray-500 mb-2">Loading...</h6>
+        ) : claims.length > 0 ? (
           <Table
             label="Promotion Claims"
             margin="8px 0"
@@ -95,9 +108,13 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
             rows={claims || []}
             parsingConfig={promotionClaimsManagementParsingConfig}
           />
-        </AccordionContent>
-      </>
-    )
+        ) : (
+          <h6 className="text-center text-gray-500 mb-2">
+            No Promotion Claims
+          </h6>
+        )}
+      </AccordionContent>
+    </>
   );
 };
 
