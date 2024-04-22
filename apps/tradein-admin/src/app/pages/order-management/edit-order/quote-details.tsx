@@ -108,7 +108,6 @@ const QuoteDetails = () => {
   };
 
   const giftCardStatus = (voucher: any) => {
-    console.log(activeGiftCard, voucher);
     return (
       <div className="flex items-center justify-between gap-2">
         {(isFetchingGiftCard || isUpdatingGiftCard) &&
@@ -144,16 +143,29 @@ const QuoteDetails = () => {
       // clarify how to handle multiple vouchers
       const vouchers: any = [];
       payment?.additional_info.forEach((voucher: any) => {
-        const params = {
-          pan: voucher?.voucherPan,
-          pin: voucher?.voucherPin,
-          txId: voucher?.voucherReference,
-          currency: voucher?.voucherCurrency,
-          amount: voucher?.voucherBalance,
-          status: voucher?.voucherStatus,
-          itemNumber: voucher?.voucherOrderNumber,
-          provider: voucher?.voucherProvider,
-        };
+        let params = {};
+        if (voucher?.voucherProvider === 'prezzee') {
+          params = {
+            pan: voucher?.voucherUuid,
+            txId: voucher?.voucherReference,
+            currency: voucher?.voucherCurrency,
+            amount: voucher?.voucherBalance,
+            status: voucher?.vouchersStatus,
+            itemNumber: voucher?.voucherOrderNumber,
+            provider: voucher?.voucherProvider,
+          };
+        } else {
+          params = {
+            pan: voucher?.voucherPan,
+            pin: voucher?.voucherPin,
+            txId: voucher?.voucherReference,
+            currency: voucher?.voucherCurrency,
+            amount: voucher?.voucherBalance,
+            status: voucher?.voucherStatus,
+            itemNumber: voucher?.voucherOrderNumber,
+            provider: voucher?.voucherProvider,
+          };
+        }
         vouchers.push(params);
       });
       setVoucherDetails(vouchers);
@@ -240,14 +252,14 @@ const QuoteDetails = () => {
           <div className="w-full mx-auto">
             <div className="overflow-x-auto max-w-full pb-2 text-sm">
               <table className="w-full text-nowrap border-t-[1px]">
-                <thead className="text-left font-semibold text-gray-700">
-                  <td className="p-2">Order Item Number</td>
-                  <td className="p-2">Card PAN</td>
-                  <td className="p-2">Balance</td>
-                  <td className="p-2">Status</td>
+                <thead className="text-left text-gray-700">
+                  <th className="p-2 font-medium">Order Item Number</th>
+                  <th className="p-2 font-medium">Card PAN</th>
+                  <th className="p-2 font-medium">Balance</th>
+                  <th className="p-2 font-medium">Status</th>
                 </thead>
                 {voucherDetails.map((voucher: any, idx: number) => (
-                  <tr className="border-t-[1px]">
+                  <tr className="border-t-[1px]" key={idx}>
                     <td className="p-2">{voucher?.itemNumber}</td>
                     <td className="p-2">{voucher?.pan}</td>
                     <td className="p-2">

@@ -28,7 +28,7 @@ import Completion from './completion';
 import { EditForm } from './status/edit-form';
 import ValidationOffer from './validation-offer';
 import QuoteDetails from './quote-details';
-import ClaimsList from '../claims-list';
+import ClaimsList from './claims-list';
 
 type AccordionStates = {
   quote: boolean;

@@ -13,7 +13,7 @@ import {
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { AccordionHeading } from './edit-order';
+import { AccordionHeading } from '.';
 
 type ClaimsListProps = {
   order: OrderInterface;
