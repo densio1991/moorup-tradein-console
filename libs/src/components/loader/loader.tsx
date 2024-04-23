@@ -8,14 +8,19 @@ interface LoaderContainerProps {
   children: React.ReactNode;
   title?: string;
   height?: string;
+  margin?: string;
+  padding?: string;
+  bgColor?: string;
 }
 
-const StyledLoaderContainer = styled.div<{ height?: string }>`
+const StyledLoaderContainer = styled.div<{ height?: string; margin?: string; padding?: string; bgColor?: string }>`
   display: flex;
   flex-direction: column;
   height: ${({ height }) => (height ?? '100%')};
-  background-color: white;
+  background-color: ${({ bgColor }) => (bgColor ?? 'white')};
   overflow-y: auto;
+  ${(props) => props.margin && `margin: ${props.margin};`}
+  ${(props) => props.padding && `padding: ${props.padding};`}
 `;
 
 const StyledOverlay = styled.div`
@@ -40,9 +45,9 @@ const StyledPrimaryText = styled.span`
   font-weight: bold;
 `;
 
-export function LoaderContainer({ loading, color, children, title, height }: LoaderContainerProps) {
+export function LoaderContainer({ loading, color, children, title, height, margin, padding, bgColor }: LoaderContainerProps) {
   return (
-    <StyledLoaderContainer height={height}>
+    <StyledLoaderContainer height={height} margin={margin} padding={padding} bgColor={bgColor}>
       {loading ? (
         <StyledOverlay>
           <LoadingSpinner color={color} />

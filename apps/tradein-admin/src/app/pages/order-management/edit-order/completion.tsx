@@ -1,9 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-  DetailCardContainer,
-  OrderItems,
-  amountFormatter,
-} from '@tradein-admin/libs';
+import { DetailCardContainer, OrderItems } from '@tradein-admin/libs';
 import { CardDetail, DeviceSection } from './sections';
 import OfferSection from './sections/offer-section';
 
@@ -47,13 +43,13 @@ const Completion = ({
   );
 
   return (
-    <div className="flex gap-2 p-2.5">
+    <div className="flex gap-2 p-2.5 items-start">
       {orderItems?.map((item: OrderItems, idx) => {
         const { questions_answered = [] } = item;
 
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
-            <DeviceSection order={item} orderId={orderId} />
+            <DeviceSection orderItem={item} orderId={orderId} />
             <OfferSection orderItem={item} />
             <hr />
             <div>
@@ -73,7 +69,7 @@ const Completion = ({
             <hr />
             <button
               onClick={() => handleStatus(item)}
-              className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
+              className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
             >
               Update Status
             </button>

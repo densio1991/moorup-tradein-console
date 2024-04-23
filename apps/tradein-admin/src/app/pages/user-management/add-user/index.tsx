@@ -62,7 +62,7 @@ export function AddUserForm() {
   };
 
   const onSubmit = (values: any) => {
-    createUser(values);
+    createUser(values, userDetails?._id);
     setSideModalState({ ...sideModalState, view: null, open: false });
   };
 

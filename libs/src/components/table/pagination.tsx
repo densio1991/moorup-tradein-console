@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'styled-components';
 interface PaginationProps {
   currentPage: number;
+  pageSize: number;
   totalPages: number;
   totalRows: number;
   paginate: (pageNumber: number) => void;
@@ -79,6 +80,7 @@ const StyledIcon = styled(FontAwesomeIcon)`
 
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
+  pageSize = 10,
   totalPages,
   totalRows,
   paginate,
@@ -90,7 +92,7 @@ const Pagination: React.FC<PaginationProps> = ({
           {
             totalRows > 0 && (
               <span>
-                {`Showing ${((currentPage - 1) * 10) + 1} - ${Math.min(currentPage * 10, totalRows)} of ${totalRows} results`}
+                {`Showing ${((currentPage - 1) * pageSize) + 1} - ${Math.min(currentPage * pageSize, totalRows)} of ${totalRows} entries`}
               </span>
             )
           }

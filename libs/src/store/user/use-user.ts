@@ -17,12 +17,12 @@ export const useUser = () => {
     actions.clearUsers(payload)(dispatch);
   }
 
-  const createUser = (payload: any) => {
-    actions.createUser(payload, activePlatform)(dispatch);
+  const createUser = (payload: any, currentUserId: string) => {
+    actions.createUser(payload, currentUserId, activePlatform)(dispatch);
   }
 
-  const updateUser = (id: string, payload: any) => {
-    actions.updateUser(id, activePlatform, payload)(dispatch);
+  const updateUser = (id: string, currentUserId: string, payload: any) => {
+    actions.updateUser(id, currentUserId, activePlatform, payload)(dispatch);
   }
 
   return {

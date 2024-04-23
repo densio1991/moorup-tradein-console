@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
 import { StyledMenuIcon } from '../components';
+import { ROLES } from '../constants';
 import { parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
@@ -9,6 +10,12 @@ interface ParsingFunctionParams {
 }
 
 export const userManagementParsingConfig = {
+  'Role': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['role'])) return '--';
+
+    const role = ROLES.find((item: any) => row['role'] === item?.value);
+    return role?.label;
+  },
   'First Name': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['first_name'])) return '--';
     return row['first_name'];

@@ -5,6 +5,9 @@ import * as actions from './actions';
 
 export const useAuth = () => {
   const { state, dispatch } = useContext(RootContext);
+  const {
+    activePlatform,
+  } = state.auth;
 
   const loginUser = (payload: any) => {
     actions.loginUser(payload)(dispatch);
@@ -18,8 +21,8 @@ export const useAuth = () => {
     actions.getUserDetailsById(payload)(dispatch);
   }
 
-  const getPlatformConfig = (payload: any) => {
-    actions.getPlatformConfig(payload)(dispatch);
+  const getPlatformConfig = (payload: any, signal?: AbortSignal) => {
+    actions.getPlatformConfig(payload, signal)(dispatch);
   }
 
   const setActivePlatform = (payload: any) => {
@@ -30,6 +33,14 @@ export const useAuth = () => {
     actions.setLoading(payload)(dispatch);
   }
 
+  const clearPlatformConfig = (payload: any) => {
+    actions.clearPlatformConfig(payload)(dispatch);
+  }
+
+  const updatePlatformConfig = (id: string, payload: any) => {
+    actions.updatePlatformConfig(id, activePlatform, payload)(dispatch);
+  }
+
   return {
     state: state.auth,
     loginUser,
@@ -38,5 +49,7 @@ export const useAuth = () => {
     getPlatformConfig,
     setActivePlatform,
     setLoading,
+    clearPlatformConfig,
+    updatePlatformConfig,
   };
 };

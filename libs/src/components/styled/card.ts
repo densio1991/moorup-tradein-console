@@ -9,7 +9,7 @@ export const DetailCardContainer = styled.div`
   border-radius: 8px;
   box-sizing: border-box;
   box-shadow: 0px 0px 8px #eee;
-  overflow: visible;
+  overflow: auto;
 
   h4:first-of-type {
     margin: 8px 0;
@@ -19,6 +19,7 @@ export const DetailCardContainer = styled.div`
   h4 {
     margin: 16px 0 8px 0;
     line-height: 1.2;
+    color: rgb(155,155,155);
   }
 `;
 
@@ -27,7 +28,7 @@ export const DataLine = styled.div`
   grid-template-columns: 3fr 5fr;
   box-sizing: content-box;
   gap: 16px;
-  padding: 6px 0;
+  padding: 8px 0;
   border-top: 1px solid #eee;
   font-size: 14px;
   

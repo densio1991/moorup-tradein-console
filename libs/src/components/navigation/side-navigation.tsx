@@ -1,9 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faAngleDown, faAngleRight, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleRight, faArrowRightFromBracket, faGears } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, MenuItem, MenuItemStyles, Sidebar, SubMenu } from 'react-pro-sidebar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Logo from '../../Moorup.png';
 import {
   ADMIN,
   CUSTOMER_SERVICE,
@@ -17,7 +18,20 @@ import { hexToRgba } from '../../helpers';
 import { useAuth, useCommon } from '../../store';
 import { Typography } from '../typography';
 
-const StyledIcon = styled(FontAwesomeIcon)``;
+const Image = styled.img`
+  height: 4rem;
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+  padding: 0px 60px;
+`;
+
+const StyledIcon = styled(FontAwesomeIcon)<{ size?: string }>`
+  ${(props) => props.size && `font-size: ${props.size};`}
+`;
 
 export function SideBar(): JSX.Element {
   const { pathname } = useLocation();
@@ -39,7 +53,6 @@ export function SideBar(): JSX.Element {
           'Product Management',
           'Order Management',
           'Promotions',
-          'Actionables',
         ].includes(item.title);
 
       case WAREHOUSE:
@@ -61,11 +74,10 @@ export function SideBar(): JSX.Element {
 
   const menuItemStyles: MenuItemStyles = {
     root: {
-      fontSize: '14px',
+      fontSize: '13.333px',
       fontWeight: 600,
     },
     icon: {
-      color: '#216A4C',
       '&.disabled': {
         color: '#ccc',
       },
@@ -86,11 +98,8 @@ export function SideBar(): JSX.Element {
           : 'transparent',
     }),
     button: {
-      '&.disabled': {
-        color: '#9fb6cf',
-      },
       '&:hover': {
-        background: 'linear-gradient(to right, #216A4C, #01463A)',
+        background: 'linear-gradient(to right, #216A4C, #216A4C)',
         color: 'white',
 
         '& svg': {
@@ -98,7 +107,7 @@ export function SideBar(): JSX.Element {
         }
       },
       '&.ps-active': {
-        background: 'linear-gradient(to right, #216A4C, #01463A)',
+        background: 'linear-gradient(to right, #01463A, #01463A)',
         color: 'white',
 
         '& svg': {
@@ -108,24 +117,24 @@ export function SideBar(): JSX.Element {
     },
   };
 
-
   return (
     <div style={{ display: 'flex', height: '100vh', zIndex: '999'}}>
       <Sidebar 
-        toggled={showSideNav}
         onBackdropClick={() => setShowSideNav(false)}
+        breakPoint='lg'
         onBreakPoint={(broken) => setShowSideNav(!broken)}
-        breakPoint="md"
+        toggled={showSideNav}
         backgroundColor='white'
         rootStyles={{
-          color: '#607489'
+          color: '#216A4C'
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-          <div style={{ flex: 1, marginBottom: '32px', marginTop: '32px' }}>
+          <Image src={Logo} alt="" />
+          <div style={{ flex: 1, marginBottom: '32px' }}>
             <div style={{ padding: '0 24px', marginBottom: '8px' }}>
               <Typography
-                variant="body2"
+                variant="caption"
                 fontWeight={600}
                 style={{ letterSpacing: '0.5px' }}
               >
@@ -146,7 +155,7 @@ export function SideBar(): JSX.Element {
                         key={index} 
                         icon={<StyledIcon icon={item.icon} />}
                         disabled={item.disabled}
-                        defaultOpen
+                        defaultOpen={item.activeUrl?.test(pathname)}
                       >
                         {item.submenu.map((subItem, subIndex) => (
                           <MenuItem 
@@ -179,23 +188,33 @@ export function SideBar(): JSX.Element {
             </Menu>
             <div style={{ padding: '0 24px', marginBottom: '8px', marginTop: '16px' }}>
               <Typography
-                variant="body2"
+                variant="caption"
                 fontWeight={600}
-                style={{ letterSpacing: '0.5px', opacity: 0.7 }}
+                style={{ letterSpacing: '0.5px' }}
               >
-                Account
+                Settings
               </Typography>
             </div>
             <Menu menuItemStyles={menuItemStyles}>
               <MenuItem 
-                key='logout' 
-                onClick={() => logoutUser()} 
-                icon={<StyledIcon icon={faArrowRightFromBracket} />}
+                key='configs'
+                onClick={() => navigate('/dashboard/configurations')} 
+                active={/^\/dashboard\/configurations/?.test(pathname)}
+                icon={<StyledIcon icon={faGears} />}
               >
-                Logout
+                Configurations
               </MenuItem>
             </Menu>
           </div>
+          <Menu menuItemStyles={menuItemStyles}>
+            <MenuItem 
+              key='logout' 
+              onClick={() => logoutUser()} 
+              icon={<StyledIcon icon={faArrowRightFromBracket} />}
+            >
+              Logout
+            </MenuItem>
+          </Menu>
         </div>
       </Sidebar>
     </div>

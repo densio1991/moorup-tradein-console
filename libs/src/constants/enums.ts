@@ -17,11 +17,10 @@ export enum OrderItemStatus {
   FOR_REVISION = 'for-revision',
   REVISED = 'revised',
   REVISION_REJECTED = 'revision-rejected',
-  HOLD = 'hold'
+  HOLD = 'hold',
 }
 
 export enum DropdownOrderItemStatus {
-  CANCELLED = 'cancelled',
   RECEIVED = 'received',
   EVALUATED = 'evaluated',
   COMPLETED = 'completed',
@@ -35,14 +34,22 @@ export enum OrderPaymentStatus {
 export enum ClaimStatus {
   PENDING = 'pending',
   APPROVED = 'approved',
-  REJECT = 'reject',
+  REJECTED = 'rejected',
   CANCELLED = 'cancelled',
-  DELETED = 'deleted'
+  FAILED = 'failed',
+  COMPLETED = 'completed',
+  PROCESSING = 'processing'
 }
 
 export enum DefaultStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive'
+}
+
+export enum PromotionStatus {
+  ENDED = 'ended',
+  NOT_STARTED = 'not_started',
+  ONGOING = 'ongoing',
 }
 
 export enum OrderTypes {
@@ -55,4 +62,17 @@ export enum CreditTypes {
   UPFRONT = 'upfront',
   POSTASSESSMENT = 'post-assessment',
   POST_ASSESSMENT = 'post_assessment',
+}
+
+export enum ProductTypes {
+  LAPTOPS = 'laptops',
+  TABLETS = 'tablets',
+  PHONES = 'phones',
+  WATCHES = 'watches',
+}
+
+export enum ConfirmationModalTypes {
+  APPROVE_CLAIM_REGULAR = 'APPROVE_CLAIM_REGULAR',
+  REJECT_CLAIM_REGULAR = 'REJECT_CLAIM_REGULAR',
+  OVERRIDE_CLAIM_STATUS = 'OVERRIDE_CLAIM',
 }

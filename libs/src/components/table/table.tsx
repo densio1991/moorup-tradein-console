@@ -4,11 +4,10 @@ import { isEmpty } from 'lodash';
 import { ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-import {
-  sortArray,
-  sortByKey
-} from '../../helpers';
+import { PAGE_SIZES } from '../../constants';
+import { sortArray, sortByKey } from '../../helpers';
 import { useCommon } from '../../store';
+import { StyledReactSelect } from '../input';
 import { StyledIcon } from '../styled';
 import Pagination from './pagination';
 
@@ -25,6 +24,7 @@ interface TableProps {
     label: string;
     order: number;
     enableSort?: boolean;
+    keyName?: any;
   }>;
   rows: Array<{ [key: string]: string }>;
   isLoading: boolean;
@@ -32,6 +32,7 @@ interface TableProps {
   menuItems?: any;
   rightControls?: any;
   parsingConfig?: { [key: string]: (value: any) => any };
+  margin?: string;
 }
 
 const HeaderSection = styled.div`
@@ -77,13 +78,13 @@ const ActionContainer = styled.div`
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
-`
+`;
 
 const TableWrapper = styled.div`
   box-shadow: none;
   border-radius: 6px !important;
   overflow-x: auto;
-  padding: 0px 20px;
+  margin: 0px 20px;
 `;
 
 const TableStyled = styled.table`
@@ -169,12 +170,12 @@ const Th = styled.th<ThProps>`
 const Tr = styled.tr<{ hover?: boolean }>`
   transition: background-color 0.3s ease;
   &:hover {
-    ${(props) => props.hover && 'background-color: #dff1f0;'}
+    ${(props) => props.hover && 'background-color: #f5f6f6;'}
     ${(props) => props.hover && 'cursor: pointer;'}
   }
 `;
 
-const Td = styled.td<{ alignRight: boolean }>`
+const Td = styled.td<{ alignRight?: boolean }>`
   padding: 12px 10px;
   border-bottom: 1px solid #e1e4e8;
   color: #333;
@@ -265,8 +266,6 @@ const Line = styled.div`
   }
 `;
 
-const PAGE_SIZE = 10;
-
 export function Table({
   label,
   headers,
@@ -276,9 +275,11 @@ export function Table({
   menuItems,
   rightControls,
   parsingConfig = {},
+  margin = '20px',
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(parseInt(PAGE_SIZES[0].value));
   const { state: commonState } = useCommon();
   const { searchTerm } = commonState;
 
@@ -298,9 +299,8 @@ export function Table({
     if (!isEmpty(row?.viewURL)) {
       navigate(row?.viewURL);
     }
-  }
+  };
 
-  // TODO: Make the parser a parameter for Table component
   const parseRowValue = (
     header: any,
     row: { [x: string]: any },
@@ -358,12 +358,16 @@ export function Table({
     return false;
   }
 
-  const startIndex = (currentPage - 1) * PAGE_SIZE;
-  const endIndex = startIndex + PAGE_SIZE;
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
   const itemsToDisplay = filteredRows.slice(startIndex, endIndex);
 
   return (
-    <div style={{ backgroundColor: 'white', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 8px 16px 0px', margin: '10px' }}>
+    <div style={{ 
+      backgroundColor: 'white', 
+      boxShadow: '0px 0px 8px #eee', 
+      border: '1px solid #eee',
+      margin: margin }}>
       <HeaderSection>
         <LeftSection>
           <TitleContainer>
@@ -372,6 +376,15 @@ export function Table({
         </LeftSection>
         <RightSection>
           <ActionContainer>
+            <StyledReactSelect
+              name="page_size"
+              isMulti={false}
+              options={PAGE_SIZES}
+              value={pageSize.toString()}
+              onChange={(selected) => {
+                setPageSize(parseInt(selected.value));
+              }}
+            />
             {rightControls}
           </ActionContainer>
         </RightSection>
@@ -385,7 +398,6 @@ export function Table({
                   key={header.label}
                   onClick={() => header.enableSort && handleSort(header.keyName)}
                   className={header.enableSort ? 'enableSort' : ''}
-                  alignRight={header.label === 'Actions'}
                 >
                   {header.label}
                   {header.enableSort && (
@@ -406,7 +418,7 @@ export function Table({
             {itemsToDisplay?.map((row: any, index: any) => (
               <Tr key={index} onClick={() => handleRowClick(row)} hover={!isEmpty(row?.viewURL)}>
                 {sortedHeaders?.map((header) => (
-                  <Td key={`${index}-${header.label}`} alignRight={header.label === 'Actions'}>
+                  <Td key={`${index}-${header.label}`}>
                     <span>{parseRowValue(header, row)}</span>
                   </Td>
                 ))}
@@ -419,11 +431,11 @@ export function Table({
       </TableWrapper>
       <Pagination
         currentPage={currentPage}
-        totalPages={Math.ceil(filteredRows.length / PAGE_SIZE)}
+        pageSize={pageSize}
+        totalPages={Math.ceil(filteredRows.length / pageSize)}
         totalRows={filteredRows.length}
         paginate={paginate}
       />
     </div>
   );
 }
- 

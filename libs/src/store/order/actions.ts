@@ -464,6 +464,39 @@ export const generateLabels = (payload: any, onSuccess: any = false) => (dispatc
     });
 };
 
+export const generateOutboundLabel = (payload: any, onSuccess: any = false) => (dispatch: any) => {
+  dispatch({
+    type: types.GENERATE_LABELS.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .post('/api/shipments/generate-labels?label=outbound', payload)
+    .then((response) => {
+      dispatch({
+        type: types.GENERATE_OUTBOUND_LABEL.SUCCESS,
+        payload: response?.data,
+      });
+
+      const { data = {} } = response?.data || {};
+      if (data?.outbound?.label) {
+        window.open(data?.outbound?.label, '_blank');
+      }
+
+      if (onSuccess && typeof onSuccess == 'function') {
+        onSuccess(data);
+      }
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.GENERATE_OUTBOUND_LABEL.FAILED,
+        payload: error,
+      });
+      
+      toast.error('Failed to generate labels.');
+    });
+};
+
 export const updateOrderItemImeiSerial = (orderItemId: string, orderId: string, payload: any) => (dispatch: any) => {
   dispatch({
     type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.baseType,
@@ -490,6 +523,58 @@ export const updateOrderItemImeiSerial = (orderItemId: string, orderId: string, 
       toast.error('Failed to update IMEI/Serial.');
     });
 };
+
+export const getGiftCardStatus =
+  (orderId: any, payload: any, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.FETCH_GIFT_CARD_STATUS.baseType,
+    });
+
+    axiosInstance()
+      .get('/api/epay/balance-inquiry', { params: payload, signal: signal })
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_GIFT_CARD_STATUS.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.FETCH_GIFT_CARD_STATUS.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to check gift card status.');
+      });
+  };
+
+export const cancelGiftCard =
+  (orderId: any, voucherOrderNumber: any, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.CANCEL_GIFT_CARD.baseType,
+    });
+
+    axiosInstance()
+      .patch(
+        `/api/payments/cancel-voucher/${orderId}?voucherOrderNumber=${voucherOrderNumber}`,
+        { signal: signal })
+      .then((response) => {
+        dispatch({
+          type: types.CANCEL_GIFT_CARD.SUCCESS,
+          payload: response?.data,
+        });
+        getOrderById(orderId)(dispatch);
+        toast.success('Gift card successfully cancelled!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.CANCEL_GIFT_CARD.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to check gift card status.');
+      });
+  };
 
 export const clearOrder = (payload: any) => (dispatch: any) => {
   dispatch({

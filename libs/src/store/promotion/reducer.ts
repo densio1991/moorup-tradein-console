@@ -22,6 +22,19 @@ const promotionState = {
   promotion: {},
   isFetchingPromotionById: true,
   isUpdatingPromotion: false,
+  confirmationModalState: {
+    open: false,
+    view: null,
+    title: 'Confirmation',
+    content: 'Are you sure you want to perform this action?',
+    data: {},
+    id: '',
+  },
+  isUpdatingPromotionClaimMoorupStatus: false,
+  isUpdatingPromotionClaimStatus: false,
+  isProcessingPromotionClaimPayment: false,
+  promotionCardImage: null,
+  promotionBannerImage: null,
 };
 
 const promotionReducer = (state: any, action: any) => {
@@ -195,6 +208,87 @@ const promotionReducer = (state: any, action: any) => {
         isUpdatingPromotion: false,
       };
     }
+
+    case types.SET_CONFIRMATION_MODAL_STATE:
+      return {
+        ...state,
+        confirmationModalState: action?.payload,
+      };
+
+    case types.UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.baseType: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimMoorupStatus: true,
+        isFetchingPromotionClaims: true,
+        promotionClaims: [],
+      };
+    }
+    case types.UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimMoorupStatus: false,
+      };
+    }
+    case types.UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.FAILED: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimMoorupStatus: false,
+      };
+    }
+
+    case types.UPDATE_PROMOTION_CLAIM_STATUS.baseType: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimStatus: true,
+        isFetchingPromotionClaims: true,
+        promotionClaims: [],
+      };
+    }
+    case types.UPDATE_PROMOTION_CLAIM_STATUS.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimStatus: false,
+      };
+    }
+    case types.UPDATE_PROMOTION_CLAIM_STATUS.FAILED: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimStatus: false,
+      };
+    }
+
+    case types.PROCESS_PROMOTION_CLAIM_PAYMENT.baseType: {
+      return {
+        ...state,
+        isProcessingPromotionClaimPayment: true,
+        isFetchingPromotionClaims: true,
+        promotionClaims: [],
+      };
+    }
+    case types.PROCESS_PROMOTION_CLAIM_PAYMENT.SUCCESS: {
+      return {
+        ...state,
+        isProcessingPromotionClaimPayment: false,
+      };
+    }
+    case types.PROCESS_PROMOTION_CLAIM_PAYMENT.FAILED: {
+      return {
+        ...state,
+        isProcessingPromotionClaimPayment: false,
+      };
+    }
+
+    case types.SET_PROMOTION_CARD_IMAGE:
+      return {
+        ...state,
+        promotionCardImage: action?.payload,
+      };
+
+    case types.SET_PROMOTION_BANNER_IMAGE:
+      return {
+        ...state,
+        promotionBannerImage: action?.payload,
+      };
 
     default:
       return state;

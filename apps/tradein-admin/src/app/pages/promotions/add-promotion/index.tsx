@@ -6,11 +6,14 @@ import {
   FormContainer,
   FormGroup,
   FormWrapper,
+  ImageEditor,
   MODAL_TYPES,
   PROMOTION_STATUS,
   StyledDateRangePicker,
   StyledInput,
   StyledReactSelect,
+  ToggleButton,
+  createFileFromImageURL,
   hasEmptyValue,
   useAuth,
   useCommon,
@@ -28,7 +31,8 @@ interface FormValues {
   status: string;
   start_date: Date | null;
   end_date: Date | null;
-  image_url: string;
+  show_banner: boolean;
+  banner_url?: string;
   [key: string]: any; // Index signature to allow dynamic access
 }
 
@@ -36,9 +40,7 @@ const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   description: Yup.string().required('Description is required'),
   status: Yup.string().required('Status is required'),
-  image_url: Yup.string()
-    .required('Image URL is required')
-    .url('Enter a valid URL'),
+  show_banner: Yup.boolean().required('Show Banner is required'),
 });
 
 export function AddPromotionForm() {
@@ -46,9 +48,17 @@ export function AddPromotionForm() {
   const { sideModalState } = commonState;
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
-  const { state: promotionState, setAddPromotionDetailsPayload } =
-    usePromotion();
-  const { addPromotionDetailsPayload } = promotionState;
+  const {
+    state: promotionState,
+    setAddPromotionDetailsPayload,
+    setPromotionCardImage,
+    setPromotionBannerImage,
+  } = usePromotion();
+  const {
+    addPromotionDetailsPayload,
+    promotionCardImage,
+    promotionBannerImage,
+  } = promotionState;
 
   const resetForm = () => {
     formik.resetForm();
@@ -102,6 +112,18 @@ export function AddPromotionForm() {
   useEffect(() => {
     formik.setValues(addPromotionDetailsPayload);
   }, [addPromotionDetailsPayload]);
+
+  const handleCropCardImageComplete = (image: string, fileName: string) => {
+    createFileFromImageURL(image, fileName).then((file) => {
+      setPromotionCardImage(file);
+    });
+  };
+
+  const handleCropBannerImageComplete = (image: string, fileName: string) => {
+    createFileFromImageURL(image, fileName).then((file) => {
+      setPromotionBannerImage(file);
+    });
+  };
 
   return (
     <FormWrapper
@@ -181,21 +203,34 @@ export function AddPromotionForm() {
             onChange={() => {}}
           />
         </FormGroup>
-        <FormGroup>
-          <StyledInput
-            type="text"
-            id="image_url"
-            label="Promotion Image"
+        <FormGroup marginBottom="20px">
+          <ImageEditor
             name="image_url"
-            placeholder="Promotion Image"
-            onChange={formik.handleChange}
-            value={formik.values.image_url}
-            onBlur={formik.handleBlur}
-            error={Boolean(formik.touched.image_url && formik.errors.image_url)}
-            errorMessage={formik.errors.image_url}
-            enableHoverImage={true}
+            aspectRatio={8 / 3}
+            label="Card Image (Recommended Size: 320p x 120p)"
+            onImageChange={handleCropCardImageComplete}
           />
         </FormGroup>
+        <FormGroup>
+          <ToggleButton
+            label="Show Banner"
+            name="show_banner"
+            isOn={formik.values.show_banner}
+            onToggle={() =>
+              formik.setFieldValue('show_banner', !formik.values.show_banner)
+            }
+          />
+        </FormGroup>
+        {formik.values.show_banner && (
+          <FormGroup marginBottom="20px">
+            <ImageEditor
+              name="banner_url"
+              aspectRatio={16 / 9}
+              label="Banner Image (Min. Recommended Size: 1080p x 720p)"
+              onImageChange={handleCropBannerImageComplete}
+            />
+          </FormGroup>
+        )}
         <FormGroup>
           <span />
           <FormGroup>
@@ -210,7 +245,12 @@ export function AddPromotionForm() {
             <AppButton
               type="submit"
               width="fit-content"
-              disabled={hasEmptyValue(formik.values) || !isEmpty(formik.errors)}
+              disabled={
+                hasEmptyValue(formik.values) ||
+                !isEmpty(formik.errors) ||
+                !promotionCardImage ||
+                (formik.values.show_banner && !promotionBannerImage)
+              }
             >
               Next
             </AppButton>

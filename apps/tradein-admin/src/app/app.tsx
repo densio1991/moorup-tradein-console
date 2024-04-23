@@ -8,12 +8,13 @@ import {
   EditProductPage,
   LoginPage,
   OrderManagementPage,
-  PaymentsPage,
   ProductManagementPage,
   PromotionClaimsPage,
+  PromotionClaimsPaymentPage,
   PromotionsPage,
   UserManagementPage,
 } from './pages';
+import { ConfigurationsPage } from './pages/configurations';
 
 export function App() {
   return (
@@ -49,7 +50,14 @@ export function App() {
             path="/dashboard/promotion/claims"
             element={<PromotionClaimsPage />}
           />
-          <Route path="/dashboard/payment" element={<PaymentsPage />} />
+          <Route
+            path="/dashboard/promotion/payment"
+            element={<PromotionClaimsPaymentPage />}
+          />
+          <Route
+            path="/dashboard/configurations"
+            element={<ConfigurationsPage />}
+          />
         </Route>
 
         {/* Will redirect authenticated users to /dashboard */}

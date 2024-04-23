@@ -8,21 +8,15 @@ import {
   AccordionHeaderContainer,
   AccordionInnerContainer,
   AccordionTitle,
-  Badge,
   COLLECTION_ORDER_ITEM_STATUS,
+  VALIDATION_ORDER_ITEM_STATUS,
   COMPLETION_ORDER_ITEM_STATUS,
-  CopyToClipboardButton,
-  DataLine,
-  DetailCardContainer,
   LoaderContainer,
   OrderItemStatus,
   OrderItems,
   Shipments,
   StatusModal,
   StyledIcon,
-  VALIDATION_ORDER_ITEM_STATUS,
-  formatDate,
-  parseStatus,
   useAuth,
   useOrder,
 } from '@tradein-admin/libs';
@@ -33,19 +27,22 @@ import Collection from './collection';
 import Completion from './completion';
 import { EditForm } from './status/edit-form';
 import ValidationOffer from './validation-offer';
+import QuoteDetails from './quote-details';
+import ClaimsList from './claims-list';
+
+type AccordionStates = {
+  quote: boolean;
+  claims: boolean;
+  collection: boolean;
+  validation: boolean;
+  completion: boolean;
+};
 
 type AccordionHeadingProps = {
   id: any;
   title: string;
   isOpen: boolean;
   onToggle: (id: any) => void;
-};
-
-type AccordionStates = {
-  quote: boolean;
-  collection: boolean;
-  validation: boolean;
-  completion: boolean;
 };
 
 export const AccordionHeading = ({
@@ -65,24 +62,6 @@ export const AccordionHeading = ({
   );
 };
 
-type CardItemProps = {
-  label: string;
-  value: any;
-  copy?: boolean;
-};
-
-export const CardItem = ({ label, value, copy }: CardItemProps) => {
-  return (
-    <DataLine>
-      <dl>{label}</dl>
-      <dt>
-        {value || '---'}
-        {copy && value && <CopyToClipboardButton textToCopy={value} />}
-      </dt>
-    </DataLine>
-  );
-};
-
 export const EditOrderPage = () => {
   const { id: orderId } = useParams();
   const navigate = useNavigate();
@@ -90,12 +69,11 @@ export const EditOrderPage = () => {
     state,
     fetchOrderById,
     fetchOrderShipments,
-    cancelOrderById,
     patchOrderItemById,
     evaluateOrderItemById,
-    // closeModal,
     resendShipmentLabel,
     clearOrder,
+    // closeModal,
   } = useOrder();
 
   const { state: authState } = useAuth();
@@ -103,6 +81,7 @@ export const EditOrderPage = () => {
 
   const [accordionState, setAccordionState] = useState<AccordionStates>({
     quote: true,
+    claims: true,
     collection: true,
     validation: true,
     completion: true,
@@ -120,11 +99,7 @@ export const EditOrderPage = () => {
     isUpdatingImeiSerial,
   } = state;
 
-  const user_id = order?.user_id || {};
-  const address = order?.address || {};
-  const order_items = order?.order_items || [];
-  const payment = order?.payment || {};
-  const { bank_details = {} } = user_id;
+  const orderItems = order?.order_items || [];
 
   const isSingleOrderFlow = order?.order_flow === 'single';
 
@@ -133,25 +108,12 @@ export const EditOrderPage = () => {
     const signal = controller.signal;
 
     fetchOrderById(orderId, signal);
-    // fetchOrderShipments(order._id, signal);
+    fetchOrderShipments(orderId, signal);
 
     return () => {
       controller.abort();
     };
   }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const signal = controller.signal;
-
-    if (order._id) {
-      fetchOrderShipments(order._id, signal);
-    }
-
-    return () => {
-      controller.abort();
-    };
-  }, [order._id]);
 
   useEffect(() => {
     if (!isEmpty(order)) {
@@ -212,7 +174,7 @@ export const EditOrderPage = () => {
         };
       });
     } else {
-      order_items?.forEach((item: OrderItems) => {
+      orderItems?.forEach((item: OrderItems) => {
         shippingItems[item?._id] = {
           [shipments.direction]: shipments,
         };
@@ -222,41 +184,22 @@ export const EditOrderPage = () => {
     return shippingItems;
   };
 
-  const creditType: any = {
-    'post-assessment': 'Post Assessment',
-    post_assessment: 'Post Assessment',
-    upfront: 'Upfront',
-    online: 'Online',
-  };
-
-  const completeAddress = [
-    address?.line_1,
-    address?.suburb,
-    address?.city,
-    address?.zipcode,
-    address?.state,
-  ].join(', ');
-  const accountName = bank_details ? bank_details[0]?.account_name : '';
-  const fullName = `${user_id?.first_name} ${user_id?.last_name}`;
-
-  const products = order_items.map((item: OrderItems, idx: number) => {
-    return <Badge key={idx}>{item?.product_name}</Badge>;
-  });
-
-  const collectionOrderItems = order_items.filter((item: OrderItems) =>
+  const collectionOrderItems = orderItems.filter((item: OrderItems) =>
     COLLECTION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
   );
 
-  const validationOrderItems = order_items.filter((item: OrderItems) =>
+  const validationOrderItems = orderItems.filter((item: OrderItems) =>
     VALIDATION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
   );
 
-  const completionOrderItems = order_items.filter((item: OrderItems) =>
+  const completionOrderItems = orderItems.filter((item: OrderItems) =>
     COMPLETION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
   );
 
   return (
     <LoaderContainer
+      margin="20px"
+      padding="10px"
       title="Order Details"
       loading={isFetchingOrder || isUpdatingOrder || isUpdatingImeiSerial}
     >
@@ -271,70 +214,13 @@ export const EditOrderPage = () => {
             />
           </AccordionHeaderContainer>
           <AccordionContent isOpen={accordionState.quote} key="Quote Creation">
-            {!isSingleOrderFlow &&
-              order?.status !== OrderItemStatus.CANCELLED && (
-                <div className="flex justify-end gap-2 mb-2">
-                  <button
-                    className="text-md font-medium text-white bg-red-500 py-1 px-3 rounded-md hover:bg-red-600"
-                    onClick={() => cancelOrderById(order?._id)}
-                    disabled={isUpdatingOrder}
-                  >
-                    Cancel Order
-                  </button>
-                </div>
-              )}
-            <div className="grid md:grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-2">
-              <DetailCardContainer className="lg:col-span-2 2xl:col-span-1">
-                <h4>Quote Information</h4>
-                <CardItem label="Quote #" value={order.order_number} copy />
-                <CardItem
-                  label="Quote Status"
-                  value={parseStatus(order.status)}
-                />
-                <CardItem
-                  label="Products"
-                  value={<div className="flex flex-wrap gap-1">{products}</div>}
-                />
-                <CardItem
-                  label="Date Created"
-                  value={formatDate(order.createdAt)}
-                />
-                <CardItem
-                  label="Last Updated"
-                  value={formatDate(order.updatedAt)}
-                />
-              </DetailCardContainer>
-              <DetailCardContainer className="lg:col-span-1">
-                <h4>Account Information</h4>
-                <CardItem label="Name" value={fullName} copy />
-                <CardItem label="Address" value={completeAddress} copy />
-                <CardItem label="Email" value={user_id?.email} copy />
-                <CardItem
-                  label="Email Verified"
-                  value={user_id?.is_verified ? 'Yes' : 'No'}
-                />
-                <CardItem label="Mobile" value={user_id?.mobile_number} copy />
-                <CardItem label="Account" value={accountName} copy />
-              </DetailCardContainer>
-              <DetailCardContainer className="lg:col-span-1">
-                <h4>Payment Details</h4>
-                <CardItem
-                  label="Credit Timeframe"
-                  value={creditType[order.credit_type]}
-                />
-                <CardItem
-                  label="Payment Status"
-                  value={payment.payment_status}
-                />
-                <CardItem label="Payment Type" value={payment?.payment_type} />
-                <CardItem
-                  label="BSB & Account"
-                  value={user_id?.bsb_account}
-                  copy
-                />
-              </DetailCardContainer>
-            </div>
+            <QuoteDetails />
           </AccordionContent>
+          <ClaimsList
+            order={order}
+            isOpen={accordionState.claims}
+            onToggle={() => toggleAccordion('claims')}
+          />
           {collectionOrderItems.length > 0 && (
             <>
               <AccordionHeaderContainer>
@@ -354,7 +240,7 @@ export const EditOrderPage = () => {
                   order?.status !== OrderItemStatus.CANCELLED && (
                     <div className="flex justify-end gap-2 mb-2">
                       <button
-                        className="text-md font-medium text-white bg-emerald-500 py-1 px-3 rounded-md hover:bg-emerald-600"
+                        className="text-md text-white bg-emerald-500 py-1 px-3 rounded-md hover:bg-emerald-600"
                         onClick={() => resendShipmentLabel(order?._id)}
                         disabled={isUpdatingOrder}
                       >
@@ -435,7 +321,7 @@ export const EditOrderPage = () => {
           )}
         </AccordionInnerContainer>
       </AccordionContainer>
-      <StatusModal isOpen={statusModal}>
+      <StatusModal isOpen={statusModal} onClose={() => setStatusModal(false)}>
         {!isEmpty(selectedItem) && (
           <EditForm
             setStatusModal={(value) => {

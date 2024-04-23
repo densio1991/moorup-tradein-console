@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   faBullhorn,
   faCheckToSlot,
@@ -10,7 +11,7 @@ import {
   faPenToSquare,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
-import { OrderItemStatus } from './enums';
+import { ClaimStatus, OrderItemStatus } from './enums';
 import { PlatformType } from './interfaces';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
@@ -49,7 +50,7 @@ export const SIDENAV_ITEMS = [
   {
     title: 'Order Management',
     url: '/dashboard/order',
-    activeUrl: /^\/dashboard\/order/,
+    activeUrl: /\/dashboard\/order/,
     icon: faFileInvoice,
     disabled: false,
     submenu: [
@@ -79,7 +80,7 @@ export const SIDENAV_ITEMS = [
   {
     title: 'Promotions',
     url: '/dashboard/promotion',
-    activeUrl: /^\/dashboard\/promotion/,
+    activeUrl: /\/dashboard\/promotion/,
     icon: faBullhorn,
     disabled: false,
     submenu: [
@@ -97,7 +98,14 @@ export const SIDENAV_ITEMS = [
         icon: faCheckToSlot,
         disabled: false,
       },
-    ],
+      {
+        title: 'Payment',
+        url: '/dashboard/promotion/payment',
+        activeUrl: /^\/dashboard\/promotion\/payment/,
+        icon: faCreditCard,
+        disabled: false,
+      }
+    ]
   },
   {
     title: 'User Management',
@@ -106,14 +114,7 @@ export const SIDENAV_ITEMS = [
     icon: faUsers,
     disabled: false,
   },
-  {
-    title: 'Payment',
-    url: '/dashboard/payment',
-    activeUrl: /^\/dashboard\/payment/,
-    icon: faCreditCard,
-    disabled: true,
-  },
-];
+]
 
 export const DEFAULT_COLUMN = [
   {
@@ -149,7 +150,13 @@ export const PRODUCT_MANAGEMENT_COLUMNS = [
     enableSort: true,
     keyName: 'year',
   },
-];
+  {
+    label: 'Type',
+    order: 6,
+    enableSort: true,
+    keyName: 'type',
+  }
+]
 
 export const ORDER_MANAGEMENT_COLUMNS = [
   {
@@ -212,19 +219,19 @@ export const DISCREPANCY_MANAGEMENT_COLUMNS = [
     label: 'Customer Name',
     order: 3,
     enableSort: true,
-    keyName: 'first_name',
+    keyName: 'user_details.first_name',
   },
   {
     label: 'Mobile Number',
     order: 4,
     enableSort: true,
-    keyName: 'mobile_number',
+    keyName: 'user_details.mobile_number',
   },
   {
     label: 'Email Address',
     order: 5,
     enableSort: true,
-    keyName: 'email',
+    keyName: 'user_details.email',
   },
   {
     label: 'Credit Timeframe',
@@ -236,19 +243,19 @@ export const DISCREPANCY_MANAGEMENT_COLUMNS = [
     label: 'Device',
     order: 7,
     enableSort: true,
-    keyName: 'product_name',
+    keyName: 'order_items.product_name',
   },
   {
     label: 'Original Offer',
     order: 8,
     enableSort: true,
-    keyName: 'original_offer',
+    keyName: 'order_items.original_offer',
   },
   {
     label: 'IMEI/Serial',
     order: 9,
     enableSort: true,
-    keyName: 'imei_serial',
+    keyName: 'order_items.imei_serial',
   },
   {
     label: 'System Model',
@@ -332,26 +339,32 @@ export const DISCREPANCY_MANAGEMENT_COLUMNS = [
 
 export const USER_MANAGEMENT_COLUMNS = [
   {
-    label: 'First Name',
+    label: 'Role',
     order: 2,
+    enableSort: true,
+    keyName: 'role',
+  },
+  {
+    label: 'First Name',
+    order: 3,
     enableSort: true,
     keyName: 'first_name',
   },
   {
     label: 'Last Name',
-    order: 3,
+    order: 4,
     enableSort: true,
     keyName: 'last_name',
   },
   {
     label: 'Email',
-    order: 4,
+    order: 5,
     enableSort: true,
     keyName: 'email',
   },
   {
     label: 'Status',
-    order: 5,
+    order: 6,
     enableSort: true,
     keyName: 'status',
   },
@@ -385,7 +398,7 @@ export const PROMOTIONS_MANAGEMENT_COLUMNS = [
     label: 'Status',
     order: 6,
     enableSort: true,
-    keyName: 'status',
+    keyName: 'promotion_status',
   },
 ];
 
@@ -417,51 +430,57 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     label: 'Order Number',
     order: 2,
     enableSort: true,
-    keyName: 'order_number',
+    keyName: 'order_id.order_number',
   },
   {
     label: 'Promotion Name',
     order: 3,
     enableSort: true,
-    keyName: 'promotion_details.name',
+    keyName: 'promotion_id.name',
   },
   {
     label: 'Promotion Link',
     order: 4,
     enableSort: true,
-    keyName: 'promotion_details.slug',
+    keyName: 'promotion_id.slug',
+  },
+  {
+    label: 'Device Model',
+    order: 5,
+    enableSort: false,
+    keyName: 'device_model',
   },
   {
     label: 'Receipt Number',
-    order: 5,
+    order: 6,
     enableSort: true,
     keyName: 'receipt_number',
   },
   {
-    label: 'Claimed By',
-    order: 6,
+    label: 'Claim Number',
+    order: 7,
     enableSort: true,
-    keyName: 'user_details.first_name',
+    keyName: 'claim_number',
+  },
+  {
+    label: 'Claimed By',
+    order: 8,
+    enableSort: true,
+    keyName: 'user_id.first_name',
   },
   {
     label: 'Claimed Date',
-    order: 7,
+    order: 9,
     enableSort: true,
     keyName: 'createdAt',
   },
   {
-    label: 'Moorup Status',
-    order: 8,
-    enableSort: true,
-    keyName: 'moorup_status',
-  },
-  {
     label: 'Claim Status',
-    order: 9,
+    order: 10,
     enableSort: true,
     keyName: 'status',
-  },
-];
+  }
+]
 
 export const ACTIONABLES_MANAGEMENT_COLUMNS = [
   {
@@ -508,11 +527,51 @@ export const ACTIONABLES_MANAGEMENT_COLUMNS = [
   },
 ];
 
+export const PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Claim Number',
+    order: 2,
+    enableSort: true,
+    keyName: 'order_id.claim_number',
+  },
+  {
+    label: 'Order Number',
+    order: 3,
+    enableSort: true,
+    keyName: 'order_number',
+  },
+  {
+    label: 'Promotion Name',
+    order: 4,
+    enableSort: true,
+    keyName: 'promotion_id.name',
+  },
+  {
+    label: 'Claim Amount',
+    order: 5,
+    enableSort: true,
+    keyName: 'amount',
+  },
+  {
+    label: 'Claim Status',
+    order: 6,
+    enableSort: true,
+    keyName: 'status',
+  },
+  {
+    label: 'Claimed Date',
+    order: 12,
+    enableSort: true,
+    keyName: 'createdAt',
+  },
+]
+
 export const ACTIONS_COLUMN = [
   {
     label: 'Actions',
     order: 99,
     enableSort: false,
+    keyName: ''
   },
 ];
 
@@ -588,6 +647,7 @@ export interface OrderItems {
   line_item_number: string;
   reason: string[];
   questions_answered: QuestionAnswered[];
+  revision: any;
 }
 
 export interface Addresses {
@@ -831,7 +891,7 @@ export const CURRENCIES = [
   { value: 'TJS', label: 'Tajikistani Somoni (TJS)' },
   { value: 'TMT', label: 'Turkmenistani Manat (TMT)' },
   { value: 'TND', label: 'Tunisian Dinar (TND)' },
-  { value: 'TOP', label: "Tongan Pa'anga (TOP)" },
+  { value: 'TOP', label: 'Tongan Pa\'anga (TOP)' },
   { value: 'TRY', label: 'Turkish Lira (TRY)' },
   { value: 'TTD', label: 'Trinidad and Tobago Dollar (TTD)' },
   { value: 'TVD', label: 'Tuvaluan Dollar (TVD)' },
@@ -1097,7 +1157,9 @@ export const MODAL_TYPES = {
   EDIT_PROMOTION_ELIGIBILITY_AND_FAQS: 'EDIT_PROMOTION_ELIGIBILITY_AND_FAQS',
   ADD_PROMOTION_PREVIEW: 'ADD_PROMOTION_PREVIEW',
   EDIT_PROMOTION_PREVIEW: 'EDIT_PROMOTION_PREVIEW',
-};
+  FILTER_PROMOTION_CLAIMS: 'FILTER_PROMOTION_CLAIMS',
+  DOWNLOAD_PROMOTION_CLAIMS: 'DOWNLOAD_PROMOTION_CLAIMS',
+}
 
 export const PROMOTION_STATUS = [
   { value: 'active', label: 'Active' },
@@ -1108,10 +1170,11 @@ export const ADD_PROMOTION_DETAILS_PAYLOAD = {
   name: '',
   description: '',
   status: '',
+  image_url: '-',
   start_date: null,
   end_date: null,
-  image_url: '',
-};
+  show_banner: false,
+}
 
 export const ADD_PROMOTION_PRODUCTS_PAYLOAD = {
   product_name: '',
@@ -1198,14 +1261,65 @@ export const COLLECTION_ORDER_ITEM_STATUS = [
   OrderItemStatus.CREATED,
   OrderItemStatus.CANCELLED,
   OrderItemStatus.HOLD,
-];
+]
+
 export const VALIDATION_ORDER_ITEM_STATUS = [
   OrderItemStatus.RECEIVED,
   OrderItemStatus.LABEL_SENT,
   OrderItemStatus.FOR_REVISION,
-];
+  OrderItemStatus.REVISION_REJECTED,
+]
+
 export const COMPLETION_ORDER_ITEM_STATUS = [
   OrderItemStatus.EVALUATED,
   OrderItemStatus.REVISED,
   OrderItemStatus.COMPLETED,
+];
+
+export const TIMEZONE = 'Australia/Sydney';
+
+export const OVERRIDE_CLAIM_STATUSES = [
+  { value: ClaimStatus.APPROVED, label: 'Approved' },
+  { value: ClaimStatus.CANCELLED, label: 'Cancelled' },
+  { value: ClaimStatus.PENDING, label: 'Pending' },
+  { value: ClaimStatus.REJECTED, label: 'Rejected' },
+]
+
+export const CLAIM_STATUSES = [
+  { value: ClaimStatus.APPROVED, label: 'Approved' },
+  { value: ClaimStatus.CANCELLED, label: 'Cancelled' },
+  { value: ClaimStatus.COMPLETED, label: 'Completed' },
+  { value: ClaimStatus.FAILED, label: 'Failed' },
+  { value: ClaimStatus.PENDING, label: 'Pending' },
+  { value: ClaimStatus.PROCESSING, label: 'Processing Payment' },
+  { value: ClaimStatus.REJECTED, label: 'Rejected' },
+]
+
+export const MOORUP_CLAIM_STATUSES = [
+  { value: ClaimStatus.APPROVED, label: 'Approved' },
+  { value: ClaimStatus.CANCELLED, label: 'Cancelled' },
+  { value: ClaimStatus.COMPLETED, label: 'Completed' },
+  { value: ClaimStatus.FAILED, label: 'Failed' },
+  { value: ClaimStatus.PENDING, label: 'Pending' },
+  { value: ClaimStatus.PROCESSING, label: 'Processing Payment' },
+  { value: ClaimStatus.REJECTED, label: 'Rejected' },
+]
+
+export const PAGE_SIZES = [
+  {
+    label: '10',
+    value: '10',
+  },
+  {
+    label: '25',
+    value: '25',
+  },
+  {
+    label: '50',
+    value: '50',
+  },
+  {
+    label: '100',
+    value: '100',
+  }
 ];

@@ -47,14 +47,14 @@ const ModalSubmitButton = styled.button`
 const DEFAULT_VALUES = {
   _id: '',
   status: '',
-  revised_offer: '',
+  revised_offer: 0,
   reason: '',
 };
 
 interface FormValues {
   _id: string;
   status: string;
-  revised_offer: string;
+  revised_offer: number;
   reason: string;
 }
 
@@ -78,10 +78,10 @@ export const EditForm = ({
 
   const onSubmit = () => {
     const { status, revised_offer, reason } = formik.values;
-    const errors = {} as FormValues;
+    const errors: any = {};
 
     if (status === DropdownOrderItemStatus.FOR_REVISION) {
-      if (isEmpty(revised_offer)) {
+      if (!revised_offer || revised_offer <= 0) {
         errors['revised_offer'] = 'Required field';
       }
       if (isEmpty(reason)) {
@@ -126,10 +126,10 @@ export const EditForm = ({
         <>
           <FormGroup>
             <StyledInput
-              type="text"
+              type="number"
               id="revised_offer"
               label="Revision"
-              name="name"
+              name="revised_offer"
               placeholder="Revision Offer"
               onChange={formik.handleChange}
               value={formik.values.revised_offer}

@@ -109,9 +109,21 @@ export const useOrder = () => {
     actions.generateLabels(payload)(dispatch);
   }
 
+  const printOutboundLabel = (payload: any) => {
+    actions.generateOutboundLabel(payload)(dispatch);
+  }
+
   const updateOrderItemImeiSerial = (orderItemId: string, orderId: any, payload: any) => {
     actions.updateOrderItemImeiSerial(orderItemId, orderId, payload)(dispatch);
   }
+
+  const getGiftCardStatus = (id: any, payload: any, signal?: AbortSignal) => {
+    actions.getGiftCardStatus(id, payload, signal)(dispatch);
+  };
+
+  const cancelGiftCard = (id: any, payload: any, signal?: AbortSignal) => {
+    actions.cancelGiftCard(id, payload, signal)(dispatch);
+  };
 
   const clearOrder = () => {
     actions.clearOrder({})(dispatch);
@@ -140,7 +152,10 @@ export const useOrder = () => {
     clearOrders,
     sendBox,
     printLabels,
+    printOutboundLabel,
     updateOrderItemImeiSerial,
+    getGiftCardStatus,
+    cancelGiftCard,
     clearOrder,
   };
 };

@@ -2,7 +2,7 @@
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
 import { StyledMenuIcon } from '../components';
-import { parseDateString, parseStatus } from '../helpers';
+import { formatDate, parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
@@ -63,15 +63,15 @@ export const promotionsManagementParsingConfig = {
   },
   'Start Date': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['start_date'])) return '--';
-    return parseDateString(row['start_date']);
+    return formatDate(row['start_date']);
   },
   'End Date': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['end_date'])) return '--';
-    return parseDateString(row['end_date']);
+    return formatDate(row['end_date']);
   },
   'Status': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['status'])) return '--';
-    return parseStatus(row['status']);
+    if (!row || isEmpty(row['promotion_status'])) return '--';
+    return parseStatus(row['promotion_status']);
   },
   'Actions': ({ row, menuItems }: ParsingFunctionParams) => {
     if (!row || isEmpty(menuItems)) return '--';

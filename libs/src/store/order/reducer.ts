@@ -13,18 +13,20 @@ const orderState = {
   isFetchingOrderItem: true,
   isUpdatingOrderItem: false,
   orderItems: [],
+  activeOrderItem: {},
   isFetchingOrderItems: true,
   shipments: [],
   isFetchingShipments: true,
   orderStatuses: [],
   isFetchingOrderStatuses: false,
-  isResendingLabel: false,
-  variants: [],
-  isModalOpen: false,
-  activeOrderItem: {},
   generatedLabels: {},
+  isResendingLabel: false,
   isGeneratingLabels: false,
   isUpdatingImeiSerial: false,
+  giftCard: {},
+  isFetchingGiftCard: false,
+  isUpdatingGiftCard: false,
+  isModalOpen: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -284,6 +286,46 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.FETCH_GIFT_CARD_STATUS.baseType: {
+      return {
+        ...state,
+        isFetchingGiftCard: true,
+      };
+    }
+    case types.FETCH_GIFT_CARD_STATUS.SUCCESS: {
+      return {
+        ...state,
+        isFetchingGiftCard: false,
+        giftCard: action.payload?.data?.response,
+      };
+    }
+    case types.FETCH_GIFT_CARD_STATUS.FAILED: {
+      return {
+        ...state,
+        isFetchingGiftCard: false,
+        giftCard: {},
+      };
+    }
+
+    case types.CANCEL_GIFT_CARD.baseType: {
+      return {
+        ...state,
+        isUpdatingGiftCard: true,
+      };
+    }
+    case types.CANCEL_GIFT_CARD.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingGiftCard: false,
+      };
+    }
+    case types.CANCEL_GIFT_CARD.FAILED: {
+      return {
+        ...state,
+        isUpdatingGiftCard: false,
+      };
+    }
+
     case types.CLEAR_ORDER_ITEMS: {
       return {
         ...state,
@@ -318,21 +360,24 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
-    case types.GENERATE_LABELS.baseType: {
+    case types.GENERATE_LABELS.baseType:
+    case types.GENERATE_OUTBOUND_LABEL.baseType: {
       return {
         ...state,
         isGeneratingLabels: true,
         generatedLabels: {},
       };
     }
-    case types.GENERATE_LABELS.SUCCESS: {
+    case types.GENERATE_LABELS.SUCCESS:
+    case types.GENERATE_OUTBOUND_LABEL.SUCCESS: {
       return {
         ...state,
         isGeneratingLabels: false,
         generatedLabels: action.payload,
       };
     }
-    case types.GENERATE_LABELS.FAILED: {
+    case types.GENERATE_LABELS.FAILED:
+    case types.GENERATE_OUTBOUND_LABEL.FAILED: {
       return {
         ...state,
         isGeneratingLabels: false,
@@ -364,6 +409,7 @@ const orderReducer = (state = orderState, action: any) => {
         ...state,
         isFetchingOrder: true,
         order: {},
+        giftCard: {},
       };
     }
 
