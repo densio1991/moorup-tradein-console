@@ -85,6 +85,10 @@ export const usePromotion = () => {
     actions.setPromotionBannerImage(payload)(dispatch);
   }
 
+  const setAddOrderPromotionClaimPayload = (payload: any) => {
+    actions.setAddOrderPromotionClaimPayload(payload)(dispatch);
+  }
+
   return {
     state: state.promotion,
     getPromotions,
@@ -106,5 +110,6 @@ export const usePromotion = () => {
     processPromotionClaimPayment,
     setPromotionCardImage,
     setPromotionBannerImage,
+    setAddOrderPromotionClaimPayload,
   };
 };

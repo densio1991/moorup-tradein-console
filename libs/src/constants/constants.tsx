@@ -1159,6 +1159,7 @@ export const MODAL_TYPES = {
   EDIT_PROMOTION_PREVIEW: 'EDIT_PROMOTION_PREVIEW',
   FILTER_PROMOTION_CLAIMS: 'FILTER_PROMOTION_CLAIMS',
   DOWNLOAD_PROMOTION_CLAIMS: 'DOWNLOAD_PROMOTION_CLAIMS',
+  ADD_ORDER_PROMOTION_CLAIM: 'ADD_ORDER_PROMOTION_CLAIM',
 }
 
 export const PROMOTION_STATUS = [
@@ -1187,6 +1188,13 @@ export const ADD_PROMOTION_CLAIMS_PAYLOAD = {
   description: '',
   disclaimer: '',
   products: [ADD_PROMOTION_PRODUCTS_PAYLOAD],
+};
+
+export const ADD_ORDER_PROMOTION_CLAIM_PAYLOAD = {
+  status: '',
+  promotion_id: '',
+  receipt_number: '',
+  // platform_domain: '',
 };
 
 export const ADD_PROMOTION_STEPS_ITEM = {

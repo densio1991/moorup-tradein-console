@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  ADD_ORDER_PROMOTION_CLAIM_PAYLOAD,
   ADD_PROMOTION_CLAIMS_PAYLOAD,
   ADD_PROMOTION_CONDITIONS_PAYLOAD,
   ADD_PROMOTION_DETAILS_PAYLOAD,
@@ -17,6 +18,7 @@ const promotionState = {
   addPromotionStepsPayload: ADD_PROMOTION_STEPS_PAYLOAD,
   addPromotionConditionPayload: ADD_PROMOTION_CONDITIONS_PAYLOAD,
   addPromotionEligibilityAndFaqsPayload: ADD_PROMOTION_ELIGIBILITY_AND_FAQS_PAYLOAD,
+  addOrderPromotionClaimPayload: ADD_ORDER_PROMOTION_CLAIM_PAYLOAD,
   promotionClaims: [],
   isFetchingPromotionClaims: true,
   promotion: {},

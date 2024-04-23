@@ -4,16 +4,20 @@ import {
   AccordionContent,
   AccordionHeaderContainer,
   ClaimStatus,
+  MODAL_TYPES,
   OrderInterface,
   PROMOTION_CLAIMS_MANAGEMENT_COLUMNS,
   promotionClaimsManagementParsingConfig,
   REGULAR,
+  SideModal,
   Table,
   useAuth,
+  useCommon,
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { AccordionHeading } from '.';
+import { AddOrderPromotionClaimForm } from './forms/add-claims';
 
 type ClaimsListProps = {
   order: OrderInterface;
@@ -32,11 +36,21 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
   const { state: authState } = useAuth();
   const { activePlatform, userDetails } = authState;
   const [claims, setClaims] = useState([]);
+  const { state: commonState, setSideModalState } = useCommon();
+  const { sideModalState } = commonState;
   const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
 
   const handleAddClaim = () => {
-    console.log('ADD CLAIM');
+    setSideModalState({
+      ...sideModalState,
+      open: true,
+      view: MODAL_TYPES.ADD_ORDER_PROMOTION_CLAIM,
+    });
   };
+
+  const handleSubmitClaim = (values) => {
+    console.log({values});
+  }
 
   useEffect(() => {
     const controller = new AbortController();
@@ -73,6 +87,16 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
       );
     }
   }, [promotionClaims]);
+
+  const renderForm = () => {
+    switch (sideModalState.view) {
+      case MODAL_TYPES.ADD_ORDER_PROMOTION_CLAIM:
+        return <AddOrderPromotionClaimForm onFormSubmit={handleSubmitClaim}/>;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <>
@@ -114,6 +138,18 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
           </h6>
         )}
       </AccordionContent>
+      <SideModal
+        isOpen={sideModalState?.open}
+        onClose={() => {
+          setSideModalState({
+            ...sideModalState,
+            open: false,
+            view: null,
+          });
+        }}
+      >
+        {renderForm()}
+      </SideModal>
     </>
   );
 };

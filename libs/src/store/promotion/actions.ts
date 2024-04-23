@@ -98,6 +98,13 @@ export const setAddPromotionStepsPayload = (payload: any) => (dispatch: any) => 
   });
 };
 
+export const setAddOrderPromotionClaimPayload = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_ORDER_PROMOTION_CLAIM,
+    payload,
+  });
+};
+
 export const setAddPromotionConditionPayload = (payload: any) => (dispatch: any) => {
   dispatch({
     type: types.SET_ADD_PROMOTION_CONDITION_PAYLOAD,
