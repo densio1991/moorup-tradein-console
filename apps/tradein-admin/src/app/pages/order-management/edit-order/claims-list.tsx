@@ -26,7 +26,12 @@ type ClaimsListProps = {
 };
 
 const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
-  const { state, getPromotionClaims, clearPromotionClaims } = usePromotion();
+  const {
+    state,
+    getPromotionClaims,
+    submitOrderPromotionClaim,
+    clearPromotionClaims,
+  } = usePromotion();
   const {
     promotionClaims,
     isFetchingPromotionClaims,
@@ -48,9 +53,13 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
     });
   };
 
-  const handleSubmitClaim = (values) => {
-    console.log({values});
-  }
+  const handleSubmitClaim = (values: any) => {
+    const payload = {
+      ...values,
+      order_number: order?.order_number,
+    };
+    submitOrderPromotionClaim(payload, {});
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -91,7 +100,7 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
   const renderForm = () => {
     switch (sideModalState.view) {
       case MODAL_TYPES.ADD_ORDER_PROMOTION_CLAIM:
-        return <AddOrderPromotionClaimForm onFormSubmit={handleSubmitClaim}/>;
+        return <AddOrderPromotionClaimForm onFormSubmit={handleSubmitClaim} />;
 
       default:
         break;

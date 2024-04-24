@@ -73,6 +73,10 @@ export const usePromotion = () => {
     actions.updatePromotionClaimStatus(payload, promotionId, filter, activePlatform)(dispatch);
   }
 
+  const submitOrderPromotionClaim = (payload: any,  filter: any) => {
+    actions.submitOrderPromotionClaim(payload, filter, activePlatform)(dispatch);
+  }
+
   const processPromotionClaimPayment = (payload: any, filter: any) => {
     actions.processPromotionClaimPayment(payload, filter, activePlatform)(dispatch);
   }
@@ -111,5 +115,6 @@ export const usePromotion = () => {
     setPromotionCardImage,
     setPromotionBannerImage,
     setAddOrderPromotionClaimPayload,
+    submitOrderPromotionClaim,
   };
 };

@@ -1,19 +1,23 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import {
+  ADD_CLAIM_RECEIPT_PAYLOAD,
   ADD_ORDER_PROMOTION_CLAIM_PAYLOAD,
   AppButton,
-  CLAIM_STATUSES,
   FormContainer,
   FormGroup,
+  FormGroupWithIcon,
   // FormGroupWithIcon,
   FormWrapper,
   MODAL_TYPES,
   Promotion,
+  StyledIcon,
   // PromotionProductInterface,
   StyledInput,
   StyledReactSelect,
   hasEmptyValue,
+  hasEmptyValueInArray,
   useAuth,
   useCommon,
   usePromotion,
@@ -21,27 +25,34 @@ import {
 import { useFormik } from 'formik';
 import { isEmpty } from 'lodash';
 import { FormEvent, useEffect, useMemo } from 'react';
+import styled from 'styled-components';
 import * as Yup from 'yup';
 
-interface FormValues {
-  status: string;
-  promotion_id: string;
+const ItemsContainer = styled.div`
+  box-shadow: 0px 1px 0px 0px #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+`;
+
+interface ClaimReceipt {
   receipt_number: string;
-  // platform_domain: string;
-  // email: string; // autofill
-  // platform: string; // autofill
-  // order_id: string; // autofill
+  promotion_id: string;
+}
+
+interface FormValues {
+  claims: ClaimReceipt[];
+  // order_number: string; // autofill
   [key: string]: any; // Index signature to allow dynamic access
 }
 
 const validationSchema = Yup.object().shape({
-  status: Yup.string().required('Status is required'),
-  promotion_id: Yup.string().required('Promotion ID is required'),
-  receipt_number: Yup.string().required('Receipt number is required'),
-  // platform_domain: Yup.string().required('Platform domain is required'),
-  // email: Yup.string().required('Email is required'),
-  // platform: Yup.string().required('Platform is required'),
-  // order_id: Yup.string().required('Order ID is required'),
+  claims: Yup.array().of(
+    Yup.object().shape({
+      receipt_number: Yup.string().required('Receipt number is required'),
+      promotion_id: Yup.string().required('Promotion ID is required'),
+    }),
+  ),
+  // order_number: Yup.string().required('Order ID is required'),
 });
 
 export function AddOrderPromotionClaimForm({
@@ -77,6 +88,38 @@ export function AddOrderPromotionClaimForm({
 
     return [];
   }, [promotions]);
+
+  const handleArrayValueChange = (
+    fieldIndex: number,
+    field: string,
+    value: any,
+    arrayField: string,
+  ) => {
+    formik.setFieldValue(`${arrayField}[${fieldIndex}].${field}`, value);
+  };
+
+  const handleArrayValueOnBlur = (
+    fieldIndex: number,
+    field: string,
+    arrayField: string,
+  ) => {
+    formik.setFieldTouched(`${arrayField}[${fieldIndex}].${field}`, true);
+  };
+
+  const addReceiptToClaims = () => {
+    const updatedClaims = [...formik.values.claims, ADD_CLAIM_RECEIPT_PAYLOAD];
+
+    formik.setValues({ ...formik.values, claims: updatedClaims });
+  };
+
+  const removeFromClaims = (claimIndex: number) => {
+    if (formik.values.claims?.length > 1) {
+      const updatedClaims = [...formik.values.claims];
+      updatedClaims.splice(claimIndex, 1);
+
+      formik.setValues({ ...formik.values, claims: updatedClaims });
+    }
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -121,78 +164,85 @@ export function AddOrderPromotionClaimForm({
     <FormWrapper formTitle="Add Order Claim">
       <FormContainer onSubmit={formik.handleSubmit}>
         <FormGroup>
-          <StyledInput
-            type="text"
-            id="receipt_number"
-            label="Receipt Number"
-            name="receipt_number"
-            placeholder="Receipt number"
-            onChange={formik.handleChange}
-            value={formik.values.receipt_number}
-            onBlur={formik.handleBlur}
-            error={Boolean(
-              formik.touched.receipt_number && formik.errors.receipt_number,
-            )}
-            errorMessage={formik.errors.receipt_number}
-          />
+          <span />
+          <AppButton
+            type="button"
+            width="fit-content"
+            onClick={() => addReceiptToClaims()}
+            disabled={hasEmptyValueInArray(formik.values.claims)}
+          >
+            Add Product
+          </AppButton>
         </FormGroup>
-        <FormGroup>
-          <StyledReactSelect
-            label="Claim Status"
-            name="status"
-            isMulti={false}
-            options={CLAIM_STATUSES}
-            placeholder="Select Claim Status"
-            value={formik.values.status}
-            onChange={(selected) => {
-              formik.setFieldValue('status', selected.value, true);
-            }}
-            onBlur={() => formik.setFieldTouched('status')}
-            error={Boolean(
-              formik.touched.status && isEmpty(formik.values.status),
-            )}
-            errorMessage="Claim status is required."
-          />
-        </FormGroup>
-        <FormGroup>
-          <StyledReactSelect
-            label="Promotion"
-            name="promotion_id"
-            isMulti={false}
-            isLoading={isFetchingPromotions}
-            options={promotionOptions}
-            placeholder="Select promotion"
-            value={formik.values.promotion_id}
-            onChange={(selected) => {
-              formik.setFieldValue('promotion_id', selected.value, true);
-            }}
-            onBlur={() => formik.setFieldTouched('promotion_id')}
-            error={Boolean(
-              formik.touched.promotion_id &&
-                isEmpty(formik.values.promotion_id),
-            )}
-            errorMessage="Promotion is required."
-          />
-        </FormGroup>
-        {/* <FormGroup>
-          <StyledReactSelect
-            label="Platform Domain"
-            name="platform_domain"
-            isMulti={false}
-            options={[]}
-            placeholder="Select platform domain"
-            value={formik.values.platform_domain}
-            onChange={(selected) => {
-              formik.setFieldValue('platform_domain', selected.value, true);
-            }}
-            onBlur={() => formik.setFieldTouched('platform_domain')}
-            error={Boolean(
-              formik.touched.platform_domain &&
-                isEmpty(formik.values.platform_domain),
-            )}
-            errorMessage="Platform domain is required."
-          />
-        </FormGroup> */}
+        {formik.values.claims.map((claim: ClaimReceipt, index: number) => {
+          return (
+            <ItemsContainer key={index}>
+              <FormGroupWithIcon>
+                <StyledInput
+                  type="text"
+                  id={`claims[${index}].receipt_number`}
+                  label="Receipt Number"
+                  name={`claims[${index}].receipt_number`}
+                  placeholder="Receipt number"
+                  onChange={formik.handleChange}
+                  value={claim.receipt_number}
+                  onBlur={(e) => {
+                    handleArrayValueOnBlur(index, 'receipt_number', 'claims');
+                  }}
+                  error={Boolean(
+                    formik.touched.claims &&
+                      formik.touched.claims[index]?.receipt_number &&
+                      formik.errors.claims &&
+                      (formik.errors.claims as any)[index]?.receipt_number,
+                  )}
+                  errorMessage={
+                    formik.errors.claims &&
+                    (formik.errors.claims as any)[index]?.receipt_number
+                  }
+                />
+                <StyledIcon
+                  icon={faTrash}
+                  color="#ccc"
+                  hovercolor="#f44336"
+                  disabled={formik.values.claims?.length <= 1}
+                  onClick={() => removeFromClaims(index)}
+                />
+              </FormGroupWithIcon>
+              <FormGroup>
+                <StyledReactSelect
+                  isMulti={false}
+                  label="Promotion"
+                  isLoading={isFetchingPromotions}
+                  options={promotionOptions}
+                  name={`claims[${index}].promotion_id`}
+                  placeholder="Receipt number"
+                  onChange={(selected) =>
+                    handleArrayValueChange(
+                      index,
+                      'promotion_id',
+                      selected.value,
+                      'claims',
+                    )
+                  }
+                  value={claim.promotion_id}
+                  onBlur={(e) => {
+                    handleArrayValueOnBlur(index, 'promotion_id', 'claims');
+                  }}
+                  error={Boolean(
+                    formik.touched.claims &&
+                      formik.touched.claims[index]?.promotion_id &&
+                      formik.errors.claims &&
+                      (formik.errors.claims as any)[index]?.promotion_id,
+                  )}
+                  errorMessage={
+                    formik.errors.claims &&
+                    (formik.errors.claims as any)[index]?.promotion_id
+                  }
+                />
+              </FormGroup>
+            </ItemsContainer>
+          );
+        })}
         <FormGroup>
           <FormGroup>
             <AppButton
@@ -203,8 +253,8 @@ export function AddOrderPromotionClaimForm({
                 setAddOrderPromotionClaimPayload(formik.values);
                 setSideModalState({
                   ...sideModalState,
-                  open: true,
-                  view: MODAL_TYPES.ADD_PROMOTION,
+                  open: false,
+                  view: MODAL_TYPES.ADD_ORDER_PROMOTION_CLAIM,
                 });
               }}
             >
@@ -225,7 +275,7 @@ export function AddOrderPromotionClaimForm({
               width="fit-content"
               disabled={hasEmptyValue(formik.values)}
             >
-              Next
+              Submit
             </AppButton>
           </FormGroup>
         </FormGroup>

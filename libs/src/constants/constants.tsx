@@ -1190,11 +1190,13 @@ export const ADD_PROMOTION_CLAIMS_PAYLOAD = {
   products: [ADD_PROMOTION_PRODUCTS_PAYLOAD],
 };
 
-export const ADD_ORDER_PROMOTION_CLAIM_PAYLOAD = {
-  status: '',
+export const ADD_CLAIM_RECEIPT_PAYLOAD = {
   promotion_id: '',
   receipt_number: '',
-  // platform_domain: '',
+};
+
+export const ADD_ORDER_PROMOTION_CLAIM_PAYLOAD = {
+  claims: [ADD_CLAIM_RECEIPT_PAYLOAD]
 };
 
 export const ADD_PROMOTION_STEPS_ITEM = {
