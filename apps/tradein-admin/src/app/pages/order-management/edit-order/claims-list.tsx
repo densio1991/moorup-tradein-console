@@ -45,7 +45,8 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
   const { sideModalState } = commonState;
   const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
 
-  const handleAddClaim = () => {
+  const handleAddClaim = (event: any) => {
+    event?.stopPropagation();
     setSideModalState({
       ...sideModalState,
       open: true,
@@ -107,25 +108,31 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
     }
   };
 
+  const AddButton = () => {
+    return (
+      <div className="flex justify-end">
+        <button
+          className="text-md text-white py-1 px-3 rounded-md bg-emerald-800 hover:bg-emerald-900"
+          onClick={handleAddClaim}
+        >
+          Add Claim
+        </button>
+      </div>
+    );
+  };
+
   return (
     <>
       <AccordionHeaderContainer>
         <AccordionHeading
           id="claims"
-          title="Claims"
+          title={'Promotion Claims'}
+          action={<AddButton />}
           isOpen={isOpen}
           onToggle={onToggle}
         />
       </AccordionHeaderContainer>
       <AccordionContent isOpen={isOpen} key="Claims List">
-        <div className="flex justify-end mb-3">
-          <button
-            className="text-md text-white py-1 px-3 rounded-md bg-emerald-800 hover:bg-emerald-900"
-            onClick={handleAddClaim}
-          >
-            Add Claim
-          </button>
-        </div>
         {isFetchingPromotionClaims ? (
           <h6 className="text-center text-gray-500 mb-2">Loading...</h6>
         ) : claims.length > 0 ? (
