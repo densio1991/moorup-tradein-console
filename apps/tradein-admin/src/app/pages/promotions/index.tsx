@@ -16,6 +16,7 @@ import {
   PageSubHeader,
   SideModal,
   Table,
+  parsePromotionStatus,
   promotionsManagementParsingConfig,
   useAuth,
   useCommon,
@@ -155,33 +156,7 @@ export function PromotionsPage() {
 
   const overrideStatus = (promotions: any) => {
     return promotions?.map((promotion: any) => {
-      const status = promotion.status;
-      let promotion_status = status;
-      const currentDate = new Date();
-      currentDate.setHours(0, 0, 0, 0);
-
-      const startDate = new Date(promotion['start_date']);
-      startDate.setHours(0, 0, 0, 0);
-
-      const endDate = new Date(promotion['end_date']);
-      endDate.setHours(0, 0, 0, 0);
-
-      // Check if current date falls between the start date and end date
-      const isBetween = currentDate >= startDate && currentDate <= endDate;
-
-      // Check if current date is before the start date
-      const isBeforeStart = currentDate < startDate;
-
-      // Check if current date is after the end date
-      const isAfterEnd = currentDate > endDate;
-
-      if (status === 'active' && isBetween) {
-        promotion_status = 'ongoing';
-      } else if (status === 'active' && isBeforeStart) {
-        promotion_status = 'not_started';
-      } else if (status === 'active' && isAfterEnd) {
-        promotion_status = 'ended';
-      }
+      const promotion_status = parsePromotionStatus(promotion);
 
       return {
         ...promotion,

@@ -118,9 +118,9 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
         />
       </AccordionHeaderContainer>
       <AccordionContent isOpen={isOpen} key="Claims List">
-        <div className="flex justify-end mb-2">
+        <div className="flex justify-end mb-3">
           <button
-            className="text-md text-white bg-emerald-600 py-1 px-3 rounded-md hover:bg-emerald-700"
+            className="text-md text-white py-1 px-3 rounded-md bg-emerald-800 hover:bg-emerald-900"
             onClick={handleAddClaim}
           >
             Add Claim

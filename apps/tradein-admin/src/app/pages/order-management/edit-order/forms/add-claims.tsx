@@ -8,16 +8,16 @@ import {
   FormContainer,
   FormGroup,
   FormGroupWithIcon,
-  // FormGroupWithIcon,
   FormWrapper,
   MODAL_TYPES,
   Promotion,
+  PromotionStatus,
   StyledIcon,
-  // PromotionProductInterface,
   StyledInput,
   StyledReactSelect,
   hasEmptyValue,
   hasEmptyValueInArray,
+  parsePromotionStatus,
   useAuth,
   useCommon,
   usePromotion,
@@ -78,12 +78,17 @@ export function AddOrderPromotionClaimForm({
 
   const promotionOptions = useMemo(() => {
     if (!isEmpty(promotions)) {
-      return promotions.map((promotion: Promotion) => {
-        return {
-          value: promotion._id,
-          label: promotion.name,
-        };
-      });
+      return promotions
+        .filter((promotion: Promotion) => {
+          const promotionStatus = parsePromotionStatus(promotion);
+          return promotionStatus === PromotionStatus.ONGOING;
+        })
+        .map((promotion: Promotion) => {
+          return {
+            value: promotion._id,
+            label: promotion.name,
+          };
+        });
     }
 
     return [];
