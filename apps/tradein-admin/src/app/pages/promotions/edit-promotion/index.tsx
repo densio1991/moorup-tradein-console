@@ -118,8 +118,6 @@ export function EditPromotionForm({ data }: any) {
     });
   };
 
-  console.log('formik.values: ', formik.values);
-
   useEffect(() => {
     const promotionDetails = {
       name: data?.name,

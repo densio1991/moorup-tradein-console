@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import { jwtDecode } from 'jwt-decode';
 import { capitalize, isEmpty } from 'lodash';
 import { Chip, StyledIcon } from '../components';
-import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes, PromotionStatus, TIMEZONE } from '../constants';
+import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes, Promotion, PromotionStatus, TIMEZONE } from '../constants';
 import { defaultTheme } from './theme';
 
 dayjs.extend(utc)
@@ -578,4 +578,37 @@ export const parseTypes = (type: string) => {
       <span style={{ color: color, marginLeft: '2px' }}>{text}</span>
     </span>
   )
+}
+
+export const parsePromotionStatus = (promotion: Promotion) => {
+  const status = promotion.status;
+  let promotion_status = status;
+
+  const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
+
+  const startDate = new Date(promotion['start_date']);
+  startDate.setHours(0, 0, 0, 0);
+
+  const endDate = new Date(promotion['end_date']);
+  endDate.setHours(0, 0, 0, 0);
+
+  // Check if current date falls between the start date and end date
+  const isBetween = currentDate >= startDate && currentDate <= endDate;
+
+  // Check if current date is before the start date
+  const isBeforeStart = currentDate < startDate;
+
+  // Check if current date is after the end date
+  const isAfterEnd = currentDate > endDate;
+
+  if (status === 'active' && isBetween) {
+    promotion_status = PromotionStatus.ONGOING;
+  } else if (status === 'active' && isBeforeStart) {
+    promotion_status = PromotionStatus.NOT_STARTED;
+  } else if (status === 'active' && isAfterEnd) {
+    promotion_status = PromotionStatus.ENDED;
+  }
+
+  return promotion_status;
 }

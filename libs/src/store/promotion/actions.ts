@@ -98,6 +98,13 @@ export const setAddPromotionStepsPayload = (payload: any) => (dispatch: any) => 
   });
 };
 
+export const setAddOrderPromotionClaimPayload = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_ORDER_PROMOTION_CLAIM_PAYLOAD,
+    payload,
+  });
+};
+
 export const setAddPromotionConditionPayload = (payload: any) => (dispatch: any) => {
   dispatch({
     type: types.SET_ADD_PROMOTION_CONDITION_PAYLOAD,
@@ -276,6 +283,34 @@ export const updatePromotionClaimStatus = (payload: any, promotionClaimId: strin
     .catch((error) => {
       dispatch({
         type: types.UPDATE_PROMOTION_CLAIM_STATUS.FAILED,
+        payload: error,
+      });
+
+      getPromotionClaims(filter, activePlatform)(dispatch);
+      toast.error('Failed to update claim status.');
+    });
+};
+
+export const submitOrderPromotionClaim = (payload: any, filter: any, activePlatform: string) => (dispatch: any) => {
+  dispatch({
+    type: types.SUBMIT_ORDER_PROMOTION_CLAIM.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .post('/api/claims/submit-receipt', payload)
+    .then((response) => {
+      dispatch({
+        type: types.SUBMIT_ORDER_PROMOTION_CLAIM.SUCCESS,
+        payload: response?.data,
+      });
+
+      getPromotionClaims(filter, activePlatform)(dispatch);
+      toast.success('Claim receipt successfully submitted!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.SUBMIT_ORDER_PROMOTION_CLAIM.FAILED,
         payload: error,
       });
 

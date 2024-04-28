@@ -73,6 +73,10 @@ export const usePromotion = () => {
     actions.updatePromotionClaimStatus(payload, promotionId, filter, activePlatform)(dispatch);
   }
 
+  const submitOrderPromotionClaim = (payload: any,  filter: any) => {
+    actions.submitOrderPromotionClaim(payload, filter, activePlatform)(dispatch);
+  }
+
   const processPromotionClaimPayment = (payload: any, filter: any) => {
     actions.processPromotionClaimPayment(payload, filter, activePlatform)(dispatch);
   }
@@ -83,6 +87,10 @@ export const usePromotion = () => {
 
   const setPromotionBannerImage = (payload: File) => {
     actions.setPromotionBannerImage(payload)(dispatch);
+  }
+
+  const setAddOrderPromotionClaimPayload = (payload: any) => {
+    actions.setAddOrderPromotionClaimPayload(payload)(dispatch);
   }
 
   return {
@@ -106,5 +114,7 @@ export const usePromotion = () => {
     processPromotionClaimPayment,
     setPromotionCardImage,
     setPromotionBannerImage,
+    setAddOrderPromotionClaimPayload,
+    submitOrderPromotionClaim,
   };
 };
