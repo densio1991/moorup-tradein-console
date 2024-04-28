@@ -50,6 +50,11 @@ export function UserManagementPage() {
       // Clear data on unmount
       clearUsers({});
       setSearchTerm('');
+      setSideModalState({
+        ...sideModalState,
+        open: false,
+        view: null,
+      });
     };
   }, [activePlatform]);
 

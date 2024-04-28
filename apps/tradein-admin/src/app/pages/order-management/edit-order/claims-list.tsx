@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from 'react';
 import {
   AccordionContent,
   AccordionHeaderContainer,
@@ -7,15 +6,16 @@ import {
   MODAL_TYPES,
   OrderInterface,
   PROMOTION_CLAIMS_MANAGEMENT_COLUMNS,
-  promotionClaimsManagementParsingConfig,
   REGULAR,
   SideModal,
   Table,
+  promotionClaimsManagementParsingConfig,
   useAuth,
   useCommon,
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
+import { useEffect, useState } from 'react';
 import { AccordionHeading } from '.';
 import { AddOrderPromotionClaimForm } from './forms/add-claims';
 
@@ -85,6 +85,11 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
 
       // Clear data on unmount
       clearPromotionClaims({});
+      setSideModalState({
+        ...sideModalState,
+        open: false,
+        view: null,
+      });
     };
   }, [activePlatform]);
 

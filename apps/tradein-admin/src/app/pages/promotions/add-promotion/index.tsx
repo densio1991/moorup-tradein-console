@@ -207,7 +207,7 @@ export function AddPromotionForm() {
           <ImageEditor
             name="image_url"
             aspectRatio={8 / 3}
-            label="Card Image (Recommended Size: 320p x 120p)"
+            label="Card Image (Max File Size: 1MB | Aspect Ratio: 8:3)"
             onImageChange={handleCropCardImageComplete}
           />
         </FormGroup>
@@ -225,8 +225,8 @@ export function AddPromotionForm() {
           <FormGroup marginBottom="20px">
             <ImageEditor
               name="banner_url"
-              aspectRatio={16 / 9}
-              label="Banner Image (Min. Recommended Size: 1080p x 720p)"
+              aspectRatio={4 / 1}
+              label="Banner Image (Max File Size: 1MB | Aspect Ratio: 4:1)"
               onImageChange={handleCropBannerImageComplete}
             />
           </FormGroup>

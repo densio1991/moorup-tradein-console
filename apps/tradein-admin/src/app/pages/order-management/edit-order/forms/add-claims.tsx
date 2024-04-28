@@ -49,7 +49,7 @@ const validationSchema = Yup.object().shape({
   claims: Yup.array().of(
     Yup.object().shape({
       receipt_number: Yup.string().required('Receipt number is required'),
-      promotion_id: Yup.string().required('Promotion ID is required'),
+      promotion_id: Yup.string().required('Promotion is required'),
     }),
   ),
   // order_number: Yup.string().required('Order ID is required'),
@@ -88,7 +88,10 @@ export function AddOrderPromotionClaimForm({
             value: promotion._id,
             label: promotion.name,
           };
-        });
+        })
+        .sort((a: { label: string }, b: { label: any }) =>
+          a.label.localeCompare(b.label),
+        );
     }
 
     return [];
@@ -150,6 +153,11 @@ export function AddOrderPromotionClaimForm({
     setAddOrderPromotionClaimPayload(values);
     if (onFormSubmit) {
       onFormSubmit(values);
+      setSideModalState({
+        ...sideModalState,
+        open: false,
+        view: null,
+      });
     }
   };
 
@@ -163,8 +171,6 @@ export function AddOrderPromotionClaimForm({
     formik.setValues(addOrderPromotionClaimPayload);
   }, [addOrderPromotionClaimPayload]);
 
-  console.log(hasEmptyValue(formik.values), formik.values);
-
   return (
     <FormWrapper formTitle="Add Order Claim">
       <FormContainer onSubmit={formik.handleSubmit}>
@@ -176,7 +182,7 @@ export function AddOrderPromotionClaimForm({
             onClick={() => addReceiptToClaims()}
             disabled={hasEmptyValueInArray(formik.values.claims)}
           >
-            Add Product
+            Add Order Claim
           </AppButton>
         </FormGroup>
         {formik.values.claims.map((claim: ClaimReceipt, index: number) => {

@@ -114,6 +114,11 @@ export function PromotionsPage() {
       // Clear data on unmount
       clearPromotions({});
       setSearchTerm('');
+      setSideModalState({
+        ...sideModalState,
+        open: false,
+        view: null,
+      });
     };
   }, [activePlatform]);
 
