@@ -10,6 +10,7 @@ import { useCommon } from '../../store';
 import { StyledReactSelect } from '../input';
 import { StyledIcon } from '../styled';
 import Pagination from './pagination';
+import { Checkbox } from '../checkbox';
 
 interface ThProps {
   key: any;
@@ -279,6 +280,8 @@ export function Table({
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
+  const [isAllSelected, setIsAllSelected] = useState(false);
+  const [selectedItems, setSelectedItems] = useState(new Set());
   const [pageSize, setPageSize] = useState(parseInt(PAGE_SIZES[0].value));
   const { state: commonState } = useCommon();
   const { searchTerm } = commonState;
@@ -313,6 +316,17 @@ export function Table({
     
     return row[header.keyName] || '--';
   };
+
+  const toggleSelection = (index: any) => {
+    const newSelectedItems = new Set(selectedItems);
+
+    if (newSelectedItems.has(index)) {
+      newSelectedItems.delete(index);
+    } else {
+      newSelectedItems.add(index);
+    }
+    setSelectedItems(newSelectedItems);
+  }
 
   const sortedHeaders = sortByKey(headers, 'order');
   const sortedRows = sortConfig.key
@@ -393,6 +407,21 @@ export function Table({
         <TableStyled>
           <Thead>
             <Tr>
+              {enableCheckbox && (
+                <Th key="select-all">
+                  <Checkbox
+                    label=""
+                    checked={isAllSelected}
+                    onChange={() => {
+                      if (!isAllSelected) {
+                        setSelectedItems(new Set([]));
+                      }
+                      setIsAllSelected((value) => !value)
+                    }}
+                    className="!mb-0"
+                  />
+                </Th>
+              )}
               {sortedHeaders?.map((header) => (
                 <Th
                   key={header.label}
@@ -417,6 +446,16 @@ export function Table({
           <Tbody>
             {itemsToDisplay?.map((row: any, index: any) => (
               <Tr key={index} onClick={() => handleRowClick(row)} hover={!isEmpty(row?.viewURL)}>
+                {enableCheckbox && (
+                  <Td key="select-all">
+                    <Checkbox
+                      label=""
+                      checked={selectedItems.has(index) || isAllSelected}
+                      onChange={() => toggleSelection(index)}
+                      className="!mb-0"
+                    />
+                  </Td>
+                )}
                 {sortedHeaders?.map((header) => (
                   <Td key={`${index}-${header.label}`}>
                     <span>{parseRowValue(header, row)}</span>

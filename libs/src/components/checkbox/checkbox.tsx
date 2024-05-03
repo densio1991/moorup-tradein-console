@@ -4,6 +4,7 @@ import styled from 'styled-components';
 interface CheckboxProps {
   label: string;
   checked: boolean;
+  className?: string;
   onChange: (checked: boolean) => void;
 }
 
@@ -43,13 +44,9 @@ const StyledSectionLabel = styled.span`
   font-weight: 600;
 `;
 
-export function Checkbox({
-  label,
-  checked,
-  onChange,
-}: CheckboxProps): JSX.Element {
+export function Checkbox({ label, checked, className, onChange }: CheckboxProps): JSX.Element {
   return (
-    <StyledCheckboxContainer>
+    <StyledCheckboxContainer className={className}>
       <StyledCheckboxInput
         type="checkbox"
         id={label.toLowerCase().replace(/\s/g, '-')}

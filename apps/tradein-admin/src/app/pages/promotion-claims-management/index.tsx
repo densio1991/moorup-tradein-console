@@ -661,6 +661,7 @@ export function PromotionClaimsPage() {
         }
         headers={headers}
         rows={promotionClaimsWithActions || []}
+        enableCheckbox={true}
         parsingConfig={promotionClaimsManagementParsingConfig}
       />
       <GenericModal
