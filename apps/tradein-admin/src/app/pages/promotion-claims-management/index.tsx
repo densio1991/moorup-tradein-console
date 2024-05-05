@@ -117,6 +117,7 @@ export function PromotionClaimsPage() {
   const [createdDateFrom, setCreatedDateFrom] = useState<Date | null>(null);
   const [createdDateTo, setCreatedDateTo] = useState<Date | null>(null);
   const [exportFileFormat, setExportFileFormat] = useState<any>('csv');
+  const [selectedRows, setSelectedRows] = useState<any>([]);
 
   const renderModalContentAndActions = () => {
     switch (confirmationModalState.view) {
@@ -330,6 +331,11 @@ export function PromotionClaimsPage() {
   };
 
   const promotionClaimsWithActions = addActions(promotionClaims || []);
+
+  const handleChangeSelection = (selectedItems: any) => {
+    console.log({ selectedItems });
+    setSelectedRows(selectedItems);
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -616,6 +622,22 @@ export function PromotionClaimsPage() {
     <>
       <PageSubHeader
         withSearch
+        leftControls={
+          !isEmpty(selectedRows) && (
+            <AppButton
+              width="fit-content"
+              onClick={() =>
+                setSideModalState({
+                  ...sideModalState,
+                  open: true,
+                  view: MODAL_TYPES.ADD_PRODUCT,
+                })
+              }
+            >
+              Approve
+            </AppButton>
+          )
+        }
         rightControls={
           <>
             <IconButton
@@ -663,6 +685,7 @@ export function PromotionClaimsPage() {
         rows={promotionClaimsWithActions || []}
         enableCheckbox={true}
         parsingConfig={promotionClaimsManagementParsingConfig}
+        onChangeSelection={handleChangeSelection}
       />
       <GenericModal
         title="Confirmation"
