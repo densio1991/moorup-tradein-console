@@ -26,6 +26,7 @@ import {
   StyledInput,
   StyledReactSelect,
   Table,
+  bulkUpdatePromotionClaimStatus,
   exportPromotionClaims,
   getCurrencySymbol,
   hasEmptyValue,
@@ -37,6 +38,7 @@ import {
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { BulkApproveClaims } from './forms/bulk-approve-claims';
 
 export function PromotionClaimsPage() {
   const {
@@ -60,6 +62,7 @@ export function PromotionClaimsPage() {
   const { sideModalState } = commonState;
 
   const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
+  // const leftActions = [];
 
   switch (userDetails.role) {
     case REGULAR:
@@ -118,6 +121,15 @@ export function PromotionClaimsPage() {
   const [createdDateTo, setCreatedDateTo] = useState<Date | null>(null);
   const [exportFileFormat, setExportFileFormat] = useState<any>('csv');
   const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const handleSubmitBulkClaimApproval = (values: any) => {
+    const filters = {
+      status: ClaimStatus.PENDING,
+      moorup_status: ClaimStatus.APPROVED,
+      include_all: true,
+    };
+    bulkUpdatePromotionClaimStatus(values, filters, activePlatform);
+  };
 
   const renderModalContentAndActions = () => {
     switch (confirmationModalState.view) {
@@ -303,6 +315,7 @@ export function PromotionClaimsPage() {
 
       return {
         ...claim,
+        products,
         approveAction: () =>
           setConfirmationModalState({
             open: true,
@@ -613,6 +626,14 @@ export function PromotionClaimsPage() {
           </FormWrapper>
         );
 
+      case MODAL_TYPES.BULK_APPROVE_CLAIM_REGULAR:
+        return (
+          <BulkApproveClaims
+            selectedRows={selectedRows}
+            onFormSubmit={handleSubmitBulkClaimApproval}
+          />
+        );
+
       default:
         return;
     }
@@ -630,7 +651,7 @@ export function PromotionClaimsPage() {
                 setSideModalState({
                   ...sideModalState,
                   open: true,
-                  view: MODAL_TYPES.ADD_PRODUCT,
+                  view: MODAL_TYPES.BULK_APPROVE_CLAIM_REGULAR,
                 })
               }
             >

@@ -259,6 +259,27 @@ const promotionReducer = (state: any, action: any) => {
       };
     }
 
+    case types.BULK_UPDATE_PROMOTION_CLAIM_STATUS.baseType: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimStatus: true,
+        isFetchingPromotionClaims: true,
+        promotionClaims: [],
+      };
+    }
+    case types.BULK_UPDATE_PROMOTION_CLAIM_STATUS.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimStatus: false,
+      };
+    }
+    case types.BULK_UPDATE_PROMOTION_CLAIM_STATUS.FAILED: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimStatus: false,
+      };
+    }
+
     case types.PROCESS_PROMOTION_CLAIM_PAYMENT.baseType: {
       return {
         ...state,
