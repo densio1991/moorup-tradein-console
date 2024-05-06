@@ -291,6 +291,34 @@ export const updatePromotionClaimStatus = (payload: any, promotionClaimId: strin
     });
 };
 
+export const bulkUpdatePromotionClaimStatus = (payload: any, filter: any, activePlatform: string) => (dispatch: any) => {
+  dispatch({
+    type: types.UPDATE_PROMOTION_CLAIM_STATUS.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .patch('/api/claims/status', payload)
+    .then((response) => {
+      dispatch({
+        type: types.UPDATE_PROMOTION_CLAIM_STATUS.SUCCESS,
+        payload: response?.data,
+      });
+
+      getPromotionClaims(filter, activePlatform)(dispatch);
+      toast.success('Claim status successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.UPDATE_PROMOTION_CLAIM_STATUS.FAILED,
+        payload: error,
+      });
+
+      getPromotionClaims(filter, activePlatform)(dispatch);
+      toast.error('Failed to update claim status.');
+    });
+};
+
 export const submitOrderPromotionClaim = (payload: any, filter: any, activePlatform: string) => (dispatch: any) => {
   dispatch({
     type: types.SUBMIT_ORDER_PROMOTION_CLAIM.baseType,

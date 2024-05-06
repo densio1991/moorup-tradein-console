@@ -93,6 +93,10 @@ export const usePromotion = () => {
     actions.setAddOrderPromotionClaimPayload(payload)(dispatch);
   }
 
+  const bulkUpdatePromotionClaimStatus = (payload: any, filter: any) => {
+    actions.bulkUpdatePromotionClaimStatus(payload, filter, activePlatform)(dispatch);
+  }
+
   return {
     state: state.promotion,
     getPromotions,
@@ -116,5 +120,6 @@ export const usePromotion = () => {
     setPromotionBannerImage,
     setAddOrderPromotionClaimPayload,
     submitOrderPromotionClaim,
+    bulkUpdatePromotionClaimStatus,
   };
 };
