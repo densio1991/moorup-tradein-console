@@ -5,18 +5,18 @@ import {
   FormContainer,
   FormGroup,
   FormWrapper,
+  MODAL_TYPES,
   ROLES,
   StyledInput,
   StyledReactSelect,
   capitalizeFirstLetter,
-  compareObjects,
   hasEmptyValue,
   useAuth,
   useCommon,
   useUser,
 } from '@tradein-admin/libs';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import * as Yup from 'yup';
 
 interface FormValues {
@@ -56,9 +56,7 @@ export function EditUserForm({ data }: any) {
   const { state: authState } = useAuth();
   const { userDetails } = authState;
 
-  const { updateUser } = useUser();
-
-  const [currentUserData, setCurrentUserData] = useState({});
+  const { setUpdateUserDetailsPayload } = useUser();
 
   const resetForm = () => {
     formik.resetForm();
@@ -66,8 +64,12 @@ export function EditUserForm({ data }: any) {
   };
 
   const onSubmit = (values: any) => {
-    updateUser(data?._id, userDetails?._id, values);
-    setSideModalState({ ...sideModalState, view: null, open: false });
+    setUpdateUserDetailsPayload(values);
+    setSideModalState({
+      ...sideModalState,
+      view: MODAL_TYPES.EDIT_USER_PERMISSIONS,
+      open: true,
+    });
   };
 
   const formik = useFormik<FormValues>({
@@ -98,12 +100,11 @@ export function EditUserForm({ data }: any) {
       platforms: data?.platforms,
     };
 
-    setCurrentUserData(userData);
     formik.setValues(userData);
   }, [data]);
 
   return (
-    <FormWrapper formTitle="Edit User">
+    <FormWrapper formTitle="Edit User" subtTitle="Enter User Details">
       <FormContainer onSubmit={formik.handleSubmit}>
         <FormGroup>
           <StyledInput
@@ -196,12 +197,9 @@ export function EditUserForm({ data }: any) {
             <AppButton
               type="submit"
               width="fit-content"
-              disabled={
-                hasEmptyValue(formik.values) ||
-                compareObjects(formik.values, currentUserData)
-              }
+              disabled={hasEmptyValue(formik.values)}
             >
-              Save Changes
+              Next
             </AppButton>
           </FormGroup>
         </FormGroup>
