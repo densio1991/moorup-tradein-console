@@ -395,8 +395,20 @@ export const PROMOTIONS_MANAGEMENT_COLUMNS = [
     keyName: 'end_date',
   },
   {
-    label: 'Status',
+    label: 'Device Send In Deadline Date',
     order: 6,
+    enableSort: true,
+    keyName: 'send_in_deadline',
+  },
+  {
+    label: 'Payment Due Date',
+    order: 7,
+    enableSort: true,
+    keyName: 'payment_due_date',
+  },
+  {
+    label: 'Status',
+    order: 8,
     enableSort: true,
     keyName: 'promotion_status',
   },
@@ -1177,6 +1189,8 @@ export const ADD_PROMOTION_DETAILS_PAYLOAD = {
   start_date: null,
   end_date: null,
   show_banner: false,
+  send_in_deadline: null,
+  payment_due_date: null,
 }
 
 export const ADD_PROMOTION_PRODUCTS_PAYLOAD = {
