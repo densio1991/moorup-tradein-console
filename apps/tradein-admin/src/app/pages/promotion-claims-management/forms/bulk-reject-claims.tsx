@@ -6,7 +6,7 @@ import {
   FormContainer,
   FormGroup,
   FormWrapper,
-  StyledReactSelect,
+  StyledInput,
   hasEmptyValue,
   useCommon,
 } from '@tradein-admin/libs';
@@ -23,9 +23,7 @@ const ItemsContainer = styled.div`
 
 interface Claims {
   claim_id: string;
-  product_name: string;
-  currency: string;
-  amount: number;
+  remarks: string;
 }
 
 interface FormValues {
@@ -36,9 +34,7 @@ interface FormValues {
 const validationSchema = Yup.object().shape({
   claims: Yup.array().of(
     Yup.object().shape({
-      product_name: Yup.string().required('Receipt number is required'),
-      currency: Yup.string(),
-      amount: Yup.number(),
+      remarks: Yup.string().required('Receipt number is required'),
     }),
   ),
 });
@@ -48,7 +44,7 @@ interface FormProps {
   onFormSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }
 
-export function BulkApproveClaims({
+export function BulkRejectClaims({
   selectedRows = [],
   onFormSubmit,
 }: FormProps) {
@@ -59,26 +55,14 @@ export function BulkApproveClaims({
     claims: selectedRows?.map((claim: any) => {
       return {
         claim_id: claim?._id,
-        status: ClaimStatus.APPROVED,
-        product_name: '',
-        currency: '',
-        amount: 0,
+        status: ClaimStatus.REJECTED,
+        remarks: '',
       };
     }),
   };
 
-  const handleArrayValueChange = (
-    fieldIndex: number,
-    value: any,
-    arrayField: string,
-    obj: any,
-  ) => {
-    console.log(value, obj);
-    formik.setFieldValue(`${arrayField}[${fieldIndex}]`, {
-      ...value.data,
-      claim_id: obj?._id,
-      status: ClaimStatus.APPROVED,
-    });
+  const handleChangeRemarks = (fieldIndex: number, value: any, obj: any) => {
+    formik.setFieldValue(`claims[${fieldIndex}].remarks`, value);
   };
 
   const handleArrayValueOnBlur = (
@@ -111,7 +95,7 @@ export function BulkApproveClaims({
   });
 
   return (
-    <FormWrapper formTitle="Approve Claims">
+    <FormWrapper formTitle="Reject Claims">
       <FormContainer onSubmit={formik.handleSubmit}>
         {selectedRows?.map((claim: any, index: number) => {
           return (
@@ -120,28 +104,28 @@ export function BulkApproveClaims({
                 Claim - {claim.claim_number}
               </h6>
               <FormGroup>
-                <StyledReactSelect
-                  isMulti={false}
-                  label={'Product Purchased'}
-                  options={claim.products}
-                  name={`claims[${index}].product_name`}
-                  placeholder="Product Name"
-                  onChange={(selected) =>
-                    handleArrayValueChange(index, selected, 'claims', claim)
+                <StyledInput
+                  type="text"
+                  id="remarks"
+                  label="Rejection Remarks"
+                  name="remarks"
+                  placeholder="Set rejection remarks"
+                  onChange={(e) =>
+                    handleChangeRemarks(index, e.target.value, claim)
                   }
-                  value={formik.values.claims[index]?.product_name}
+                  value={formik.values.claims[index]?.remarks}
                   onBlur={(e) => {
-                    handleArrayValueOnBlur(index, 'product_name', 'claims');
+                    handleArrayValueOnBlur(index, 'remarks', 'claims');
                   }}
                   error={Boolean(
                     formik.touched.claims &&
-                      formik.touched.claims[index]?.product_name &&
+                      formik.touched.claims[index]?.remarks &&
                       formik.errors.claims &&
-                      (formik.errors.claims as any)[index]?.product_name,
+                      (formik.errors.claims as any)[index]?.remarks,
                   )}
                   errorMessage={
                     formik.errors.claims &&
-                    (formik.errors.claims as any)[index]?.product_name
+                    (formik.errors.claims as any)[index]?.remarks
                   }
                 />
               </FormGroup>
