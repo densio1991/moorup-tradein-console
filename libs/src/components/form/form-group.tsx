@@ -8,6 +8,8 @@ interface FormGroupProps {
   marginBottom?: string;
   marginLeft?: string;
   marginRight?: string;
+  flexDirection?: string;
+  withBottomHr?: boolean;
 }
 
 const StyledFormGroup = styled.div<{ 
@@ -16,6 +18,7 @@ const StyledFormGroup = styled.div<{
   marginBottom?: string;
   marginLeft?: string;
   marginRight?: string;
+  flexDirection?: string;
 }>`
   display: flex;
   align-items: start;
@@ -23,6 +26,7 @@ const StyledFormGroup = styled.div<{
   gap: 10px;
   margin-bottom: 10px;
 
+  ${(props) => props.flexDirection && `flex-direction: ${props.flexDirection};`}
   ${(props) => props.margin && `margin: ${props.margin};`}
   ${(props) => props.marginTop && `margin-top: ${props.marginTop};`}
   ${(props) => props.marginBottom && `margin-bottom: ${props.marginBottom};`}
@@ -47,6 +51,8 @@ export function FormGroup({
   marginBottom,
   marginLeft,
   marginRight,
+  flexDirection,
+  withBottomHr,
 }: FormGroupProps): JSX.Element {
   return (
     <StyledFormGroup 
@@ -55,8 +61,10 @@ export function FormGroup({
       marginBottom={marginBottom}
       marginLeft={marginLeft}
       marginRight={marginRight}
+      flexDirection={flexDirection}
     >
       {children}
+      {withBottomHr && <hr style={{ height: '1px', width: '100%', backgroundColor: '#ccc', margin: '10px 0' }}/>}
     </StyledFormGroup>
   );
 }

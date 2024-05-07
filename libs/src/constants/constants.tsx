@@ -11,7 +11,7 @@ import {
   faPenToSquare,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
-import { ClaimStatus, OrderItemStatus } from './enums';
+import { ClaimStatus, OrderItemStatus, PermissionCodes } from './enums';
 import { PlatformType } from './interfaces';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
@@ -1144,7 +1144,9 @@ export const MODAL_TYPES = {
   ADD_PRODUCT: 'ADD_PRODUCT',
   ADD_PRODUCT_VARIANT: 'ADD_PRODUCT_VARIANT',
   ADD_USER: 'ADD_USER',
+  ADD_USER_PERMISSIONS: 'ADD_USER_PERMISSIONS',
   EDIT_USER: 'EDIT_USER',
+  EDIT_USER_PERMISSIONS: 'EDIT_USER_PERMISSIONS',
   ADD_PROMOTION: 'ADD_PROMOTION',
   ADD_PROMOTION_CLAIMS: 'ADD_PROMOTION_CLAIMS',
   ADD_PROMOTION_STEPS: 'ADD_PROMOTION_STEPS',
@@ -1332,4 +1334,48 @@ export const PAGE_SIZES = [
     label: '100',
     value: '100',
   }
+];
+
+export const DASHBOARD_MANAGEMENT_ITEMS = [
+  { value: PermissionCodes.VIEW_DASHBOARD, label: 'View Dashboard' },
+];
+
+export const PRODUCT_MANAGEMENT_ITEMS = [
+  { value: PermissionCodes.VIEW_PRODUCTS, label: 'View Products' },
+  { value: PermissionCodes.ADD_PRODUCT, label: 'Add Product' },
+  { value: PermissionCodes.EDIT_PRODUCT, label: 'Edit Product' },
+  { value: PermissionCodes.IMPORT_PRODUCTS, label: 'Import Products' },
+  { value: PermissionCodes.EXPORT_PRODUCTS, label: 'Export Products' },
+  { value: PermissionCodes.EXPORT_PRODUCT_UPLOAD_TEMPLATE, label: 'Export Product Upload Template' },
+];
+
+export const ORDER_MANAGEMENT_ITEMS = [
+  { value: PermissionCodes.VIEW_ORDERS, label: 'View Orders' },
+  { value: PermissionCodes.VIEW_ORDER_DETAILS, label: 'View Order Details' },
+  { value: PermissionCodes.EDIT_IMEI_SERIAL, label: 'Edit IMEI/Serial' },
+  { value: PermissionCodes.RESEND_LABEL, label: 'Resend Label' },
+  { value: PermissionCodes.MARK_AS_RECEIVED, label: 'Mark as Received' },
+  { value: PermissionCodes.UPDATE_ORDER_ITEM_STATUS, label: 'Update Order Item Status' },
+  { value: PermissionCodes.CANCEL_ITEM, label: 'Cancel Item' },
+  { value: PermissionCodes.CANCEL_GIFT_CARDS, label: 'Cancel Gift Card' },
+  { value: PermissionCodes.ADD_ORDER_CLAIMS, label: 'Add Order Claim' },
+  { value: PermissionCodes.VIEW_DISCREPANCIES, label: 'View Discrepancies' },
+  { value: PermissionCodes.VIEW_ACTIONABLES, label: 'View Actionables' },
+  { value: PermissionCodes.PRINT_LABEL, label: 'Print Label' },
+];
+
+export const USER_MANAGEMENT_ITEMS = [
+  { value: PermissionCodes.VIEW_USERS, label: 'View Users' },
+  { value: PermissionCodes.ADD_USER, label: 'Add User' },
+  { value: PermissionCodes.EDIT_USER_DETAILS, label: 'Edit User Details' },
+  { value: PermissionCodes.EDIT_USER_PERMISSIONS, label: 'Edit User Permissions' },
+];
+
+export const PROMOTION_MANAGEMENT_ITEMS = [
+  { value: PermissionCodes.VIEW_PROMOTIONS, label: 'View Promotions' },
+  { value: PermissionCodes.ADD_PROMOTION, label: 'Add Promotion' },
+  { value: PermissionCodes.EDIT_PROMOTION, label: 'Edit Promotion' },
+  { value: PermissionCodes.VIEW_PROMOTION_CLAIMS, label: 'View Promotion Claims' },
+  { value: PermissionCodes.UPDATE_PROMOTION_CLAIM, label: 'Update Promotion Claim' },
+  { value: PermissionCodes.PROCESS_PROMOTION_CLAIM_PAYMENT, label: 'Process Promotion Claim Payment' },
 ];
