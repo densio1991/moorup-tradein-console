@@ -9,6 +9,7 @@ import {
   ImageEditor,
   MODAL_TYPES,
   PROMOTION_STATUS,
+  StyledDatePicker,
   StyledDateRangePicker,
   StyledInput,
   StyledReactSelect,
@@ -33,6 +34,8 @@ interface FormValues {
   end_date: Date | null;
   show_banner: boolean;
   banner_url?: string;
+  send_in_deadline: Date | null;
+  payment_due_date: Date | null;
   [key: string]: any; // Index signature to allow dynamic access
 }
 
@@ -64,12 +67,16 @@ export function AddPromotionForm() {
     formik.resetForm();
     formik.setFieldTouched('start_date', false);
     formik.setFieldTouched('end_date', false);
+    formik.setFieldTouched('send_in_deadline', false);
+    formik.setFieldTouched('payment_due_date', false);
     setAddPromotionDetailsPayload(ADD_PROMOTION_DETAILS_PAYLOAD);
   };
 
   const onSubmit = (values: any) => {
     values.start_date = moment(values.start_date).toISOString();
     values.end_date = moment(values.end_date).toISOString();
+    values.send_in_deadline = moment(values.send_in_deadline).toISOString();
+    values.payment_due_date = moment(values.payment_due_date).toISOString();
     values.platform = activePlatform;
 
     setAddPromotionDetailsPayload(values);
@@ -106,6 +113,33 @@ export function AddPromotionForm() {
     } else {
       formik.setFieldTouched('start_date', false, false);
       formik.setFieldError('start_date', '');
+    }
+  };
+
+  const handleDateChange = (fieldName: string, date: Date | null) => {
+    formik.setFieldValue(fieldName, date);
+  };
+
+  const handleSendInDeadlineDateOnBlur = () => {
+    if (isEmpty(formik.values.send_in_deadline)) {
+      formik.setFieldTouched('send_in_deadline', true, false);
+      formik.setFieldError(
+        'send_in_deadline',
+        'Device Send In Deadline date is required',
+      );
+    } else {
+      formik.setFieldTouched('send_in_deadline', false, false);
+      formik.setFieldError('send_in_deadline', '');
+    }
+  };
+
+  const handlePaymentDueDateOnBlur = () => {
+    if (isEmpty(formik.values.payment_due_date)) {
+      formik.setFieldTouched('payment_due_date', true, false);
+      formik.setFieldError('payment_due_date', 'Payment due date is required');
+    } else {
+      formik.setFieldTouched('payment_due_date', false, false);
+      formik.setFieldError('payment_due_date', '');
     }
   };
 
@@ -200,6 +234,42 @@ export function AddPromotionForm() {
               errorMessage: formik.errors.end_date,
             }}
             label="Set Promotion Period"
+            onChange={() => {}}
+          />
+        </FormGroup>
+        <FormGroup marginBottom="20px">
+          <StyledDatePicker
+            dateInput={{
+              onChange: handleDateChange,
+              placeholder: 'Set Date',
+              value: formik.values.send_in_deadline,
+              name: 'send_in_deadline',
+              onBlur: handleSendInDeadlineDateOnBlur,
+              error: Boolean(
+                formik.touched.send_in_deadline &&
+                  formik.errors.send_in_deadline,
+              ),
+              errorMessage: formik.errors.send_in_deadline,
+            }}
+            label="Set Device Send In Deadline Date"
+            onChange={() => {}}
+          />
+        </FormGroup>
+        <FormGroup marginBottom="20px">
+          <StyledDatePicker
+            dateInput={{
+              onChange: handleDateChange,
+              placeholder: 'Set Date',
+              value: formik.values.payment_due_date,
+              name: 'payment_due_date',
+              onBlur: handlePaymentDueDateOnBlur,
+              error: Boolean(
+                formik.touched.payment_due_date &&
+                  formik.errors.payment_due_date,
+              ),
+              errorMessage: formik.errors.payment_due_date,
+            }}
+            label="Set Payment Due Date"
             onChange={() => {}}
           />
         </FormGroup>

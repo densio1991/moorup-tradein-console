@@ -69,6 +69,14 @@ export const promotionsManagementParsingConfig = {
     if (!row || isEmpty(row['end_date'])) return '--';
     return formatDate(row['end_date']);
   },
+  'Device Send In Deadline Date': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['send_in_deadline'])) return '--';
+    return formatDate(row['send_in_deadline']);
+  },
+  'Payment Due Date': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['payment_due_date'])) return '--';
+    return formatDate(row['payment_due_date']);
+  },
   'Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['promotion_status'])) return '--';
     return parseStatus(row['promotion_status']);
