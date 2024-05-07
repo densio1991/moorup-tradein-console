@@ -39,6 +39,7 @@ import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { BulkApproveClaims } from './forms/bulk-approve-claims';
+import { BulkRejectClaims } from './forms/bulk-reject-claims';
 
 export function PromotionClaimsPage() {
   const {
@@ -62,7 +63,7 @@ export function PromotionClaimsPage() {
   const { sideModalState } = commonState;
 
   const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
-  // const leftActions = [];
+  const rowActions: any = [];
 
   switch (userDetails.role) {
     case REGULAR:
@@ -72,6 +73,35 @@ export function PromotionClaimsPage() {
         enableSort: false,
         keyName: '',
       });
+      rowActions.push(
+        <>
+          <AppButton
+            width="fit-content"
+            onClick={() =>
+              setSideModalState({
+                ...sideModalState,
+                open: true,
+                view: MODAL_TYPES.BULK_APPROVE_CLAIM_REGULAR,
+              })
+            }
+          >
+            Approve
+          </AppButton>
+          <AppButton
+            width="fit-content"
+            variant="error"
+            onClick={() =>
+              setSideModalState({
+                ...sideModalState,
+                open: true,
+                view: MODAL_TYPES.BULK_REJECT_CLAIM_REGULAR,
+              })
+            }
+          >
+            Reject
+          </AppButton>
+        </>,
+      );
       break;
 
     case ADMIN:
@@ -89,6 +119,20 @@ export function PromotionClaimsPage() {
         enableSort: false,
         keyName: '',
       });
+      rowActions.push(
+        <AppButton
+          width="fit-content"
+          onClick={() =>
+            setSideModalState({
+              ...sideModalState,
+              open: true,
+              view: MODAL_TYPES.BULK_APPROVE_CLAIM_REGULAR,
+            })
+          }
+        >
+          Update
+        </AppButton>,
+      );
       break;
 
     default:
@@ -123,6 +167,17 @@ export function PromotionClaimsPage() {
   const [selectedRows, setSelectedRows] = useState<any>([]);
 
   const handleSubmitBulkClaimApproval = (values: any) => {
+    console.log({ values });
+    const filters = {
+      status: ClaimStatus.PENDING,
+      moorup_status: ClaimStatus.APPROVED,
+      include_all: true,
+    };
+    bulkUpdatePromotionClaimStatus(values, filters, activePlatform);
+  };
+
+  const handleSubmitBulkClaimRejection = (values: any) => {
+    console.log({ values });
     const filters = {
       status: ClaimStatus.PENDING,
       moorup_status: ClaimStatus.APPROVED,
@@ -634,6 +689,14 @@ export function PromotionClaimsPage() {
           />
         );
 
+      case MODAL_TYPES.BULK_REJECT_CLAIM_REGULAR:
+        return (
+          <BulkRejectClaims
+            selectedRows={selectedRows}
+            onFormSubmit={handleSubmitBulkClaimRejection}
+          />
+        );
+
       default:
         return;
     }
@@ -643,22 +706,7 @@ export function PromotionClaimsPage() {
     <>
       <PageSubHeader
         withSearch
-        leftControls={
-          !isEmpty(selectedRows) && (
-            <AppButton
-              width="fit-content"
-              onClick={() =>
-                setSideModalState({
-                  ...sideModalState,
-                  open: true,
-                  view: MODAL_TYPES.BULK_APPROVE_CLAIM_REGULAR,
-                })
-              }
-            >
-              Approve
-            </AppButton>
-          )
-        }
+        leftControls={!isEmpty(selectedRows) && rowActions}
         rightControls={
           <>
             <IconButton
@@ -704,7 +752,7 @@ export function PromotionClaimsPage() {
         }
         headers={headers}
         rows={promotionClaimsWithActions || []}
-        enableCheckbox={true}
+        enableCheckbox={!isEmpty(rowActions)}
         parsingConfig={promotionClaimsManagementParsingConfig}
         onChangeSelection={handleChangeSelection}
       />
