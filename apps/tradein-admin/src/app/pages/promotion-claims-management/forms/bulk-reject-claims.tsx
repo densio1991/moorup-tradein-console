@@ -34,7 +34,7 @@ interface FormValues {
 const validationSchema = Yup.object().shape({
   claims: Yup.array().of(
     Yup.object().shape({
-      remarks: Yup.string().required('Receipt number is required'),
+      remarks: Yup.string().required('Rejection remarks is required'),
     }),
   ),
 });
