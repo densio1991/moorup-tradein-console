@@ -63,6 +63,33 @@ export function PromotionClaimsPage() {
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
 
+  const [claimToApprove, setClaimToApprove] = useState({
+    product_name: '',
+    amount: 0,
+    currency: '',
+  });
+
+  const [claimToReject, setClaimToReject] = useState({
+    remarks: '',
+  });
+
+  const [claimToOverride, setClaimToOverride] = useState({
+    remarks: '',
+    status: '',
+    user_id: userDetails?._id,
+  });
+
+  const [selectedClaimStatuses, setSelectedClaimStatuses] = useState<string[]>(
+    [],
+  );
+  const [selectedMoorupClaimStatuses, setSelectedMoorupClaimStatuses] =
+    useState<string[]>([]);
+  const [promotionName, setPromotionName] = useState<string>('');
+  const [createdDateFrom, setCreatedDateFrom] = useState<Date | null>(null);
+  const [createdDateTo, setCreatedDateTo] = useState<Date | null>(null);
+  const [exportFileFormat, setExportFileFormat] = useState<any>('csv');
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
   const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
   const rowActions: any = [];
 
@@ -123,6 +150,11 @@ export function PromotionClaimsPage() {
       rowActions.push(
         <AppButton
           width="fit-content"
+          disabled={selectedRows.some((row: any) =>
+            [ClaimStatus.APPROVED, ClaimStatus.COMPLETED].includes(
+              row['moorup_status'],
+            ),
+          )}
           onClick={() =>
             setSideModalState({
               ...sideModalState,
@@ -139,33 +171,6 @@ export function PromotionClaimsPage() {
     default:
       break;
   }
-
-  const [claimToApprove, setClaimToApprove] = useState({
-    product_name: '',
-    amount: 0,
-    currency: '',
-  });
-
-  const [claimToReject, setClaimToReject] = useState({
-    remarks: '',
-  });
-
-  const [claimToOverride, setClaimToOverride] = useState({
-    remarks: '',
-    status: '',
-    user_id: userDetails?._id,
-  });
-
-  const [selectedClaimStatuses, setSelectedClaimStatuses] = useState<string[]>(
-    [],
-  );
-  const [selectedMoorupClaimStatuses, setSelectedMoorupClaimStatuses] =
-    useState<string[]>([]);
-  const [promotionName, setPromotionName] = useState<string>('');
-  const [createdDateFrom, setCreatedDateFrom] = useState<Date | null>(null);
-  const [createdDateTo, setCreatedDateTo] = useState<Date | null>(null);
-  const [exportFileFormat, setExportFileFormat] = useState<any>('csv');
-  const [selectedRows, setSelectedRows] = useState<any>([]);
 
   const handleSubmitBulkClaimApproval = (values: any) => {
     console.log({ values });

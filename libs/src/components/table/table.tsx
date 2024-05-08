@@ -397,6 +397,7 @@ export function Table({
       setSelectedIndex(new Set([]));
       onChangeSelection([]);
     } else {
+      setSelectedIndex(new Set([...Array(itemsToDisplay.length).keys()]));
       onChangeSelection(itemsToDisplay);
     }
     setIsAllSelected((value) => !value);
