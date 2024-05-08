@@ -102,7 +102,7 @@ export function BulkOverrideClaimStatus({
   });
 
   return (
-    <FormWrapper formTitle="Reject Claims">
+    <FormWrapper formTitle="Override Claim Status">
       <FormContainer onSubmit={formik.handleSubmit}>
         {selectedRows?.map((claim: any, index: number) => {
           const overrideClaimStatuses = OVERRIDE_CLAIM_STATUSES?.filter(
