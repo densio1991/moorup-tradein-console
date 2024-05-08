@@ -40,6 +40,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { BulkApproveClaims } from './forms/bulk-approve-claims';
 import { BulkRejectClaims } from './forms/bulk-reject-claims';
+import { BulkOverrideClaimStatus } from './forms/bulk-update-claims';
 
 export function PromotionClaimsPage() {
   const {
@@ -126,7 +127,7 @@ export function PromotionClaimsPage() {
             setSideModalState({
               ...sideModalState,
               open: true,
-              view: MODAL_TYPES.BULK_APPROVE_CLAIM_REGULAR,
+              view: MODAL_TYPES.BULK_OVERRIDE_CLAIM_STATUS,
             })
           }
         >
@@ -177,6 +178,16 @@ export function PromotionClaimsPage() {
   };
 
   const handleSubmitBulkClaimRejection = (values: any) => {
+    console.log({ values });
+    const filters = {
+      status: ClaimStatus.PENDING,
+      moorup_status: ClaimStatus.APPROVED,
+      include_all: true,
+    };
+    bulkUpdatePromotionClaimStatus(values, filters, activePlatform);
+  };
+
+  const handleSubmitBulkOverrideClaimStatus = (values: any) => {
     console.log({ values });
     const filters = {
       status: ClaimStatus.PENDING,
@@ -694,6 +705,14 @@ export function PromotionClaimsPage() {
           <BulkRejectClaims
             selectedRows={selectedRows}
             onFormSubmit={handleSubmitBulkClaimRejection}
+          />
+        );
+
+      case MODAL_TYPES.BULK_OVERRIDE_CLAIM_STATUS:
+        return (
+          <BulkOverrideClaimStatus
+            selectedRows={selectedRows}
+            onFormSubmit={handleSubmitBulkOverrideClaimStatus}
           />
         );
 
