@@ -3,20 +3,17 @@
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
 import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import {
-  ADMIN,
-  CUSTOMER_SERVICE,
-  PRODUCTS,
-  REGULAR,
-  SUPERADMIN,
-  WAREHOUSE
-} from '../../constants';
 import { validateExpiry } from '../../helpers';
+import { usePermission } from '../../hooks';
 import { useAuth } from '../../store';
 import { SideBar, TopNavBar } from '../navigation';
 import { CardContainer } from './card-container';
 import { PageContainer } from './page-container';
 import { ComponentWrapper } from './wrapper';
+
+interface Permissions {
+  [path: string]: boolean;
+}
 
 export function PrivateRoute(): JSX.Element {
   const navigate = useNavigate();
@@ -30,66 +27,57 @@ export function PrivateRoute(): JSX.Element {
     userDetails,
   } = state
 
+  const {
+    hasViewDashboardPermission,
+    hasViewProductsPermission,
+    hasViewOrdersPermission,
+    hasViewDiscrepanciesPermission,
+    hasViewActionablesPermission,
+    hasViewPromotionsPermission,
+    hasViewPromotionClaimsPermission,
+    hasViewPromotionClaimsPaymentPermission,
+    hasViewUsersPermission,
+    hasViewPlatformConfigsPermissions,
+  } = usePermission();
+
   useEffect(() => {
     if (!isEmpty(userDetails)) {
-      let activeUrl = /\/dashboard/;
+      const permissions: Permissions = {
+        '/dashboard': hasViewDashboardPermission,
+        '/dashboard/product': hasViewProductsPermission,
+        '/dashboard/order/list': hasViewOrdersPermission,
+        '/dashboard/order/discrepancy': hasViewDiscrepanciesPermission,
+        '/dashboard/order/actionables': hasViewActionablesPermission,
+        '/dashboard/promotion/list': hasViewPromotionsPermission,
+        '/dashboard/promotion/claims': hasViewPromotionClaimsPermission,
+        '/dashboard/promotion/payment': hasViewPromotionClaimsPaymentPermission,
+        '/dashboard/user': hasViewUsersPermission,
+        '/dashboard/configurations': hasViewPlatformConfigsPermissions,
+      };
 
-      switch (userDetails?.role) {
-        case REGULAR:
-          setLoading(false);
+      let redirectTo = null;
 
-          activeUrl = /^\/dashboard\/promotion/;
-          if (!activeUrl?.test(pathname)) {
-            navigate('/dashboard/promotion/list');
+      // Check if user has permission for the current path
+      if (!permissions[pathname]) {
+        // If user doesn't have permission for current path, find the first path with permissions
+        Object.entries(permissions).some(([path, permission]) => {
+          if (permission) {
+            redirectTo = path;
+            return true; // Stop iterating once a path with permissions is found
           }
-          break;
-  
-        case ADMIN:
-          setLoading(false);
-          activeUrl = /^\/dashboard\/(product|order|promotion|actionables)/;
-          if (!activeUrl?.test(pathname)) {
-            navigate('/dashboard/product');
-          }
-          break;
-  
-        case WAREHOUSE:
-          setLoading(false);
-          activeUrl = /^\/dashboard\/order/;
-          if (!activeUrl?.test(pathname)) {
-            navigate('/dashboard/order/list');
-          }
-          break;
-  
-        case PRODUCTS:
-          setLoading(false);
-          activeUrl = /^\/dashboard\/product/;
-          if (!activeUrl?.test(pathname)) {
-            navigate('/dashboard/product');
-          }
-          break;
-  
-        case CUSTOMER_SERVICE:
-          setLoading(false);
-          activeUrl = /^\/dashboard\/product/;
-          if (!activeUrl?.test(pathname)) {
-            navigate('/dashboard/product');
-          }
-          break;
-  
-        case SUPERADMIN:
-          setLoading(false);
-          activeUrl = /\/dashboard/;
-          if (!activeUrl?.test(pathname)) {
-            navigate('/dashboard');
-          }
-          break;
-  
-        default:
-          // Redirect to 404 if role is not valid
-          setLoading(false);
-          navigate('/404');
-          break;
+          return false;
+        });
+      } else {
+        redirectTo = pathname;
       }
+
+      if (!redirectTo) {
+        // If no path with permissions found, default to '/404'
+        redirectTo = '/404';
+      }
+
+      setLoading(false);
+      navigate(redirectTo);
     }
   }, [userDetails])
 
