@@ -26,6 +26,7 @@ import {
   StyledInput,
   StyledReactSelect,
   Table,
+  bulkUpdatePromotionClaimStatus,
   exportPromotionClaims,
   getCurrencySymbol,
   hasEmptyValue,
@@ -37,6 +38,9 @@ import {
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { BulkApproveClaims } from './forms/bulk-approve-claims';
+import { BulkRejectClaims } from './forms/bulk-reject-claims';
+import { BulkOverrideClaimStatus } from './forms/bulk-update-claims';
 
 export function PromotionClaimsPage() {
   const {
@@ -58,39 +62,6 @@ export function PromotionClaimsPage() {
   const { activePlatform, userDetails } = authState;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
-
-  const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
-
-  switch (userDetails.role) {
-    case REGULAR:
-      headers.push({
-        label: 'Actions',
-        order: 98,
-        enableSort: false,
-        keyName: '',
-      });
-      break;
-
-    case ADMIN:
-    case SUPERADMIN:
-      headers.push({
-        label: 'Moorup Status',
-        order: 11,
-        enableSort: true,
-        keyName: 'moorup_status',
-      });
-
-      headers.push({
-        label: 'Action',
-        order: 99,
-        enableSort: false,
-        keyName: '',
-      });
-      break;
-
-    default:
-      break;
-  }
 
   const [claimToApprove, setClaimToApprove] = useState({
     product_name: '',
@@ -117,6 +88,119 @@ export function PromotionClaimsPage() {
   const [createdDateFrom, setCreatedDateFrom] = useState<Date | null>(null);
   const [createdDateTo, setCreatedDateTo] = useState<Date | null>(null);
   const [exportFileFormat, setExportFileFormat] = useState<any>('csv');
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
+  const rowActions: any = [];
+
+  switch (userDetails.role) {
+    case REGULAR:
+      headers.push({
+        label: 'Actions',
+        order: 98,
+        enableSort: false,
+        keyName: '',
+      });
+      rowActions.push(
+        <>
+          <AppButton
+            width="fit-content"
+            onClick={() =>
+              setSideModalState({
+                ...sideModalState,
+                open: true,
+                view: MODAL_TYPES.BULK_APPROVE_CLAIM_REGULAR,
+              })
+            }
+          >
+            Approve
+          </AppButton>
+          <AppButton
+            width="fit-content"
+            variant="error"
+            onClick={() =>
+              setSideModalState({
+                ...sideModalState,
+                open: true,
+                view: MODAL_TYPES.BULK_REJECT_CLAIM_REGULAR,
+              })
+            }
+          >
+            Reject
+          </AppButton>
+        </>,
+      );
+      break;
+
+    case ADMIN:
+    case SUPERADMIN:
+      headers.push({
+        label: 'Moorup Status',
+        order: 11,
+        enableSort: true,
+        keyName: 'moorup_status',
+      });
+
+      headers.push({
+        label: 'Action',
+        order: 99,
+        enableSort: false,
+        keyName: '',
+      });
+      rowActions.push(
+        <AppButton
+          width="fit-content"
+          disabled={selectedRows.some((row: any) =>
+            [ClaimStatus.APPROVED, ClaimStatus.COMPLETED].includes(
+              row['moorup_status'],
+            ),
+          )}
+          onClick={() =>
+            setSideModalState({
+              ...sideModalState,
+              open: true,
+              view: MODAL_TYPES.BULK_OVERRIDE_CLAIM_STATUS,
+            })
+          }
+        >
+          Update
+        </AppButton>,
+      );
+      break;
+
+    default:
+      break;
+  }
+
+  const handleSubmitBulkClaimApproval = (values: any) => {
+    console.log({ values });
+    const filters = {
+      status: ClaimStatus.PENDING,
+      moorup_status: ClaimStatus.APPROVED,
+      include_all: true,
+    };
+    bulkUpdatePromotionClaimStatus(values, filters, activePlatform);
+  };
+
+  const handleSubmitBulkClaimRejection = (values: any) => {
+    console.log({ values });
+    const filters = {
+      status: ClaimStatus.PENDING,
+      moorup_status: ClaimStatus.APPROVED,
+      include_all: true,
+    };
+    bulkUpdatePromotionClaimStatus(values, filters, activePlatform);
+  };
+
+  const handleSubmitBulkOverrideClaimStatus = (values: any) => {
+    console.log({ values });
+    const filters = {
+      status: ClaimStatus.PENDING,
+      moorup_status: ClaimStatus.APPROVED,
+      include_all: true,
+    };
+    bulkUpdatePromotionClaimStatus(values, filters, activePlatform);
+  };
 
   const renderModalContentAndActions = () => {
     switch (confirmationModalState.view) {
@@ -302,6 +386,7 @@ export function PromotionClaimsPage() {
 
       return {
         ...claim,
+        products,
         approveAction: () =>
           setConfirmationModalState({
             open: true,
@@ -330,6 +415,11 @@ export function PromotionClaimsPage() {
   };
 
   const promotionClaimsWithActions = addActions(promotionClaims || []);
+
+  const handleChangeSelection = (selectedItems: any) => {
+    console.log({ selectedItems });
+    setSelectedRows(selectedItems);
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -607,6 +697,30 @@ export function PromotionClaimsPage() {
           </FormWrapper>
         );
 
+      case MODAL_TYPES.BULK_APPROVE_CLAIM_REGULAR:
+        return (
+          <BulkApproveClaims
+            selectedRows={selectedRows}
+            onFormSubmit={handleSubmitBulkClaimApproval}
+          />
+        );
+
+      case MODAL_TYPES.BULK_REJECT_CLAIM_REGULAR:
+        return (
+          <BulkRejectClaims
+            selectedRows={selectedRows}
+            onFormSubmit={handleSubmitBulkClaimRejection}
+          />
+        );
+
+      case MODAL_TYPES.BULK_OVERRIDE_CLAIM_STATUS:
+        return (
+          <BulkOverrideClaimStatus
+            selectedRows={selectedRows}
+            onFormSubmit={handleSubmitBulkOverrideClaimStatus}
+          />
+        );
+
       default:
         return;
     }
@@ -616,6 +730,7 @@ export function PromotionClaimsPage() {
     <>
       <PageSubHeader
         withSearch
+        leftControls={!isEmpty(selectedRows) && rowActions}
         rightControls={
           <>
             <IconButton
@@ -661,7 +776,9 @@ export function PromotionClaimsPage() {
         }
         headers={headers}
         rows={promotionClaimsWithActions || []}
+        enableCheckbox={!isEmpty(rowActions)}
         parsingConfig={promotionClaimsManagementParsingConfig}
+        onChangeSelection={handleChangeSelection}
       />
       <GenericModal
         title="Confirmation"

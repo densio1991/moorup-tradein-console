@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faArrowDownWideShort, faArrowUpWideShort } from '@fortawesome/free-solid-svg-icons';
-import { isEmpty } from 'lodash';
+import { isEmpty, isEqual } from 'lodash';
 import { ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
@@ -10,6 +10,7 @@ import { useCommon } from '../../store';
 import { StyledReactSelect } from '../input';
 import { StyledIcon } from '../styled';
 import Pagination from './pagination';
+import { Checkbox } from '../checkbox';
 
 interface ThProps {
   key: any;
@@ -33,6 +34,7 @@ interface TableProps {
   rightControls?: any;
   parsingConfig?: { [key: string]: (value: any) => any };
   margin?: string;
+  onChangeSelection?: any;
 }
 
 const HeaderSection = styled.div`
@@ -276,9 +278,12 @@ export function Table({
   rightControls,
   parsingConfig = {},
   margin = '20px',
+  onChangeSelection,
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
+  const [isAllSelected, setIsAllSelected] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(new Set());
   const [pageSize, setPageSize] = useState(parseInt(PAGE_SIZES[0].value));
   const { state: commonState } = useCommon();
   const { searchTerm } = commonState;
@@ -319,7 +324,12 @@ export function Table({
     ? sortArray(rows, sortConfig.key, sortConfig.direction)
     : rows;
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    setSelectedIndex(new Set([]));
+    setIsAllSelected(false);
+    onChangeSelection([]);
+  }
 
   const filteredRows = searchTerm
   ? sortedRows.filter(row =>
@@ -362,6 +372,37 @@ export function Table({
   const endIndex = startIndex + pageSize;
   const itemsToDisplay = filteredRows.slice(startIndex, endIndex);
 
+  const toggleSelection = (index: any) => {
+    const newSelectedIndex = new Set(selectedIndex);
+
+    if (newSelectedIndex.has(index)) {
+      newSelectedIndex.delete(index);
+    } else {
+      newSelectedIndex.add(index);
+    }
+
+    setSelectedIndex(newSelectedIndex);
+    if (isEqual(newSelectedIndex, new Set([...Array(itemsToDisplay.length).keys()]))) {
+      onChangeSelection(itemsToDisplay)
+      setIsAllSelected(true);
+    } else {
+      const selectedItems = itemsToDisplay?.filter((item, idx) => newSelectedIndex.has(idx));
+      onChangeSelection(selectedItems);
+      setIsAllSelected(false);
+    }
+  }
+
+  const toggleSelectAll = () => {
+    if (isAllSelected) {
+      setSelectedIndex(new Set([]));
+      onChangeSelection([]);
+    } else {
+      setSelectedIndex(new Set([...Array(itemsToDisplay.length).keys()]));
+      onChangeSelection(itemsToDisplay);
+    }
+    setIsAllSelected((value) => !value);
+  }
+
   return (
     <div style={{ 
       backgroundColor: 'white', 
@@ -393,6 +434,16 @@ export function Table({
         <TableStyled>
           <Thead>
             <Tr>
+              {enableCheckbox && (
+                <Th key="select-all">
+                  <Checkbox
+                    label=""
+                    checked={isAllSelected}
+                    onChange={toggleSelectAll}
+                    className="!mb-0"
+                  />
+                </Th>
+              )}
               {sortedHeaders?.map((header) => (
                 <Th
                   key={header.label}
@@ -417,6 +468,16 @@ export function Table({
           <Tbody>
             {itemsToDisplay?.map((row: any, index: any) => (
               <Tr key={index} onClick={() => handleRowClick(row)} hover={!isEmpty(row?.viewURL)}>
+                {enableCheckbox && (
+                  <Td key="select-all">
+                    <Checkbox
+                      label=""
+                      checked={selectedIndex.has(index) || isAllSelected}
+                      onChange={() => toggleSelection(index)}
+                      className="!mb-0"
+                    />
+                  </Td>
+                )}
                 {sortedHeaders?.map((header) => (
                   <Td key={`${index}-${header.label}`}>
                     <span>{parseRowValue(header, row)}</span>
