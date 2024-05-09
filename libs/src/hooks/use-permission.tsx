@@ -34,7 +34,10 @@ export function usePermission() {
   const hasEditPromotionPermission = permissions.includes(PermissionCodes.EDIT_PROMOTION);
   const hasViewPromotionClaimsPermission = permissions.includes(PermissionCodes.VIEW_PROMOTION_CLAIMS);
   const hasUpdatePromotionClaimPermission = permissions.includes(PermissionCodes.UPDATE_PROMOTION_CLAIM);
+  const hasViewPromotionClaimsPaymentPermission = permissions.includes(PermissionCodes.VIEW_PROMOTION_CLAIMS_PAYMENT);
   const hasProcessPromotionClaimPaymentPermission = permissions.includes(PermissionCodes.PROCESS_PROMOTION_CLAIM_PAYMENT);
+  const hasViewPlatformConfigsPermissions = permissions.includes(PermissionCodes.VIEW_PLATFORM_CONFIGS);
+  const hasEditPlatformConfigsPermissions = permissions.includes(PermissionCodes.EDIT_PLATFORM_CONFIGS);
 
   return {
     hasViewDashboardPermission,
@@ -65,6 +68,9 @@ export function usePermission() {
     hasEditPromotionPermission,
     hasViewPromotionClaimsPermission,
     hasUpdatePromotionClaimPermission,
+    hasViewPromotionClaimsPaymentPermission,
     hasProcessPromotionClaimPaymentPermission,
+    hasViewPlatformConfigsPermissions,
+    hasEditPlatformConfigsPermissions,
   };
 }
