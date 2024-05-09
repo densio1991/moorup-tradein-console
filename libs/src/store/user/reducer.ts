@@ -7,6 +7,7 @@ const userState = {
   isFetchingUsers: true,
   isCreatingUser: false,
   isUpdatingUser: false,
+  updateUserDetailsPayload: {},
 };
 
 const userReducer = (state: any, action: any) => {
@@ -70,6 +71,8 @@ const userReducer = (state: any, action: any) => {
       return {
         ...state,
         isUpdatingUser: true,
+        isFetchingUsers: true,
+        users: [],
       };
     }
     case types.UPDATE_USER.SUCCESS: {
@@ -84,6 +87,12 @@ const userReducer = (state: any, action: any) => {
         isUpdatingUser: false,
       };
     }
+
+    case types.SET_UPDATE_USER_DETAILS_PAYLOAD:
+      return {
+        ...state,
+        updateUserDetailsPayload: action.payload,
+      };
 
     default:
       return state;

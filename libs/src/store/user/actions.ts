@@ -95,3 +95,10 @@ export const updateUser = (id: string, currentUserId: string, platform: string, 
       toast.error('Failed to update user!');
     });
 };
+
+export const setUpdateUserDetailsPayload = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_UPDATE_USER_DETAILS_PAYLOAD,
+    payload,
+  });
+};

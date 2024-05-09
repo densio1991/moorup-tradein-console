@@ -19,6 +19,7 @@ import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 import { AddUserForm } from './add-user';
 import { EditUserForm } from './edit-user';
+import { EditUserPermissionForm } from './edit-user-permission';
 
 export function UserManagementPage() {
   const { state, getUsers, clearUsers } = useUser();
@@ -36,6 +37,31 @@ export function UserManagementPage() {
 
   const [selectedUser, setSelectedUser] = useState({});
 
+  const addUserSteps = [MODAL_TYPES.ADD_USER];
+
+  const editUserSteps = [
+    MODAL_TYPES.EDIT_USER,
+    MODAL_TYPES.EDIT_USER_PERMISSIONS,
+  ];
+
+  const [steps, setSteps] = useState(addUserSteps);
+
+  useEffect(() => {
+    switch (true) {
+      case addUserSteps.includes(sideModalState.view):
+        setSteps(addUserSteps);
+        break;
+
+      case editUserSteps.includes(sideModalState.view):
+        setSteps(editUserSteps);
+        break;
+
+      default:
+        setSteps(addUserSteps);
+        break;
+    }
+  }, [sideModalState]);
+
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -50,6 +76,11 @@ export function UserManagementPage() {
       // Clear data on unmount
       clearUsers({});
       setSearchTerm('');
+      setSideModalState({
+        ...sideModalState,
+        open: false,
+        view: null,
+      });
     };
   }, [activePlatform]);
 
@@ -60,6 +91,9 @@ export function UserManagementPage() {
 
       case MODAL_TYPES.EDIT_USER:
         return <EditUserForm data={selectedUser} />;
+
+      case MODAL_TYPES.EDIT_USER_PERMISSIONS:
+        return <EditUserPermissionForm data={selectedUser} />;
 
       default:
         break;
@@ -112,6 +146,9 @@ export function UserManagementPage() {
         onClose={() => {
           setSideModalState({ ...sideModalState, open: false, view: null });
         }}
+        withSteps
+        steps={steps}
+        activeStep={sideModalState.view}
       >
         {renderForm()}
       </SideModal>

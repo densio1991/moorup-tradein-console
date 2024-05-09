@@ -42,6 +42,7 @@ type AccordionHeadingProps = {
   id: any;
   title: string;
   isOpen: boolean;
+  action?: any;
   onToggle: (id: any) => void;
 };
 
@@ -49,16 +50,28 @@ export const AccordionHeading = ({
   id,
   title,
   isOpen,
+  action,
   onToggle,
 }: AccordionHeadingProps) => {
   return (
     <AccordionHeader onClick={() => onToggle(id)} isOpen={isOpen}>
-      <AccordionTitle>{title}</AccordionTitle>
+      <div className="flex justify-between items-center w-full pr-4">
+        <AccordionTitle>{title}</AccordionTitle>
+        {action}
+      </div>
       <StyledIcon
         icon={isOpen ? faAngleDown : faAngleUp}
         color={isOpen ? 'inherit' : '#ccc'}
       />
     </AccordionHeader>
+  );
+};
+
+export const ScrollableContainer = ({ children }: any) => {
+  return (
+    <div className="max-w-full mx-auto">
+      <div className="overflow-x-auto max-w-full pb-2">{children}</div>
+    </div>
   );
 };
 
@@ -90,6 +103,9 @@ export const EditOrderPage = () => {
   const [statusModal, setStatusModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState({} as OrderItems);
   const [parsedShipments, setParsedShipments] = useState({});
+  const [collectionOrderItems, setCollectionOrderItems] = useState([]);
+  const [validationOrderItems, setValidationOrderItems] = useState([]);
+  const [completionOrderItems, setCompletionOrderItems] = useState([]);
 
   const {
     order = {},
@@ -128,6 +144,32 @@ export const EditOrderPage = () => {
     const formattedShipments = parseShipments();
     setParsedShipments(formattedShipments);
   }, [shipments]);
+
+  useEffect(() => {
+    if (orderItems.length > 0) {
+      const collectionOrderItems = orderItems.filter((item: OrderItems) =>
+        COLLECTION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
+      );
+      const validationOrderItems = orderItems.filter((item: OrderItems) =>
+        VALIDATION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
+      );
+      const completionOrderItems = orderItems.filter((item: OrderItems) =>
+        COMPLETION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
+      );
+      setCollectionOrderItems(collectionOrderItems);
+      setValidationOrderItems(validationOrderItems);
+      setCompletionOrderItems(completionOrderItems);
+
+      setAccordionState((prev) => {
+        return {
+          ...prev,
+          collection: collectionOrderItems.length > 0,
+          validation: validationOrderItems.length > 0,
+          completion: completionOrderItems.length > 0,
+        };
+      });
+    }
+  }, [order]);
 
   const onUpdateStatus = (newValue: any) => {
     if (newValue.status === OrderItemStatus.FOR_REVISION) {
@@ -184,18 +226,6 @@ export const EditOrderPage = () => {
     return shippingItems;
   };
 
-  const collectionOrderItems = orderItems.filter((item: OrderItems) =>
-    COLLECTION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
-  );
-
-  const validationOrderItems = orderItems.filter((item: OrderItems) =>
-    VALIDATION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
-  );
-
-  const completionOrderItems = orderItems.filter((item: OrderItems) =>
-    COMPLETION_ORDER_ITEM_STATUS.includes(item.status as OrderItemStatus),
-  );
-
   return (
     <LoaderContainer
       margin="20px"
@@ -204,7 +234,7 @@ export const EditOrderPage = () => {
       loading={isFetchingOrder || isUpdatingOrder || isUpdatingImeiSerial}
     >
       <AccordionContainer className="px-4 pt-4">
-        <AccordionInnerContainer key="Quote Creation">
+        <AccordionInnerContainer>
           <AccordionHeaderContainer>
             <AccordionHeading
               id="quote"
@@ -221,104 +251,110 @@ export const EditOrderPage = () => {
             isOpen={accordionState.claims}
             onToggle={() => toggleAccordion('claims')}
           />
-          {collectionOrderItems.length > 0 && (
-            <>
-              <AccordionHeaderContainer>
-                <AccordionHeading
-                  id="collection"
-                  title="Collection"
-                  isOpen={accordionState.collection}
-                  onToggle={() => toggleAccordion('collection')}
+        </AccordionInnerContainer>
+      </AccordionContainer>
+      <AccordionContainer className="px-4 pt-4">
+        <hr />
+        <h2 className="text-lg text-gray-500 p-2">Order Items</h2>
+        <AccordionInnerContainer>
+          <AccordionHeaderContainer>
+            <AccordionHeading
+              id="collection"
+              title={`Collection (${collectionOrderItems.length})`}
+              isOpen={accordionState.collection}
+              action={
+                !isSingleOrderFlow &&
+                order?.status !== OrderItemStatus.CANCELLED && (
+                  <button
+                    className="text-md text-white bg-emerald-500 py-1 px-3 rounded-md hover:bg-emerald-600"
+                    onClick={() => resendShipmentLabel(order?._id)}
+                    disabled={isUpdatingOrder}
+                  >
+                    Resend Label
+                  </button>
+                )
+              }
+              onToggle={() => toggleAccordion('collection')}
+            />
+          </AccordionHeaderContainer>
+          <AccordionContent
+            isOpen={accordionState.collection}
+            removePadding={true}
+            key="Collection"
+          >
+            {collectionOrderItems.length > 0 ? (
+              <ScrollableContainer>
+                <Collection
+                  orderId={order._id}
+                  orderItems={collectionOrderItems}
+                  shipments={parsedShipments}
+                  isSingleOrderFlow={isSingleOrderFlow}
+                  setStatusModal={setStatusModal}
+                  setSelectedItem={setSelectedItem}
                 />
-              </AccordionHeaderContainer>
-              <AccordionContent
-                isOpen={accordionState.collection}
-                removePadding={true}
-                key="Collection"
-              >
-                {!isSingleOrderFlow &&
-                  order?.status !== OrderItemStatus.CANCELLED && (
-                    <div className="flex justify-end gap-2 mb-2">
-                      <button
-                        className="text-md text-white bg-emerald-500 py-1 px-3 rounded-md hover:bg-emerald-600"
-                        onClick={() => resendShipmentLabel(order?._id)}
-                        disabled={isUpdatingOrder}
-                      >
-                        Resend Label
-                      </button>
-                    </div>
-                  )}
-                <div className="max-w-full mx-auto">
-                  <div className="overflow-x-auto max-w-full pb-2">
-                    <Collection
-                      orderId={order._id}
-                      orderItems={collectionOrderItems}
-                      shipments={parsedShipments}
-                      isSingleOrderFlow={isSingleOrderFlow}
-                      setStatusModal={setStatusModal}
-                      setSelectedItem={setSelectedItem}
-                    />
-                  </div>
-                </div>
-              </AccordionContent>
-            </>
-          )}
-          {validationOrderItems.length > 0 && (
-            <>
-              <AccordionHeaderContainer>
-                <AccordionHeading
-                  id="validation"
-                  title="Validation & Offer"
-                  isOpen={accordionState.validation}
-                  onToggle={() => toggleAccordion('validation')}
+              </ScrollableContainer>
+            ) : (
+              <h6 className="text-center text-gray-500 pb-3 pt-2">
+                No order items for collection
+              </h6>
+            )}
+          </AccordionContent>
+          <AccordionHeaderContainer>
+            <AccordionHeading
+              id="validation"
+              title={`Validation & Offer (${validationOrderItems.length})`}
+              isOpen={accordionState.validation}
+              onToggle={() => toggleAccordion('validation')}
+            />
+          </AccordionHeaderContainer>
+          <AccordionContent
+            isOpen={accordionState.validation}
+            removePadding={true}
+            key="validation"
+          >
+            {validationOrderItems.length > 0 ? (
+              <ScrollableContainer>
+                <ValidationOffer
+                  orderId={orderId}
+                  orderItems={validationOrderItems}
+                  setStatusModal={setStatusModal}
+                  setSelectedItem={setSelectedItem}
                 />
-              </AccordionHeaderContainer>
-              <AccordionContent
-                isOpen={accordionState.validation}
-                removePadding={true}
-                key="validation"
-              >
-                <div className="max-w-full mx-auto">
-                  <div className="overflow-x-auto max-w-full pb-2">
-                    <ValidationOffer
-                      orderId={orderId}
-                      orderItems={validationOrderItems}
-                      setStatusModal={setStatusModal}
-                      setSelectedItem={setSelectedItem}
-                    />
-                  </div>
-                </div>
-              </AccordionContent>
-            </>
-          )}
-          {completionOrderItems.length > 0 && (
-            <>
-              <AccordionHeaderContainer>
-                <AccordionHeading
-                  id="completion"
-                  title="Completion"
-                  isOpen={accordionState.completion}
-                  onToggle={() => toggleAccordion('completion')}
+              </ScrollableContainer>
+            ) : (
+              <h6 className="text-center text-gray-500 pb-3 pt-2">
+                No order items for validation or offer
+              </h6>
+            )}
+          </AccordionContent>
+          <AccordionHeaderContainer>
+            <AccordionHeading
+              id="completion"
+              title={`Completion (${completionOrderItems.length})`}
+              isOpen={accordionState.completion}
+              onToggle={() => toggleAccordion('completion')}
+            />
+          </AccordionHeaderContainer>
+          <AccordionContent
+            isOpen={accordionState.completion}
+            removePadding={true}
+            key="completion"
+          >
+            {completionOrderItems.length > 0 ? (
+              <ScrollableContainer>
+                <Completion
+                  orderId={orderId}
+                  orderItems={completionOrderItems}
+                  setStatusModal={setStatusModal}
+                  setSelectedItem={setSelectedItem}
                 />
-              </AccordionHeaderContainer>
-              <AccordionContent
-                isOpen={accordionState.completion}
-                removePadding={true}
-                key="completion"
-              >
-                <div className="max-w-full mx-auto">
-                  <div className="overflow-x-auto max-w-full pb-2">
-                    <Completion
-                      orderId={orderId}
-                      orderItems={completionOrderItems}
-                      setStatusModal={setStatusModal}
-                      setSelectedItem={setSelectedItem}
-                    />
-                  </div>
-                </div>
-              </AccordionContent>
-            </>
-          )}
+              </ScrollableContainer>
+            ) : (
+              <h6 className="text-center text-gray-500 pb-3 pt-2">
+                No order items for completion
+              </h6>
+            )}
+          </AccordionContent>
         </AccordionInnerContainer>
       </AccordionContainer>
       <StatusModal isOpen={statusModal} onClose={() => setStatusModal(false)}>

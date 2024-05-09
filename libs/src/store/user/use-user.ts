@@ -25,11 +25,16 @@ export const useUser = () => {
     actions.updateUser(id, currentUserId, activePlatform, payload)(dispatch);
   }
 
+  const setUpdateUserDetailsPayload = (payload: any) => {
+    actions.setUpdateUserDetailsPayload(payload)(dispatch);
+  }
+
   return {
     state: state.user,
     getUsers,
     clearUsers,
     createUser,
     updateUser,
+    setUpdateUserDetailsPayload,
   };
 };

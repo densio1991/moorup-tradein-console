@@ -1,19 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from 'react';
 import {
   AccordionContent,
   AccordionHeaderContainer,
   ClaimStatus,
+  MODAL_TYPES,
   OrderInterface,
   PROMOTION_CLAIMS_MANAGEMENT_COLUMNS,
-  promotionClaimsManagementParsingConfig,
   REGULAR,
+  SideModal,
   Table,
+  promotionClaimsManagementParsingConfig,
   useAuth,
+  useCommon,
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
+import { useEffect, useState } from 'react';
 import { AccordionHeading } from '.';
+import { AddOrderPromotionClaimForm } from './forms/add-claims';
 
 type ClaimsListProps = {
   order: OrderInterface;
@@ -22,7 +26,12 @@ type ClaimsListProps = {
 };
 
 const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
-  const { state, getPromotionClaims, clearPromotionClaims } = usePromotion();
+  const {
+    state,
+    getPromotionClaims,
+    submitOrderPromotionClaim,
+    clearPromotionClaims,
+  } = usePromotion();
   const {
     promotionClaims,
     isFetchingPromotionClaims,
@@ -32,7 +41,26 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
   const { state: authState } = useAuth();
   const { activePlatform, userDetails } = authState;
   const [claims, setClaims] = useState([]);
+  const { state: commonState, setSideModalState } = useCommon();
+  const { sideModalState } = commonState;
   const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
+
+  const handleAddClaim = (event: any) => {
+    event?.stopPropagation();
+    setSideModalState({
+      ...sideModalState,
+      open: true,
+      view: MODAL_TYPES.ADD_ORDER_PROMOTION_CLAIM,
+    });
+  };
+
+  const handleSubmitClaim = (values: any) => {
+    const payload = {
+      ...values,
+      order_number: order?.order_number,
+    };
+    submitOrderPromotionClaim(payload, {});
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -57,6 +85,11 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
 
       // Clear data on unmount
       clearPromotionClaims({});
+      setSideModalState({
+        ...sideModalState,
+        open: false,
+        view: null,
+      });
     };
   }, [activePlatform]);
 
@@ -70,19 +103,44 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
     }
   }, [promotionClaims]);
 
+  const renderForm = () => {
+    switch (sideModalState.view) {
+      case MODAL_TYPES.ADD_ORDER_PROMOTION_CLAIM:
+        return <AddOrderPromotionClaimForm onFormSubmit={handleSubmitClaim} />;
+
+      default:
+        break;
+    }
+  };
+
+  const AddButton = () => {
+    return (
+      <div className="flex justify-end">
+        <button
+          className="text-md text-white py-1 px-3 rounded-md bg-emerald-800 hover:bg-emerald-900"
+          onClick={handleAddClaim}
+        >
+          Add Claim
+        </button>
+      </div>
+    );
+  };
+
   return (
-    !isFetchingPromotionClaims &&
-    claims.length > 0 && (
-      <>
-        <AccordionHeaderContainer>
-          <AccordionHeading
-            id="claims"
-            title="Claims"
-            isOpen={isOpen}
-            onToggle={onToggle}
-          />
-        </AccordionHeaderContainer>
-        <AccordionContent isOpen={isOpen} key="Claims List">
+    <>
+      <AccordionHeaderContainer>
+        <AccordionHeading
+          id="claims"
+          title={'Promotion Claims'}
+          action={<AddButton />}
+          isOpen={isOpen}
+          onToggle={onToggle}
+        />
+      </AccordionHeaderContainer>
+      <AccordionContent isOpen={isOpen} key="Claims List">
+        {isFetchingPromotionClaims ? (
+          <h6 className="text-center text-gray-500 mb-2">Loading...</h6>
+        ) : claims.length > 0 ? (
           <Table
             label="Promotion Claims"
             margin="8px 0"
@@ -95,9 +153,25 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
             rows={claims || []}
             parsingConfig={promotionClaimsManagementParsingConfig}
           />
-        </AccordionContent>
-      </>
-    )
+        ) : (
+          <h6 className="text-center text-gray-500 mb-2">
+            No Promotion Claims
+          </h6>
+        )}
+      </AccordionContent>
+      <SideModal
+        isOpen={sideModalState?.open}
+        onClose={() => {
+          setSideModalState({
+            ...sideModalState,
+            open: false,
+            view: null,
+          });
+        }}
+      >
+        {renderForm()}
+      </SideModal>
+    </>
   );
 };
 
