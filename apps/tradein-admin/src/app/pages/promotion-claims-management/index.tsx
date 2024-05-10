@@ -95,12 +95,6 @@ export function PromotionClaimsPage() {
 
   switch (userDetails.role) {
     case REGULAR:
-      headers.push({
-        label: 'Actions',
-        order: 98,
-        enableSort: false,
-        keyName: '',
-      });
       rowActions.push(
         <>
           <AppButton
@@ -113,7 +107,7 @@ export function PromotionClaimsPage() {
               })
             }
           >
-            Approve
+            Approve ({selectedRows.length})
           </AppButton>
           <AppButton
             width="fit-content"
@@ -126,7 +120,7 @@ export function PromotionClaimsPage() {
               })
             }
           >
-            Reject
+            Reject ({selectedRows.length})
           </AppButton>
         </>,
       );
@@ -141,12 +135,6 @@ export function PromotionClaimsPage() {
         keyName: 'moorup_status',
       });
 
-      headers.push({
-        label: 'Action',
-        order: 99,
-        enableSort: false,
-        keyName: '',
-      });
       rowActions.push(
         <AppButton
           width="fit-content"
@@ -163,7 +151,7 @@ export function PromotionClaimsPage() {
             })
           }
         >
-          Update
+          Update ({selectedRows.length})
         </AppButton>,
       );
       break;
