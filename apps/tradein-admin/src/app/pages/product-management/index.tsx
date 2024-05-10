@@ -24,6 +24,7 @@ import {
   productManagementParsingConfig,
   useAuth,
   useCommon,
+  usePermission,
   useProduct,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
@@ -34,6 +35,13 @@ import { AddProductVariantForm } from './add-product-variant';
 
 export function ProductManagementPage() {
   const navigate = useNavigate();
+  const {
+    hasAddProductPermission,
+    hasEditProductPermission,
+    hasImportProductsPermission,
+    hasExportProductsPermission,
+    hasExportProductUploadTemplatePermission,
+  } = usePermission();
   const {
     state,
     getProducts,
@@ -53,7 +61,7 @@ export function ProductManagementPage() {
   const headers = [
     ...DEFAULT_COLUMN,
     ...PRODUCT_MANAGEMENT_COLUMNS,
-    ...ACTIONS_COLUMN,
+    ...(hasEditProductPermission ? ACTIONS_COLUMN : []),
   ];
 
   useEffect(() => {
@@ -109,20 +117,22 @@ export function ProductManagementPage() {
         withSearch
         leftControls={
           <>
-            <AppButton
-              width="fit-content"
-              icon={faPlus}
-              onClick={() =>
-                setSideModalState({
-                  ...sideModalState,
-                  open: true,
-                  view: MODAL_TYPES.ADD_PRODUCT,
-                })
-              }
-            >
-              Add
-            </AppButton>
-            <div>
+            {hasAddProductPermission && (
+              <AppButton
+                width="fit-content"
+                icon={faPlus}
+                onClick={() =>
+                  setSideModalState({
+                    ...sideModalState,
+                    open: true,
+                    view: MODAL_TYPES.ADD_PRODUCT,
+                  })
+                }
+              >
+                Add
+              </AppButton>
+            )}
+            {hasImportProductsPermission && (
               <AppButton
                 width="fit-content"
                 icon={faUpload}
@@ -130,26 +140,34 @@ export function ProductManagementPage() {
               >
                 Import
               </AppButton>
-            </div>
-            <AppButton
-              width="fit-content"
-              icon={faDownload}
-              onClick={() => exportToCSV(products, activePlatform)}
-              disabled={isEmpty(products) || isFetchingProducts}
-            >
-              Export
-            </AppButton>
-            <>
+            )}
+            {hasExportProductsPermission && (
               <AppButton
                 width="fit-content"
-                icon={faFileExport}
-                onClick={handleDownloadClick}
-                disabled={isEmpty(TEMPLATE_LINK)}
+                icon={faDownload}
+                onClick={() => exportToCSV(products, activePlatform)}
+                disabled={isEmpty(products) || isFetchingProducts}
               >
-                Export Template
+                Export
               </AppButton>
-              <a ref={downloadAnchorRef} style={{ display: 'none' }} download />
-            </>
+            )}
+            {hasExportProductUploadTemplatePermission && (
+              <>
+                <AppButton
+                  width="fit-content"
+                  icon={faFileExport}
+                  onClick={handleDownloadClick}
+                  disabled={isEmpty(TEMPLATE_LINK)}
+                >
+                  Export Template
+                </AppButton>
+                <a
+                  ref={downloadAnchorRef}
+                  style={{ display: 'none' }}
+                  download
+                />
+              </>
+            )}
           </>
         }
       />
