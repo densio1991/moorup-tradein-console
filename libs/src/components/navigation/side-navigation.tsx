@@ -60,7 +60,7 @@ export function SideBar(): JSX.Element {
       case 'Order Management':
         return hasViewOrdersPermission || hasViewDiscrepanciesPermission || hasViewActionablesPermission;
 
-      case 'Promotions':
+      case 'Promotion Management':
         return hasViewPromotionsPermission || hasViewPromotionClaimsPermission || hasViewPromotionClaimsPaymentPermission;
 
       case 'User Management':
@@ -127,6 +127,7 @@ export function SideBar(): JSX.Element {
         rootStyles={{
           color: '#216A4C'
         }}
+        width='280px'
       >
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Image src={Logo} alt="" />
@@ -165,7 +166,7 @@ export function SideBar(): JSX.Element {
                   if (item.submenu) {
                     const filteredSideNavSubItems = item.submenu.filter((item) => {
                       switch (item.title) {
-                        case 'Order List':
+                        case 'Orders':
                           return hasViewOrdersPermission
 
                         case 'Discrepancy':
@@ -174,7 +175,7 @@ export function SideBar(): JSX.Element {
                         case 'Actionables':
                           return hasViewActionablesPermission;
 
-                        case 'Promotion List':
+                        case 'Promotions':
                           return hasViewPromotionsPermission;
 
                         case 'Claims':

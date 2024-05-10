@@ -55,7 +55,7 @@ export const SIDENAV_ITEMS = [
     disabled: false,
     submenu: [
       {
-        title: 'Order List',
+        title: 'Orders',
         url: '/dashboard/order/list',
         activeUrl: /^\/dashboard\/order\/list/,
         icon: faList,
@@ -78,14 +78,14 @@ export const SIDENAV_ITEMS = [
     ],
   },
   {
-    title: 'Promotions',
+    title: 'Promotion Management',
     url: '/dashboard/promotion',
     activeUrl: /\/dashboard\/promotion/,
     icon: faBullhorn,
     disabled: false,
     submenu: [
       {
-        title: 'Promotion List',
+        title: 'Promotions',
         url: '/dashboard/promotion/list',
         activeUrl: /^\/dashboard\/promotion\/list/,
         icon: faList,
