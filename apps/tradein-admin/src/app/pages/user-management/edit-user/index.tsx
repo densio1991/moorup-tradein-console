@@ -13,6 +13,7 @@ import {
   hasEmptyValue,
   useAuth,
   useCommon,
+  usePermission,
   useUser,
 } from '@tradein-admin/libs';
 import { useFormik } from 'formik';
@@ -56,7 +57,9 @@ export function EditUserForm({ data }: any) {
   const { state: authState } = useAuth();
   const { userDetails } = authState;
 
-  const { setUpdateUserDetailsPayload } = useUser();
+  const { updateUser, setUpdateUserDetailsPayload } = useUser();
+
+  const { hasEditUserPermissionsPermission } = usePermission();
 
   const resetForm = () => {
     formik.resetForm();
@@ -64,12 +67,17 @@ export function EditUserForm({ data }: any) {
   };
 
   const onSubmit = (values: any) => {
-    setUpdateUserDetailsPayload(values);
-    setSideModalState({
-      ...sideModalState,
-      view: MODAL_TYPES.EDIT_USER_PERMISSIONS,
-      open: true,
-    });
+    if (hasEditUserPermissionsPermission) {
+      setUpdateUserDetailsPayload(values);
+      setSideModalState({
+        ...sideModalState,
+        view: MODAL_TYPES.EDIT_USER_PERMISSIONS,
+        open: true,
+      });
+    } else {
+      updateUser(data?._id, userDetails?._id, values);
+      setSideModalState({ ...sideModalState, view: null, open: false });
+    }
   };
 
   const formik = useFormik<FormValues>({
@@ -199,7 +207,7 @@ export function EditUserForm({ data }: any) {
               width="fit-content"
               disabled={hasEmptyValue(formik.values)}
             >
-              Next
+              {hasEditUserPermissionsPermission ? 'Next' : 'Save Changes'}
             </AppButton>
           </FormGroup>
         </FormGroup>
