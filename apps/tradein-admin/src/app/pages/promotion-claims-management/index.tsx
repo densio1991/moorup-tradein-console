@@ -32,6 +32,7 @@ import {
   promotionClaimsManagementParsingConfig,
   useAuth,
   useCommon,
+  usePermission,
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
@@ -42,6 +43,7 @@ import { BulkRejectClaims } from './forms/bulk-reject-claims';
 import { BulkOverrideClaimStatus } from './forms/bulk-update-claims';
 
 export function PromotionClaimsPage() {
+  const { hasUpdatePromotionClaimPermission } = usePermission();
   const {
     state,
     getPromotionClaims,
@@ -777,7 +779,9 @@ export function PromotionClaimsPage() {
         }
         headers={headers}
         rows={promotionClaimsWithActions || []}
-        enableCheckbox={!isEmpty(rowActions)}
+        enableCheckbox={
+          !isEmpty(rowActions) && hasUpdatePromotionClaimPermission
+        }
         parsingConfig={promotionClaimsManagementParsingConfig}
         onChangeSelection={handleChangeSelection}
       />
