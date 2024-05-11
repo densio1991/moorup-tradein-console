@@ -12,6 +12,7 @@ import {
   VerticalPills,
   compareJSON,
   useAuth,
+  usePermission,
 } from '@tradein-admin/libs';
 import { useFormik } from 'formik';
 import { isEmpty } from 'lodash';
@@ -34,6 +35,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export function ConfigurationsPage() {
+  const { hasEditPlatformConfigsPermissions } = usePermission();
   const {
     state: authState,
     getPlatformConfig,
@@ -258,18 +260,20 @@ export function ConfigurationsPage() {
             </FormContainer>
           </FormWrapper>
         </PageContainer>
-        <FormGroup>
-          <span />
-          <AppButton
-            type="button"
-            variant="fill"
-            width="fit-content"
-            onClick={() => onSubmit(formik.values)}
-            disabled={compareJSON(platformConfig, formik.values)}
-          >
-            Save Changes
-          </AppButton>
-        </FormGroup>
+        {hasEditPlatformConfigsPermissions && (
+          <FormGroup>
+            <span />
+            <AppButton
+              type="button"
+              variant="fill"
+              width="fit-content"
+              onClick={() => onSubmit(formik.values)}
+              disabled={compareJSON(platformConfig, formik.values)}
+            >
+              Save Changes
+            </AppButton>
+          </FormGroup>
+        )}
       </div>
     </LoaderContainer>
   );
