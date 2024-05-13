@@ -57,6 +57,7 @@ const PAYMENT_STATUS: any = {
   unpaid: 'Unpaid',
   paid: 'paid',
   redeemed: 'Redeemed',
+  completed: 'Completed',
 };
 
 const QuoteDetails = () => {
