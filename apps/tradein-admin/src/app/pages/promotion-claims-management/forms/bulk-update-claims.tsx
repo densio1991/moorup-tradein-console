@@ -23,7 +23,7 @@ const ItemsContainer = styled.div`
 `;
 
 interface Claims {
-  claim_id: string;
+  id: string;
   status: string;
   remarks: string;
 }
@@ -57,9 +57,12 @@ export function BulkOverrideClaimStatus({
   const initialValues = {
     claims: selectedRows?.map((claim: any) => {
       return {
-        claim_id: claim?._id,
+        id: claim?._id,
         status: '',
         remarks: '',
+        product_name: claim.product_name,
+        amount: claim.amount,
+        currency: claim.currency,
       };
     }),
   };

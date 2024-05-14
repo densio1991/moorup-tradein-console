@@ -26,7 +26,6 @@ import {
   StyledInput,
   StyledReactSelect,
   Table,
-  bulkUpdatePromotionClaimStatus,
   exportPromotionClaims,
   getCurrencySymbol,
   hasEmptyValue,
@@ -50,6 +49,7 @@ export function PromotionClaimsPage() {
     setConfirmationModalState,
     updatePromotionClaimMoorupStatus,
     updatePromotionClaimStatus,
+    bulkUpdatePromotionClaimStatus,
   } = usePromotion();
   const {
     promotionClaims,
@@ -167,7 +167,7 @@ export function PromotionClaimsPage() {
       moorup_status: ClaimStatus.APPROVED,
       include_all: true,
     };
-    bulkUpdatePromotionClaimStatus(values, filters, activePlatform);
+    bulkUpdatePromotionClaimStatus(values?.claims, filters);
   };
 
   const handleSubmitBulkClaimRejection = (values: any) => {
@@ -177,17 +177,16 @@ export function PromotionClaimsPage() {
       moorup_status: ClaimStatus.APPROVED,
       include_all: true,
     };
-    bulkUpdatePromotionClaimStatus(values, filters, activePlatform);
+    bulkUpdatePromotionClaimStatus(values?.claims, filters);
   };
 
   const handleSubmitBulkOverrideClaimStatus = (values: any) => {
     console.log({ values });
     const filters = {
       status: ClaimStatus.PENDING,
-      moorup_status: ClaimStatus.APPROVED,
       include_all: true,
     };
-    bulkUpdatePromotionClaimStatus(values, filters, activePlatform);
+    bulkUpdatePromotionClaimStatus(values?.claims, filters);
   };
 
   const renderModalContentAndActions = () => {

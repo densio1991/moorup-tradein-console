@@ -22,7 +22,7 @@ const ItemsContainer = styled.div`
 `;
 
 interface Claims {
-  claim_id: string;
+  id: string;
   remarks: string;
 }
 
@@ -54,7 +54,7 @@ export function BulkRejectClaims({
   const initialValues = {
     claims: selectedRows?.map((claim: any) => {
       return {
-        claim_id: claim?._id,
+        id: claim?._id,
         status: ClaimStatus.REJECTED,
         remarks: '',
       };
