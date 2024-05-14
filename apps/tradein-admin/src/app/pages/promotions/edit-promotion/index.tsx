@@ -37,6 +37,9 @@ interface FormValues {
   banner_url?: string;
   send_in_deadline: Date | null;
   payment_due_date: Date | null;
+  new_device_purchase_start_date: Date | null;
+  new_device_purchase_end_date: Date | null;
+  claim_deadline: Date | null;
   [key: string]: any; // Index signature to allow dynamic access
 }
 
@@ -66,6 +69,9 @@ export function EditPromotionForm({ data }: any) {
     formik.setFieldTouched('end_date', false);
     formik.setFieldTouched('send_in_deadline', false);
     formik.setFieldTouched('payment_due_date', false);
+    formik.setFieldTouched('new_device_purchase_start_date', false);
+    formik.setFieldTouched('new_device_purchase_end_date', false);
+    formik.setFieldTouched('claim_deadline', false);
     setAddPromotionDetailsPayload(ADD_PROMOTION_DETAILS_PAYLOAD);
   };
 
@@ -74,6 +80,13 @@ export function EditPromotionForm({ data }: any) {
     values.end_date = moment(values.end_date).toISOString();
     values.send_in_deadline = moment(values.send_in_deadline).toISOString();
     values.payment_due_date = moment(values.payment_due_date).toISOString();
+    values.new_device_purchase_start_date = moment(
+      values.new_device_purchase_start_date,
+    ).toISOString();
+    values.new_device_purchase_end_date = moment(
+      values.new_device_purchase_end_date,
+    ).toISOString();
+    values.claim_deadline = moment(values.claim_deadline).toISOString();
     values.platform = activePlatform;
 
     setAddPromotionDetailsPayload(values);
@@ -140,6 +153,38 @@ export function EditPromotionForm({ data }: any) {
     }
   };
 
+  const handleNewDevicePurchaseStartDateOnBlur = () => {
+    if (isEmpty(formik.values.new_device_purchase_start_date)) {
+      formik.setFieldTouched('new_device_purchase_start_date', true, false);
+      formik.setFieldError(
+        'new_device_purchase_start_date',
+        'New device purchase date is required',
+      );
+    } else {
+      formik.setFieldTouched('new_device_purchase_start_date', false, false);
+      formik.setFieldError('new_device_purchase_start_date', '');
+    }
+  };
+
+  const handleNewDevicePurchaseStartDateChange = (date: Date | null) => {
+    formik.setFieldValue('new_device_purchase_start_date', date);
+    formik.setFieldValue('new_device_purchase_end_date', date);
+  };
+
+  const handleNewDevicePurchaseEndDateChange = (date: Date | null) => {
+    formik.setFieldValue('new_device_purchase_end_date', date);
+  };
+
+  const handleClaimDeadlineDateOnBlur = () => {
+    if (isEmpty(formik.values.claim_deadline)) {
+      formik.setFieldTouched('claim_deadline', true, false);
+      formik.setFieldError('claim_deadline', 'Claim deadline date is required');
+    } else {
+      formik.setFieldTouched('claim_deadline', false, false);
+      formik.setFieldError('claim_deadline', '');
+    }
+  };
+
   const handleCropCardImageComplete = (image: string, fileName: string) => {
     createFileFromImageURL(image, fileName).then((file) => {
       setPromotionCardImage(file);
@@ -164,6 +209,9 @@ export function EditPromotionForm({ data }: any) {
       banner_url: data?.banner_url,
       send_in_deadline: data?.send_in_deadline,
       payment_due_date: data?.payment_due_date,
+      new_device_purchase_start_date: data?.new_device_purchase_start_date,
+      new_device_purchase_end_date: data?.new_device_purchase_end_date,
+      claim_deadline: data?.claim_deadline,
     };
 
     formik.setValues(promotionDetails);
@@ -244,6 +292,41 @@ export function EditPromotionForm({ data }: any) {
             onChange={() => {}}
           />
         </FormGroup>
+        <FormGroup>
+          <StyledDateRangePicker
+            startDateInput={{
+              onChange: handleNewDevicePurchaseStartDateChange,
+              placeholder: 'Start Date',
+              value: formik.values.new_device_purchase_start_date,
+              name: 'new_device_purchase_start_date',
+              onBlur: handleNewDevicePurchaseStartDateOnBlur,
+              error: Boolean(
+                formik.touched.new_device_purchase_start_date &&
+                  formik.errors.new_device_purchase_start_date,
+              ),
+              errorMessage: formik.errors.new_device_purchase_start_date,
+            }}
+            endDateInput={{
+              onChange: handleNewDevicePurchaseEndDateChange,
+              placeholder: 'End Date',
+              value: formik.values.new_device_purchase_end_date,
+              name: 'new_device_purchase_end_date',
+              onBlur: () =>
+                formik.setFieldTouched(
+                  'new_device_purchase_end_date',
+                  true,
+                  false,
+                ),
+              error: Boolean(
+                formik.touched.new_device_purchase_end_date &&
+                  formik.errors.new_device_purchase_end_date,
+              ),
+              errorMessage: formik.errors.new_device_purchase_end_date,
+            }}
+            label="Set New Device Purchase Period"
+            onChange={() => {}}
+          />
+        </FormGroup>
         <FormGroup marginBottom="20px">
           <StyledDatePicker
             dateInput={{
@@ -259,6 +342,23 @@ export function EditPromotionForm({ data }: any) {
               errorMessage: formik.errors.send_in_deadline,
             }}
             label="Set Device Send In Deadline Date"
+            onChange={() => {}}
+          />
+        </FormGroup>
+        <FormGroup marginBottom="20px">
+          <StyledDatePicker
+            dateInput={{
+              onChange: handleDateChange,
+              placeholder: 'Set Date',
+              value: formik.values.claim_deadline,
+              name: 'claim_deadline',
+              onBlur: handleClaimDeadlineDateOnBlur,
+              error: Boolean(
+                formik.touched.claim_deadline && formik.errors.claim_deadline,
+              ),
+              errorMessage: formik.errors.claim_deadline,
+            }}
+            label="Set Claim Deadline Date"
             onChange={() => {}}
           />
         </FormGroup>
