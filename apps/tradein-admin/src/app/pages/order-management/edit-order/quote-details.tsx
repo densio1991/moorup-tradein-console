@@ -10,6 +10,7 @@ import {
   DataLine,
   StyledIcon,
   amountFormatter,
+  usePermission,
 } from '@tradein-admin/libs';
 import { faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
@@ -62,6 +63,7 @@ const PAYMENT_STATUS: any = {
 
 const QuoteDetails = () => {
   const { state, getGiftCardStatus, cancelGiftCard } = useOrder();
+  const { hasCancelGiftCardsPermission } = usePermission();
   const [voucherDetails, setVoucherDetails] = useState<any>([]);
   const {
     order = {},

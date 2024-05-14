@@ -5,6 +5,8 @@ import {
   OrderItems,
   useOrder,
   PRODUCT_TYPES,
+  usePermission,
+  OrderItemStatus,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { CardDetail, DeviceSection } from './sections';
@@ -34,6 +36,13 @@ const Collection = ({
     resendShipmentLabel,
     sendBox,
   } = useOrder();
+  const {
+    hasUpdateOrderItemStatusPermission,
+    hasMarkAsReceivedPermission,
+    hasCancelItemPermission,
+    hasResendLabelPermission,
+    hasPrintLabelPermission,
+  } = usePermission();
 
   const {
     isResendingLabel,
@@ -76,6 +85,67 @@ const Collection = ({
     <div className="flex gap-2 p-2.5 items-start">
       {orderItems?.map((item: OrderItems, idx) => {
         const shipment = getItemShipment(item._id);
+        const isCancelled = item.status === OrderItemStatus.CANCELLED;
+
+        // Shipment-related Actions
+        const shipmentActions = [];
+        if (!isEmpty(shipment)) {
+          if (hasMarkAsReceivedPermission) {
+            shipmentActions.push(
+              <button
+                onClick={() => handleReceiveOrderItem(item._id)}
+                className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
+              >
+                Mark as Received
+              </button>,
+            );
+          }
+          if (isBoxRequired(item?.product_type) && hasPrintLabelPermission) {
+            shipmentActions.push(
+              <button
+                onClick={() => handleSendBox(item?._id)}
+                className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
+              >
+                Send Box
+              </button>,
+            );
+          }
+        } else {
+          if (isSingleOrderFlow && hasResendLabelPermission) {
+            shipmentActions.push(
+              <button
+                className="flex-1 text-white bg-emerald-800 py-1 px-3 rounded-md hover:bg-emerald-900"
+                disabled={isResendingLabel}
+                onClick={() => handleResendLabel(item._id)}
+              >
+                Resend Label
+              </button>,
+            );
+          }
+        }
+
+        // Order Item Actions
+        const orderItemActions = [];
+        if (hasUpdateOrderItemStatusPermission) {
+          orderItemActions.push(
+            <button
+              onClick={() => handleUpdateStatus(item)}
+              className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
+            >
+              Update Status
+            </button>,
+          );
+        }
+        if (isSingleOrderFlow && !isCancelled && hasCancelItemPermission) {
+          orderItemActions.push(
+            <button
+              onClick={() => handleCancelOrderItem(item._id)}
+              className="px-3 py-1 flex-1 text-white bg-red-700 hover:bg-red-800 rounded-md"
+            >
+              Cancel Item
+            </button>,
+          );
+        }
 
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
@@ -108,56 +178,19 @@ const Collection = ({
                 </div>
               )}
             </div>
-            {!isEmpty(shipment) ? (
+            {shipmentActions.length > 0 && !isCancelled && (
               <>
                 <hr />
                 <div className="flex flex-row flex-wrap gap-2 pt-1">
-                  <button
-                    onClick={() => handleReceiveOrderItem(item._id)}
-                    className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
-                  >
-                    Mark as Received
-                  </button>
-                  {isBoxRequired(item?.product_type) && (
-                    <button
-                      onClick={() => handleSendBox(item?._id)}
-                      className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
-                    >
-                      Send Box
-                    </button>
-                  )}
+                  {shipmentActions}
                 </div>
               </>
-            ) : (
-              isSingleOrderFlow && (
-                <>
-                  <hr />
-                  <button
-                    className="flex-1 text-white bg-emerald-800 py-1 px-3 rounded-md hover:bg-emerald-900"
-                    disabled={isResendingLabel}
-                    onClick={() => handleResendLabel(item._id)}
-                  >
-                    Resend Label
-                  </button>
-                </>
-              )
             )}
-            <div className="flex flex-row flex-wrap gap-2">
-              <button
-                onClick={() => handleUpdateStatus(item)}
-                className="px-3 py-1 flex-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
-              >
-                Update Status
-              </button>
-              {isSingleOrderFlow && (
-                <button
-                  onClick={() => handleCancelOrderItem(item._id)}
-                  className="px-3 py-1 flex-1 text-white bg-red-700 hover:bg-red-800 rounded-md"
-                >
-                  Cancel Item
-                </button>
-              )}
-            </div>
+            {orderItemActions.length > 0 && (
+              <div className="flex flex-row flex-wrap gap-2">
+                {orderItemActions}
+              </div>
+            )}
           </DetailCardContainer>
         );
       })}
