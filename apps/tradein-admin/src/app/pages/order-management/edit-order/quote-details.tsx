@@ -10,6 +10,7 @@ import {
   DataLine,
   StyledIcon,
   amountFormatter,
+  usePermission,
 } from '@tradein-admin/libs';
 import { faRefresh } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
@@ -61,6 +62,7 @@ const PAYMENT_STATUS: any = {
 
 const QuoteDetails = () => {
   const { state, getGiftCardStatus, cancelGiftCard } = useOrder();
+  const { hasCancelGiftCardsPermission } = usePermission();
   const [voucherDetails, setVoucherDetails] = useState<any>([]);
   const {
     order = {},
@@ -122,15 +124,16 @@ const QuoteDetails = () => {
                 color="#666666"
                 onClick={() => refreshGiftCardStatus(voucher)}
               />
-              {voucher?.provider === 'ezipay' && (
-                <button
-                  className="bg-red-500 py-[2px] px-2 rounded text-xs text-white place-self-end self-end"
-                  onClick={() => onCancelGiftCard(voucher)}
-                  disabled={isUpdatingGiftCard}
-                >
-                  Cancel
-                </button>
-              )}
+              {voucher?.provider === 'ezipay' &&
+                hasCancelGiftCardsPermission && (
+                  <button
+                    className="bg-red-500 py-[2px] px-2 rounded text-xs text-white place-self-end self-end"
+                    onClick={() => onCancelGiftCard(voucher)}
+                    disabled={isUpdatingGiftCard}
+                  >
+                    Cancel
+                  </button>
+                )}
             </div>
           </>
         )}

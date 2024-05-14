@@ -12,6 +12,7 @@ import {
   promotionClaimsManagementParsingConfig,
   useAuth,
   useCommon,
+  usePermission,
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
@@ -42,6 +43,7 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
   const { activePlatform, userDetails } = authState;
   const [claims, setClaims] = useState([]);
   const { state: commonState, setSideModalState } = useCommon();
+  const { hasAddOrderClaimsPermission } = usePermission();
   const { sideModalState } = commonState;
   const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
 
@@ -132,7 +134,7 @@ const ClaimsList = ({ order, isOpen, onToggle }: ClaimsListProps) => {
         <AccordionHeading
           id="claims"
           title={'Promotion Claims'}
-          action={<AddButton />}
+          action={hasAddOrderClaimsPermission && <AddButton />}
           isOpen={isOpen}
           onToggle={onToggle}
         />
