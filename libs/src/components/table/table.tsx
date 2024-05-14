@@ -404,9 +404,11 @@ export function Table({
   }
 
   useEffect(() => {
-    setIsAllSelected(false);
-    setSelectedIndex(new Set([]));
-  }, [rows])
+    if (!isLoading) {
+      setIsAllSelected(false);
+      setSelectedIndex(new Set([]));
+    }
+  }, [isLoading])
 
   return (
     <div style={{ 
