@@ -401,14 +401,32 @@ export const PROMOTIONS_MANAGEMENT_COLUMNS = [
     keyName: 'send_in_deadline',
   },
   {
-    label: 'Payment Due Date',
+    label: 'Claim Deadline',
     order: 7,
+    enableSort: true,
+    keyName: 'claim_deadline',
+  },
+  {
+    label: 'New Device Purchase Start Date',
+    order: 8,
+    enableSort: true,
+    keyName: 'new_device_purchase_start_date',
+  },
+  {
+    label: 'New Device Purchase End Date',
+    order: 9,
+    enableSort: true,
+    keyName: 'new_device_purchase_end_date',
+  },
+  {
+    label: 'Payment Due Date',
+    order: 10,
     enableSort: true,
     keyName: 'payment_due_date',
   },
   {
     label: 'Status',
-    order: 8,
+    order: 11,
     enableSort: true,
     keyName: 'promotion_status',
   },
@@ -1194,6 +1212,9 @@ export const ADD_PROMOTION_DETAILS_PAYLOAD = {
   show_banner: false,
   send_in_deadline: null,
   payment_due_date: null,
+  new_device_purchase_start_date: null,
+  new_device_purchase_end_date: null,
+  claim_deadline: null,
 }
 
 export const ADD_PROMOTION_PRODUCTS_PAYLOAD = {
