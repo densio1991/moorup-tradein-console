@@ -22,7 +22,7 @@ const ItemsContainer = styled.div`
 `;
 
 interface Claims {
-  claim_id: string;
+  id: string;
   product_name: string;
   currency: string;
   amount: number;
@@ -58,7 +58,7 @@ export function BulkApproveClaims({
   const initialValues = {
     claims: selectedRows?.map((claim: any) => {
       return {
-        claim_id: claim?._id,
+        id: claim?._id,
         status: ClaimStatus.APPROVED,
         product_name: '',
         currency: '',
@@ -76,7 +76,7 @@ export function BulkApproveClaims({
     console.log(value, obj);
     formik.setFieldValue(`${arrayField}[${fieldIndex}]`, {
       ...value.data,
-      claim_id: obj?._id,
+      id: obj?._id,
       status: ClaimStatus.APPROVED,
     });
   };

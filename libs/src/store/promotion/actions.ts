@@ -298,7 +298,7 @@ export const bulkUpdatePromotionClaimStatus = (payload: any, filter: any, active
   });
 
   axiosInstance()
-    .patch('/api/claims/status', payload)
+    .patch('/api/claims/status/bulk', payload)
     .then((response) => {
       dispatch({
         type: types.UPDATE_PROMOTION_CLAIM_STATUS.SUCCESS,

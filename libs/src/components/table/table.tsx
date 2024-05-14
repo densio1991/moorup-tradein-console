@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faArrowDownWideShort, faArrowUpWideShort } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty, isEqual } from 'lodash';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { PAGE_SIZES } from '../../constants';
@@ -402,6 +402,11 @@ export function Table({
     }
     setIsAllSelected((value) => !value);
   }
+
+  useEffect(() => {
+    setIsAllSelected(false);
+    setSelectedIndex(new Set([]));
+  }, [rows])
 
   return (
     <div style={{ 
