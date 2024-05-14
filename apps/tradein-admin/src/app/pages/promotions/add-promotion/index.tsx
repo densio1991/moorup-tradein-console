@@ -36,6 +36,9 @@ interface FormValues {
   banner_url?: string;
   send_in_deadline: Date | null;
   payment_due_date: Date | null;
+  new_device_purchase_start_date: Date | null;
+  new_device_purchase_end_date: Date | null;
+  claim_deadline: Date | null;
   [key: string]: any; // Index signature to allow dynamic access
 }
 
@@ -69,6 +72,9 @@ export function AddPromotionForm() {
     formik.setFieldTouched('end_date', false);
     formik.setFieldTouched('send_in_deadline', false);
     formik.setFieldTouched('payment_due_date', false);
+    formik.setFieldTouched('new_device_purchase_start_date', false);
+    formik.setFieldTouched('new_device_purchase_end_date', false);
+    formik.setFieldTouched('claim_deadline', false);
     setAddPromotionDetailsPayload(ADD_PROMOTION_DETAILS_PAYLOAD);
   };
 
@@ -187,7 +193,7 @@ export function AddPromotionForm() {
       formik.setFieldTouched('send_in_deadline', true, false);
       formik.setFieldError(
         'send_in_deadline',
-        'Device Send In Deadline date is required',
+        'Device send in deadline date is required',
       );
     } else {
       formik.setFieldTouched('send_in_deadline', false, false);
@@ -346,6 +352,41 @@ export function AddPromotionForm() {
             onChange={() => {}}
           />
         </FormGroup>
+        <FormGroup>
+          <StyledDateRangePicker
+            startDateInput={{
+              onChange: handleNewDevicePurchaseStartDateChange,
+              placeholder: 'Start Date',
+              value: formik.values.new_device_purchase_start_date,
+              name: 'new_device_purchase_start_date',
+              onBlur: handleNewDevicePurchaseStartDateOnBlur,
+              error: Boolean(
+                formik.touched.new_device_purchase_start_date &&
+                  formik.errors.new_device_purchase_start_date,
+              ),
+              errorMessage: formik.errors.new_device_purchase_start_date,
+            }}
+            endDateInput={{
+              onChange: handleNewDevicePurchaseEndDateChange,
+              placeholder: 'End Date',
+              value: formik.values.new_device_purchase_end_date,
+              name: 'new_device_purchase_end_date',
+              onBlur: () =>
+                formik.setFieldTouched(
+                  'new_device_purchase_end_date',
+                  true,
+                  false,
+                ),
+              error: Boolean(
+                formik.touched.new_device_purchase_end_date &&
+                  formik.errors.new_device_purchase_end_date,
+              ),
+              errorMessage: formik.errors.new_device_purchase_end_date,
+            }}
+            label="Set New Device Purchase Period"
+            onChange={() => {}}
+          />
+        </FormGroup>
         <FormGroup marginBottom="20px">
           <StyledDatePicker
             dateInput={{
@@ -361,6 +402,23 @@ export function AddPromotionForm() {
               errorMessage: formik.errors.send_in_deadline,
             }}
             label="Set Device Send In Deadline Date"
+            onChange={() => {}}
+          />
+        </FormGroup>
+        <FormGroup marginBottom="20px">
+          <StyledDatePicker
+            dateInput={{
+              onChange: handleDateChange,
+              placeholder: 'Set Date',
+              value: formik.values.claim_deadline,
+              name: 'claim_deadline',
+              onBlur: handleClaimDeadlineDateOnBlur,
+              error: Boolean(
+                formik.touched.claim_deadline && formik.errors.claim_deadline,
+              ),
+              errorMessage: formik.errors.claim_deadline,
+            }}
+            label="Set Claim Deadline Date"
             onChange={() => {}}
           />
         </FormGroup>
