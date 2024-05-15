@@ -50,6 +50,7 @@ export function PromotionClaimsPage() {
     updatePromotionClaimMoorupStatus,
     updatePromotionClaimStatus,
     bulkUpdatePromotionClaimStatus,
+    bulkUpdatePromotionClaimMoorupStatus,
   } = usePromotion();
   const {
     promotionClaims,
@@ -186,7 +187,7 @@ export function PromotionClaimsPage() {
       status: ClaimStatus.PENDING,
       include_all: true,
     };
-    bulkUpdatePromotionClaimStatus(values?.claims, filters);
+    bulkUpdatePromotionClaimMoorupStatus(values?.claims);
   };
 
   const renderModalContentAndActions = () => {
@@ -424,6 +425,7 @@ export function PromotionClaimsPage() {
       } else {
         getPromotionClaims({ include_all: true }, signal);
       }
+      setSelectedRows([]);
     }
 
     return () => {
@@ -436,6 +438,10 @@ export function PromotionClaimsPage() {
       onCloseModal();
     };
   }, [activePlatform]);
+
+  useEffect(() => {
+    setSelectedRows([]);
+  }, [promotionClaims]);
 
   const onCloseModal = () => {
     setConfirmationModalState({

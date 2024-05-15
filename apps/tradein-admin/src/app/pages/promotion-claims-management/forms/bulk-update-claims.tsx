@@ -9,6 +9,7 @@ import {
   StyledInput,
   StyledReactSelect,
   hasEmptyValue,
+  useAuth,
   useCommon,
 } from '@tradein-admin/libs';
 import { useFormik } from 'formik';
@@ -53,6 +54,8 @@ export function BulkOverrideClaimStatus({
 }: FormProps) {
   const { state: commonState, setSideModalState } = useCommon();
   const { sideModalState } = commonState;
+  const { state: authState } = useAuth();
+  const { userDetails } = authState;
 
   const initialValues = {
     claims: selectedRows?.map((claim: any) => {
@@ -60,9 +63,7 @@ export function BulkOverrideClaimStatus({
         id: claim?._id,
         status: '',
         remarks: '',
-        product_name: claim.product_name,
-        amount: claim.amount,
-        currency: claim.currency,
+        user_id: userDetails?._id,
       };
     }),
   };
