@@ -152,7 +152,7 @@ export function PromotionClaimsPage() {
             })
           }
         >
-          Update ({selectedRows.length})
+          Override Status ({selectedRows.length})
         </AppButton>,
       );
       break;
