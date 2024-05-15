@@ -187,7 +187,15 @@ export function PromotionClaimsPage() {
       status: ClaimStatus.PENDING,
       include_all: true,
     };
-    bulkUpdatePromotionClaimMoorupStatus(values?.claims);
+
+    // When the API is available
+    // bulkUpdatePromotionClaimMoorupStatus(values?.claims);
+
+    // Workaround to make the feature work w/o the bulk API
+    const claims = values?.claims || [];
+    claims.forEach((claim: any) => {
+      updatePromotionClaimMoorupStatus(claim, claim.id);
+    })
   };
 
   const renderModalContentAndActions = () => {
