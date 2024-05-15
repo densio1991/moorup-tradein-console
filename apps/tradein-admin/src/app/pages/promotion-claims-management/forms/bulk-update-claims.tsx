@@ -44,7 +44,7 @@ const validationSchema = Yup.object().shape({
 });
 
 interface FormProps {
-  selectedRows: Claims[];
+  selectedRows: any[];
   onFormSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }
 
@@ -61,9 +61,9 @@ export function BulkOverrideClaimStatus({
     claims: selectedRows?.map((claim: any) => {
       return {
         id: claim?._id,
+        user_id: userDetails?._id,
         status: '',
         remarks: '',
-        user_id: userDetails?._id,
       };
     }),
   };
@@ -105,8 +105,21 @@ export function BulkOverrideClaimStatus({
     onSubmit,
   });
 
+  const applySelectionToAll = (values: any) => {
+    formik.values.claims.forEach((claim, idx) => {
+      formik.setFieldValue(`claims[${idx}]`, {
+        ...values,
+        id: claim?.id,
+        user_id: userDetails?._id,
+      });
+    });
+  }
+
+  const promotionId = selectedRows[0]?.promotion_id?._id;
+  const canApplyToAll = selectedRows.every((claim: any) => claim?.promotion_id?._id === promotionId);
+
   return (
-    <FormWrapper formTitle="Override Claim Status">
+    <FormWrapper formTitle="Override Claim Moorup Status">
       <FormContainer onSubmit={formik.handleSubmit}>
         {selectedRows?.map((claim: any, index: number) => {
           const overrideClaimStatuses = OVERRIDE_CLAIM_STATUSES?.filter(
@@ -170,6 +183,18 @@ export function BulkOverrideClaimStatus({
                   }
                 />
               </FormGroup>
+              {index === 0 && canApplyToAll && selectedRows.length > 1 && (
+                <div className="flex justify-end mb-2">
+                  <AppButton 
+                    type="button"
+                    width="fit-content"
+                    disabled={hasEmptyValue(formik.values.claims[index])} 
+                    onClick={() => applySelectionToAll(formik.values.claims[index])}
+                  >
+                    Apply to all
+                  </AppButton>
+                </div>
+              )}
             </ItemsContainer>
           );
         })}
