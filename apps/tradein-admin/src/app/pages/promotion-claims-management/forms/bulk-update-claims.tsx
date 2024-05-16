@@ -9,6 +9,7 @@ import {
   StyledInput,
   StyledReactSelect,
   hasEmptyValue,
+  useAuth,
   useCommon,
 } from '@tradein-admin/libs';
 import { useFormik } from 'formik';
@@ -23,7 +24,7 @@ const ItemsContainer = styled.div`
 `;
 
 interface Claims {
-  claim_id: string;
+  id: string;
   status: string;
   remarks: string;
 }
@@ -43,7 +44,7 @@ const validationSchema = Yup.object().shape({
 });
 
 interface FormProps {
-  selectedRows: Claims[];
+  selectedRows: any[];
   onFormSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }
 
@@ -53,11 +54,14 @@ export function BulkOverrideClaimStatus({
 }: FormProps) {
   const { state: commonState, setSideModalState } = useCommon();
   const { sideModalState } = commonState;
+  const { state: authState } = useAuth();
+  const { userDetails } = authState;
 
   const initialValues = {
     claims: selectedRows?.map((claim: any) => {
       return {
-        claim_id: claim?._id,
+        id: claim?._id,
+        user_id: userDetails?._id,
         status: '',
         remarks: '',
       };
@@ -101,8 +105,21 @@ export function BulkOverrideClaimStatus({
     onSubmit,
   });
 
+  const applySelectionToAll = (values: any) => {
+    formik.values.claims.forEach((claim, idx) => {
+      formik.setFieldValue(`claims[${idx}]`, {
+        ...values,
+        id: claim?.id,
+        user_id: userDetails?._id,
+      });
+    });
+  }
+
+  const promotionId = selectedRows[0]?.promotion_id?._id;
+  const canApplyToAll = selectedRows.every((claim: any) => claim?.promotion_id?._id === promotionId);
+
   return (
-    <FormWrapper formTitle="Override Claim Status">
+    <FormWrapper formTitle="Override Claim Moorup Status">
       <FormContainer onSubmit={formik.handleSubmit}>
         {selectedRows?.map((claim: any, index: number) => {
           const overrideClaimStatuses = OVERRIDE_CLAIM_STATUSES?.filter(
@@ -166,6 +183,18 @@ export function BulkOverrideClaimStatus({
                   }
                 />
               </FormGroup>
+              {index === 0 && canApplyToAll && selectedRows.length > 1 && (
+                <div className="flex justify-end mb-2">
+                  <AppButton 
+                    type="button"
+                    width="fit-content"
+                    disabled={hasEmptyValue(formik.values.claims[index])} 
+                    onClick={() => applySelectionToAll(formik.values.claims[index])}
+                  >
+                    Apply to all
+                  </AppButton>
+                </div>
+              )}
             </ItemsContainer>
           );
         })}

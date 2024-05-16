@@ -22,7 +22,7 @@ const ItemsContainer = styled.div`
 `;
 
 interface Claims {
-  claim_id: string;
+  id: string;
   product_name: string;
   currency: string;
   amount: number;
@@ -44,7 +44,7 @@ const validationSchema = Yup.object().shape({
 });
 
 interface FormProps {
-  selectedRows: Claims[];
+  selectedRows: any[];
   onFormSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }
 
@@ -58,7 +58,7 @@ export function BulkApproveClaims({
   const initialValues = {
     claims: selectedRows?.map((claim: any) => {
       return {
-        claim_id: claim?._id,
+        id: claim?._id,
         status: ClaimStatus.APPROVED,
         product_name: '',
         currency: '',
@@ -76,7 +76,7 @@ export function BulkApproveClaims({
     console.log(value, obj);
     formik.setFieldValue(`${arrayField}[${fieldIndex}]`, {
       ...value.data,
-      claim_id: obj?._id,
+      id: obj?._id,
       status: ClaimStatus.APPROVED,
     });
   };
@@ -109,6 +109,19 @@ export function BulkApproveClaims({
     validationSchema,
     onSubmit,
   });
+
+  const applySelectionToAll = (values: any) => {
+    formik.values.claims.forEach((claim, idx) => {
+      formik.setFieldValue(`claims[${idx}]`, {
+        ...values,
+        id: claim?.id,
+        status: ClaimStatus.APPROVED,
+      });
+    });
+  }
+
+  const promotionId = selectedRows[0]?.promotion_id?._id;
+  const canApplyToAll = selectedRows.every((claim: any) => claim?.promotion_id?._id === promotionId);
 
   return (
     <FormWrapper formTitle="Approve Claims">
@@ -145,6 +158,18 @@ export function BulkApproveClaims({
                   }
                 />
               </FormGroup>
+              {index === 0 && canApplyToAll && selectedRows.length > 1 && (
+                <div className="flex justify-end mb-2">
+                  <AppButton 
+                    type="button"
+                    width="fit-content"
+                    disabled={hasEmptyValue(formik.values.claims[index])} 
+                    onClick={() => applySelectionToAll(formik.values.claims[index])}
+                  >
+                    Apply to all
+                  </AppButton>
+                </div>
+              )}
             </ItemsContainer>
           );
         })}

@@ -457,40 +457,40 @@ export const PAYMENTS_MANAGEMENT_COLUMNS = [
 
 export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
   {
-    label: 'Order Number',
+    label: 'Claim Number',
     order: 2,
+    enableSort: true,
+    keyName: 'claim_number',
+  },
+  {
+    label: 'Order Number',
+    order: 3,
     enableSort: true,
     keyName: 'order_id.order_number',
   },
   {
     label: 'Promotion Name',
-    order: 3,
+    order: 4,
     enableSort: true,
     keyName: 'promotion_id.name',
   },
   {
     label: 'Promotion Link',
-    order: 4,
+    order: 5,
     enableSort: true,
     keyName: 'promotion_id.slug',
   },
   {
     label: 'Device Model',
-    order: 5,
+    order: 6,
     enableSort: false,
     keyName: 'device_model',
   },
   {
     label: 'Receipt Number',
-    order: 6,
-    enableSort: true,
-    keyName: 'receipt_number',
-  },
-  {
-    label: 'Claim Number',
     order: 7,
     enableSort: true,
-    keyName: 'claim_number',
+    keyName: 'receipt_number',
   },
   {
     label: 'Claimed By',

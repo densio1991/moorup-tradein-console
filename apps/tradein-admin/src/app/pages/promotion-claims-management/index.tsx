@@ -26,7 +26,6 @@ import {
   StyledInput,
   StyledReactSelect,
   Table,
-  bulkUpdatePromotionClaimStatus,
   exportPromotionClaims,
   getCurrencySymbol,
   hasEmptyValue,
@@ -50,6 +49,8 @@ export function PromotionClaimsPage() {
     setConfirmationModalState,
     updatePromotionClaimMoorupStatus,
     updatePromotionClaimStatus,
+    bulkUpdatePromotionClaimStatus,
+    bulkUpdatePromotionClaimMoorupStatus,
   } = usePromotion();
   const {
     promotionClaims,
@@ -151,7 +152,7 @@ export function PromotionClaimsPage() {
             })
           }
         >
-          Update ({selectedRows.length})
+          Override Status ({selectedRows.length})
         </AppButton>,
       );
       break;
@@ -167,7 +168,7 @@ export function PromotionClaimsPage() {
       moorup_status: ClaimStatus.APPROVED,
       include_all: true,
     };
-    bulkUpdatePromotionClaimStatus(values, filters, activePlatform);
+    bulkUpdatePromotionClaimStatus(values?.claims, filters);
   };
 
   const handleSubmitBulkClaimRejection = (values: any) => {
@@ -177,17 +178,24 @@ export function PromotionClaimsPage() {
       moorup_status: ClaimStatus.APPROVED,
       include_all: true,
     };
-    bulkUpdatePromotionClaimStatus(values, filters, activePlatform);
+    bulkUpdatePromotionClaimStatus(values?.claims, filters);
   };
 
   const handleSubmitBulkOverrideClaimStatus = (values: any) => {
     console.log({ values });
     const filters = {
       status: ClaimStatus.PENDING,
-      moorup_status: ClaimStatus.APPROVED,
       include_all: true,
     };
-    bulkUpdatePromotionClaimStatus(values, filters, activePlatform);
+
+    // When the API is available
+    // bulkUpdatePromotionClaimMoorupStatus(values?.claims);
+
+    // Workaround to make the feature work w/o the bulk API
+    const claims = values?.claims || [];
+    claims.forEach((claim: any) => {
+      updatePromotionClaimMoorupStatus(claim, claim.id);
+    })
   };
 
   const renderModalContentAndActions = () => {
@@ -425,6 +433,7 @@ export function PromotionClaimsPage() {
       } else {
         getPromotionClaims({ include_all: true }, signal);
       }
+      setSelectedRows([]);
     }
 
     return () => {
@@ -437,6 +446,10 @@ export function PromotionClaimsPage() {
       onCloseModal();
     };
   }, [activePlatform]);
+
+  useEffect(() => {
+    setSelectedRows([]);
+  }, [promotionClaims]);
 
   const onCloseModal = () => {
     setConfirmationModalState({

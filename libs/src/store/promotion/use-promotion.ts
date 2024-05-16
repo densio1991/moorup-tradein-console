@@ -97,6 +97,10 @@ export const usePromotion = () => {
     actions.bulkUpdatePromotionClaimStatus(payload, filter, activePlatform)(dispatch);
   }
 
+  const bulkUpdatePromotionClaimMoorupStatus = (payload: any) => {
+    actions.bulkUpdatePromotionClaimMoorupStatus(payload, activePlatform)(dispatch);
+  }
+
   return {
     state: state.promotion,
     getPromotions,
@@ -121,5 +125,6 @@ export const usePromotion = () => {
     setAddOrderPromotionClaimPayload,
     submitOrderPromotionClaim,
     bulkUpdatePromotionClaimStatus,
+    bulkUpdatePromotionClaimMoorupStatus,
   };
 };
