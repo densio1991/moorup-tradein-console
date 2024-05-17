@@ -324,14 +324,14 @@ export const receiveOrderItemById =
   };
 
 export const evaluateOrderItemById =
-(orderItemId: any, orderId: any, payload: any) => (dispatch: any) => {
+(orderItemNumber: any, orderId: any, payload: any) => (dispatch: any) => {
   dispatch({
     type: types.EVALUATE_ORDER_ITEM_BY_ID.baseType,
-    orderItemId,
+    orderItemNumber,
   });
 
   axiosInstance()
-    .post(`/api/orders/${orderItemId}/evaluate`, payload)
+    .patch(`/api/order/item/${orderItemNumber}/evaluate`, payload)
     .then((response) => {
       dispatch({
         type: types.EVALUATE_ORDER_ITEM_BY_ID.SUCCESS,
@@ -346,6 +346,36 @@ export const evaluateOrderItemById =
     .catch((error) => {
       dispatch({
         type: types.EVALUATE_ORDER_ITEM_BY_ID.FAILED,
+        payload: error,
+      });
+
+      toast.error('Failed to update order item status.');
+    });
+};
+
+export const reviseOfferByItemId =
+(orderItemNumber: any, orderId: any, payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.REVISE_OFFER_BY_ITEM_ID.baseType,
+    orderItemNumber,
+  });
+
+  axiosInstance()
+    .patch(`/api/order/item/${orderItemNumber}/revise-offer`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.REVISE_OFFER_BY_ITEM_ID.SUCCESS,
+        payload: response?.data,
+      });
+
+      getOrderById(orderId)(dispatch);
+      getOrderShipments(orderId)(dispatch);
+      setToggleModal(false)(dispatch);
+      toast.success('Order item successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.REVISE_OFFER_BY_ITEM_ID.FAILED,
         payload: error,
       });
 
@@ -504,7 +534,7 @@ export const updateOrderItemImeiSerial = (orderItemId: string, orderId: string, 
   });
 
   axiosInstance()
-    .patch(`/api/orders/items/${orderItemId}/imei-serial`, payload)
+    .patch(`/api/orders/items/${orderItemId}/imei`, payload)
     .then((response) => {
       dispatch({
         type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.SUCCESS,

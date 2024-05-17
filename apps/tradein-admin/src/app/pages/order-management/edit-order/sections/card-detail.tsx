@@ -3,6 +3,7 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import {
   CopyToClipboardButton,
   StyledIcon,
+  useAuth,
   useOrder,
 } from '@tradein-admin/libs';
 import { useEffect, useState } from 'react';
@@ -25,6 +26,9 @@ export const CardDetail = ({
   orderId,
   orderItem,
 }: CardDetailProps) => {
+  const { state: authState } = useAuth();
+  const { activePlatform } = authState;
+
   const [editing, setEditing] = useState(false);
   const [editedValue, setEditedValue] = useState(value);
   const [isImeiValid, setIsImeiValid] = useState(true);
@@ -89,6 +93,7 @@ export const CardDetail = ({
 
     updateOrderItemImeiSerial(orderItem?._id, orderId, {
       imei_serial: editedValue,
+      platform: activePlatform,
     });
     setEditing(false);
   };

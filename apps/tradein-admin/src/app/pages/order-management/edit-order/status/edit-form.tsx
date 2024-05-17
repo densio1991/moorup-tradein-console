@@ -60,7 +60,7 @@ interface FormValues {
 
 type FormProps = {
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
-  updateStatus: (newValue: any) => void;
+  updateStatus: (newValue: any, orderItem: OrderItems) => void;
   orderItem: OrderItems;
 };
 
@@ -90,9 +90,7 @@ export const EditForm = ({
       formik.setErrors(errors);
     }
     if (isEmpty(errors)) {
-      updateStatus({
-        ...formik.values,
-      });
+      updateStatus(formik.values, orderItem);
       setStatusModal(false);
     }
   };
