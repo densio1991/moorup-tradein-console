@@ -361,6 +361,36 @@ export const evaluateOrderItemById =
       });
   };
 
+export const reviseOfferByItemId =
+(orderItemNumber: any, orderId: any, payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.REVISE_OFFER_BY_ITEM_ID.baseType,
+    orderItemNumber,
+  });
+
+  axiosInstance()
+    .patch(`/api/order/item/${orderItemNumber}/revise-offer`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.REVISE_OFFER_BY_ITEM_ID.SUCCESS,
+        payload: response?.data,
+      });
+
+      getOrderById(orderId)(dispatch);
+      getOrderShipments(orderId)(dispatch);
+      setToggleModal(false)(dispatch);
+      toast.success('Order item successfully updated!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.REVISE_OFFER_BY_ITEM_ID.FAILED,
+        payload: error,
+      });
+
+      toast.error('Failed to update order item status.');
+    });
+};
+
 export const cancelOrderItemById =
   (orderItemId: any, orderId: any, payload: any) => (dispatch: any) => {
     dispatch({
