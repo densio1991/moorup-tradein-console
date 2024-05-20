@@ -7,10 +7,10 @@ import styled, { keyframes } from 'styled-components';
 import { PAGE_SIZES } from '../../constants';
 import { sortArray, sortByKey } from '../../helpers';
 import { useCommon } from '../../store';
+import { Checkbox } from '../checkbox';
 import { StyledReactSelect } from '../input';
 import { StyledIcon } from '../styled';
 import Pagination from './pagination';
-import { Checkbox } from '../checkbox';
 
 interface ThProps {
   key: any;
@@ -386,7 +386,7 @@ export function Table({
       onChangeSelection(itemsToDisplay)
       setIsAllSelected(true);
     } else {
-      const selectedItems = itemsToDisplay?.filter((item, idx) => newSelectedIndex.has(idx));
+      const selectedItems = itemsToDisplay?.filter((_, idx) => newSelectedIndex.has(idx));
       onChangeSelection(selectedItems);
       setIsAllSelected(false);
     }
@@ -397,8 +397,13 @@ export function Table({
       setSelectedIndex(new Set([]));
       onChangeSelection([]);
     } else {
-      setSelectedIndex(new Set([...Array(itemsToDisplay.length).keys()]));
-      onChangeSelection(itemsToDisplay);
+      const selectableItems = itemsToDisplay.filter(item => !item.disableCheckbox);
+      const selectableIndices = new Set(
+        selectableItems.map((item) => itemsToDisplay.indexOf(item))
+      );
+
+      setSelectedIndex(selectableIndices);
+      onChangeSelection(selectableItems);
     }
     setIsAllSelected((value) => !value);
   }
@@ -479,9 +484,10 @@ export function Table({
                   <Td key="select-all">
                     <Checkbox
                       label=""
-                      checked={selectedIndex.has(index) || isAllSelected}
+                      checked={selectedIndex.has(index) || (isAllSelected && !row?.disableCheckbox)}
                       onChange={() => toggleSelection(index)}
                       className="!mb-0"
+                      disabled={row?.disableCheckbox}
                     />
                   </Td>
                 )}
