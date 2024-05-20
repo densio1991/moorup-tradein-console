@@ -23,6 +23,7 @@ import {
   promotionClaimsPaymentManagementParsingConfig,
   useAuth,
   useCommon,
+  usePermission,
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
@@ -30,6 +31,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 export function PromotionClaimsPaymentPage() {
+  const { hasProcessPromotionClaimPaymentPermission } = usePermission();
   const {
     state,
     getPromotionClaims,
@@ -359,7 +361,9 @@ export function PromotionClaimsPaymentPage() {
         }
         headers={headers}
         rows={promotionClaimsWithActions || []}
-        enableCheckbox={!isEmpty(rowActions)}
+        enableCheckbox={
+          !isEmpty(rowActions) && hasProcessPromotionClaimPaymentPermission
+        }
         parsingConfig={promotionClaimsPaymentManagementParsingConfig}
         onChangeSelection={handleChangeSelection}
       />
