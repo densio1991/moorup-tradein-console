@@ -84,6 +84,7 @@ export const EditOrderPage = () => {
     fetchOrderShipments,
     patchOrderItemById,
     evaluateOrderItemById,
+    reviseOfferByItemId,
     resendShipmentLabel,
     clearOrder,
     // closeModal,
@@ -171,18 +172,20 @@ export const EditOrderPage = () => {
     }
   }, [order]);
 
-  const onUpdateStatus = (newValue: any) => {
+  const onUpdateStatus = (newValue: any, orderItem: OrderItems) => {
     if (newValue.status === OrderItemStatus.FOR_REVISION) {
       const payload = {
-        pass: false,
-        revised_offer: newValue.revised_offer,
-        reasons: newValue.reason?.split(','),
+        platform: activePlatform,
+        revision_price: newValue.revised_offer,
+        revision_reasons: newValue.reason?.split(','),
       };
-      evaluateOrderItemById(newValue._id, payload);
+      reviseOfferByItemId(orderItem.line_item_number, payload);
     } else if (newValue.status === OrderItemStatus.EVALUATED) {
-      evaluateOrderItemById(newValue._id, { pass: true });
+      evaluateOrderItemById(orderItem.line_item_number, {
+        platform: activePlatform,
+      });
     } else {
-      patchOrderItemById(newValue._id, { status: newValue.status });
+      patchOrderItemById(orderItem._id, { status: newValue.status });
     }
     setSelectedItem({} as OrderItems);
   };
