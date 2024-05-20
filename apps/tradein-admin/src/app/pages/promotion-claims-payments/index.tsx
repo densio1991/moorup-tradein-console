@@ -323,6 +323,8 @@ export function PromotionClaimsPaymentPage() {
       title: '',
       subtitle: '',
     });
+
+    setSelectedRows([]);
   };
 
   return (
