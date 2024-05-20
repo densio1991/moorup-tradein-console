@@ -302,6 +302,7 @@ const productReducer = (state: any, action: any) => {
         ...state,
         isUploadingProductsExcel: true,
         products: [],
+        isFetchingProducts: true,
       };
     }
     case types.UPLOAD_PRODUCTS_EXCEL.SUCCESS: {
