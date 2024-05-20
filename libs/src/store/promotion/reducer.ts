@@ -37,6 +37,7 @@ const promotionState = {
   isProcessingPromotionClaimPayment: false,
   promotionCardImage: null,
   promotionBannerImage: null,
+  isBulkProcessingPromotionClaimPayment: false,
 };
 
 const promotionReducer = (state: any, action: any) => {
@@ -312,6 +313,27 @@ const promotionReducer = (state: any, action: any) => {
         ...state,
         promotionBannerImage: action?.payload,
       };
+
+    case types.BULK_PROCESS_PROMOTION_CLAIM_PAYMENT.baseType: {
+      return {
+        ...state,
+        isBulkProcessingPromotionClaimPayment: true,
+        isFetchingPromotionClaims: true,
+        promotionClaims: [],
+      };
+    }
+    case types.BULK_PROCESS_PROMOTION_CLAIM_PAYMENT.SUCCESS: {
+      return {
+        ...state,
+        isBulkProcessingPromotionClaimPayment: false,
+      };
+    }
+    case types.BULK_PROCESS_PROMOTION_CLAIM_PAYMENT.FAILED: {
+      return {
+        ...state,
+        isBulkProcessingPromotionClaimPayment: false,
+      };
+    }
 
     default:
       return state;

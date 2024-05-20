@@ -35,6 +35,7 @@ export function PromotionClaimsPaymentPage() {
     getPromotionClaims,
     clearPromotionClaims,
     setConfirmationModalState,
+    bulkProcessPromotionClaimPayment,
   } = usePromotion();
   const {
     promotionClaims,
@@ -283,15 +284,21 @@ export function PromotionClaimsPaymentPage() {
               <AppButton
                 width="100%"
                 onClick={() => {
-                  // const filters = {
-                  //   status: [ClaimStatus.APPROVED, ClaimStatus.FAILED].join(
-                  //     ',',
-                  //   ),
-                  //   moorup_status: [
-                  //     ClaimStatus.APPROVED,
-                  //     ClaimStatus.FAILED,
-                  //   ].join(','),
-                  // };
+                  const filters = {
+                    status: [ClaimStatus.APPROVED, ClaimStatus.FAILED].join(
+                      ',',
+                    ),
+                    moorup_status: [
+                      ClaimStatus.APPROVED,
+                      ClaimStatus.FAILED,
+                    ].join(','),
+                  };
+
+                  const payload = selectedRows.map((row: any) => {
+                    return { claimId: row?._id };
+                  });
+
+                  bulkProcessPromotionClaimPayment(payload, filters);
 
                   onCloseModal();
                 }}
