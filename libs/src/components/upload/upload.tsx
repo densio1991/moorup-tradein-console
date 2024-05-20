@@ -27,7 +27,10 @@ const ModalContent = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  padding: 20px;
+  padding: 40px 50px;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 500px;
 `;
 
 const ModalTitle = styled.h5`
@@ -35,6 +38,7 @@ const ModalTitle = styled.h5`
   font-weight: bold;
   padding-top: 10px;
   padding-bottom: 10px;
+  margin-bottom: 10px;
 `;
 
 const ModalBody = styled.div``;
@@ -93,7 +97,7 @@ const UploadInfoText = styled.div`
 const RowContainer = styled.div`
   display: flex;
   justify-content: center;
-  padding: 0 40px;
+  padding: 0;
 `;
 
 const ColumnContainer = styled.div`
@@ -131,7 +135,7 @@ export function UploadFileModal({ isOpen, closeModal }: UploadInvoiceModalProps)
   }, [isOpen]);
 
   return (
-    <ModalOverlay isOpen={isOpen} onClick={() => closeModal()}>
+    <ModalOverlay isOpen={isOpen}>
       <ModalContent>
         <ModalBody>
           <ModalTitle>
