@@ -50,7 +50,6 @@ export function PromotionClaimsPage() {
     updatePromotionClaimMoorupStatus,
     updatePromotionClaimStatus,
     bulkUpdatePromotionClaimStatus,
-    bulkUpdatePromotionClaimMoorupStatus,
   } = usePromotion();
   const {
     promotionClaims,
@@ -97,7 +96,7 @@ export function PromotionClaimsPage() {
   switch (userDetails.role) {
     case REGULAR:
       rowActions.push(
-        <>
+        <div key="update_claims">
           <AppButton
             width="fit-content"
             onClick={() =>
@@ -123,7 +122,7 @@ export function PromotionClaimsPage() {
           >
             Reject ({selectedRows.length})
           </AppButton>
-        </>,
+        </div>,
       );
       break;
 
@@ -138,6 +137,7 @@ export function PromotionClaimsPage() {
 
       rowActions.push(
         <AppButton
+          key="override_moorup_status"
           width="fit-content"
           disabled={selectedRows.some((row: any) =>
             [ClaimStatus.APPROVED, ClaimStatus.COMPLETED].includes(
@@ -183,10 +183,10 @@ export function PromotionClaimsPage() {
 
   const handleSubmitBulkOverrideClaimStatus = (values: any) => {
     console.log({ values });
-    const filters = {
-      status: ClaimStatus.PENDING,
-      include_all: true,
-    };
+    // const filters = {
+    //   status: ClaimStatus.PENDING,
+    //   include_all: true,
+    // };
 
     // When the API is available
     // bulkUpdatePromotionClaimMoorupStatus(values?.claims);
@@ -195,7 +195,7 @@ export function PromotionClaimsPage() {
     const claims = values?.claims || [];
     claims.forEach((claim: any) => {
       updatePromotionClaimMoorupStatus(claim, claim.id);
-    })
+    });
   };
 
   const renderModalContentAndActions = () => {
