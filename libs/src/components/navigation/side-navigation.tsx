@@ -6,15 +6,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Logo from '../../Moorup.png';
 import {
-  ADMIN,
-  CUSTOMER_SERVICE,
-  PRODUCTS,
-  REGULAR,
-  SIDENAV_ITEMS,
-  SUPERADMIN,
-  WAREHOUSE,
+  SIDENAV_ITEMS
 } from '../../constants';
 import { hexToRgba } from '../../helpers';
+import { usePermission } from '../../hooks';
 import { useAuth, useCommon } from '../../store';
 import { Typography } from '../typography';
 
@@ -37,36 +32,40 @@ export function SideBar(): JSX.Element {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const { state: authState, logoutUser } = useAuth();
-  const { userDetails } = authState;
-
+  const { logoutUser } = useAuth();
   const { state: commonState, setShowSideNav } = useCommon();
   const { showSideNav } = commonState;
 
+  const {
+    hasViewDashboardPermission,
+    hasViewProductsPermission,
+    hasViewOrdersPermission,
+    hasViewDiscrepanciesPermission,
+    hasViewActionablesPermission,
+    hasViewPromotionsPermission,
+    hasViewPromotionClaimsPermission,
+    hasViewPromotionClaimsPaymentPermission,
+    hasViewUsersPermission,
+    hasViewPlatformConfigsPermissions,
+  } = usePermission();
+
   const filteredSideNavItems = SIDENAV_ITEMS.filter((item) => {
-    switch (userDetails?.role) {
-      case REGULAR:
-        return item.title === 'Promotions';
+    switch (item.title) {
+      case 'Home':
+        return hasViewDashboardPermission;
+      
+      case 'Product Management':
+        return hasViewProductsPermission;
 
-      case ADMIN:
-        return [
-          'Product Management',
-          'Order Management',
-          'Promotions',
-        ].includes(item.title);
+      case 'Order Management':
+        return hasViewOrdersPermission || hasViewDiscrepanciesPermission || hasViewActionablesPermission;
 
-      case WAREHOUSE:
-        return item.title === 'Order Management';
+      case 'Promotion Management':
+        return hasViewPromotionsPermission || hasViewPromotionClaimsPermission || hasViewPromotionClaimsPaymentPermission;
 
-      case PRODUCTS:
-        return item.title === 'Product Management';
-
-      case CUSTOMER_SERVICE:
-        return item.title === 'Product Management';
-
-      case SUPERADMIN:
-        return true;
-
+      case 'User Management':
+        return hasViewUsersPermission;
+    
       default:
         return false;
     }
@@ -128,19 +127,35 @@ export function SideBar(): JSX.Element {
         rootStyles={{
           color: '#216A4C'
         }}
+        width='280px'
       >
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Image src={Logo} alt="" />
           <div style={{ flex: 1, marginBottom: '32px' }}>
-            <div style={{ padding: '0 24px', marginBottom: '8px' }}>
-              <Typography
-                variant="caption"
-                fontWeight={600}
-                style={{ letterSpacing: '0.5px' }}
-              >
-                General
-              </Typography>
-            </div>
+            {
+              (
+                hasViewDashboardPermission ||
+                hasViewProductsPermission ||
+                hasViewOrdersPermission ||
+                hasViewDiscrepanciesPermission ||
+                hasViewActionablesPermission ||
+                hasViewPromotionsPermission ||
+                hasViewPromotionClaimsPermission ||
+                hasViewPromotionClaimsPaymentPermission ||
+                hasViewUsersPermission
+              )
+              && (
+                <div style={{ padding: '0 24px', marginBottom: '8px' }}>
+                  <Typography
+                    variant="caption"
+                    fontWeight={600}
+                    style={{ letterSpacing: '0.5px' }}
+                  >
+                    General
+                  </Typography>
+                </div>
+              )
+            }
             <Menu
               menuItemStyles={menuItemStyles}
               renderExpandIcon={(params) => <StyledIcon icon={params.open ? faAngleDown : faAngleRight} />}
@@ -149,6 +164,31 @@ export function SideBar(): JSX.Element {
               {
                 filteredSideNavItems?.map((item, index) => {
                   if (item.submenu) {
+                    const filteredSideNavSubItems = item.submenu.filter((item) => {
+                      switch (item.title) {
+                        case 'Orders':
+                          return hasViewOrdersPermission
+
+                        case 'Discrepancy':
+                          return hasViewDiscrepanciesPermission;
+
+                        case 'Actionables':
+                          return hasViewActionablesPermission;
+
+                        case 'Promotions':
+                          return hasViewPromotionsPermission;
+
+                        case 'Claims':
+                          return hasViewPromotionClaimsPermission;
+
+                        case 'Payment':
+                          return hasViewPromotionClaimsPaymentPermission;
+                      
+                        default:
+                          return false;
+                      }
+                    })
+
                     return (
                       <SubMenu 
                         label={item.title} 
@@ -157,10 +197,10 @@ export function SideBar(): JSX.Element {
                         disabled={item.disabled}
                         defaultOpen={item.activeUrl?.test(pathname)}
                       >
-                        {item.submenu.map((subItem, subIndex) => (
-                          <MenuItem 
-                            key={subIndex} 
-                            onClick={() => navigate(subItem.url)} 
+                        {filteredSideNavSubItems?.map((subItem, subIndex) => (
+                          <MenuItem
+                            key={subIndex}
+                            onClick={() => navigate(subItem.url)}
                             active={subItem.activeUrl?.test(pathname)}
                             disabled={subItem.disabled}
                             icon={<StyledIcon icon={subItem.icon} />}
@@ -186,25 +226,31 @@ export function SideBar(): JSX.Element {
                 })
               }
             </Menu>
-            <div style={{ padding: '0 24px', marginBottom: '8px', marginTop: '16px' }}>
-              <Typography
-                variant="caption"
-                fontWeight={600}
-                style={{ letterSpacing: '0.5px' }}
-              >
-                Settings
-              </Typography>
-            </div>
-            <Menu menuItemStyles={menuItemStyles}>
-              <MenuItem 
-                key='configs'
-                onClick={() => navigate('/dashboard/configurations')} 
-                active={/^\/dashboard\/configurations/?.test(pathname)}
-                icon={<StyledIcon icon={faGears} />}
-              >
-                Configurations
-              </MenuItem>
-            </Menu>
+            {
+              hasViewPlatformConfigsPermissions && (
+                <>
+                  <div style={{ padding: '0 24px', marginBottom: '8px', marginTop: '16px' }}>
+                    <Typography
+                      variant="caption"
+                      fontWeight={600}
+                      style={{ letterSpacing: '0.5px' }}
+                    >
+                      Settings
+                    </Typography>
+                  </div>
+                  <Menu menuItemStyles={menuItemStyles}>
+                    <MenuItem 
+                      key='configs'
+                      onClick={() => navigate('/dashboard/configurations')} 
+                      active={/^\/dashboard\/configurations/?.test(pathname)}
+                      icon={<StyledIcon icon={faGears} />}
+                    >
+                      Configurations
+                    </MenuItem>
+                  </Menu>
+                </>
+              )
+            }
           </div>
           <Menu menuItemStyles={menuItemStyles}>
             <MenuItem 

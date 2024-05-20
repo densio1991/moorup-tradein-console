@@ -5,6 +5,7 @@ import {
   StyledIcon,
   useAuth,
   useOrder,
+  usePermission,
 } from '@tradein-admin/libs';
 import { useEffect, useState } from 'react';
 
@@ -34,6 +35,7 @@ export const CardDetail = ({
   const [isImeiValid, setIsImeiValid] = useState(true);
 
   const { updateOrderItemImeiSerial } = useOrder();
+  const { hasEditIMEISerialPermission } = usePermission();
 
   const serialQuestion: Record<string, any> = {
     phones: {
@@ -148,7 +150,7 @@ export const CardDetail = ({
         <dt className="flex items-center break-normal capitalize pb-2 sm:pb-0">
           {value || '---'}
           {copy && value && <CopyToClipboardButton textToCopy={value} />}
-          {edit && value && (
+          {edit && value && hasEditIMEISerialPermission && (
             <button
               onClick={handleEditClick}
               className="text-gray-500 hover:text-gray-700"
