@@ -5,9 +5,11 @@ import {
   ADMIN,
   AppButton,
   ClaimStatus,
+  ConfirmationModalTypes,
   Divider,
   FormGroup,
   FormWrapper,
+  GenericModal,
   IconButton,
   MODAL_TYPES,
   PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS,
@@ -17,6 +19,7 @@ import {
   StyledDateRangePicker,
   StyledInput,
   Table,
+  Typography,
   promotionClaimsPaymentManagementParsingConfig,
   useAuth,
   useCommon,
@@ -31,19 +34,24 @@ export function PromotionClaimsPaymentPage() {
     state,
     getPromotionClaims,
     clearPromotionClaims,
-    processPromotionClaimPayment,
+    setConfirmationModalState,
+    bulkProcessPromotionClaimPayment,
   } = usePromotion();
   const {
     promotionClaims,
     isFetchingPromotionClaims,
     isProcessingPromotionClaimPayment,
+    confirmationModalState,
   } = state;
   const { state: authState } = useAuth();
   const { activePlatform, userDetails } = authState;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
 
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
   const headers = [...PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS];
+  const rowActions: any = [];
 
   switch (userDetails.role) {
     case ADMIN:
@@ -55,29 +63,37 @@ export function PromotionClaimsPaymentPage() {
         keyName: 'moorup_status',
       });
 
-      headers.push({
-        label: 'Action',
-        order: 99,
-        enableSort: false,
-        keyName: '',
-      });
+      rowActions.push(
+        <AppButton
+          key="pay_action"
+          width="fit-content"
+          onClick={() => {
+            setConfirmationModalState({
+              open: true,
+              view: ConfirmationModalTypes.BULK_PROCESS_CLAIM_PAYMENT,
+              subtitle: `You are about to process payment for ${selectedRows.length} claim/s`,
+              data: selectedRows || [],
+            });
+          }}
+        >
+          Pay Now ({selectedRows.length})
+        </AppButton>,
+      );
       break;
 
     default:
       break;
   }
 
-  const addActions = (claims: any) => {
-    const filters = {
-      status: [ClaimStatus.APPROVED, ClaimStatus.FAILED].join(','),
-      moorup_status: [ClaimStatus.APPROVED, ClaimStatus.FAILED].join(','),
-    };
+  const handleChangeSelection = (selectedItems: any) => {
+    setSelectedRows(selectedItems);
+  };
 
+  const addActions = (claims: any) => {
     return claims.map((claim: any) => {
       return {
         ...claim,
-        action: () =>
-          processPromotionClaimPayment({ claimId: claim._id }, filters),
+        disableCheckbox: isNaN(claim['amount']) || claim['amount'] <= 0,
       };
     });
   };
@@ -241,10 +257,79 @@ export function PromotionClaimsPaymentPage() {
     }
   };
 
+  const renderModalContentAndActions = () => {
+    const totalAmount = selectedRows?.reduce(
+      (sum: number, item: any) => sum + item.amount,
+      0,
+    );
+
+    switch (confirmationModalState.view) {
+      case ConfirmationModalTypes.BULK_PROCESS_CLAIM_PAYMENT:
+        return (
+          <div style={{ width: '100%' }}>
+            <Typography variant="body2">
+              Please review the details carefully before proceeding.
+            </Typography>
+            <Typography variant="body2" fontWeight={600} marginBottom="20px">
+              Total Amount: {totalAmount}
+            </Typography>
+            <FormGroup>
+              <AppButton
+                variant="outlined"
+                width="100%"
+                onClick={() => onCloseModal()}
+              >
+                Cancel
+              </AppButton>
+              <AppButton
+                width="100%"
+                onClick={() => {
+                  const filters = {
+                    status: [ClaimStatus.APPROVED, ClaimStatus.FAILED].join(
+                      ',',
+                    ),
+                    moorup_status: [
+                      ClaimStatus.APPROVED,
+                      ClaimStatus.FAILED,
+                    ].join(','),
+                  };
+
+                  const payload = selectedRows.map((row: any) => {
+                    return { claimId: row?._id };
+                  });
+
+                  bulkProcessPromotionClaimPayment(payload, filters);
+
+                  onCloseModal();
+                }}
+                disabled={isEmpty(selectedRows)}
+              >
+                Confirm
+              </AppButton>
+            </FormGroup>
+          </div>
+        );
+
+      default:
+        return;
+    }
+  };
+
+  const onCloseModal = () => {
+    setConfirmationModalState({
+      open: false,
+      view: null,
+      data: {},
+      title: '',
+      subtitle: '',
+    });
+  };
+
   return (
     <>
       <PageSubHeader
         withSearch
+        leftControls={!isEmpty(selectedRows) && rowActions}
         rightControls={
           (userDetails?.role === SUPERADMIN || userDetails.role === ADMIN) && (
             <>
@@ -272,7 +357,9 @@ export function PromotionClaimsPaymentPage() {
         }
         headers={headers}
         rows={promotionClaimsWithActions || []}
+        enableCheckbox={!isEmpty(rowActions)}
         parsingConfig={promotionClaimsPaymentManagementParsingConfig}
+        onChangeSelection={handleChangeSelection}
       />
       <SideModal
         isOpen={sideModalState?.open}
@@ -286,6 +373,13 @@ export function PromotionClaimsPaymentPage() {
       >
         {renderSideModalContent()}
       </SideModal>
+      <GenericModal
+        title="Confirmation"
+        subtitle={confirmationModalState.subtitle}
+        content={renderModalContentAndActions()}
+        isOpen={confirmationModalState.open}
+        onClose={() => onCloseModal()}
+      />
     </>
   );
 }

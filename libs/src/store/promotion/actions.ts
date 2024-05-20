@@ -326,7 +326,7 @@ export const bulkUpdatePromotionClaimMoorupStatus = (payload: any, activePlatfor
   });
 
   axiosInstance()
-    .patch(`/api/claims/moorup-status`, payload)
+    .patch('/api/claims/moorup-status', payload)
     .then((response) => {
       dispatch({
         type: types.BULK_UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.SUCCESS,
@@ -415,4 +415,32 @@ export const setPromotionBannerImage = (payload: File) => (dispatch: any) => {
     type: types.SET_PROMOTION_BANNER_IMAGE,
     payload,
   });
+};
+
+export const bulkProcessPromotionClaimPayment = (payload: any, filter: any, activePlatform: string) => (dispatch: any) => {
+  dispatch({
+    type: types.BULK_PROCESS_PROMOTION_CLAIM_PAYMENT.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .post('/api/claims/payment/bulk', payload)
+    .then((response) => {
+      dispatch({
+        type: types.BULK_PROCESS_PROMOTION_CLAIM_PAYMENT.SUCCESS,
+        payload: response?.data,
+      });
+
+      getPromotionClaims(filter, activePlatform)(dispatch);
+      toast.success('Payment successfully processed!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.BULK_PROCESS_PROMOTION_CLAIM_PAYMENT.FAILED,
+        payload: error,
+      });
+
+      getPromotionClaims(filter, activePlatform)(dispatch);
+      toast.error('Failed to process claim payment.');
+    });
 };
