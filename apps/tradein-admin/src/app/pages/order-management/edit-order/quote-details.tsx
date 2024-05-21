@@ -103,12 +103,12 @@ const QuoteDetails = () => {
     getGiftCardStatus(order?._id, params);
   };
 
-  const onCancelGiftCard = (voucher: any) => {
+  const onCancelGiftCard = (voucher: any, id: number) => {
     setActiveGiftCard(voucher?.pan);
-    cancelGiftCard(order?._id, voucher?.itemNumber);
+    cancelGiftCard(order?._id, orderItems[id].line_item_number);
   };
 
-  const giftCardStatus = (voucher: any) => {
+  const giftCardStatus = (voucher: any, id: number) => {
     return (
       <div className="flex items-center justify-between gap-2">
         {(isFetchingGiftCard || isUpdatingGiftCard) &&
@@ -126,7 +126,7 @@ const QuoteDetails = () => {
               {voucher?.provider === 'ezipay' && (
                 <button
                   className="bg-red-500 py-[2px] px-2 rounded text-xs text-white place-self-end self-end"
-                  onClick={() => onCancelGiftCard(voucher)}
+                  onClick={() => onCancelGiftCard(voucher, id)}
                   disabled={isUpdatingGiftCard}
                 >
                   Cancel
@@ -266,7 +266,7 @@ const QuoteDetails = () => {
                     <td className="p-2">
                       {amountFormatter(voucher?.amount / 100)}
                     </td>
-                    <td className="p-2">{giftCardStatus(voucher)}</td>
+                    <td className="p-2">{giftCardStatus(voucher, idx)}</td>
                   </tr>
                 ))}
               </table>
