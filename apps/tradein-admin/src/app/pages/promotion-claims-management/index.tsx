@@ -98,7 +98,10 @@ export function PromotionClaimsPage() {
   switch (userDetails.role) {
     case REGULAR:
       rowActions.push(
-        <div key="update_claims">
+        <div
+          key="update_claims"
+          style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}
+        >
           <AppButton
             width="fit-content"
             onClick={() =>
@@ -164,7 +167,6 @@ export function PromotionClaimsPage() {
   }
 
   const handleSubmitBulkClaimApproval = (values: any) => {
-    console.log({ values });
     const filters = {
       status: ClaimStatus.PENDING,
       moorup_status: ClaimStatus.APPROVED,
@@ -174,7 +176,6 @@ export function PromotionClaimsPage() {
   };
 
   const handleSubmitBulkClaimRejection = (values: any) => {
-    console.log({ values });
     const filters = {
       status: ClaimStatus.PENDING,
       moorup_status: ClaimStatus.APPROVED,
@@ -184,7 +185,6 @@ export function PromotionClaimsPage() {
   };
 
   const handleSubmitBulkOverrideClaimStatus = (values: any) => {
-    console.log({ values });
     // const filters = {
     //   status: ClaimStatus.PENDING,
     //   include_all: true,
@@ -415,7 +415,6 @@ export function PromotionClaimsPage() {
   const promotionClaimsWithActions = addActions(promotionClaims || []);
 
   const handleChangeSelection = (selectedItems: any) => {
-    console.log({ selectedItems });
     setSelectedRows(selectedItems);
   };
 

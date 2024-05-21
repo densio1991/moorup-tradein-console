@@ -73,7 +73,6 @@ export function BulkApproveClaims({
     arrayField: string,
     obj: any,
   ) => {
-    console.log(value, obj);
     formik.setFieldValue(`${arrayField}[${fieldIndex}]`, {
       ...value.data,
       id: obj?._id,
@@ -118,10 +117,12 @@ export function BulkApproveClaims({
         status: ClaimStatus.APPROVED,
       });
     });
-  }
+  };
 
   const promotionId = selectedRows[0]?.promotion_id?._id;
-  const canApplyToAll = selectedRows.every((claim: any) => claim?.promotion_id?._id === promotionId);
+  const canApplyToAll = selectedRows.every(
+    (claim: any) => claim?.promotion_id?._id === promotionId,
+  );
 
   return (
     <FormWrapper formTitle="Approve Claims">
@@ -160,11 +161,13 @@ export function BulkApproveClaims({
               </FormGroup>
               {index === 0 && canApplyToAll && selectedRows.length > 1 && (
                 <div className="flex justify-end mb-2">
-                  <AppButton 
+                  <AppButton
                     type="button"
                     width="fit-content"
-                    disabled={hasEmptyValue(formik.values.claims[index])} 
-                    onClick={() => applySelectionToAll(formik.values.claims[index])}
+                    disabled={hasEmptyValue(formik.values.claims[index])}
+                    onClick={() =>
+                      applySelectionToAll(formik.values.claims[index])
+                    }
                   >
                     Apply to all
                   </AppButton>
