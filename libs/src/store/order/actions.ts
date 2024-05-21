@@ -4,128 +4,135 @@ import { CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
-
-export const getOrderItems = (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any) => {
-  dispatch({
-    type: types.FETCH_ORDER_ITEMS.baseType,
-    payload,
-  });
-
-  axiosInstance()
-    .get(`/api/orders/items?platform=${platform}`, { params: payload, signal: signal })
-    .then((response) => {
-      dispatch({
-        type: types.FETCH_ORDER_ITEMS.SUCCESS,
-        payload: response?.data,
-      });
-    })
-    .catch((error) => {
-      if (error.code === CANCELLED_AXIOS) {
-        dispatch({
-          type: types.FETCH_ORDER_ITEMS.CANCELLED,
-          payload: error,
-        });
-      } else {
-        dispatch({
-          type: types.FETCH_ORDER_ITEMS.FAILED,
-          payload: error,
-        });
-      }
+export const getOrderItems =
+  (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.FETCH_ORDER_ITEMS.baseType,
+      payload,
     });
-};
+
+    axiosInstance()
+      .get(`/api/orders/items?platform=${platform}`, {
+        params: payload,
+        signal: signal,
+      })
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_ORDER_ITEMS.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.FETCH_ORDER_ITEMS.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.FETCH_ORDER_ITEMS.FAILED,
+            payload: error,
+          });
+        }
+      });
+  };
 
 export const clearOrderItems = (payload: any) => (dispatch: any) => {
   dispatch({
-    type: types.CLEAR_ORDER_ITEMS,payload,
-  });
-};
-
-export const getAllOrders = (platform: any, signal?: AbortSignal) => (dispatch: any) => {
-  dispatch({
-    type: types.FETCH_ORDERS.baseType,
-    platform,
-  });
-
-  axiosInstance()
-    .get(`/api/orders?platform=${platform}`, { signal: signal })
-    .then((response) => {
-      dispatch({
-        type: types.FETCH_ORDERS.SUCCESS,
-        payload: response?.data,
-      });
-    })
-    .catch((error) => {
-      if (error.code === CANCELLED_AXIOS) {
-        dispatch({
-          type: types.FETCH_ORDERS.CANCELLED,
-          payload: error,
-        });
-      } else {
-        dispatch({
-          type: types.FETCH_ORDERS.FAILED,
-          payload: error,
-        });
-      }
-    });
-};
-
-export const getOrderShipments = (payload: string, signal?: AbortSignal) => (dispatch: any) => {
-  dispatch({
-    type: types.FETCH_ORDER_SHIPMENTS.baseType,
+    type: types.CLEAR_ORDER_ITEMS,
     payload,
   });
-
-  axiosInstance()
-    .get(`/api/orders/${payload}/shipments`, { signal: signal })
-    .then((response) => {
-      dispatch({
-        type: types.FETCH_ORDER_SHIPMENTS.SUCCESS,
-        payload: response?.data,
-      });
-    })
-    .catch((error) => {
-      if (error.code === CANCELLED_AXIOS) {
-        dispatch({
-          type: types.FETCH_ORDER_SHIPMENTS.CANCELLED,
-          payload: error,
-        });
-      } else {
-        dispatch({
-          type: types.FETCH_ORDER_SHIPMENTS.FAILED,
-          payload: error,
-        });
-      }
-    });
 };
 
-export const getOrderById = (payload: any, signal?: AbortSignal) => (dispatch: any) => {
-  dispatch({
-    type: types.FETCH_ORDER_BY_ID.baseType,
-    payload,
-  });
-
-  axiosInstance()
-    .get(`/api/orders/${payload}`,  { signal: signal })
-    .then((response) => {
-      dispatch({
-        type: types.FETCH_ORDER_BY_ID.SUCCESS,
-        payload: response?.data,
-      });
-    })
-    .catch((error) => {
-      if (error.code === CANCELLED_AXIOS) {
-        dispatch({
-          type: types.FETCH_ORDER_BY_ID.CANCELLED,
-          payload: error,
-        });
-      } else {
-        dispatch({
-          type: types.FETCH_ORDER_BY_ID.FAILED,
-          payload: error,
-        });
-      }
+export const getAllOrders =
+  (platform: any, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.FETCH_ORDERS.baseType,
+      platform,
     });
-};
+
+    axiosInstance()
+      .get(`/api/orders?platform=${platform}`, { signal: signal })
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_ORDERS.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.FETCH_ORDERS.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.FETCH_ORDERS.FAILED,
+            payload: error,
+          });
+        }
+      });
+  };
+
+export const getOrderShipments =
+  (payload: string, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.FETCH_ORDER_SHIPMENTS.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .get(`/api/orders/${payload}/shipments`, { signal: signal })
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_ORDER_SHIPMENTS.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.FETCH_ORDER_SHIPMENTS.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.FETCH_ORDER_SHIPMENTS.FAILED,
+            payload: error,
+          });
+        }
+      });
+  };
+
+export const getOrderById =
+  (payload: any, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.FETCH_ORDER_BY_ID.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .get(`/api/orders/${payload}`, { signal: signal })
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_ORDER_BY_ID.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.FETCH_ORDER_BY_ID.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.FETCH_ORDER_BY_ID.FAILED,
+            payload: error,
+          });
+        }
+      });
+  };
 
 export const updateOrderById =
   (orderId: any, payload: any) => (dispatch: any) => {
@@ -157,30 +164,30 @@ export const updateOrderById =
   };
 
 export const cancelOrderById = (orderId: any) => (dispatch: any) => {
-    dispatch({
-      type: types.CANCEL_ORDER_BY_ID.baseType,
-    });
+  dispatch({
+    type: types.CANCEL_ORDER_BY_ID.baseType,
+  });
 
-    axiosInstance()
-      .patch(`/api/orders/${orderId}/cancel`)
-      .then((response) => {
-        dispatch({
-          type: types.CANCEL_ORDER_BY_ID.SUCCESS,
-        });
-
-        getOrderById(orderId)(dispatch);
-        toast.success('Order successfully cancelled!');
-      })
-      .catch((error) => {
-        dispatch({
-          type: types.CANCEL_ORDER_BY_ID.FAILED,
-          payload: error,
-        });
-
-        getOrderById(orderId)(dispatch);
-        toast.error('Failed to cancel order.');
+  axiosInstance()
+    .patch(`/api/orders/${orderId}/cancel`)
+    .then((response) => {
+      dispatch({
+        type: types.CANCEL_ORDER_BY_ID.SUCCESS,
       });
-  };
+
+      getOrderById(orderId)(dispatch);
+      toast.success('Order successfully cancelled!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.CANCEL_ORDER_BY_ID.FAILED,
+        payload: error,
+      });
+
+      getOrderById(orderId)(dispatch);
+      toast.error('Failed to cancel order.');
+    });
+};
 
 export const resendShipmentLabel =
   (id: any, payload: any) => (dispatch: any) => {
@@ -250,7 +257,7 @@ export const updateOrderItemById =
           type: types.UPDATE_ORDER_ITEM_BY_ID.SUCCESS,
           payload: response?.data,
         });
- 
+
         getOrderById(orderId)(dispatch);
         getOrderShipments(orderId)(dispatch);
         setToggleModal(false)(dispatch);
@@ -266,33 +273,34 @@ export const updateOrderItemById =
       });
   };
 
-export const deleteOrderById = (payload: any, platform: string) => (dispatch: any) => {
-  dispatch({
-    type: types.DELETE_ORDER_BY_ID.baseType,
-    payload,
-  });
-
-  axiosInstance()
-    .delete(`/api/orders/${payload}`)
-    .then((response) => {
-      dispatch({
-        type: types.DELETE_ORDER_BY_ID.SUCCESS,
-        payload: response?.data,
-      });
-
-      getAllOrders(platform)(dispatch);
-      toast.success('Order successfully deleted!');
-    })
-    .catch((error) => {
-      dispatch({
-        type: types.DELETE_ORDER_BY_ID.FAILED,
-        payload: error,
-      });
-
-      getAllOrders(platform)(dispatch);
-      toast.error('Failed to delete order.');
+export const deleteOrderById =
+  (payload: any, platform: string) => (dispatch: any) => {
+    dispatch({
+      type: types.DELETE_ORDER_BY_ID.baseType,
+      payload,
     });
-};
+
+    axiosInstance()
+      .delete(`/api/orders/${payload}`)
+      .then((response) => {
+        dispatch({
+          type: types.DELETE_ORDER_BY_ID.SUCCESS,
+          payload: response?.data,
+        });
+
+        getAllOrders(platform)(dispatch);
+        toast.success('Order successfully deleted!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.DELETE_ORDER_BY_ID.FAILED,
+          payload: error,
+        });
+
+        getAllOrders(platform)(dispatch);
+        toast.error('Failed to delete order.');
+      });
+  };
 
 export const receiveOrderItemById =
   (orderItemId: any, orderId: any) => (dispatch: any) => {
@@ -324,34 +332,34 @@ export const receiveOrderItemById =
   };
 
 export const evaluateOrderItemById =
-(orderItemId: any, orderId: any, payload: any) => (dispatch: any) => {
-  dispatch({
-    type: types.EVALUATE_ORDER_ITEM_BY_ID.baseType,
-    orderItemId,
-  });
-
-  axiosInstance()
-    .post(`/api/orders/${orderItemId}/evaluate`, payload)
-    .then((response) => {
-      dispatch({
-        type: types.EVALUATE_ORDER_ITEM_BY_ID.SUCCESS,
-        payload: response?.data,
-      });
-
-      getOrderById(orderId)(dispatch);
-      getOrderShipments(orderId)(dispatch);
-      setToggleModal(false)(dispatch);
-      toast.success('Order item successfully updated!');
-    })
-    .catch((error) => {
-      dispatch({
-        type: types.EVALUATE_ORDER_ITEM_BY_ID.FAILED,
-        payload: error,
-      });
-
-      toast.error('Failed to update order item status.');
+  (orderItemId: any, orderId: any, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.EVALUATE_ORDER_ITEM_BY_ID.baseType,
+      orderItemId,
     });
-};
+
+    axiosInstance()
+      .post(`/api/orders/${orderItemId}/evaluate`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.EVALUATE_ORDER_ITEM_BY_ID.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderById(orderId)(dispatch);
+        getOrderShipments(orderId)(dispatch);
+        setToggleModal(false)(dispatch);
+        toast.success('Order item successfully updated!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.EVALUATE_ORDER_ITEM_BY_ID.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to update order item status.');
+      });
+  };
 
 export const cancelOrderItemById =
   (orderItemId: any, orderId: any, payload: any) => (dispatch: any) => {
@@ -367,7 +375,7 @@ export const cancelOrderItemById =
           type: types.CANCEL_ORDER_ITEM_BY_ID.SUCCESS,
           payload: response?.data,
         });
- 
+
         getOrderById(orderId)(dispatch);
         getOrderShipments(orderId)(dispatch);
         setToggleModal(false)(dispatch);
@@ -383,29 +391,30 @@ export const cancelOrderItemById =
       });
   };
 
-export const updateShipmentStatus = (shipmentId: string, orderId: string, payload: any) => (dispatch: any) => {
-  dispatch({
-    type: types.UPDATE_SHIPPING_STATUS_BY_ID.baseType,
-    payload,
-  });
-
-  axiosInstance()
-    .patch(`/api/shipments/status/${shipmentId}`, payload)
-    .then((response) => {
-      dispatch({
-        type: types.UPDATE_SHIPPING_STATUS_BY_ID.SUCCESS,
-        payload: response?.data,
-      });
-      getOrderShipments(orderId)(dispatch);
-      toast.success('Shipment status successfully updated!');
-    })
-    .catch((error) => {
-      dispatch({
-        type: types.UPDATE_SHIPPING_STATUS_BY_ID.FAILED,
-        payload: error,
-      });
+export const updateShipmentStatus =
+  (shipmentId: string, orderId: string, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.UPDATE_SHIPPING_STATUS_BY_ID.baseType,
+      payload,
     });
-};
+
+    axiosInstance()
+      .patch(`/api/shipments/status/${shipmentId}`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.UPDATE_SHIPPING_STATUS_BY_ID.SUCCESS,
+          payload: response?.data,
+        });
+        getOrderShipments(orderId)(dispatch);
+        toast.success('Shipment status successfully updated!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.UPDATE_SHIPPING_STATUS_BY_ID.FAILED,
+          payload: error,
+        });
+      });
+  };
 
 export const setToggleModal = (payload: any) => (dispatch: any) => {
   dispatch({
@@ -428,101 +437,109 @@ export const clearOrders = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const generateLabels = (payload: any, onSuccess: any = false) => (dispatch: any) => {
-  dispatch({
-    type: types.GENERATE_LABELS.baseType,
-    payload,
-  });
-
-  axiosInstance()
-    .post('/api/shipments/generate-labels?label=return,outbound&update_status=true', payload)
-    .then((response) => {
-      dispatch({
-        type: types.GENERATE_LABELS.SUCCESS,
-        payload: response?.data,
-      });
-
-      const { data = {} } = response?.data || {};
-      if (data?.return?.label) {
-        window.open(data?.return?.label, '_blank');
-      }
-      if (data?.outbound?.label) {
-        window.open(data?.outbound?.label, '_blank');
-      }
-
-      if (onSuccess && typeof onSuccess == 'function') {
-        onSuccess(data);
-      }
-    })
-    .catch((error) => {
-      dispatch({
-        type: types.GENERATE_LABELS.FAILED,
-        payload: error,
-      });
-      
-      toast.error('Failed to generate labels.');
+export const generateLabels =
+  (payload: any, onSuccess: any = false) =>
+  (dispatch: any) => {
+    dispatch({
+      type: types.GENERATE_LABELS.baseType,
+      payload,
     });
-};
 
-export const generateOutboundLabel = (payload: any, onSuccess: any = false) => (dispatch: any) => {
-  dispatch({
-    type: types.GENERATE_LABELS.baseType,
-    payload,
-  });
+    axiosInstance()
+      .post(
+        '/api/shipments/generate-labels?label=return,outbound&update_status=true',
+        payload,
+      )
+      .then((response) => {
+        dispatch({
+          type: types.GENERATE_LABELS.SUCCESS,
+          payload: response?.data,
+        });
 
-  axiosInstance()
-    .post('/api/shipments/generate-labels?label=outbound', payload)
-    .then((response) => {
-      dispatch({
-        type: types.GENERATE_OUTBOUND_LABEL.SUCCESS,
-        payload: response?.data,
+        const { data = {} } = response?.data || {};
+        if (data?.return?.label) {
+          window.open(data?.return?.label, '_blank');
+        }
+        if (data?.outbound?.label) {
+          window.open(data?.outbound?.label, '_blank');
+        }
+
+        if (onSuccess && typeof onSuccess == 'function') {
+          onSuccess(data);
+        }
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.GENERATE_LABELS.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to generate labels.');
       });
+  };
 
-      const { data = {} } = response?.data || {};
-      if (data?.outbound?.label) {
-        window.open(data?.outbound?.label, '_blank');
-      }
-
-      if (onSuccess && typeof onSuccess == 'function') {
-        onSuccess(data);
-      }
-    })
-    .catch((error) => {
-      dispatch({
-        type: types.GENERATE_OUTBOUND_LABEL.FAILED,
-        payload: error,
-      });
-      
-      toast.error('Failed to generate labels.');
+export const generateOutboundLabel =
+  (payload: any, onSuccess: any = false) =>
+  (dispatch: any) => {
+    dispatch({
+      type: types.GENERATE_LABELS.baseType,
+      payload,
     });
-};
 
-export const updateOrderItemImeiSerial = (orderItemId: string, orderId: string, payload: any) => (dispatch: any) => {
-  dispatch({
-    type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.baseType,
-    payload,
-  });
+    axiosInstance()
+      .post('/api/shipments/generate-labels?label=outbound', payload)
+      .then((response) => {
+        dispatch({
+          type: types.GENERATE_OUTBOUND_LABEL.SUCCESS,
+          payload: response?.data,
+        });
 
-  axiosInstance()
-    .patch(`/api/orders/items/${orderItemId}/imei-serial`, payload)
-    .then((response) => {
-      dispatch({
-        type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.SUCCESS,
-        payload: response,
+        const { data = {} } = response?.data || {};
+        if (data?.outbound?.label) {
+          window.open(data?.outbound?.label, '_blank');
+        }
+
+        if (onSuccess && typeof onSuccess == 'function') {
+          onSuccess(data);
+        }
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.GENERATE_OUTBOUND_LABEL.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to generate labels.');
       });
+  };
 
-      getOrderById(orderId)(dispatch);
-      toast.success('IMEI/Serial successfully updated!');
-    })
-    .catch((error) => {
-      dispatch({
-        type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.FAILED,
-        payload: error,
-      });
-      
-      toast.error('Failed to update IMEI/Serial.');
+export const updateOrderItemImeiSerial =
+  (orderItemId: string, orderId: string, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.baseType,
+      payload,
     });
-};
+
+    axiosInstance()
+      .patch(`/api/orders/items/${orderItemId}/imei-serial`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.SUCCESS,
+          payload: response,
+        });
+
+        getOrderById(orderId)(dispatch);
+        toast.success('IMEI/Serial successfully updated!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to update IMEI/Serial.');
+      });
+  };
 
 export const getGiftCardStatus =
   (orderId: any, payload: any, signal?: AbortSignal) => (dispatch: any) => {
@@ -549,7 +566,8 @@ export const getGiftCardStatus =
   };
 
 export const cancelGiftCard =
-  (orderId: any, voucherOrderNumber: any, signal?: AbortSignal) => (dispatch: any) => {
+  (orderId: any, voucherOrderNumber: any, signal?: AbortSignal) =>
+  (dispatch: any) => {
     dispatch({
       type: types.CANCEL_GIFT_CARD.baseType,
     });
@@ -557,7 +575,8 @@ export const cancelGiftCard =
     axiosInstance()
       .patch(
         `/api/payments/cancel-voucher/${orderId}?voucherOrderNumber=${voucherOrderNumber}`,
-        { signal: signal })
+        { signal: signal },
+      )
       .then((response) => {
         dispatch({
           type: types.CANCEL_GIFT_CARD.SUCCESS,
@@ -578,6 +597,7 @@ export const cancelGiftCard =
 
 export const clearOrder = (payload: any) => (dispatch: any) => {
   dispatch({
-    type: types.CLEAR_ORDER,payload,
+    type: types.CLEAR_ORDER,
+    payload,
   });
 };
