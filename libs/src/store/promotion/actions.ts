@@ -425,10 +425,16 @@ export const bulkProcessPromotionClaimPayment = (payload: any, filter: any, acti
 
   axiosInstance()
     .post('/api/claims/payment/bulk', payload)
-    .then((response) => {
+    .then(() => {
+      const selectedIds = payload.map((item: any) => item.claimId);
+      const savedIds = sessionStorage.getItem('FPC');
+      const parsedIds = savedIds ? JSON.parse(savedIds) : [];
+
+      sessionStorage.setItem('FPC', JSON.stringify([...parsedIds, selectedIds]));
+
       dispatch({
         type: types.BULK_PROCESS_PROMOTION_CLAIM_PAYMENT.SUCCESS,
-        payload: response?.data,
+        payload: selectedIds,
       });
 
       getPromotionClaims(filter, activePlatform)(dispatch);
