@@ -44,6 +44,7 @@ export function PromotionClaimsPaymentPage() {
     isFetchingPromotionClaims,
     isProcessingPromotionClaimPayment,
     confirmationModalState,
+    forProcessingClaimsPayment,
   } = state;
   const { state: authState } = useAuth();
   const { activePlatform, userDetails } = authState;
@@ -95,7 +96,16 @@ export function PromotionClaimsPaymentPage() {
     return claims.map((claim: any) => {
       return {
         ...claim,
-        disableCheckbox: isNaN(claim['amount']) || claim['amount'] <= 0,
+        disableCheckbox:
+          isNaN(claim['amount']) ||
+          claim['amount'] <= 0 ||
+          forProcessingClaimsPayment.includes(claim._id),
+        displayStatus: forProcessingClaimsPayment.includes(claim._id)
+          ? 'processing'
+          : claim.status,
+        displayMoorupStatus: forProcessingClaimsPayment.includes(claim._id)
+          ? 'processing'
+          : claim.moorup_status,
       };
     });
   };
