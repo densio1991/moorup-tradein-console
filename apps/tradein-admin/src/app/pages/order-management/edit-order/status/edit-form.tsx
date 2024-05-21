@@ -5,6 +5,7 @@ import {
   OrderItems,
   StyledInput,
   StyledReactSelect,
+  isNullOrEmpty,
 } from '@tradein-admin/libs';
 
 import { useFormik } from 'formik';
@@ -81,7 +82,7 @@ export const EditForm = ({
     const errors: any = {};
 
     if (status === DropdownOrderItemStatus.FOR_REVISION) {
-      if (!revised_offer || revised_offer <= 0) {
+      if (isNullOrEmpty(revised_offer)) {
         errors['revised_offer'] = 'Required field';
       }
       if (isEmpty(reason)) {
