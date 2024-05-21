@@ -612,3 +612,7 @@ export const parsePromotionStatus = (promotion: Promotion) => {
 
   return promotion_status;
 }
+
+export const isNullOrEmpty = (value: any): boolean => {
+  return value === null || value === '';
+};
