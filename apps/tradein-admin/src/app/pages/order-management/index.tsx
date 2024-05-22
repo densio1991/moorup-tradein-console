@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
-  ACTIONS_COLUMN,
   ORDER_MANAGEMENT_COLUMNS,
   PageSubHeader,
   Table,
@@ -26,8 +25,19 @@ export function OrderManagementPage() {
 
   const headers = [
     ...ORDER_MANAGEMENT_COLUMNS,
-    ...(hasViewOrderDetailsPermission ? ACTIONS_COLUMN : []),
+    // ...(hasViewOrderDetailsPermission ? ACTIONS_COLUMN : []),
   ];
+
+  const addViewUrlToOrders = (orders: any) => {
+    return orders.map((order: any) => ({
+      ...order,
+      ...(hasViewOrderDetailsPermission && {
+        viewURL: `/dashboard/order/${order._id}`,
+      }),
+    }));
+  };
+
+  const ordersWithViewUrl = addViewUrlToOrders(orders || []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -53,7 +63,7 @@ export function OrderManagementPage() {
         label="Orders"
         isLoading={isFetchingOrders}
         headers={headers}
-        rows={orders || []}
+        rows={ordersWithViewUrl || []}
         parsingConfig={orderManagementParsingConfig}
         menuItems={[
           {

@@ -38,6 +38,10 @@ const promotionState = {
   promotionCardImage: null,
   promotionBannerImage: null,
   isBulkProcessingPromotionClaimPayment: false,
+  forProcessingClaimsPayment: (() => {
+    const saved = sessionStorage.getItem('FPC');
+    return saved ? JSON.parse(saved) : [];
+  })(),
 };
 
 const promotionReducer = (state: any, action: any) => {
@@ -326,6 +330,7 @@ const promotionReducer = (state: any, action: any) => {
       return {
         ...state,
         isBulkProcessingPromotionClaimPayment: false,
+        forProcessingClaimsPayment: [...state.forProcessingClaimsPayment, ...action.payload],
       };
     }
     case types.BULK_PROCESS_PROMOTION_CLAIM_PAYMENT.FAILED: {

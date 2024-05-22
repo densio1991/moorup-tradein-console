@@ -99,8 +99,8 @@ const TableStyled = styled.table`
   tbody td {
     white-space: nowrap;
     border-bottom: 1px solid #f0f0f0;
-    padding-top: 12px !important;
-    padding-bottom: 12px !important;
+    padding-top: 14px !important;
+    padding-bottom: 14px !important;
     padding-left: 30px !important;
 
     &:nth-child(2) {
@@ -146,7 +146,7 @@ const Tbody = styled.tbody`
   tr {
     transition: background-color 0.3s ease;
     td {
-      padding: 12px 10px;
+      padding: 14px 10px;
       border-bottom: 1px solid #e1e4e8;
       color: #333;
       font-size: 12px;
@@ -178,7 +178,7 @@ const Tr = styled.tr<{ hover?: boolean }>`
 `;
 
 const Td = styled.td<{ alignRight?: boolean }>`
-  padding: 12px 10px;
+  padding: 14px 10px;
   border-bottom: 1px solid #e1e4e8;
   color: #333;
   font-size: 12px;

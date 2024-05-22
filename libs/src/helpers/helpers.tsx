@@ -522,7 +522,7 @@ export const hexToRgba = (hex: string, alpha: number) => {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
-export const parseTypes = (type: string) => {
+export const parseTypes = (type: string, disableFormatting?: boolean) => {
   let color = defaultTheme.disabled.text;
   let text = type;
   switch (type) {
@@ -574,8 +574,8 @@ export const parseTypes = (type: string) => {
 
   return (
     <span>
-      <StyledIcon icon={faCircle} color={color} disabled />
-      <span style={{ color: color, marginLeft: '2px' }}>{text}</span>
+      { !disableFormatting && <StyledIcon icon={faCircle} color={color} disabled /> }
+      <span style={{ color: disableFormatting ? '' : color, marginLeft: '2px' }}>{text}</span>
     </span>
   )
 }
@@ -612,3 +612,7 @@ export const parsePromotionStatus = (promotion: Promotion) => {
 
   return promotion_status;
 }
+
+export const isNullOrEmpty = (value: any): boolean => {
+  return value === null || value === '';
+};

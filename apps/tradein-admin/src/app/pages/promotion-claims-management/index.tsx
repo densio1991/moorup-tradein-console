@@ -14,7 +14,6 @@ import {
   IconButton,
   MODAL_TYPES,
   MOORUP_CLAIM_STATUSES,
-  OVERRIDE_CLAIM_STATUSES,
   PROMOTION_CLAIMS_MANAGEMENT_COLUMNS,
   PageSubHeader,
   REGULAR,
@@ -98,7 +97,10 @@ export function PromotionClaimsPage() {
   switch (userDetails.role) {
     case REGULAR:
       rowActions.push(
-        <div key="update_claims">
+        <div
+          key="update_claims"
+          style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}
+        >
           <AppButton
             width="fit-content"
             onClick={() =>
@@ -141,11 +143,6 @@ export function PromotionClaimsPage() {
         <AppButton
           key="override_moorup_status"
           width="fit-content"
-          disabled={selectedRows.some((row: any) =>
-            [ClaimStatus.APPROVED, ClaimStatus.COMPLETED].includes(
-              row['moorup_status'],
-            ),
-          )}
           onClick={() =>
             setSideModalState({
               ...sideModalState,
@@ -164,7 +161,6 @@ export function PromotionClaimsPage() {
   }
 
   const handleSubmitBulkClaimApproval = (values: any) => {
-    console.log({ values });
     const filters = {
       status: ClaimStatus.PENDING,
       moorup_status: ClaimStatus.APPROVED,
@@ -174,7 +170,6 @@ export function PromotionClaimsPage() {
   };
 
   const handleSubmitBulkClaimRejection = (values: any) => {
-    console.log({ values });
     const filters = {
       status: ClaimStatus.PENDING,
       moorup_status: ClaimStatus.APPROVED,
@@ -184,7 +179,6 @@ export function PromotionClaimsPage() {
   };
 
   const handleSubmitBulkOverrideClaimStatus = (values: any) => {
-    console.log({ values });
     // const filters = {
     //   status: ClaimStatus.PENDING,
     //   include_all: true,
@@ -378,36 +372,23 @@ export function PromotionClaimsPage() {
           a?.label?.localeCompare(b?.label),
         );
 
-      const overrideClaimStatuses = OVERRIDE_CLAIM_STATUSES?.filter(
-        (item) => item?.value !== claim?.moorup_status,
-      );
+      let disableCheckbox = false;
+      if (userDetails.role === SUPERADMIN) {
+        disableCheckbox = [
+          ClaimStatus.APPROVED,
+          ClaimStatus.COMPLETED,
+        ].includes(claim['moorup_status']);
+      } else if (userDetails.role === REGULAR) {
+        disableCheckbox = [
+          ClaimStatus.COMPLETED,
+          ClaimStatus.APPROVED,
+        ].includes(claim['status']);
+      }
 
       return {
         ...claim,
         products,
-        approveAction: () =>
-          setConfirmationModalState({
-            open: true,
-            view: ConfirmationModalTypes.APPROVE_CLAIM_REGULAR,
-            subtitle: 'Are you sure you want to approve this claim?',
-            data: products || [],
-            id: claim._id,
-          }),
-        rejectAction: () =>
-          setConfirmationModalState({
-            open: true,
-            view: ConfirmationModalTypes.REJECT_CLAIM_REGULAR,
-            subtitle: 'Are you sure you want to reject this claim?',
-            id: claim._id,
-          }),
-        overrideAction: () =>
-          setConfirmationModalState({
-            open: true,
-            view: ConfirmationModalTypes.OVERRIDE_CLAIM_STATUS,
-            subtitle: 'Are you sure you want to update moorup status?',
-            data: overrideClaimStatuses || [],
-            id: claim._id,
-          }),
+        disableCheckbox,
       };
     });
   };
@@ -415,7 +396,6 @@ export function PromotionClaimsPage() {
   const promotionClaimsWithActions = addActions(promotionClaims || []);
 
   const handleChangeSelection = (selectedItems: any) => {
-    console.log({ selectedItems });
     setSelectedRows(selectedItems);
   };
 

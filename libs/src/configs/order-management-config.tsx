@@ -19,11 +19,11 @@ export const orderManagementParsingConfig = {
   },
   'Order Type': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['order_type'])) return '--';
-    return parseTypes(row['order_type']);
+    return parseTypes(row['order_type'], true);
   },
   'Credit Type': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['credit_type'])) return '--';
-    return parseTypes(row['credit_type']);
+    return parseTypes(row['credit_type'], true);
   },
   'Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['status'])) return '--';
