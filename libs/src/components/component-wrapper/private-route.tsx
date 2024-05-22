@@ -38,6 +38,8 @@ export function PrivateRoute(): JSX.Element {
     hasViewPromotionClaimsPaymentPermission,
     hasViewUsersPermission,
     hasViewPlatformConfigsPermissions,
+    hasViewOrderDetailsPermission,
+    hasEditProductPermission,
   } = usePermission();
 
   useEffect(() => {
@@ -53,33 +55,55 @@ export function PrivateRoute(): JSX.Element {
         '/dashboard/promotion/payment': hasViewPromotionClaimsPaymentPermission,
         '/dashboard/user': hasViewUsersPermission,
         '/dashboard/configurations': hasViewPlatformConfigsPermissions,
+        // There should be no static entry for dynamic paths in the permissions object
       };
-
+  
       let redirectTo = null;
+  
+      // Remove possible trailing slash from pathname
+      const cleanPathname = pathname.replace(/\/$/, '');
+  
+      const checkPermission = (path: string) => {
+        if (permissions[path] !== undefined) {
+          return permissions[path];
+        }
 
+        const dynamicPaths = [
+          { pattern: /^\/dashboard\/order\/[^/]+$/, permission: hasViewOrderDetailsPermission },
+          { pattern: /^\/dashboard\/product\/[^/]+$/, permission: hasEditProductPermission },
+        ];
+        
+        for (const { pattern, permission } of dynamicPaths) {
+          if (pattern.test(path)) {
+            return permission;
+          }
+        }
+        return null;
+      };
+  
       // Check if user has permission for the current path
-      if (!permissions[pathname]) {
-        // If user doesn't have permission for current path, find the first path with permissions
+      if (!checkPermission(cleanPathname)) {
+        // If user doesn't have permission for the current path, find the first path with permissions
         Object.entries(permissions).some(([path, permission]) => {
           if (permission) {
-            redirectTo = path;
+            redirectTo = path.includes('/:id') ? '/dashboard' : path; // Redirect dynamic path to a safe default
             return true; // Stop iterating once a path with permissions is found
           }
           return false;
         });
       } else {
-        redirectTo = pathname;
+        redirectTo = cleanPathname;
       }
-
+  
       if (!redirectTo) {
         // If no path with permissions found, default to '/404'
         redirectTo = '/404';
       }
-
+  
       setLoading(false);
       navigate(redirectTo);
     }
-  }, [userDetails])
+  }, [userDetails]);
 
   if (!validateExpiry(expiry)) {
     return <Navigate to="/" />;
