@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import styled from 'styled-components';
 
-interface CustomButtonProps {
+export interface CustomButtonProps {
   id?: string;
   isLoading?: boolean;
   icon?: any;
@@ -54,14 +54,13 @@ const StyledButton = styled.button<CustomButtonProps>`
   }
 
   svg {
-    margin-right: 8px;
+    margin-left: 8px;
     font-size: 13.3333px;
   }
 `;
 
 const StyledIcon = styled(FontAwesomeIcon)`
   color: white;
-  margin-right: 8px;
 `;
 
 const LoadingSpinner = styled(FontAwesomeIcon)`
@@ -107,8 +106,8 @@ export function AppButton({
       variant={variant}
     >
       {isLoading && <LoadingSpinner icon={faSpinner} />}
-      {icon && !isLoading && <StyledIcon icon={icon} />}
       {children}
+      {icon && !isLoading && <StyledIcon icon={icon} />}
     </StyledButton>
   );
 }
