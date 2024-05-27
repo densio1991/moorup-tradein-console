@@ -69,6 +69,10 @@ export const useProduct = () => {
     actions.uploadProductsExcelFile(payload, activePlatform)(dispatch);
   }
 
+  const downloadProductPricingRevisionTemplate = () => {
+    actions.downloadProductPricingRevisionTemplate(activePlatform)(dispatch);
+  }
+
   return {
     state: state.product,
     getProducts,
@@ -86,5 +90,6 @@ export const useProduct = () => {
     addProductVariant,
     updateProductVariant,
     uploadProductsExcelFile,
+    downloadProductPricingRevisionTemplate,
   };
 };
