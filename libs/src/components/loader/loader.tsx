@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { LogoLoader } from './logo-loader';
 import { LoadingSpinner } from './spinner';
 
 interface LoaderContainerProps {
@@ -50,7 +51,7 @@ export function LoaderContainer({ loading, color, children, title, height, margi
     <StyledLoaderContainer height={height} margin={margin} padding={padding} bgColor={bgColor}>
       {loading ? (
         <StyledOverlay>
-          <LoadingSpinner color={color} />
+          <LogoLoader />
         </StyledOverlay>
       ) : (
         <>
