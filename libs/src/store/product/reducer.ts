@@ -23,6 +23,7 @@ const productState = {
   isAddingProductVariant: false,
   isUpdatingProductVariant: false,
   isUploadingProductsExcel: false,
+  isDownloadingProductPricingRevisionTemplate: false,
 };
 
 const productReducer = (state: any, action: any) => {
@@ -319,7 +320,26 @@ const productReducer = (state: any, action: any) => {
       };
     }
 
-    default:
+    case types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.baseType: {
+      return {
+        ...state,
+        isDownloadingProductPricingRevisionTemplate: true,
+      };
+    }
+    case types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.SUCCESS: {
+      return {
+        ...state,
+        isDownloadingProductPricingRevisionTemplate: false,
+      };
+    }
+    case types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.FAILED: {
+      return {
+        ...state,
+        isDownloadingProductPricingRevisionTemplate: false,
+      };
+    }
+
+    default: 
       return state;
   }
 };
