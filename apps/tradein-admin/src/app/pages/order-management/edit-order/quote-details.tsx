@@ -105,7 +105,7 @@ const QuoteDetails = () => {
 
   const onCancelGiftCard = (voucher: any, id: number) => {
     setActiveGiftCard(voucher?.pan);
-    cancelGiftCard(order?._id, voucher?.itemNumber);
+    cancelGiftCard(order?._id, voucher?.pan);
   };
 
   const giftCardStatus = (voucher: any, id: number) => {

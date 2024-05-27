@@ -566,15 +566,14 @@ export const getGiftCardStatus =
   };
 
 export const cancelGiftCard =
-  (orderId: any, voucherOrderNumber: any, signal?: AbortSignal) =>
-  (dispatch: any) => {
+  (orderId: any, voucherPan: any, signal?: AbortSignal) => (dispatch: any) => {
     dispatch({
       type: types.CANCEL_GIFT_CARD.baseType,
     });
 
     axiosInstance()
       .patch(
-        `/api/payments/cancel-voucher/${orderId}?voucherOrderNumber=${voucherOrderNumber}`,
+        `/api/payments/cancel-voucher-by-query/${orderId}?voucherPan=${voucherPan}`,
         { signal: signal },
       )
       .then((response) => {
