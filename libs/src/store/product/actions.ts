@@ -339,3 +339,43 @@ export const uploadProductsExcelFile =
         toast.error('Failed to import products.');
       });
   };
+
+export const downloadProductPricingRevisionTemplate = (platform: string) => (dispatch: any) => {
+  dispatch({
+    type: types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.baseType,
+    payload: platform,
+  });
+
+  axiosInstance()
+    .get('/api/products/pricing/download-template', { params: { platform: platform }, responseType: 'blob' })
+    .then((response) => {
+      const blob = new Blob([response.data], { type: response.headers['content-type'] });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'update-pricing-template.xlsx';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      dispatch({
+        type: types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.SUCCESS,
+        payload: response?.data,
+      });
+    })
+    .catch((error) => {
+      if (error.code === CANCELLED_AXIOS) {
+        dispatch({
+          type: types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.CANCELLED,
+          payload: error,
+        });
+      } else {
+        dispatch({
+          type: types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.FAILED,
+          payload: error,
+        });
+        toast.error('Failed to export product pricing upload template.');
+      }
+    });
+  };

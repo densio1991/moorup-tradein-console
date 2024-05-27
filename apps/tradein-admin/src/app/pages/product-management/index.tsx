@@ -4,7 +4,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   faDownload,
-  faFileExport,
   faPlus,
   faUpload,
 } from '@fortawesome/free-solid-svg-icons';
@@ -13,14 +12,15 @@ import {
   ADD_PRODUCT_PAYLOAD,
   AppButton,
   DEFAULT_COLUMN,
+  Divider,
+  DropdownButton,
+  IconButton,
   MODAL_TYPES,
   PRODUCT_MANAGEMENT_COLUMNS,
   PageSubHeader,
   SideModal,
-  TEMPLATE_LINK,
   Table,
   UploadFileModal,
-  exportToCSV,
   productManagementParsingConfig,
   useAuth,
   useCommon,
@@ -28,10 +28,11 @@ import {
   useProduct,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AddProductForm } from './add-product';
 import { AddProductVariantForm } from './add-product-variant';
+import { ExportFileForm } from './export';
 
 export function ProductManagementPage() {
   const navigate = useNavigate();
@@ -91,84 +92,116 @@ export function ProductManagementPage() {
       case MODAL_TYPES.ADD_PRODUCT_VARIANT:
         return <AddProductVariantForm />;
 
+      case MODAL_TYPES.EXPORT_PRODUCTS:
+        return <ExportFileForm />;
+
+      case MODAL_TYPES.IMPORT_PRODUCTS:
+        return <ExportFileForm />;
+
       default:
         break;
     }
   };
 
-  const handleImportClick = () => {
-    setIsOpenUploadModal(true);
-  };
+  const renderAddProductAction = () => {
+    if (hasAddProductPermission && hasImportProductsPermission) {
+      const addProductItems = [
+        {
+          label: 'Add Product',
+          onClick: () => {
+            setSideModalState({
+              ...sideModalState,
+              open: true,
+              view: MODAL_TYPES.ADD_PRODUCT,
+            });
+          },
+        },
+        {
+          label: 'Import Products',
+          onClick: () => setIsOpenUploadModal(true),
+        },
+        {
+          label: 'Import Products Pricing',
+          onClick: () => setIsOpenUploadModal(true),
+          disabled: true,
+        },
+      ];
 
-  const downloadAnchorRef = useRef<HTMLAnchorElement>(null);
-
-  const handleDownloadClick = () => {
-    const fileUrl = TEMPLATE_LINK;
-    if (downloadAnchorRef.current) {
-      downloadAnchorRef.current.href = fileUrl;
-      downloadAnchorRef.current.click();
+      return (
+        <DropdownButton
+          id="addProductItems"
+          dropdownItems={addProductItems}
+          disabled={isFetchingProducts}
+        >
+          Add/Import
+        </DropdownButton>
+      );
+    } else if (hasAddProductPermission) {
+      return (
+        <AppButton
+          width="fit-content"
+          icon={faPlus}
+          onClick={() =>
+            setSideModalState({
+              ...sideModalState,
+              open: true,
+              view: MODAL_TYPES.ADD_PRODUCT,
+            })
+          }
+        >
+          Add
+        </AppButton>
+      );
+    } else if (hasImportProductsPermission) {
+      return (
+        <>
+          <AppButton
+            width="fit-content"
+            icon={faUpload}
+            onClick={() => setIsOpenUploadModal(true)}
+          >
+            Import Products
+          </AppButton>
+          <AppButton
+            width="fit-content"
+            icon={faUpload}
+            onClick={() => setIsOpenUploadModal(true)}
+          >
+            Import Products Pricing
+          </AppButton>
+        </>
+      );
     }
   };
 
   return (
     <>
       <PageSubHeader
-        overflowx="auto"
         withSearch
-        leftControls={
-          <>
-            {hasAddProductPermission && (
-              <AppButton
-                width="fit-content"
-                icon={faPlus}
-                onClick={() =>
+        leftControls={renderAddProductAction()}
+        rightControls={
+          (hasExportProductsPermission ||
+            hasExportProductUploadTemplatePermission) && (
+            <>
+              <IconButton
+                tooltipLabel="Export"
+                icon={faDownload}
+                onClick={() => {
                   setSideModalState({
                     ...sideModalState,
                     open: true,
-                    view: MODAL_TYPES.ADD_PRODUCT,
-                  })
+                    view: MODAL_TYPES.EXPORT_PRODUCTS,
+                  });
+                }}
+                disabled={
+                  (!hasExportProductsPermission &&
+                    !hasExportProductUploadTemplatePermission) ||
+                  isFetchingProducts
                 }
-              >
-                Add
-              </AppButton>
-            )}
-            {hasImportProductsPermission && (
-              <AppButton
-                width="fit-content"
-                icon={faUpload}
-                onClick={handleImportClick}
-              >
-                Import
-              </AppButton>
-            )}
-            {hasExportProductsPermission && (
-              <AppButton
-                width="fit-content"
-                icon={faDownload}
-                onClick={() => exportToCSV(products, activePlatform)}
-                disabled={isEmpty(products) || isFetchingProducts}
-              >
-                Export
-              </AppButton>
-            )}
-            {hasExportProductUploadTemplatePermission && (
-              <>
-                <AppButton
-                  width="fit-content"
-                  icon={faFileExport}
-                  onClick={handleDownloadClick}
-                  disabled={isEmpty(TEMPLATE_LINK)}
-                >
-                  Export Template
-                </AppButton>
-                <a
-                  ref={downloadAnchorRef}
-                  style={{ display: 'none' }}
-                  download
-                />
-              </>
-            )}
-          </>
+              />
+              <Divider />
+            </>
+          )
         }
       />
       <Table
@@ -194,7 +227,6 @@ export function ProductManagementPage() {
       >
         {renderForm()}
       </SideModal>
-
       <UploadFileModal
         isOpen={isOpenUploadModal}
         closeModal={() => setIsOpenUploadModal(false)}
