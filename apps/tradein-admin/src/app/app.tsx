@@ -16,6 +16,7 @@ import {
 } from './pages';
 import { ConfigurationsPage } from './pages/configurations';
 import { UploadProductPricingErrorPage } from './pages/product-management/upload-pricing-details';
+import { ProductUploadLogsPage } from './pages/product-upload-logs';
 
 export function App() {
   return (
@@ -33,6 +34,10 @@ export function App() {
           <Route
             path="/dashboard/product/upload-pricing-details"
             element={<UploadProductPricingErrorPage />}
+          />
+          <Route
+            path="/dashboard/product/upload-logs"
+            element={<ProductUploadLogsPage />}
           />
           <Route
             path="/dashboard/order/list"

@@ -26,6 +26,8 @@ const productState = {
   isDownloadingProductPricingRevisionTemplate: false,
   isUploadingProductsPricingTemplate: false,
   uploadProductsPricingError: [],
+  isFetchingProductUploadLogs: false,
+  productUploadLogs: [],
 };
 
 const productReducer = (state: any, action: any) => {
@@ -375,6 +377,41 @@ const productReducer = (state: any, action: any) => {
       return {
         ...state,
         uploadProductsPricingError: [],
+      };
+
+    case types.FETCH_PRODUCT_UPLOAD_LOGS.baseType: {
+      return {
+        ...state,
+        isFetchingProductUploadLogs: true,
+        productUploadLogs: [],
+      };
+    }
+    case types.FETCH_PRODUCT_UPLOAD_LOGS.SUCCESS: {
+      return {
+        ...state,
+        isFetchingProductUploadLogs: false,
+        productUploadLogs: action.payload?.data,
+      };
+    }
+    case types.FETCH_PRODUCT_UPLOAD_LOGS.FAILED: {
+      return {
+        ...state,
+        isFetchingProductUploadLogs: false,
+        productUploadLogs: [],
+      };
+    }
+    case types.FETCH_PRODUCT_UPLOAD_LOGS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingProductUploadLogs: true,
+        productUploadLogs: [],
+      };
+    }
+
+    case types.CLEAR_PRODUCT_UPLOAD_LOGS:
+      return {
+        ...state,
+        productUploadLogs: [],
       };
 
     default: 
