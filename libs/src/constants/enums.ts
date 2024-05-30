@@ -113,3 +113,8 @@ export enum PermissionCodes {
   VIEW_PLATFORM_CONFIGS = 'VIEW_PLATFORM_CONFIGS',
   EDIT_PLATFORM_CONFIGS = 'EDIT_PLATFORM_CONFIGS',
 }
+
+export enum ProductUploadLogsStatus {
+  SUCCESS = 'success',
+  FAILED = 'failed',
+}
