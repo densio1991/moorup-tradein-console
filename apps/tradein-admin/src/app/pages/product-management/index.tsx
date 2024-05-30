@@ -51,9 +51,10 @@ export function ProductManagementPage() {
     getProductStatuses,
     setAddProductPayload,
     setIncludeProductVariant,
+    uploadProductsExcelFile,
   } = useProduct();
   const { state: authState } = useAuth();
-  const { products, isFetchingProducts } = state;
+  const { products, isFetchingProducts, isUploadingProductsExcel } = state;
   const { activePlatform } = authState;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
@@ -206,7 +207,7 @@ export function ProductManagementPage() {
       />
       <Table
         label="Products"
-        isLoading={isFetchingProducts}
+        isLoading={isFetchingProducts || isUploadingProductsExcel}
         headers={headers}
         rows={products || []}
         parsingConfig={productManagementParsingConfig}
@@ -230,6 +231,8 @@ export function ProductManagementPage() {
       <UploadFileModal
         isOpen={isOpenUploadModal}
         closeModal={() => setIsOpenUploadModal(false)}
+        modalTitle="Select file to import products"
+        onUploadFile={uploadProductsExcelFile}
       />
     </>
   );
