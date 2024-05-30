@@ -1155,6 +1155,7 @@ export const ROLES = [
 ];
 
 export const CANCELLED_AXIOS = 'ERR_CANCELED';
+export const BAD_REQUEST = 'ERR_BAD_REQUEST';
 
 export const PRODUCT_TYPES = {
   PHONES: 'phones',
