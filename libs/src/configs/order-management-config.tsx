@@ -6,6 +6,7 @@ import { formatDate, parseStatus, parseTypes } from '../helpers';
 interface ParsingFunctionParams {
   row: { [key: string]: any };
   menuItems?: any;
+  index: number;
 }
 
 export const orderManagementParsingConfig = {
@@ -45,8 +46,8 @@ export const orderManagementParsingConfig = {
     if (!row || isEmpty(row['updatedAt'])) return '--';
     return formatDate(row['updatedAt']);
   },
-  'Actions': ({ row, menuItems }: ParsingFunctionParams) => {
+  'Actions': ({ row, menuItems, index }: ParsingFunctionParams) => {
     if (!row || isEmpty(menuItems)) return '--';
-    return <StyledMenuIcon menuItems={menuItems} rowData={row} />;
+    return <StyledMenuIcon menuItems={menuItems} rowData={row} index={index} />;
   },
 };

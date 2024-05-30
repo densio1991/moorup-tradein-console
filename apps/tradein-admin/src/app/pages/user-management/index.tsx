@@ -4,7 +4,6 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
   ACTIONS_COLUMN,
   AppButton,
-  DEFAULT_COLUMN,
   MODAL_TYPES,
   PageSubHeader,
   SideModal,
@@ -36,7 +35,6 @@ export function UserManagementPage() {
   const { activePlatform, userDetails } = authState;
 
   const headers = [
-    ...DEFAULT_COLUMN,
     ...USER_MANAGEMENT_COLUMNS,
     ...(hasEditUserDetailsPermission ? ACTIONS_COLUMN : []),
   ];

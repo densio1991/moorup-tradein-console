@@ -46,7 +46,7 @@ export function PrivateRoute(): JSX.Element {
     if (!isEmpty(userDetails)) {
       const permissions: Permissions = {
         '/dashboard': hasViewDashboardPermission,
-        '/dashboard/product': hasViewProductsPermission,
+        '/dashboard/product/list': hasViewProductsPermission,
         '/dashboard/order/list': hasViewOrdersPermission,
         '/dashboard/order/discrepancy': hasViewDiscrepanciesPermission,
         '/dashboard/order/actionables': hasViewActionablesPermission,

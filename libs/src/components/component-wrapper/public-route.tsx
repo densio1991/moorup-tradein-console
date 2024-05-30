@@ -36,7 +36,7 @@ export function PublicRoute(): JSX.Element {
   
         case ADMIN:
           setLoading(false);
-          navigate('/dashboard/product');
+          navigate('/dashboard/product/list');
           break;
   
         case WAREHOUSE:
@@ -46,12 +46,12 @@ export function PublicRoute(): JSX.Element {
   
         case PRODUCTS:
           setLoading(false);
-          navigate('/dashboard/product');
+          navigate('/dashboard/product/list');
           break;
   
         case CUSTOMER_SERVICE:
           setLoading(false);
-          navigate('/dashboard/product');
+          navigate('/dashboard/product/list');
           break;
   
         case SUPERADMIN:

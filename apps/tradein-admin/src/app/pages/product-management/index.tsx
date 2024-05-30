@@ -11,7 +11,6 @@ import {
   ACTIONS_COLUMN,
   ADD_PRODUCT_PAYLOAD,
   AppButton,
-  DEFAULT_COLUMN,
   Divider,
   DropdownButton,
   IconButton,
@@ -51,16 +50,28 @@ export function ProductManagementPage() {
     getProductStatuses,
     setAddProductPayload,
     setIncludeProductVariant,
+    uploadProductsExcelFile,
+    uploadProductsPricingTemplate,
+    clearUploadProductsPricingTemplateErrors,
   } = useProduct();
   const { state: authState } = useAuth();
-  const { products, isFetchingProducts } = state;
+  const {
+    products,
+    isFetchingProducts,
+    isUploadingProductsExcel,
+    isUploadingProductsPricingTemplate,
+    uploadProductsPricingError,
+  } = state;
   const { activePlatform } = authState;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
   const [isOpenUploadModal, setIsOpenUploadModal] = useState(false);
+  const [
+    isOpenUploadProductsPricingModal,
+    setIsOpenUploadProductsPricingModal,
+  ] = useState(false);
 
   const headers = [
-    ...DEFAULT_COLUMN,
     ...PRODUCT_MANAGEMENT_COLUMNS,
     ...(hasEditProductPermission ? ACTIONS_COLUMN : []),
   ];
@@ -70,6 +81,7 @@ export function ProductManagementPage() {
     const signal = controller.signal;
 
     if (!isEmpty(activePlatform)) {
+      clearUploadProductsPricingTemplateErrors([]);
       getProducts(true, signal);
       getProductTypes(signal);
       getProductStatuses(signal);
@@ -83,6 +95,18 @@ export function ProductManagementPage() {
       setSearchTerm('');
     };
   }, [activePlatform]);
+
+  useEffect(() => {
+    if (!isEmpty(uploadProductsPricingError)) {
+      navigate('/dashboard/product/upload-pricing-details');
+    }
+
+    return () => {
+      // Clear data on unmount
+      clearProducts({});
+      setSearchTerm('');
+    };
+  }, [uploadProductsPricingError]);
 
   const renderForm = () => {
     switch (sideModalState.view) {
@@ -122,8 +146,7 @@ export function ProductManagementPage() {
         },
         {
           label: 'Import Products Pricing',
-          onClick: () => setIsOpenUploadModal(true),
-          disabled: true,
+          onClick: () => setIsOpenUploadProductsPricingModal(true),
         },
       ];
 
@@ -206,7 +229,11 @@ export function ProductManagementPage() {
       />
       <Table
         label="Products"
-        isLoading={isFetchingProducts}
+        isLoading={
+          isFetchingProducts ||
+          isUploadingProductsExcel ||
+          isUploadingProductsPricingTemplate
+        }
         headers={headers}
         rows={products || []}
         parsingConfig={productManagementParsingConfig}
@@ -227,9 +254,19 @@ export function ProductManagementPage() {
       >
         {renderForm()}
       </SideModal>
+
       <UploadFileModal
         isOpen={isOpenUploadModal}
         closeModal={() => setIsOpenUploadModal(false)}
+        modalTitle="Select file to import products"
+        onUploadFile={uploadProductsExcelFile}
+      />
+
+      <UploadFileModal
+        isOpen={isOpenUploadProductsPricingModal}
+        closeModal={() => setIsOpenUploadProductsPricingModal(false)}
+        modalTitle="Select a file to import product pricing"
+        onUploadFile={uploadProductsPricingTemplate}
       />
     </>
   );

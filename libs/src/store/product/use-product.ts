@@ -7,6 +7,7 @@ export const useProduct = () => {
   const { state, dispatch } = useContext(RootContext);
   const {
     activePlatform,
+    userDetails,
   } = state.auth;
 
   const getProducts = (payload: any, signal: AbortSignal) => {
@@ -73,6 +74,14 @@ export const useProduct = () => {
     actions.downloadProductPricingRevisionTemplate(activePlatform)(dispatch);
   }
 
+  const uploadProductsPricingTemplate = (payload: any) => {
+    actions.uploadProductsPricingTemplate(payload, userDetails._id, activePlatform)(dispatch);
+  }
+
+  const clearUploadProductsPricingTemplateErrors = (payload: any) => {
+    actions.clearUploadProductsPricingTemplateErrors(payload)(dispatch);
+  }
+
   return {
     state: state.product,
     getProducts,
@@ -91,5 +100,7 @@ export const useProduct = () => {
     updateProductVariant,
     uploadProductsExcelFile,
     downloadProductPricingRevisionTemplate,
+    uploadProductsPricingTemplate,
+    clearUploadProductsPricingTemplateErrors,
   };
 };
