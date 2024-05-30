@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useProduct } from '../../store';
 import { AppButton } from '../button';
 import { Dropzone } from '../dropzone';
 
-interface UploadInvoiceModalProps {
+interface UploadFileModalProps {
   isOpen: boolean;
   closeModal: () => void;
+  modalTitle: string;
+  onUploadFile: (file: File | null) => void;
 }
 
 const ModalOverlay = styled.div<{ isOpen: boolean }>`
@@ -106,12 +107,10 @@ const ColumnContainer = styled.div`
   max-width: 100%;
 `;
 
-export function UploadFileModal({ isOpen, closeModal }: UploadInvoiceModalProps) {
+export function UploadFileModal({ isOpen, closeModal, modalTitle, onUploadFile }: UploadFileModalProps) {
   const [selectedFileName, setSelectedFileName] = useState<string | null>(null);
   const [fileSize, setFileSize] = useState<string | null>(null);
   const [fileToUpload, setFileToUpload] = useState<File | null>(null);
-
-  const { uploadProductsExcelFile } = useProduct();
 
   const processCSVFile = (file: File) => {
     const allowedFileTypes = ['.xls', 'xlsx'];
@@ -122,7 +121,7 @@ export function UploadFileModal({ isOpen, closeModal }: UploadInvoiceModalProps)
       return;
     }
 
-    setFileToUpload(file)
+    setFileToUpload(file);
     setSelectedFileName(file.name);
     setFileSize(fileSizeValue);
   };
@@ -138,9 +137,7 @@ export function UploadFileModal({ isOpen, closeModal }: UploadInvoiceModalProps)
     <ModalOverlay isOpen={isOpen}>
       <ModalContent>
         <ModalBody>
-          <ModalTitle>
-            Select file for import products
-          </ModalTitle>
+          <ModalTitle>{modalTitle}</ModalTitle>
           <RowContainer>
             <ColumnContainer>
               <Dropzone
@@ -173,7 +170,7 @@ export function UploadFileModal({ isOpen, closeModal }: UploadInvoiceModalProps)
             <AppButton
               type="button"
               variant='outlined'
-              onClick={() =>closeModal()}
+              onClick={closeModal}
             >
               Cancel
             </AppButton>
@@ -181,8 +178,8 @@ export function UploadFileModal({ isOpen, closeModal }: UploadInvoiceModalProps)
               type="button"
               variant='fill'
               onClick={() => {
-                uploadProductsExcelFile(fileToUpload)
-                closeModal()
+                onUploadFile(fileToUpload);
+                closeModal();
               }}
             >
               Submit
