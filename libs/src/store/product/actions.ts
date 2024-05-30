@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from 'react-toastify';
-import { CANCELLED_AXIOS } from '../../constants';
+import { BAD_REQUEST, CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
@@ -377,5 +377,57 @@ export const downloadProductPricingRevisionTemplate = (platform: string) => (dis
         });
         toast.error('Failed to export product pricing upload template.');
       }
+    });
+  };
+
+export const uploadProductsPricingTemplate =
+  (file: File, userId: string, activePlatform: string) => async (dispatch: any) => {
+    dispatch({
+      type: types.UPLOAD_PRODUCT_PRICING_REVISION.baseType,
+      payload: {},
+    });
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('user_id', userId);
+    formData.append('platform', activePlatform);
+
+    axiosInstance()
+      .post('/api/products/pricing/bulk', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(() => {
+        dispatch({
+          type: types.UPLOAD_PRODUCT_PRICING_REVISION.SUCCESS,
+          payload: {},
+        });
+
+        getProducts(activePlatform, true)(dispatch);
+        toast.success('Products pricing successfully updated!');
+      })
+      .catch((error) => {
+        if (error.code === BAD_REQUEST) {
+          dispatch({
+            type: types.UPLOAD_PRODUCT_PRICING_REVISION.BAD_REQUEST,
+            payload: error?.response?.data?.data?.invalid_entries || [],
+          });
+        } else {
+          dispatch({
+            type: types.UPLOAD_PRODUCT_PRICING_REVISION.FAILED,
+            payload: error,
+          });
+        }
+
+        getProducts(activePlatform, true)(dispatch);
+        toast.error('Failed to update products pricing.');
+      });
+  };
+
+  export const clearUploadProductsPricingTemplateErrors = (payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.CLEAR_UPLOAD_PRODUCT_PRICING_REVISION_ERRORS,
+      payload,
     });
   };

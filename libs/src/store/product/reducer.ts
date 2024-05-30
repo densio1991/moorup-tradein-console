@@ -24,6 +24,8 @@ const productState = {
   isUpdatingProductVariant: false,
   isUploadingProductsExcel: false,
   isDownloadingProductPricingRevisionTemplate: false,
+  isUploadingProductsPricingTemplate: false,
+  uploadProductsPricingError: [],
 };
 
 const productReducer = (state: any, action: any) => {
@@ -338,6 +340,42 @@ const productReducer = (state: any, action: any) => {
         isDownloadingProductPricingRevisionTemplate: false,
       };
     }
+
+    case types.UPLOAD_PRODUCT_PRICING_REVISION.baseType: {
+      return {
+        ...state,
+        isUploadingProductsPricingTemplate: true,
+        products: [],
+        isFetchingProducts: true,
+      };
+    }
+    case types.UPLOAD_PRODUCT_PRICING_REVISION.SUCCESS: {
+      return {
+        ...state,
+        isUploadingProductsPricingTemplate: false,
+      };
+    }
+    case types.UPLOAD_PRODUCT_PRICING_REVISION.FAILED: {
+      return {
+        ...state,
+        isUploadingProductsPricingTemplate: false,
+        products: [],
+      };
+    }
+    case types.UPLOAD_PRODUCT_PRICING_REVISION.BAD_REQUEST: {
+      return {
+        ...state,
+        isUploadingProductsPricingTemplate: false,
+        uploadProductsPricingError: action.payload,
+        products: [],
+      };
+    }
+
+    case types.CLEAR_UPLOAD_PRODUCT_PRICING_REVISION_ERRORS:
+      return {
+        ...state,
+        uploadProductsPricingError: [],
+      };
 
     default: 
       return state;
