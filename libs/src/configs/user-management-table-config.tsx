@@ -7,6 +7,7 @@ import { parseStatus } from '../helpers';
 interface ParsingFunctionParams {
   row: { [key: string]: any };
   menuItems?: any;
+  index: number;
 }
 
 export const userManagementParsingConfig = {
@@ -32,8 +33,8 @@ export const userManagementParsingConfig = {
     if (!row || isEmpty(row['status'])) return '--';
     return parseStatus(row['status']);
   },
-  'Actions': ({ row, menuItems }: ParsingFunctionParams) => {
+  'Actions': ({ row, menuItems, index }: ParsingFunctionParams) => {
     if (!row || isEmpty(menuItems)) return '--';
-    return <StyledMenuIcon menuItems={menuItems} rowData={row} />;
+    return <StyledMenuIcon menuItems={menuItems} rowData={row} index={index} />;
   },
 };
