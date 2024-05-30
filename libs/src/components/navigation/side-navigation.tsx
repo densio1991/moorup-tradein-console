@@ -183,6 +183,12 @@ export function SideBar(): JSX.Element {
 
                         case 'Payment':
                           return hasViewPromotionClaimsPaymentPermission;
+
+                        case 'Products':
+                          return hasViewProductsPermission;
+
+                        case 'Upload Log':
+                          return hasViewProductsPermission;
                       
                         default:
                           return false;
