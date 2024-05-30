@@ -82,6 +82,14 @@ export const useProduct = () => {
     actions.clearUploadProductsPricingTemplateErrors(payload)(dispatch);
   }
 
+  const getProductUploadLogs = (payload: any, signal: AbortSignal) => {
+    actions.getProductUploadLogs(payload, activePlatform, signal)(dispatch);
+  }
+
+  const clearProductUploadLogs = (payload: any) => {
+    actions.clearProductUploadLogs(payload)(dispatch);
+  }
+
   return {
     state: state.product,
     getProducts,
@@ -102,5 +110,7 @@ export const useProduct = () => {
     downloadProductPricingRevisionTemplate,
     uploadProductsPricingTemplate,
     clearUploadProductsPricingTemplateErrors,
+    getProductUploadLogs,
+    clearProductUploadLogs,
   };
 };
