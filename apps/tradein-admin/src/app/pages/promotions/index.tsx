@@ -10,7 +10,6 @@ import {
   ADD_PROMOTION_STEPS_PAYLOAD,
   AppButton,
   CenterModal,
-  DEFAULT_COLUMN,
   MODAL_TYPES,
   PROMOTIONS_MANAGEMENT_COLUMNS,
   PageSubHeader,
@@ -82,7 +81,6 @@ export function PromotionsPage() {
   const [selectedPromotion, setSelectedPromotion] = useState({});
 
   const headers = [
-    ...DEFAULT_COLUMN,
     ...PROMOTIONS_MANAGEMENT_COLUMNS,
     ...(hasEditPromotionPermission ? ACTIONS_COLUMN : []),
   ];

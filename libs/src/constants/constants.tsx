@@ -6,6 +6,7 @@ import {
   faCube,
   faFileCircleExclamation,
   faFileInvoice,
+  faFileLines,
   faHouse,
   faList,
   faPenToSquare,
@@ -46,6 +47,22 @@ export const SIDENAV_ITEMS = [
     activeUrl: /^\/dashboard\/product/,
     icon: faCube,
     disabled: false,
+    submenu: [
+      {
+        title: 'Products',
+        url: '/dashboard/product/list',
+        activeUrl: /^\/dashboard\/product\/list/,
+        icon: faList,
+        disabled: false,
+      },
+      {
+        title: 'Upload Log',
+        url: '/dashboard/product/logs',
+        activeUrl: /^\/dashboard\/product\/logs/,
+        icon: faFileLines,
+        disabled: true,
+      }
+    ],
   },
   {
     title: 'Order Management',
@@ -156,6 +173,51 @@ export const PRODUCT_MANAGEMENT_COLUMNS = [
     enableSort: true,
     keyName: 'type',
   }
+]
+
+export const PRODUCT_PRICING_UPLOAD_COLUMNS = [
+  {
+    label: 'Errors',
+    order: 2,
+    enableSort: false,
+    keyName: 'errors',
+  },
+  {
+    label: 'SKU',
+    order: 3,
+    enableSort: true,
+    keyName: 'payload.sku',
+  },
+  {
+    label: 'Currency',
+    order: 4,
+    enableSort: true,
+    keyName: 'payload.currency',
+  },
+  {
+    label: 'Working',
+    order: 5,
+    enableSort: true,
+    keyName: 'payload.working',
+  },
+  {
+    label: 'Working Damaged',
+    order: 6,
+    enableSort: true,
+    keyName: 'working_damaged',
+  },
+  {
+    label: 'Not Working',
+    order: 7,
+    enableSort: true,
+    keyName: 'payload.not_working',
+  },
+  {
+    label: 'Not Working Damaged',
+    order: 8,
+    enableSort: true,
+    keyName: 'payload.not_working_damaged',
+  },
 ]
 
 export const ORDER_MANAGEMENT_COLUMNS = [
