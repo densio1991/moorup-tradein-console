@@ -6,6 +6,7 @@ import { capitalizeFirstLetter, parseTypes } from '../helpers';
 interface ParsingFunctionParams {
   row: { [key: string]: any };
   menuItems?: any;
+  index: number;
 }
 
 export const productManagementParsingConfig = {
@@ -29,8 +30,8 @@ export const productManagementParsingConfig = {
     if (!row || isEmpty(row['type'])) return '--';
     return parseTypes(row['type'], true);
   },
-  'Actions': ({ row, menuItems }: ParsingFunctionParams) => {
+  'Actions': ({ row, menuItems, index }: ParsingFunctionParams) => {
     if (!row || isEmpty(menuItems)) return '--';
-    return <StyledMenuIcon menuItems={menuItems} rowData={row} />;
+    return <StyledMenuIcon menuItems={menuItems} rowData={row} index={index} />;
   },
 };
