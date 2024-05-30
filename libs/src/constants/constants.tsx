@@ -56,11 +56,11 @@ export const SIDENAV_ITEMS = [
         disabled: false,
       },
       {
-        title: 'Upload Log',
-        url: '/dashboard/product/logs',
-        activeUrl: /^\/dashboard\/product\/logs/,
+        title: 'Upload Logs',
+        url: '/dashboard/product/upload-logs',
+        activeUrl: /^\/dashboard\/product\/upload-logs/,
         icon: faFileLines,
-        disabled: true,
+        disabled: false,
       }
     ],
   },
@@ -218,6 +218,39 @@ export const PRODUCT_PRICING_UPLOAD_COLUMNS = [
     enableSort: true,
     keyName: 'payload.not_working_damaged',
   },
+]
+
+export const PRODUCT_UPLOAD_LOGS_COLUMNS = [
+  {
+    label: 'File Name',
+    order: 2,
+    enableSort: true,
+    keyName: 'filename',
+  },
+  {
+    label: 'S3 Link',
+    order: 3,
+    enableSort: true,
+    keyName: 's3_link',
+  },
+  {
+    label: 'Upload Status',
+    order: 4,
+    enableSort: true,
+    keyName: 'status',
+  },
+  {
+    label: 'Uploaded By',
+    order: 5,
+    enableSort: true,
+    keyName: 'done_by',
+  },
+  {
+    label: 'Uploaded Date',
+    order: 6,
+    enableSort: true,
+    keyName: 'createdAt',
+  }
 ]
 
 export const ORDER_MANAGEMENT_COLUMNS = [

@@ -6,7 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Logo from '../../Moorup.png';
 import {
-  SIDENAV_ITEMS
+    SIDENAV_ITEMS
 } from '../../constants';
 import { hexToRgba } from '../../helpers';
 import { usePermission } from '../../hooks';
@@ -187,7 +187,7 @@ export function SideBar(): JSX.Element {
                         case 'Products':
                           return hasViewProductsPermission;
 
-                        case 'Upload Log':
+                        case 'Upload Logs':
                           return hasViewProductsPermission;
                       
                         default:
