@@ -40,11 +40,11 @@ export function StyledMenuIcon({ menuItems, rowData, index }: MenuProps) {
         noArrow
         place="bottom-end"
         border='0px'
-        style={{ padding: '0px', backgroundColor: '#fff', borderRadius: '5px', boxShadow: 'rgba(204, 204, 204, 0.2) 0px 0px 2px 0px' }}
+        style={{ padding: '0px', backgroundColor: '#fff', borderRadius: '5px', boxShadow: 'rgba(0, 0, 0, 0.1) 0px 4px 8px 0px' }}
         render={() => (
           <div style={{ display: 'flex', flexDirection: 'column'}}>
             {menuItems.map((item: any, idx: number) => (
-              <MenuItem key={idx} onClick={item.action}>{item.label}</MenuItem>
+              <MenuItem key={idx} onClick={() => item.action(rowData)}>{item.label}</MenuItem>
             ))}
           </div>
         )} 
