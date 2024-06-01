@@ -42,7 +42,7 @@ const HeaderSection = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 12px 0px;
+  padding: 10px 0px;
   flex-wrap: wrap;
 `;
 
@@ -99,8 +99,8 @@ const TableStyled = styled.table`
   tbody td {
     white-space: nowrap;
     border-bottom: 1px solid #f0f0f0;
-    padding-top: 14px !important;
-    padding-bottom: 14px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
     padding-left: 30px !important;
 
     &:nth-child(2) {
@@ -146,7 +146,7 @@ const Tbody = styled.tbody`
   tr {
     transition: background-color 0.3s ease;
     td {
-      padding: 14px 10px;
+      padding: 12px 10px;
       border-bottom: 1px solid #e1e4e8;
       color: #333;
       font-size: 12px;
@@ -178,7 +178,7 @@ const Tr = styled.tr<{ hover?: boolean }>`
 `;
 
 const Td = styled.td<{ alignRight?: boolean }>`
-  padding: 14px 10px;
+  padding: 12px 10px;
   border-bottom: 1px solid #e1e4e8;
   color: #333;
   font-size: 12px;
@@ -277,7 +277,7 @@ export function Table({
   menuItems,
   rightControls,
   parsingConfig = {},
-  margin = '20px',
+  margin = '4px 20px',
   onChangeSelection,
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
