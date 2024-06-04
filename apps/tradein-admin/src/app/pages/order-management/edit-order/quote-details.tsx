@@ -247,7 +247,9 @@ const QuoteDetails = () => {
           value={PAYMENT_TYPE[payment?.payment_type]}
           capitalize
         />
-        <CardItem label="BSB & Account" value={userId?.bsb_account} copy />
+        <CardItem label="Bank Account Name" value={ order?.consumer_bank_details?.account_name  } copy />
+        <CardItem label="Bank Account Number" value={ order?.consumer_bank_details?.account_number  } copy />
+        <CardItem label="Bank BSB" value={ order?.consumer_bank_details?.bsb  } copy />
       </DetailCardContainer>
       {hasGiftCard && (
         <DetailCardContainer className="lg:col-span-2 2xl:col-span-1">
