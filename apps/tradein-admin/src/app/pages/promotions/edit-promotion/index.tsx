@@ -420,7 +420,7 @@ export function EditPromotionForm({ data }: any) {
           <FormGroup marginBottom="20px">
             <ImageEditor
               name="banner_url"
-              aspectRatio={16 / 9}
+              aspectRatio={4 / 1}
               label="Banner Image (Min. Recommended Size: 1080p x 720p)"
               onImageChange={handleCropBannerImageComplete}
               image={formik.values.banner_url}
