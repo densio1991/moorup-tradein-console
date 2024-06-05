@@ -70,10 +70,52 @@ export function EditPromotionForm({ data }: any) {
   };
 
   const onSubmit = (values: any) => {
-    values.start_date = moment(values.start_date).toISOString();
-    values.end_date = moment(values.end_date).toISOString();
-    values.send_in_deadline = moment(values.send_in_deadline).toISOString();
-    values.payment_due_date = moment(values.payment_due_date).toISOString();
+    values.start_date = moment(values.start_date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString();
+    values.end_date = moment(values.end_date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString();
+    values.send_in_deadline = moment(values.send_in_deadline).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString();
+    values.payment_due_date = moment(values.payment_due_date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString();
+    values.new_device_purchase_start_date = moment(
+      values.new_device_purchase_start_date,
+    ).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString();
+    values.new_device_purchase_end_date = moment(
+      values.new_device_purchase_end_date,
+    ).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString();
+    values.claim_deadline = moment(values.claim_deadline).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString();
     values.platform = activePlatform;
 
 
