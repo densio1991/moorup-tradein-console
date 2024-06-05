@@ -89,6 +89,7 @@ export function EditPromotionForm({ data }: any) {
     values.claim_deadline = moment(values.claim_deadline).toISOString();
     values.platform = activePlatform;
 
+
     setAddPromotionDetailsPayload(values);
     setSideModalState({
       ...sideModalState,
@@ -108,12 +109,28 @@ export function EditPromotionForm({ data }: any) {
   );
 
   const handleStartDateChange = (date: Date | null) => {
-    formik.setFieldValue('start_date', date);
-    formik.setFieldValue('end_date', date);
+    formik.setFieldValue('start_date', moment(date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString());
+    formik.setFieldValue('end_date', moment(date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString());
   };
 
   const handleEndDateChange = (date: Date | null) => {
-    formik.setFieldValue('end_date', date);
+    
+    formik.setFieldValue('end_date', moment(date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString());
   };
 
   const handleStartDateOnBlur = () => {
