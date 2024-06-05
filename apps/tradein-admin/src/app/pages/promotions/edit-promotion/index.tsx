@@ -143,13 +143,13 @@ export function EditPromotionForm({ data }: any) {
       minute: 0,
       second: 0,
       millisecond: 0,
-     }).toISOString());
+     }).toDate());
     formik.setFieldValue('end_date', moment(date).utc().set({
       hour: 0,
       minute: 0,
       second: 0,
       millisecond: 0,
-     }).toISOString());
+     }).toDate());
   };
 
   const handleEndDateChange = (date: Date | null) => {
@@ -159,7 +159,7 @@ export function EditPromotionForm({ data }: any) {
       minute: 0,
       second: 0,
       millisecond: 0,
-     }).toISOString());
+     }).toDate());
   };
 
   const handleStartDateOnBlur = () => {
@@ -178,7 +178,7 @@ export function EditPromotionForm({ data }: any) {
       minute: 0,
       second: 0,
       millisecond: 0,
-     }).toISOString());
+     }).toDate());
   };
 
   const handleSendInDeadlineDateOnBlur = () => {
@@ -223,13 +223,14 @@ export function EditPromotionForm({ data }: any) {
       minute: 0,
       second: 0,
       millisecond: 0,
-     }).toISOString());
+     }).toDate());
+
     formik.setFieldValue('new_device_purchase_end_date', moment(date).utc().set({
       hour: 0,
       minute: 0,
       second: 0,
       millisecond: 0,
-     }).toISOString());
+     }).toDate());
   };
 
   const handleNewDevicePurchaseEndDateChange = (date: Date | null) => {
@@ -238,7 +239,7 @@ export function EditPromotionForm({ data }: any) {
       minute: 0,
       second: 0,
       millisecond: 0,
-     }).toISOString());
+     }).toDate());
   };
 
   const handleClaimDeadlineDateOnBlur = () => {
