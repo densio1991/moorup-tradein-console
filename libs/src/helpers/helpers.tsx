@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import { jwtDecode } from 'jwt-decode';
 import { capitalize, isEmpty } from 'lodash';
 import { Chip, StyledIcon } from '../components';
-import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes, Promotion, PromotionStatus, TIMEZONE } from '../constants';
+import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes, ProductUploadLogsStatus, Promotion, PromotionStatus, TIMEZONE } from '../constants';
 import { defaultTheme } from './theme';
 
 dayjs.extend(utc)
@@ -18,6 +18,7 @@ export function createActionTypes(baseType: string) {
     SUCCESS: `${baseType}_SUCCESS`,
     FAILED: `${baseType}_FAILED`,
     CANCELLED: `${baseType}_CANCELLED`,
+    BAD_REQUEST: `${baseType}_BAD_REQUEST`,
   };
 }
 
@@ -505,6 +506,18 @@ export const parseStatus = (value: string) => {
       bgColor = defaultTheme.warning.background;
       break;
 
+    case ProductUploadLogsStatus.SUCCESS:
+      text = 'Success';
+      textColor = defaultTheme.success.text;
+      bgColor = defaultTheme.success.background;
+      break;
+
+    case ProductUploadLogsStatus.FAILED:
+      text = 'Failed';
+      textColor = defaultTheme.danger.text;
+      bgColor = defaultTheme.danger.background;
+      break;
+
     default:
       textColor = defaultTheme.default.text;
       bgColor = defaultTheme.default.background;
@@ -522,7 +535,7 @@ export const hexToRgba = (hex: string, alpha: number) => {
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
-export const parseTypes = (type: string) => {
+export const parseTypes = (type: string, disableFormatting?: boolean) => {
   let color = defaultTheme.disabled.text;
   let text = type;
   switch (type) {
@@ -574,8 +587,8 @@ export const parseTypes = (type: string) => {
 
   return (
     <span>
-      <StyledIcon icon={faCircle} color={color} disabled />
-      <span style={{ color: color, marginLeft: '2px' }}>{text}</span>
+      { !disableFormatting && <StyledIcon icon={faCircle} color={color} disabled /> }
+      <span style={{ color: disableFormatting ? '' : color, marginLeft: '2px' }}>{text}</span>
     </span>
   )
 }
@@ -612,3 +625,7 @@ export const parsePromotionStatus = (promotion: Promotion) => {
 
   return promotion_status;
 }
+
+export const isNullOrEmpty = (value: any): boolean => {
+  return value === null || value === '';
+};

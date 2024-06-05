@@ -5,6 +5,7 @@ import {
   OrderItems,
   StyledInput,
   StyledReactSelect,
+  isNullOrEmpty,
 } from '@tradein-admin/libs';
 
 import { useFormik } from 'formik';
@@ -60,7 +61,7 @@ interface FormValues {
 
 type FormProps = {
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
-  updateStatus: (newValue: any) => void;
+  updateStatus: (newValue: any, orderItem: OrderItems) => void;
   orderItem: OrderItems;
 };
 
@@ -81,7 +82,7 @@ export const EditForm = ({
     const errors: any = {};
 
     if (status === DropdownOrderItemStatus.FOR_REVISION) {
-      if (!revised_offer || revised_offer <= 0) {
+      if (isNullOrEmpty(revised_offer)) {
         errors['revised_offer'] = 'Required field';
       }
       if (isEmpty(reason)) {
@@ -90,9 +91,7 @@ export const EditForm = ({
       formik.setErrors(errors);
     }
     if (isEmpty(errors)) {
-      updateStatus({
-        ...formik.values,
-      });
+      updateStatus(formik.values, orderItem);
       setStatusModal(false);
     }
   };

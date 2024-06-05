@@ -14,7 +14,6 @@ import {
   IconButton,
   MODAL_TYPES,
   MOORUP_CLAIM_STATUSES,
-  OVERRIDE_CLAIM_STATUSES,
   PROMOTION_CLAIMS_MANAGEMENT_COLUMNS,
   PageSubHeader,
   REGULAR,
@@ -32,13 +31,18 @@ import {
   promotionClaimsManagementParsingConfig,
   useAuth,
   useCommon,
+  usePermission,
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { BulkApproveClaims } from './forms/bulk-approve-claims';
+import { BulkRejectClaims } from './forms/bulk-reject-claims';
+import { BulkOverrideClaimStatus } from './forms/bulk-update-claims';
 
 export function PromotionClaimsPage() {
+  const { hasUpdatePromotionClaimPermission } = usePermission();
   const {
     state,
     getPromotionClaims,
@@ -46,6 +50,7 @@ export function PromotionClaimsPage() {
     setConfirmationModalState,
     updatePromotionClaimMoorupStatus,
     updatePromotionClaimStatus,
+    bulkUpdatePromotionClaimStatus,
   } = usePromotion();
   const {
     promotionClaims,
@@ -58,39 +63,6 @@ export function PromotionClaimsPage() {
   const { activePlatform, userDetails } = authState;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
-
-  const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
-
-  switch (userDetails.role) {
-    case REGULAR:
-      headers.push({
-        label: 'Actions',
-        order: 98,
-        enableSort: false,
-        keyName: '',
-      });
-      break;
-
-    case ADMIN:
-    case SUPERADMIN:
-      headers.push({
-        label: 'Moorup Status',
-        order: 11,
-        enableSort: true,
-        keyName: 'moorup_status',
-      });
-
-      headers.push({
-        label: 'Action',
-        order: 99,
-        enableSort: false,
-        keyName: '',
-      });
-      break;
-
-    default:
-      break;
-  }
 
   const [claimToApprove, setClaimToApprove] = useState({
     product_name: '',
@@ -117,6 +89,110 @@ export function PromotionClaimsPage() {
   const [createdDateFrom, setCreatedDateFrom] = useState<Date | null>(null);
   const [createdDateTo, setCreatedDateTo] = useState<Date | null>(null);
   const [exportFileFormat, setExportFileFormat] = useState<any>('csv');
+  const [selectedRows, setSelectedRows] = useState<any>([]);
+
+  const headers = [...PROMOTION_CLAIMS_MANAGEMENT_COLUMNS];
+  const rowActions: any = [];
+
+  switch (userDetails.role) {
+    case REGULAR:
+      rowActions.push(
+        <div
+          key="update_claims"
+          style={{ display: 'flex', flexDirection: 'row', gap: '8px' }}
+        >
+          <AppButton
+            width="fit-content"
+            onClick={() =>
+              setSideModalState({
+                ...sideModalState,
+                open: true,
+                view: MODAL_TYPES.BULK_APPROVE_CLAIM_REGULAR,
+              })
+            }
+          >
+            Approve ({selectedRows.length})
+          </AppButton>
+          <AppButton
+            width="fit-content"
+            variant="error"
+            onClick={() =>
+              setSideModalState({
+                ...sideModalState,
+                open: true,
+                view: MODAL_TYPES.BULK_REJECT_CLAIM_REGULAR,
+              })
+            }
+          >
+            Reject ({selectedRows.length})
+          </AppButton>
+        </div>,
+      );
+      break;
+
+    case ADMIN:
+    case SUPERADMIN:
+      headers.push({
+        label: 'Moorup Status',
+        order: 11,
+        enableSort: true,
+        keyName: 'moorup_status',
+      });
+
+      rowActions.push(
+        <AppButton
+          key="override_moorup_status"
+          width="fit-content"
+          onClick={() =>
+            setSideModalState({
+              ...sideModalState,
+              open: true,
+              view: MODAL_TYPES.BULK_OVERRIDE_CLAIM_STATUS,
+            })
+          }
+        >
+          Override Status ({selectedRows.length})
+        </AppButton>,
+      );
+      break;
+
+    default:
+      break;
+  }
+
+  const handleSubmitBulkClaimApproval = (values: any) => {
+    const filters = {
+      status: ClaimStatus.PENDING,
+      moorup_status: ClaimStatus.APPROVED,
+      include_all: true,
+    };
+    bulkUpdatePromotionClaimStatus(values?.claims, filters);
+  };
+
+  const handleSubmitBulkClaimRejection = (values: any) => {
+    const filters = {
+      status: ClaimStatus.PENDING,
+      moorup_status: ClaimStatus.APPROVED,
+      include_all: true,
+    };
+    bulkUpdatePromotionClaimStatus(values?.claims, filters);
+  };
+
+  const handleSubmitBulkOverrideClaimStatus = (values: any) => {
+    // const filters = {
+    //   status: ClaimStatus.PENDING,
+    //   include_all: true,
+    // };
+
+    // When the API is available
+    // bulkUpdatePromotionClaimMoorupStatus(values?.claims);
+
+    // Workaround to make the feature work w/o the bulk API
+    const claims = values?.claims || [];
+    claims.forEach((claim: any) => {
+      updatePromotionClaimMoorupStatus(claim, claim.id);
+    });
+  };
 
   const renderModalContentAndActions = () => {
     switch (confirmationModalState.view) {
@@ -296,40 +372,32 @@ export function PromotionClaimsPage() {
           a?.label?.localeCompare(b?.label),
         );
 
-      const overrideClaimStatuses = OVERRIDE_CLAIM_STATUSES?.filter(
-        (item) => item?.value !== claim?.moorup_status,
-      );
+      let disableCheckbox = false;
+      if (userDetails.role === SUPERADMIN) {
+        disableCheckbox = [
+          ClaimStatus.APPROVED,
+          ClaimStatus.COMPLETED,
+        ].includes(claim['moorup_status']);
+      } else if (userDetails.role === REGULAR) {
+        disableCheckbox = [
+          ClaimStatus.COMPLETED,
+          ClaimStatus.APPROVED,
+        ].includes(claim['status']);
+      }
 
       return {
         ...claim,
-        approveAction: () =>
-          setConfirmationModalState({
-            open: true,
-            view: ConfirmationModalTypes.APPROVE_CLAIM_REGULAR,
-            subtitle: 'Are you sure you want to approve this claim?',
-            data: products || [],
-            id: claim._id,
-          }),
-        rejectAction: () =>
-          setConfirmationModalState({
-            open: true,
-            view: ConfirmationModalTypes.REJECT_CLAIM_REGULAR,
-            subtitle: 'Are you sure you want to reject this claim?',
-            id: claim._id,
-          }),
-        overrideAction: () =>
-          setConfirmationModalState({
-            open: true,
-            view: ConfirmationModalTypes.OVERRIDE_CLAIM_STATUS,
-            subtitle: 'Are you sure you want to update moorup status?',
-            data: overrideClaimStatuses || [],
-            id: claim._id,
-          }),
+        products,
+        disableCheckbox,
       };
     });
   };
 
   const promotionClaimsWithActions = addActions(promotionClaims || []);
+
+  const handleChangeSelection = (selectedItems: any) => {
+    setSelectedRows(selectedItems);
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -347,6 +415,7 @@ export function PromotionClaimsPage() {
       } else {
         getPromotionClaims({ include_all: true }, signal);
       }
+      setSelectedRows([]);
     }
 
     return () => {
@@ -359,6 +428,10 @@ export function PromotionClaimsPage() {
       onCloseModal();
     };
   }, [activePlatform]);
+
+  useEffect(() => {
+    setSelectedRows([]);
+  }, [promotionClaims]);
 
   const onCloseModal = () => {
     setConfirmationModalState({
@@ -607,6 +680,30 @@ export function PromotionClaimsPage() {
           </FormWrapper>
         );
 
+      case MODAL_TYPES.BULK_APPROVE_CLAIM_REGULAR:
+        return (
+          <BulkApproveClaims
+            selectedRows={selectedRows}
+            onFormSubmit={handleSubmitBulkClaimApproval}
+          />
+        );
+
+      case MODAL_TYPES.BULK_REJECT_CLAIM_REGULAR:
+        return (
+          <BulkRejectClaims
+            selectedRows={selectedRows}
+            onFormSubmit={handleSubmitBulkClaimRejection}
+          />
+        );
+
+      case MODAL_TYPES.BULK_OVERRIDE_CLAIM_STATUS:
+        return (
+          <BulkOverrideClaimStatus
+            selectedRows={selectedRows}
+            onFormSubmit={handleSubmitBulkOverrideClaimStatus}
+          />
+        );
+
       default:
         return;
     }
@@ -616,6 +713,7 @@ export function PromotionClaimsPage() {
     <>
       <PageSubHeader
         withSearch
+        leftControls={!isEmpty(selectedRows) && rowActions}
         rightControls={
           <>
             <IconButton
@@ -661,7 +759,11 @@ export function PromotionClaimsPage() {
         }
         headers={headers}
         rows={promotionClaimsWithActions || []}
+        enableCheckbox={
+          !isEmpty(rowActions) && hasUpdatePromotionClaimPermission
+        }
         parsingConfig={promotionClaimsManagementParsingConfig}
+        onChangeSelection={handleChangeSelection}
       />
       <GenericModal
         title="Confirmation"

@@ -10,17 +10,22 @@ import {
   actionablesManagementParsingConfig,
   useAuth,
   useOrder,
+  usePermission,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
 
 export function ActionablesPage() {
+  const { hasPrintLabelPermission } = usePermission();
   const { state, getOrderItems, clearOrderItems, printLabels } = useOrder();
   const { state: authState } = useAuth();
   const { orderItems, isFetchingOrderItems } = state;
   const { activePlatform } = authState;
 
-  const headers = [...ACTIONABLES_MANAGEMENT_COLUMNS, ...ACTIONS_COLUMN];
+  const headers = [
+    ...ACTIONABLES_MANAGEMENT_COLUMNS,
+    ...(hasPrintLabelPermission ? ACTIONS_COLUMN : []),
+  ];
 
   const addPrintLabelAction = (orderItems: any) => {
     return orderItems.map((orderItem: any) => ({

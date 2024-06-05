@@ -10,7 +10,6 @@ import {
   ADD_PROMOTION_STEPS_PAYLOAD,
   AppButton,
   CenterModal,
-  DEFAULT_COLUMN,
   MODAL_TYPES,
   PROMOTIONS_MANAGEMENT_COLUMNS,
   PageSubHeader,
@@ -20,6 +19,7 @@ import {
   promotionsManagementParsingConfig,
   useAuth,
   useCommon,
+  usePermission,
   usePromotion,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
@@ -37,6 +37,8 @@ import { EditPromotionStepsForm } from './edit-promotion-steps';
 import { PromotionPreview } from './preview-content';
 
 export function PromotionsPage() {
+  const { hasAddPromotionPermission, hasEditPromotionPermission } =
+    usePermission();
   const {
     state,
     getPromotions,
@@ -79,9 +81,8 @@ export function PromotionsPage() {
   const [selectedPromotion, setSelectedPromotion] = useState({});
 
   const headers = [
-    ...DEFAULT_COLUMN,
     ...PROMOTIONS_MANAGEMENT_COLUMNS,
-    ...ACTIONS_COLUMN,
+    ...(hasEditPromotionPermission ? ACTIONS_COLUMN : []),
   ];
 
   useEffect(() => {
@@ -177,19 +178,21 @@ export function PromotionsPage() {
       <PageSubHeader
         withSearch
         leftControls={
-          <AppButton
-            width="fit-content"
-            icon={faPlus}
-            onClick={() =>
-              setSideModalState({
-                ...sideModalState,
-                open: true,
-                view: MODAL_TYPES.ADD_PROMOTION,
-              })
-            }
-          >
-            Add
-          </AppButton>
+          hasAddPromotionPermission && (
+            <AppButton
+              width="fit-content"
+              icon={faPlus}
+              onClick={() =>
+                setSideModalState({
+                  ...sideModalState,
+                  open: true,
+                  view: MODAL_TYPES.ADD_PROMOTION,
+                })
+              }
+            >
+              Add
+            </AppButton>
+          )
         }
       />
       <Table

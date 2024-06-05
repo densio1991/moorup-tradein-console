@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
-import { AppButton } from '../components';
-import { ClaimStatus } from '../constants';
 import { formatDate, parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
@@ -13,12 +11,12 @@ interface ParsingFunctionParams {
 const StyledLink = styled.a`
   text-decoration: underline;
   color: #216A4C;
-`
-
-const StyledDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
+  display: inline-block;
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
 `
 
 const StyledChip = styled.span<{ value?: string; width?: string; bgColor?: string; textColor?: string }>`
@@ -122,47 +120,5 @@ export const promotionClaimsManagementParsingConfig = {
         </ProductChipsContainer>
       );
     }
-  },
-  Action: ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['_id'])) return '--';
-    return (
-      <StyledDiv>
-        <AppButton
-          type="button"
-          variant="fill"
-          width="fit-content"
-          padding='4px 20px'
-          onClick={() => row.overrideAction()}
-          disabled={row['moorup_status'] === ClaimStatus.APPROVED || row['moorup_status'] === ClaimStatus.COMPLETED}
-        >
-          Update
-        </AppButton>
-      </StyledDiv>
-    );
-  },
-  Actions: ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['_id'])) return '--';
-    return (
-      <StyledDiv>
-        <AppButton
-          type="button"
-          variant="fill"
-          width="fit-content"
-          padding='4px 20px'
-          onClick={() => row.approveAction()}
-        >
-          Approve
-        </AppButton>
-        <AppButton
-          type="button"
-          variant="error"
-          width="fit-content"
-          padding='4px 20px'
-          onClick={() => row.rejectAction()}
-        >
-          Reject
-        </AppButton>
-      </StyledDiv>
-    );
   },
 };

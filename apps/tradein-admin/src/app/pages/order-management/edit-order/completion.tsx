@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DetailCardContainer, OrderItems } from '@tradein-admin/libs';
+import {
+  DetailCardContainer,
+  OrderItems,
+  usePermission,
+} from '@tradein-admin/libs';
 import { CardDetail, DeviceSection } from './sections';
 import OfferSection from './sections/offer-section';
 
@@ -16,6 +20,8 @@ const Completion = ({
   setStatusModal,
   setSelectedItem,
 }: CompletionProps) => {
+  const { hasUpdateOrderItemStatusPermission } = usePermission();
+
   const formatQuestion = (question: string) => {
     return question?.replace('-', ' ');
   };
@@ -66,13 +72,17 @@ const Completion = ({
                 })}
               </div>
             </div>
-            <hr />
-            <button
-              onClick={() => handleStatus(item)}
-              className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
-            >
-              Update Status
-            </button>
+            {hasUpdateOrderItemStatusPermission && (
+              <>
+                <hr />
+                <button
+                  onClick={() => handleStatus(item)}
+                  className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
+                >
+                  Update Status
+                </button>
+              </>
+            )}
           </DetailCardContainer>
         );
       })}

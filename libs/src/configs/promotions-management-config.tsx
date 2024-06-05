@@ -7,6 +7,7 @@ import { formatDate, parseStatus } from '../helpers';
 interface ParsingFunctionParams {
   row: { [key: string]: any };
   menuItems?: any;
+  index: number;
 }
 
 const StyledChip = styled.span<{ value?: string; width?: string; bgColor?: string; textColor?: string }>`
@@ -77,12 +78,24 @@ export const promotionsManagementParsingConfig = {
     if (!row || isEmpty(row['payment_due_date'])) return '--';
     return formatDate(row['payment_due_date']);
   },
+  'New Device Purchase Start Date': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['new_device_purchase_start_date'])) return '--';
+    return formatDate(row['new_device_purchase_start_date']);
+  },
+  'New Device Purchase End Date': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['new_device_purchase_end_date'])) return '--';
+    return formatDate(row['new_device_purchase_end_date']);
+  },
+  'Claim Deadline': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['claim_deadline'])) return '--';
+    return formatDate(row['claim_deadline']);
+  },
   'Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['promotion_status'])) return '--';
     return parseStatus(row['promotion_status']);
   },
-  'Actions': ({ row, menuItems }: ParsingFunctionParams) => {
+  'Actions': ({ row, menuItems, index }: ParsingFunctionParams) => {
     if (!row || isEmpty(menuItems)) return '--';
-    return <StyledMenuIcon menuItems={menuItems} rowData={row} />;
+    return <StyledMenuIcon menuItems={menuItems} rowData={row} index={index} />;
   },
 };

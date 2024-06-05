@@ -81,6 +81,11 @@ export const useOrder = () => {
     actions.evaluateOrderItemById(id, orderId, payload)(dispatch);
   };
 
+  const reviseOfferByItemId = (id: any, payload: any) => {
+    const orderId = state.order?.order?._id;
+    actions.reviseOfferByItemId(id, orderId, payload)(dispatch);
+  };
+
   const openModal = () => {
     actions.setToggleModal(true)(dispatch);
   }
@@ -144,6 +149,7 @@ export const useOrder = () => {
     resendOrderItemShipmentLabel,
     receiveOrderItemById,
     evaluateOrderItemById,
+    reviseOfferByItemId,
     cancelOrderItemById,
     updateShipmentStatusById,
     openModal,

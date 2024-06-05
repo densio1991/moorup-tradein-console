@@ -23,6 +23,11 @@ const productState = {
   isAddingProductVariant: false,
   isUpdatingProductVariant: false,
   isUploadingProductsExcel: false,
+  isDownloadingProductPricingRevisionTemplate: false,
+  isUploadingProductsPricingTemplate: false,
+  uploadProductsPricingError: [],
+  isFetchingProductUploadLogs: false,
+  productUploadLogs: [],
 };
 
 const productReducer = (state: any, action: any) => {
@@ -302,6 +307,7 @@ const productReducer = (state: any, action: any) => {
         ...state,
         isUploadingProductsExcel: true,
         products: [],
+        isFetchingProducts: true,
       };
     }
     case types.UPLOAD_PRODUCTS_EXCEL.SUCCESS: {
@@ -318,7 +324,97 @@ const productReducer = (state: any, action: any) => {
       };
     }
 
-    default:
+    case types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.baseType: {
+      return {
+        ...state,
+        isDownloadingProductPricingRevisionTemplate: true,
+      };
+    }
+    case types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.SUCCESS: {
+      return {
+        ...state,
+        isDownloadingProductPricingRevisionTemplate: false,
+      };
+    }
+    case types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.FAILED: {
+      return {
+        ...state,
+        isDownloadingProductPricingRevisionTemplate: false,
+      };
+    }
+
+    case types.UPLOAD_PRODUCT_PRICING_REVISION.baseType: {
+      return {
+        ...state,
+        isUploadingProductsPricingTemplate: true,
+        products: [],
+        isFetchingProducts: true,
+      };
+    }
+    case types.UPLOAD_PRODUCT_PRICING_REVISION.SUCCESS: {
+      return {
+        ...state,
+        isUploadingProductsPricingTemplate: false,
+      };
+    }
+    case types.UPLOAD_PRODUCT_PRICING_REVISION.FAILED: {
+      return {
+        ...state,
+        isUploadingProductsPricingTemplate: false,
+        products: [],
+      };
+    }
+    case types.UPLOAD_PRODUCT_PRICING_REVISION.BAD_REQUEST: {
+      return {
+        ...state,
+        isUploadingProductsPricingTemplate: false,
+        uploadProductsPricingError: action.payload,
+        products: [],
+      };
+    }
+
+    case types.CLEAR_UPLOAD_PRODUCT_PRICING_REVISION_ERRORS:
+      return {
+        ...state,
+        uploadProductsPricingError: [],
+      };
+
+    case types.FETCH_PRODUCT_UPLOAD_LOGS.baseType: {
+      return {
+        ...state,
+        isFetchingProductUploadLogs: true,
+        productUploadLogs: [],
+      };
+    }
+    case types.FETCH_PRODUCT_UPLOAD_LOGS.SUCCESS: {
+      return {
+        ...state,
+        isFetchingProductUploadLogs: false,
+        productUploadLogs: action.payload?.data,
+      };
+    }
+    case types.FETCH_PRODUCT_UPLOAD_LOGS.FAILED: {
+      return {
+        ...state,
+        isFetchingProductUploadLogs: false,
+        productUploadLogs: [],
+      };
+    }
+    case types.FETCH_PRODUCT_UPLOAD_LOGS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingProductUploadLogs: true,
+        productUploadLogs: [],
+      };
+    }
+
+    case types.CLEAR_PRODUCT_UPLOAD_LOGS:
+      return {
+        ...state,
+        productUploadLogs: [],
+      };
+
+    default: 
       return state;
   }
 };

@@ -8,23 +8,32 @@ import {
   useAuth,
   useCommon,
   useOrder,
+  usePermission,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export function OrderManagementPage() {
+  const navigate = useNavigate();
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
   const { state, fetchOrders, clearOrders } = useOrder();
   const { orders, isFetchingOrders } = state;
   const { setSearchTerm } = useCommon();
+  const { hasViewOrderDetailsPermission } = usePermission();
 
-  const headers = [...ORDER_MANAGEMENT_COLUMNS];
+  const headers = [
+    ...ORDER_MANAGEMENT_COLUMNS,
+    // ...(hasViewOrderDetailsPermission ? ACTIONS_COLUMN : []),
+  ];
 
   const addViewUrlToOrders = (orders: any) => {
     return orders.map((order: any) => ({
       ...order,
-      viewURL: `/dashboard/order/${order._id}`,
+      ...(hasViewOrderDetailsPermission && {
+        viewURL: `/dashboard/order/${order._id}`,
+      }),
     }));
   };
 
@@ -56,6 +65,12 @@ export function OrderManagementPage() {
         headers={headers}
         rows={ordersWithViewUrl || []}
         parsingConfig={orderManagementParsingConfig}
+        menuItems={[
+          {
+            label: 'View',
+            action: (value: any) => navigate(`/dashboard/order/${value._id}`),
+          },
+        ]}
       />
     </>
   );

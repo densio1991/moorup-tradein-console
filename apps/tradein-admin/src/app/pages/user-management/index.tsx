@@ -4,7 +4,6 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import {
   ACTIONS_COLUMN,
   AppButton,
-  DEFAULT_COLUMN,
   MODAL_TYPES,
   PageSubHeader,
   SideModal,
@@ -12,6 +11,7 @@ import {
   USER_MANAGEMENT_COLUMNS,
   useAuth,
   useCommon,
+  usePermission,
   useUser,
   userManagementParsingConfig,
 } from '@tradein-admin/libs';
@@ -22,6 +22,11 @@ import { EditUserForm } from './edit-user';
 import { EditUserPermissionForm } from './edit-user-permission';
 
 export function UserManagementPage() {
+  const {
+    hasAddUserPermission,
+    hasEditUserDetailsPermission,
+    hasEditUserPermissionsPermission,
+  } = usePermission();
   const { state, getUsers, clearUsers } = useUser();
   const { users, isFetchingUsers, isCreatingUser, isUpdatingUser } = state;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
@@ -30,9 +35,8 @@ export function UserManagementPage() {
   const { activePlatform, userDetails } = authState;
 
   const headers = [
-    ...DEFAULT_COLUMN,
     ...USER_MANAGEMENT_COLUMNS,
-    ...ACTIONS_COLUMN,
+    ...(hasEditUserDetailsPermission ? ACTIONS_COLUMN : []),
   ];
 
   const [selectedUser, setSelectedUser] = useState({});
@@ -41,7 +45,9 @@ export function UserManagementPage() {
 
   const editUserSteps = [
     MODAL_TYPES.EDIT_USER,
-    MODAL_TYPES.EDIT_USER_PERMISSIONS,
+    ...(hasEditUserPermissionsPermission
+      ? [MODAL_TYPES.EDIT_USER_PERMISSIONS]
+      : []),
   ];
 
   const [steps, setSteps] = useState(addUserSteps);
@@ -105,20 +111,21 @@ export function UserManagementPage() {
       <PageSubHeader
         withSearch
         leftControls={
-          <AppButton
-            width="fit-content"
-            icon={faPlus}
-            onClick={() => {
-              setSideModalState({
-                ...sideModalState,
-                open: true,
-                view: MODAL_TYPES.ADD_USER,
-              });
-            }}
-            disabled
-          >
-            Add
-          </AppButton>
+          hasAddUserPermission && (
+            <AppButton
+              width="fit-content"
+              icon={faPlus}
+              onClick={() => {
+                setSideModalState({
+                  ...sideModalState,
+                  open: true,
+                  view: MODAL_TYPES.ADD_USER,
+                });
+              }}
+            >
+              Add
+            </AppButton>
+          )
         }
       />
       <Table

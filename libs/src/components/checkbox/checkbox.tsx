@@ -4,6 +4,8 @@ import styled from 'styled-components';
 interface CheckboxProps {
   label: string;
   checked: boolean;
+  disabled?: boolean;
+  className?: string;
   onChange: (checked: boolean) => void;
 }
 
@@ -27,12 +29,12 @@ const StyledCheckboxLabel = styled.label`
   cursor: pointer;
 `;
 
-const StyledCheckboxInput = styled.input`
+const StyledCheckboxInput = styled.input<{ disabled?: boolean }>`
   margin-left: 0px;
   height: 16px;
   width: 16px;
   accent-color: #01463a;
-  cursor: pointer;
+  cursor: ${(props) => props.disabled ? 'not-allowed' : 'pointer'};
 `;
 
 const StyledSectionLabel = styled.span`
@@ -43,18 +45,15 @@ const StyledSectionLabel = styled.span`
   font-weight: 600;
 `;
 
-export function Checkbox({
-  label,
-  checked,
-  onChange,
-}: CheckboxProps): JSX.Element {
+export function Checkbox({ label, checked, disabled, className, onChange }: CheckboxProps): JSX.Element {
   return (
-    <StyledCheckboxContainer>
+    <StyledCheckboxContainer className={className}>
       <StyledCheckboxInput
         type="checkbox"
         id={label.toLowerCase().replace(/\s/g, '-')}
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
+        disabled={disabled}
       />
       <StyledCheckboxLabel htmlFor={label.toLowerCase().replace(/\s/g, '-')}>
         {label}

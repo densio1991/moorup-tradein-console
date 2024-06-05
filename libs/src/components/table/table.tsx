@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faArrowDownWideShort, faArrowUpWideShort } from '@fortawesome/free-solid-svg-icons';
-import { isEmpty } from 'lodash';
-import { ReactNode, useState } from 'react';
+import { isEmpty, isEqual } from 'lodash';
+import { ReactNode, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 import { PAGE_SIZES } from '../../constants';
 import { sortArray, sortByKey } from '../../helpers';
 import { useCommon } from '../../store';
+import { Checkbox } from '../checkbox';
 import { StyledReactSelect } from '../input';
 import { StyledIcon } from '../styled';
 import Pagination from './pagination';
@@ -33,6 +34,7 @@ interface TableProps {
   rightControls?: any;
   parsingConfig?: { [key: string]: (value: any) => any };
   margin?: string;
+  onChangeSelection?: any;
 }
 
 const HeaderSection = styled.div`
@@ -40,7 +42,7 @@ const HeaderSection = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 12px 0px;
+  padding: 10px 0px;
   flex-wrap: wrap;
 `;
 
@@ -97,8 +99,8 @@ const TableStyled = styled.table`
   tbody td {
     white-space: nowrap;
     border-bottom: 1px solid #f0f0f0;
-    padding-top: 12px !important;
-    padding-bottom: 12px !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
     padding-left: 30px !important;
 
     &:nth-child(2) {
@@ -275,10 +277,13 @@ export function Table({
   menuItems,
   rightControls,
   parsingConfig = {},
-  margin = '20px',
+  margin = '4px 20px',
+  onChangeSelection,
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
+  const [isAllSelected, setIsAllSelected] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(new Set());
   const [pageSize, setPageSize] = useState(parseInt(PAGE_SIZES[0].value));
   const { state: commonState } = useCommon();
   const { searchTerm } = commonState;
@@ -304,11 +309,12 @@ export function Table({
   const parseRowValue = (
     header: any,
     row: { [x: string]: any },
+    index: number,
   ): ReactNode | string => {
     const parsingFunction = parsingConfig[header.label];
 
     if (parsingFunction) {
-      return parsingFunction({ row, menuItems });
+      return parsingFunction({ row, menuItems, index });
     }
     
     return row[header.keyName] || '--';
@@ -319,7 +325,12 @@ export function Table({
     ? sortArray(rows, sortConfig.key, sortConfig.direction)
     : rows;
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    setSelectedIndex(new Set([]));
+    setIsAllSelected(false);
+    onChangeSelection([]);
+  }
 
   const filteredRows = searchTerm
   ? sortedRows.filter(row =>
@@ -362,6 +373,49 @@ export function Table({
   const endIndex = startIndex + pageSize;
   const itemsToDisplay = filteredRows.slice(startIndex, endIndex);
 
+  const toggleSelection = (index: any) => {
+    const newSelectedIndex = new Set(selectedIndex);
+
+    if (newSelectedIndex.has(index)) {
+      newSelectedIndex.delete(index);
+    } else {
+      newSelectedIndex.add(index);
+    }
+
+    setSelectedIndex(newSelectedIndex);
+    if (isEqual(newSelectedIndex, new Set([...Array(itemsToDisplay.length).keys()]))) {
+      onChangeSelection(itemsToDisplay)
+      setIsAllSelected(true);
+    } else {
+      const selectedItems = itemsToDisplay?.filter((_, idx) => newSelectedIndex.has(idx));
+      onChangeSelection(selectedItems);
+      setIsAllSelected(false);
+    }
+  }
+
+  const toggleSelectAll = () => {
+    if (isAllSelected) {
+      setSelectedIndex(new Set([]));
+      onChangeSelection([]);
+    } else {
+      const selectableItems = itemsToDisplay.filter(item => !item.disableCheckbox);
+      const selectableIndices = new Set(
+        selectableItems.map((item) => itemsToDisplay.indexOf(item))
+      );
+
+      setSelectedIndex(selectableIndices);
+      onChangeSelection(selectableItems);
+    }
+    setIsAllSelected((value) => !value);
+  }
+
+  useEffect(() => {
+    if (!isLoading) {
+      setIsAllSelected(false);
+      setSelectedIndex(new Set([]));
+    }
+  }, [isLoading])
+
   return (
     <div style={{ 
       backgroundColor: 'white', 
@@ -393,6 +447,16 @@ export function Table({
         <TableStyled>
           <Thead>
             <Tr>
+              {enableCheckbox && (
+                <Th key="select-all">
+                  <Checkbox
+                    label=""
+                    checked={isAllSelected}
+                    onChange={toggleSelectAll}
+                    className="!mb-0"
+                  />
+                </Th>
+              )}
               {sortedHeaders?.map((header) => (
                 <Th
                   key={header.label}
@@ -417,9 +481,20 @@ export function Table({
           <Tbody>
             {itemsToDisplay?.map((row: any, index: any) => (
               <Tr key={index} onClick={() => handleRowClick(row)} hover={!isEmpty(row?.viewURL)}>
+                {enableCheckbox && (
+                  <Td key="select-all">
+                    <Checkbox
+                      label=""
+                      checked={selectedIndex.has(index) || (isAllSelected && !row?.disableCheckbox)}
+                      onChange={() => toggleSelection(index)}
+                      className="!mb-0"
+                      disabled={row?.disableCheckbox}
+                    />
+                  </Td>
+                )}
                 {sortedHeaders?.map((header) => (
                   <Td key={`${index}-${header.label}`}>
-                    <span>{parseRowValue(header, row)}</span>
+                    <span>{parseRowValue(header, row, index)}</span>
                   </Td>
                 ))}
               </Tr>

@@ -4,6 +4,7 @@ import {
   OrderItems,
   OrderItemStatus,
   useOrder,
+  usePermission,
 } from '@tradein-admin/libs';
 import { CardDetail, DeviceSection } from './sections';
 import OfferSection from './sections/offer-section';
@@ -22,6 +23,8 @@ const ValidationOffer = ({
   setSelectedItem,
 }: ValidationOfferProps) => {
   const { state, printOutboundLabel } = useOrder();
+  const { hasUpdateOrderItemStatusPermission, hasPrintLabelPermission } =
+    usePermission();
   const { isGeneratingLabels } = state;
 
   const handlePrintLabel = (orderItemId: any) => {
@@ -59,6 +62,30 @@ const ValidationOffer = ({
       {orderItems?.map((item: OrderItems, idx) => {
         const { questions_answered = [] } = item;
 
+        const orderItemActions = [];
+        if (item.status === OrderItemStatus.REVISION_REJECTED) {
+          if (hasPrintLabelPermission) {
+            orderItemActions.push(
+              <button
+                onClick={() => handlePrintLabel(item?._id)}
+                disabled={isGeneratingLabels}
+                className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
+              >
+                Return Device
+              </button>,
+            );
+          }
+        } else if (hasUpdateOrderItemStatusPermission) {
+          orderItemActions.push(
+            <button
+              onClick={() => handleStatus(item)}
+              className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
+            >
+              Update Status
+            </button>,
+          );
+        }
+
         return (
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
             <DeviceSection orderItem={item} orderId={orderId} />
@@ -88,22 +115,11 @@ const ValidationOffer = ({
                 })}
               </div>
             </div>
-            <hr />
-            {item.status === OrderItemStatus.REVISION_REJECTED ? (
-              <button
-                onClick={() => handlePrintLabel(item?._id)}
-                disabled={isGeneratingLabels}
-                className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
-              >
-                Return Device
-              </button>
-            ) : (
-              <button
-                onClick={() => handleStatus(item)}
-                className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
-              >
-                Update Status
-              </button>
+            {orderItemActions.length > 0 && (
+              <>
+                <hr />
+                {orderItemActions}
+              </>
             )}
           </DetailCardContainer>
         );

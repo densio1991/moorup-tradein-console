@@ -3,7 +3,9 @@ import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import {
   CopyToClipboardButton,
   StyledIcon,
+  useAuth,
   useOrder,
+  usePermission,
 } from '@tradein-admin/libs';
 import { useEffect, useState } from 'react';
 
@@ -25,11 +27,15 @@ export const CardDetail = ({
   orderId,
   orderItem,
 }: CardDetailProps) => {
+  const { state: authState } = useAuth();
+  const { activePlatform } = authState;
+
   const [editing, setEditing] = useState(false);
   const [editedValue, setEditedValue] = useState(value);
   const [isImeiValid, setIsImeiValid] = useState(true);
 
   const { updateOrderItemImeiSerial } = useOrder();
+  const { hasEditIMEISerialPermission } = usePermission();
 
   const serialQuestion: Record<string, any> = {
     phones: {
@@ -89,6 +95,7 @@ export const CardDetail = ({
 
     updateOrderItemImeiSerial(orderItem?._id, orderId, {
       imei_serial: editedValue,
+      platform: activePlatform,
     });
     setEditing(false);
   };
@@ -143,7 +150,7 @@ export const CardDetail = ({
         <dt className="flex items-center break-normal capitalize pb-2 sm:pb-0">
           {value || '---'}
           {copy && value && <CopyToClipboardButton textToCopy={value} />}
-          {edit && value && (
+          {edit && value && hasEditIMEISerialPermission && (
             <button
               onClick={handleEditClick}
               className="text-gray-500 hover:text-gray-700"

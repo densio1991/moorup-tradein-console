@@ -37,6 +37,11 @@ const promotionState = {
   isProcessingPromotionClaimPayment: false,
   promotionCardImage: null,
   promotionBannerImage: null,
+  isBulkProcessingPromotionClaimPayment: false,
+  forProcessingClaimsPayment: (() => {
+    const saved = sessionStorage.getItem('FPC');
+    return saved ? JSON.parse(saved) : [];
+  })(),
 };
 
 const promotionReducer = (state: any, action: any) => {
@@ -259,6 +264,27 @@ const promotionReducer = (state: any, action: any) => {
       };
     }
 
+    case types.BULK_UPDATE_PROMOTION_CLAIM_STATUS.baseType: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimStatus: true,
+        isFetchingPromotionClaims: true,
+        promotionClaims: [],
+      };
+    }
+    case types.BULK_UPDATE_PROMOTION_CLAIM_STATUS.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimStatus: false,
+      };
+    }
+    case types.BULK_UPDATE_PROMOTION_CLAIM_STATUS.FAILED: {
+      return {
+        ...state,
+        isUpdatingPromotionClaimStatus: false,
+      };
+    }
+
     case types.PROCESS_PROMOTION_CLAIM_PAYMENT.baseType: {
       return {
         ...state,
@@ -291,6 +317,28 @@ const promotionReducer = (state: any, action: any) => {
         ...state,
         promotionBannerImage: action?.payload,
       };
+
+    case types.BULK_PROCESS_PROMOTION_CLAIM_PAYMENT.baseType: {
+      return {
+        ...state,
+        isBulkProcessingPromotionClaimPayment: true,
+        isFetchingPromotionClaims: true,
+        promotionClaims: [],
+      };
+    }
+    case types.BULK_PROCESS_PROMOTION_CLAIM_PAYMENT.SUCCESS: {
+      return {
+        ...state,
+        isBulkProcessingPromotionClaimPayment: false,
+        forProcessingClaimsPayment: [...state.forProcessingClaimsPayment, ...action.payload],
+      };
+    }
+    case types.BULK_PROCESS_PROMOTION_CLAIM_PAYMENT.FAILED: {
+      return {
+        ...state,
+        isBulkProcessingPromotionClaimPayment: false,
+      };
+    }
 
     default:
       return state;

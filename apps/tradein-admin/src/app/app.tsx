@@ -15,6 +15,8 @@ import {
   UserManagementPage,
 } from './pages';
 import { ConfigurationsPage } from './pages/configurations';
+import { UploadProductPricingErrorPage } from './pages/product-management/upload-pricing-details';
+import { ProductUploadLogsPage } from './pages/product-upload-logs';
 
 export function App() {
   return (
@@ -23,12 +25,20 @@ export function App() {
         {/* Will redirect unauthenticated users to /login */}
         <Route element={<PrivateRoute />}>
           <Route path="/dashboard/" element={<DashboardPage />} />
-          <Route
-            path="/dashboard/product"
-            element={<ProductManagementPage />}
-          />
           <Route path="/dashboard/product/:id" element={<EditProductPage />} />
           <Route path="/dashboard/order/:id" element={<EditOrderPage />} />
+          <Route
+            path="/dashboard/product/list"
+            element={<ProductManagementPage />}
+          />
+          <Route
+            path="/dashboard/product/upload-pricing-details"
+            element={<UploadProductPricingErrorPage />}
+          />
+          <Route
+            path="/dashboard/product/upload-logs"
+            element={<ProductUploadLogsPage />}
+          />
           <Route
             path="/dashboard/order/list"
             element={<OrderManagementPage />}

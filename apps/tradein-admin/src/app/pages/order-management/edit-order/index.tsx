@@ -19,6 +19,7 @@ import {
   StyledIcon,
   useAuth,
   useOrder,
+  usePermission,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
@@ -84,10 +85,16 @@ export const EditOrderPage = () => {
     fetchOrderShipments,
     patchOrderItemById,
     evaluateOrderItemById,
+    reviseOfferByItemId,
     resendShipmentLabel,
     clearOrder,
     // closeModal,
   } = useOrder();
+  const {
+    hasUpdateOrderItemStatusPermission,
+    hasResendLabelPermission,
+    hasViewPromotionClaimsPermission,
+  } = usePermission();
 
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
@@ -171,18 +178,20 @@ export const EditOrderPage = () => {
     }
   }, [order]);
 
-  const onUpdateStatus = (newValue: any) => {
+  const onUpdateStatus = (newValue: any, orderItem: OrderItems) => {
     if (newValue.status === OrderItemStatus.FOR_REVISION) {
       const payload = {
-        pass: false,
-        revised_offer: newValue.revised_offer,
-        reasons: newValue.reason?.split(','),
+        platform: activePlatform,
+        revision_price: newValue.revised_offer,
+        revision_reasons: newValue.reason?.split(','),
       };
-      evaluateOrderItemById(newValue._id, payload);
+      reviseOfferByItemId(orderItem.line_item_number, payload);
     } else if (newValue.status === OrderItemStatus.EVALUATED) {
-      evaluateOrderItemById(newValue._id, { pass: true });
+      evaluateOrderItemById(orderItem.line_item_number, {
+        platform: activePlatform,
+      });
     } else {
-      patchOrderItemById(newValue._id, { status: newValue.status });
+      patchOrderItemById(orderItem._id, { status: newValue.status });
     }
     setSelectedItem({} as OrderItems);
   };
@@ -246,11 +255,13 @@ export const EditOrderPage = () => {
           <AccordionContent isOpen={accordionState.quote} key="Quote Creation">
             <QuoteDetails />
           </AccordionContent>
-          <ClaimsList
-            order={order}
-            isOpen={accordionState.claims}
-            onToggle={() => toggleAccordion('claims')}
-          />
+          {hasViewPromotionClaimsPermission && (
+            <ClaimsList
+              order={order}
+              isOpen={accordionState.claims}
+              onToggle={() => toggleAccordion('claims')}
+            />
+          )}
         </AccordionInnerContainer>
       </AccordionContainer>
       <AccordionContainer className="px-4 pt-4">
@@ -264,7 +275,8 @@ export const EditOrderPage = () => {
               isOpen={accordionState.collection}
               action={
                 !isSingleOrderFlow &&
-                order?.status !== OrderItemStatus.CANCELLED && (
+                order?.status !== OrderItemStatus.CANCELLED &&
+                hasResendLabelPermission && (
                   <button
                     className="text-md text-white bg-emerald-500 py-1 px-3 rounded-md hover:bg-emerald-600"
                     onClick={() => resendShipmentLabel(order?._id)}
@@ -357,7 +369,10 @@ export const EditOrderPage = () => {
           </AccordionContent>
         </AccordionInnerContainer>
       </AccordionContainer>
-      <StatusModal isOpen={statusModal} onClose={() => setStatusModal(false)}>
+      <StatusModal
+        isOpen={statusModal && hasUpdateOrderItemStatusPermission}
+        onClose={() => setStatusModal(false)}
+      >
         {!isEmpty(selectedItem) && (
           <EditForm
             setStatusModal={(value) => {

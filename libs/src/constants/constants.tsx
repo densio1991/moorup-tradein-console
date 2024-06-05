@@ -6,6 +6,7 @@ import {
   faCube,
   faFileCircleExclamation,
   faFileInvoice,
+  faFileLines,
   faHouse,
   faList,
   faPenToSquare,
@@ -46,6 +47,22 @@ export const SIDENAV_ITEMS = [
     activeUrl: /^\/dashboard\/product/,
     icon: faCube,
     disabled: false,
+    submenu: [
+      {
+        title: 'Products',
+        url: '/dashboard/product/list',
+        activeUrl: /^\/dashboard\/product\/list/,
+        icon: faList,
+        disabled: false,
+      },
+      {
+        title: 'Upload Logs',
+        url: '/dashboard/product/upload-logs',
+        activeUrl: /^\/dashboard\/product\/upload-logs/,
+        icon: faFileLines,
+        disabled: false,
+      }
+    ],
   },
   {
     title: 'Order Management',
@@ -55,7 +72,7 @@ export const SIDENAV_ITEMS = [
     disabled: false,
     submenu: [
       {
-        title: 'Order List',
+        title: 'Orders',
         url: '/dashboard/order/list',
         activeUrl: /^\/dashboard\/order\/list/,
         icon: faList,
@@ -78,14 +95,14 @@ export const SIDENAV_ITEMS = [
     ],
   },
   {
-    title: 'Promotions',
+    title: 'Promotion Management',
     url: '/dashboard/promotion',
     activeUrl: /\/dashboard\/promotion/,
     icon: faBullhorn,
     disabled: false,
     submenu: [
       {
-        title: 'Promotion List',
+        title: 'Promotions',
         url: '/dashboard/promotion/list',
         activeUrl: /^\/dashboard\/promotion\/list/,
         icon: faList,
@@ -155,6 +172,84 @@ export const PRODUCT_MANAGEMENT_COLUMNS = [
     order: 6,
     enableSort: true,
     keyName: 'type',
+  }
+]
+
+export const PRODUCT_PRICING_UPLOAD_COLUMNS = [
+  {
+    label: 'Errors',
+    order: 2,
+    enableSort: false,
+    keyName: 'errors',
+  },
+  {
+    label: 'SKU',
+    order: 3,
+    enableSort: true,
+    keyName: 'payload.sku',
+  },
+  {
+    label: 'Currency',
+    order: 4,
+    enableSort: true,
+    keyName: 'payload.currency',
+  },
+  {
+    label: 'Working',
+    order: 5,
+    enableSort: true,
+    keyName: 'payload.working',
+  },
+  {
+    label: 'Working Damaged',
+    order: 6,
+    enableSort: true,
+    keyName: 'working_damaged',
+  },
+  {
+    label: 'Not Working',
+    order: 7,
+    enableSort: true,
+    keyName: 'payload.not_working',
+  },
+  {
+    label: 'Not Working Damaged',
+    order: 8,
+    enableSort: true,
+    keyName: 'payload.not_working_damaged',
+  },
+]
+
+export const PRODUCT_UPLOAD_LOGS_COLUMNS = [
+  {
+    label: 'File Name',
+    order: 2,
+    enableSort: true,
+    keyName: 'filename',
+  },
+  {
+    label: 'S3 Link',
+    order: 3,
+    enableSort: true,
+    keyName: 's3_link',
+  },
+  {
+    label: 'Upload Status',
+    order: 4,
+    enableSort: true,
+    keyName: 'status',
+  },
+  {
+    label: 'Uploaded By',
+    order: 5,
+    enableSort: true,
+    keyName: 'done_by',
+  },
+  {
+    label: 'Uploaded Date',
+    order: 6,
+    enableSort: true,
+    keyName: 'createdAt',
   }
 ]
 
@@ -401,14 +496,32 @@ export const PROMOTIONS_MANAGEMENT_COLUMNS = [
     keyName: 'send_in_deadline',
   },
   {
-    label: 'Payment Due Date',
+    label: 'Claim Deadline',
     order: 7,
+    enableSort: true,
+    keyName: 'claim_deadline',
+  },
+  {
+    label: 'New Device Purchase Start Date',
+    order: 8,
+    enableSort: true,
+    keyName: 'new_device_purchase_start_date',
+  },
+  {
+    label: 'New Device Purchase End Date',
+    order: 9,
+    enableSort: true,
+    keyName: 'new_device_purchase_end_date',
+  },
+  {
+    label: 'Payment Due Date',
+    order: 10,
     enableSort: true,
     keyName: 'payment_due_date',
   },
   {
     label: 'Status',
-    order: 8,
+    order: 11,
     enableSort: true,
     keyName: 'promotion_status',
   },
@@ -439,40 +552,40 @@ export const PAYMENTS_MANAGEMENT_COLUMNS = [
 
 export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
   {
-    label: 'Order Number',
+    label: 'Claim Number',
     order: 2,
+    enableSort: true,
+    keyName: 'claim_number',
+  },
+  {
+    label: 'Order Number',
+    order: 3,
     enableSort: true,
     keyName: 'order_id.order_number',
   },
   {
     label: 'Promotion Name',
-    order: 3,
+    order: 4,
     enableSort: true,
     keyName: 'promotion_id.name',
   },
   {
     label: 'Promotion Link',
-    order: 4,
+    order: 5,
     enableSort: true,
     keyName: 'promotion_id.slug',
   },
   {
     label: 'Device Model',
-    order: 5,
+    order: 6,
     enableSort: false,
     keyName: 'device_model',
   },
   {
     label: 'Receipt Number',
-    order: 6,
-    enableSort: true,
-    keyName: 'receipt_number',
-  },
-  {
-    label: 'Claim Number',
     order: 7,
     enableSort: true,
-    keyName: 'claim_number',
+    keyName: 'receipt_number',
   },
   {
     label: 'Claimed By',
@@ -1137,6 +1250,7 @@ export const ROLES = [
 ];
 
 export const CANCELLED_AXIOS = 'ERR_CANCELED';
+export const BAD_REQUEST = 'ERR_BAD_REQUEST';
 
 export const PRODUCT_TYPES = {
   PHONES: 'phones',
@@ -1174,6 +1288,11 @@ export const MODAL_TYPES = {
   FILTER_PROMOTION_CLAIMS: 'FILTER_PROMOTION_CLAIMS',
   DOWNLOAD_PROMOTION_CLAIMS: 'DOWNLOAD_PROMOTION_CLAIMS',
   ADD_ORDER_PROMOTION_CLAIM: 'ADD_ORDER_PROMOTION_CLAIM',
+  BULK_APPROVE_CLAIM_REGULAR: 'BULK_APPROVE_CLAIM_REGULAR',
+  BULK_REJECT_CLAIM_REGULAR: 'BULK_REJECT_CLAIM_REGULAR',
+  BULK_OVERRIDE_CLAIM_STATUS: 'BULK_OVERRIDE_CLAIM_STATUS',
+  EXPORT_PRODUCTS: 'EXPORT_PRODUCTS',
+  IMPORT_PRODUCTS: 'IMPORT_PRODUCTS',
 }
 
 export const PROMOTION_STATUS = [
@@ -1191,6 +1310,9 @@ export const ADD_PROMOTION_DETAILS_PAYLOAD = {
   show_banner: false,
   send_in_deadline: null,
   payment_due_date: null,
+  new_device_purchase_start_date: null,
+  new_device_purchase_end_date: null,
+  claim_deadline: null,
 }
 
 export const ADD_PROMOTION_PRODUCTS_PAYLOAD = {
