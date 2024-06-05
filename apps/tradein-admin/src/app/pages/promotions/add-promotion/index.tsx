@@ -140,12 +140,27 @@ export function AddPromotionForm() {
   );
 
   const handleStartDateChange = (date: Date | null) => {
-    formik.setFieldValue('start_date', date);
-    formik.setFieldValue('end_date', date);
+    formik.setFieldValue('start_date', moment(date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString());
+    formik.setFieldValue('end_date', moment(date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString());
   };
 
   const handleEndDateChange = (date: Date | null) => {
-    formik.setFieldValue('end_date', date);
+    formik.setFieldValue('end_date', moment(date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString());
   };
 
   const handleStartDateOnBlur = () => {
@@ -159,7 +174,12 @@ export function AddPromotionForm() {
   };
 
   const handleDateChange = (fieldName: string, date: Date | null) => {
-    formik.setFieldValue(fieldName, date);
+    formik.setFieldValue(fieldName, moment(date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString());
   };
 
   const handleSendInDeadlineDateOnBlur = () => {
@@ -182,6 +202,53 @@ export function AddPromotionForm() {
     } else {
       formik.setFieldTouched('payment_due_date', false, false);
       formik.setFieldError('payment_due_date', '');
+    }
+  };
+
+  const handleNewDevicePurchaseStartDateOnBlur = () => {
+    if (isEmpty(formik.values.new_device_purchase_start_date)) {
+      formik.setFieldTouched('new_device_purchase_start_date', true, false);
+      formik.setFieldError(
+        'new_device_purchase_start_date',
+        'New device purchase date is required',
+      );
+    } else {
+      formik.setFieldTouched('new_device_purchase_start_date', false, false);
+      formik.setFieldError('new_device_purchase_start_date', '');
+    }
+  };
+
+  const handleNewDevicePurchaseStartDateChange = (date: Date | null) => {
+    formik.setFieldValue('new_device_purchase_start_date', moment(date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString());
+    formik.setFieldValue('new_device_purchase_end_date', moment(date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString());
+  };
+
+  const handleNewDevicePurchaseEndDateChange = (date: Date | null) => {
+    formik.setFieldValue('new_device_purchase_end_date', moment(date).utc().set({
+      hour: 0,
+      minute: 0,
+      second: 0,
+      millisecond: 0,
+     }).toISOString());
+  };
+
+  const handleClaimDeadlineDateOnBlur = () => {
+    if (isEmpty(formik.values.claim_deadline)) {
+      formik.setFieldTouched('claim_deadline', true, false);
+      formik.setFieldError('claim_deadline', 'Claim deadline date is required');
+    } else {
+      formik.setFieldTouched('claim_deadline', false, false);
+      formik.setFieldError('claim_deadline', '');
     }
   };
 
