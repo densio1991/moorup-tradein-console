@@ -12,6 +12,7 @@ import {
   PromotionClaimsPage,
   PromotionClaimsPaymentPage,
   PromotionsPage,
+  TemplateEditorPage,
   UserManagementPage,
 } from './pages';
 import { ConfigurationsPage } from './pages/configurations';
@@ -68,6 +69,7 @@ export function App() {
             path="/dashboard/configurations"
             element={<ConfigurationsPage />}
           />
+          <Route path="/dashboard/templates" element={<TemplateEditorPage />} />
         </Route>
 
         {/* Will redirect authenticated users to /dashboard */}
