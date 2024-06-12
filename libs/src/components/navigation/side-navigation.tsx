@@ -320,6 +320,16 @@ export function SideBar(): JSX.Element {
                     })
                   }
                   </Menu>
+                  <Menu menuItemStyles={menuItemStyles}>
+                    <MenuItem 
+                      key='configs'
+                      onClick={() => navigate('/dashboard/templates')} 
+                      active={/^\/dashboard\/templates/?.test(pathname)}
+                      icon={<StyledIcon icon={faGears} />}
+                    >
+                      Templates
+                    </MenuItem>
+                  </Menu>
                 </>
               )
             }
