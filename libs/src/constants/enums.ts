@@ -118,3 +118,8 @@ export enum ProductUploadLogsStatus {
   SUCCESS = 'success',
   FAILED = 'failed',
 }
+
+export enum ProductUploadLogsTypes {
+  PRODUCTS = 'update-products',
+  PRICING = 'update-pricing',
+}

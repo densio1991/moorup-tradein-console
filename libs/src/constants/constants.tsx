@@ -240,14 +240,20 @@ export const PRODUCT_UPLOAD_LOGS_COLUMNS = [
     keyName: 'status',
   },
   {
-    label: 'Uploaded By',
+    label: 'Upload Type',
     order: 5,
+    enableSort: true,
+    keyName: 'type',
+  },
+  {
+    label: 'Uploaded By',
+    order: 6,
     enableSort: true,
     keyName: 'done_by',
   },
   {
     label: 'Uploaded Date',
-    order: 6,
+    order: 7,
     enableSort: true,
     keyName: 'createdAt',
   }
