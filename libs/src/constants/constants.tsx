@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { faEnvelope, faMessage } from '@fortawesome/free-regular-svg-icons';
 import {
   faBullhorn,
   faCheckToSlot,
   faCreditCard,
   faCube,
+  faEnvelopeCircleCheck,
+  faEnvelopesBulk,
   faFileCircleExclamation,
   faFileInvoice,
   faFileLines,
+  faGears,
   faHouse,
   faList,
   faPenToSquare,
@@ -130,6 +134,46 @@ export const SIDENAV_ITEMS = [
     activeUrl: /^\/dashboard\/user/,
     icon: faUsers,
     disabled: false,
+  },
+]
+
+export const SIDENAV_ITEMS_SETTINGS = [
+  {
+    title: 'Configurations',
+    url: '/dashboard/configurations',
+    activeUrl: /^\/dashboard\/configurations/,
+    icon: faGears,
+    disabled: false,
+  },
+  {
+    title: 'Templates',
+    url: '/dashboard/templates',
+    activeUrl: /\/dashboard\/templates/,
+    icon: faEnvelopesBulk,
+    disabled: true,
+    submenu: [
+      {
+        title: 'Email',
+        url: '/dashboard/templates/email',
+        activeUrl: /^\/dashboard\/templates\/email/,
+        icon: faEnvelope,
+        disabled: false,
+      },
+      {
+        title: 'SMS',
+        url: '/dashboard/templates/sms',
+        activeUrl: /^\/dashboard\/templates\/sms/,
+        icon: faMessage,
+        disabled: false,
+      },
+      {
+        title: 'Approvals',
+        url: '/dashboard/templates/approvals',
+        activeUrl: /^\/dashboard\/templates\/approvals/,
+        icon: faEnvelopeCircleCheck,
+        disabled: false,
+      },
+    ],
   },
 ]
 
