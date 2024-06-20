@@ -11,4 +11,3 @@ export { PromotionClaimsPage } from './promotion-claims-management';
 export { PromotionClaimsPaymentPage } from './promotion-claims-payments';
 export { PromotionsPage } from './promotions';
 export { UserManagementPage } from './user-management';
-export { TemplateEditorPage } from './templates';

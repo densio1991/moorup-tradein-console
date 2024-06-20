@@ -19,6 +19,9 @@ import {
 import { ConfigurationsPage } from './pages/configurations';
 import { UploadProductPricingErrorPage } from './pages/product-management/upload-pricing-details';
 import { ProductUploadLogsPage } from './pages/product-upload-logs';
+import { EditEmailTemplatePage } from './pages/templates/edit-email-template';
+import { EditSMSTemplatePage } from './pages/templates/edit-sms-template';
+import { TemplatesPage } from './pages/templates';
 
 export function App() {
   return (
@@ -74,7 +77,7 @@ export function App() {
             path="/dashboard/configurations"
             element={<ConfigurationsPage />}
           />
-          <Route path="/dashboard/templates/email" element={<TemplateEditorPage />} />
+          <Route path="/dashboard/templates/email" element={<TemplatesPage />} />
         </Route>
 
         {/* Will redirect authenticated users to /dashboard */}

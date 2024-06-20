@@ -1,198 +1,245 @@
-/* eslint-disable react/jsx-wrap-multilines */
-import React, { useCallback, useMemo, useState } from 'react';
-import mjml from 'mjml-browser';
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
-  EmailEditor,
-  EmailEditorProvider,
-  IEmailTemplate,
-  Stack,
-} from 'easy-email-editor';
-import 'easy-email-editor/lib/style.css';
+  AppButton,
+  FormContainer,
+  FormGroup,
+  FormWrapper,
+  LoaderContainer,
+  PageContainer,
+  StyledInput,
+  ToggleButton,
+  VerticalPills,
+  compareJSON,
+  TemplateForm,
+  useAuth,
+  usePermission,
+} from '@tradein-admin/libs';
+import { useFormik } from 'formik';
+import { isEmpty } from 'lodash';
+import { useEffect, useState } from 'react';
 
-import {
-  AdvancedType,
-  BasicType,
-  BlockManager,
-  JsonToMjml,
-} from 'easy-email-core';
-import {
-  ExtensionProps,
-  SimpleLayout,
-  StandardLayout,
-} from 'easy-email-extensions';
-import { FormApi } from 'final-form';
-import 'easy-email-editor/lib/style.css';
-import 'easy-email-extensions/lib/style.css';
-import '@arco-themes/react-easy-email-theme/css/arco.css';
-import { useWindowSize } from 'react-use';
-import { toast } from 'react-toastify';
-
-const fontList = [
-  'Arial',
-  'Tahoma',
-  'Verdana',
-  'Times New Roman',
-  'Courier New',
-  'Georgia',
-  'Lato',
-  'Montserrat',
-].map((item) => ({ value: item, label: item }));
-
-const categories: ExtensionProps['categories'] = [
+const TEST_DATA = [
   {
-    label: 'Content',
-    active: true,
-    blocks: [
+    "_id": "66710d4f58f992d9b098bb8f",
+    "template_name": "device-assessment",
+    "platform": "office-works",
+    "state": "active",
+    "template": [
       {
-        type: AdvancedType.TEXT,
+        "field": "header_section",
+        "type": "text",
+        "editable": true,
+        "content": [
+          {
+            "order": 1,
+            "label": "Greetings",
+            "value": "asdasdasdasdasdasdasd"
+          },
+          {
+            "order": 2,
+            "label": "Message",
+            "value": "Your Trade-In Application Has been Successful"
+          }
+        ]
       },
       {
-        type: AdvancedType.IMAGE,
-        payload: { attributes: { padding: '0px 0px 0px 0px' } },
+        "field": "body_section",
+        "type": "paragraph",
+        "editable": true,
+        "content": [
+          {
+            "label": "Greetings",
+            "value": "Dear {first_name}",
+            "confirmation": true
+          },
+          {
+            "label": "Body",
+            "value": "Thanks for applying to trade-in your device. Good news, we're pleased to offer you a ${offer_value}.00 {platform} Card for your old device. You'll save money and help save the environment by reducing e-waste.",
+            "confirmation": true
+          },
+          {
+            "label": "Order",
+            "value": "Your Order Number is : {order_id}",
+            "confirmation": true
+          }
+        ]
       },
       {
-        type: AdvancedType.BUTTON,
+        "field": "whats_next_section",
+        "type": "bullet",
+        "editable": true,
+        "content": [
+          {
+            "order": 1,
+            "value": "Gift Card expires {expiry}",
+            "confirmation": true
+          },
+          {
+            "order": 2,
+            "value": "{platform} gift cards can be redeemed at {platform} stores nationwide and on the {platform} website.",
+            "confirmation": true
+          },
+          {
+            "order": 3,
+            "value": "Use your {platform} Gift Card at the checkout. you can use the gift card multiple times until it runs out of credit.",
+            "confirmation": true
+          },
+          {
+            "order": 4,
+            "value": "{platform} gift cards cannot be redeemed for cash, returned for a refund or exchanged. Unused balances are not refundable or transferrable",
+            "confirmation": true
+          },
+          {
+            "order": 5,
+            "value": "{platform} is not responsible for lost or stolen gift cards",
+            "confirmation": true
+          },
+          {
+            "order": 6,
+            "value": "Remaining Gift Card balances can be checked online or in stroe. For more information contact us on {contact} or visit {platformDomain} - Technology and Appliances Store in NZ",
+            "confirmation": true
+          }
+        ]
       },
       {
-        type: AdvancedType.SOCIAL,
-      },
-      {
-        type: AdvancedType.DIVIDER,
-      },
-      {
-        type: AdvancedType.SPACER,
-      },
-      {
-        type: AdvancedType.HERO,
-      },
-      {
-        type: AdvancedType.WRAPPER,
-      },
+        "field": "questions_section",
+        "type": "paragraph",
+        "editable": true,
+        "content": [
+          {
+            "order": 1,
+            "value": "We're here to help! Visit us online at {supportUrl}/help-centre for customer support. You can also email us at {supportEmail}",
+            "confirmation": true
+          },
+          {
+            "order": 2,
+            "value": "asdasdasdasdasdasdasa"
+          },
+          {
+            "order": 3,
+            "value": "asdasdasdasdasdasdasdasdsad"
+          },
+          {
+            "order": 4,
+            "value": "asdasdasdasdasdasdasd"
+          }
+        ]
+      }
     ],
-  },
-  {
-    label: 'Layout',
-    active: true,
-    displayType: 'column',
-    blocks: [
-      {
-        title: '2 columns',
-        payload: [
-          ['50%', '50%'],
-          ['33%', '67%'],
-          ['67%', '33%'],
-          ['25%', '75%'],
-          ['75%', '25%'],
-        ],
-      },
-      {
-        title: '3 columns',
-        payload: [
-          ['33.33%', '33.33%', '33.33%'],
-          ['25%', '25%', '50%'],
-          ['50%', '25%', '25%'],
-        ],
-      },
-      {
-        title: '4 columns',
-        payload: [[['25%', '25%', '25%', '25%']]],
-      },
-    ],
-  },
-];
+    "__v": 0
+  }
+]
 
-const initialValues = {
-  subject: 'Welcome to Easy-email',
-  subTitle: 'Nice to meet you!',
-  content: BlockManager.getBlockByType(BasicType.PAGE)!.create({}),
-};
+export function TemplatesPage() {
+  const { hasEditPlatformConfigsPermissions } = usePermission();
+  const {
+    state: authState,
+    getPlatformConfig,
+    clearPlatformConfig,
+    updatePlatformConfig,
+  } = useAuth();
+  const { activePlatform, platformConfig, isFetchingPlatformConfig } =
+    authState;
 
-export const TemplateEditorPage = () => {
-  const [template, setTemplate] = useState<IEmailTemplate['content']>();
-
-  const { width } = useWindowSize();
-
-  const smallScene = width < 1400;
-
-  // const onImportMjml = async () => {
-  //   try {
-  //     const [filename, data] = await importTemplate();
-  //     setDownloadName(filename);
-  //     setTemplate(data);
-  //   } catch (error) {
-  //     message.error('Invalid mjml file');
-  //   }
-  // };
-
-  // const onExportMjml = (values: IEmailTemplate) => {
-  //   exportTemplate(
-  //     downloadFileName,
-  //     JsonToMjml({
-  //       data: values.content,
-  //       mode: 'production',
-  //       context: values.content,
-  //     }),
-  //   );
-  // };
-
-  const onSubmit = useCallback(
-    async (
-      values: IEmailTemplate,
-      form: FormApi<IEmailTemplate, Partial<IEmailTemplate>>,
-    ) => {
-      console.log('values', values);
-
-      // form.restart(newValues); replace new values form backend
-      toast.success('Saved success!');
-    },
-    [],
+  const [enableUpfront, setEnableUpfront] = useState<boolean>(
+    platformConfig?.enable_upfront,
   );
 
+  useEffect(() => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    if (!isEmpty(activePlatform)) {
+      getPlatformConfig(activePlatform, signal);
+    }
+
+    return () => {
+      controller.abort();
+      resetForm();
+
+      // Clear data on unmount
+      clearPlatformConfig({});
+    };
+  }, [activePlatform]);
+
+  const resetForm = () => {
+    formik.resetForm();
+  };
+
+  const onSubmit = (values: any) => {
+    const platformId = values._id;
+    delete values._id;
+
+    updatePlatformConfig(platformId, values);
+  };
+
+  const formik = useFormik({
+    initialValues: {},
+    onSubmit,
+  });
+
+  useEffect(() => {
+    if (!isEmpty(platformConfig)) {
+      formik.setValues(platformConfig);
+    }
+  }, [platformConfig]);
+
+  const labels = TEST_DATA.map((template) => {
+    return template.template_name
+  });
+
+  // const labels = [
+  //   'Business Operation Hours',
+  //   'Contact Details',
+  //   'Credit Type Configuration',
+  // ];
+
+  const contents = TEST_DATA.map((template) => {
+    return <TemplateForm formik={formik} template={template.template} />;
+  });
+
   return (
-    <div>
-      <EmailEditorProvider
-        dashed={false}
-        data={initialValues}
-        height={'calc(100vh - 85px)'}
-        // onUploadImage={services.common.uploadByQiniu}
-
-        autoComplete
-        fontList={fontList}
-        onSubmit={onSubmit}
-      >
-        {({ values }, { submit }) => {
-          return (
-            <>
-              {/* <PageHeader
-                title="Edit"
-                extra={
-                  <Stack alignment="center">
-                    <Button onClick={() => onCopyHtml(values)}>
-                      Copy Html
-                    </Button>
-                    <Button onClick={() => onExportMjml(values)}>
-                      Export Template
-                    </Button>
-                    <Button onClick={onImportMjml}>import Template</Button>
-                    <Button type="primary" onClick={() => submit()}>
-                      Save
-                    </Button>
-                  </Stack>
-                }
-              /> */}
-
-              <StandardLayout
-                compact={!smallScene}
-                categories={categories}
-                showSourceCode={true}
-              >
-                <EmailEditor />
-              </StandardLayout>
-            </>
-          );
-        }}
-      </EmailEditorProvider>
-    </div>
+    <LoaderContainer
+      color="#01463a"
+      margin="20px"
+      padding="10px"
+      height="auto"
+      bgColor="transparent"
+      loading={isFetchingPlatformConfig}
+      title="Configurations"
+    >
+      <div style={{ marginTop: '20px' }}>
+        <PageContainer>
+          <FormWrapper padding="0px" width="100%">
+            <FormContainer onSubmit={formik.handleSubmit}>
+              <VerticalPills labels={labels} contents={contents} />
+            </FormContainer>
+          </FormWrapper>
+        </PageContainer>
+        {hasEditPlatformConfigsPermissions && (
+          <FormGroup>
+            <AppButton
+              type="button"
+              variant="fill"
+              width="fit-content"
+              onClick={() => console.log("preview")}
+              disabled={compareJSON(platformConfig, formik.values)}
+            >
+              Preview
+            </AppButton>
+            <AppButton
+              type="button"
+              variant="fill"
+              width="fit-content"
+              onClick={() => onSubmit(formik.values)}
+              disabled={compareJSON(platformConfig, formik.values)}
+            >
+              Submit
+            </AppButton>
+          </FormGroup>
+        )}
+      </div>
+    </LoaderContainer>
   );
 }
