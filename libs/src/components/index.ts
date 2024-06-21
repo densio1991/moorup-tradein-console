@@ -18,6 +18,7 @@ export * from './renderer';
 export * from './slider';
 export * from './stepper';
 export * from './styled';
+export * from './tab-list';
 export * from './table';
 export * from './tabs';
 export * from './typography';
