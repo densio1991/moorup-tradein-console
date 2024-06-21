@@ -3,8 +3,7 @@
 import {
   ACTIONABLES_MANAGEMENT_COLUMNS,
   ACTIONS_COLUMN,
-  OrderStatus,
-  PRODUCT_TYPES,
+  OrderItemStatus,
   PageSubHeader,
   Table,
   actionablesManagementParsingConfig,
@@ -14,10 +13,18 @@ import {
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 export function ActionablesPage() {
   const { hasPrintLabelPermission } = usePermission();
-  const { state, getOrderItems, clearOrderItems, printLabels } = useOrder();
+  const {
+    state,
+    getOrderItems,
+    clearOrderItems,
+    printLabels,
+    printOutboundLabel,
+    updateOrderItemsStatus,
+  } = useOrder();
   const { state: authState } = useAuth();
   const { orderItems, isFetchingOrderItems } = state;
   const { activePlatform } = authState;
@@ -30,7 +37,19 @@ export function ActionablesPage() {
   const addPrintLabelAction = (orderItems: any) => {
     return orderItems.map((orderItem: any) => ({
       ...orderItem,
-      action: () => printLabels({ item_id: orderItem?.order_items?._id }),
+      printLabelAction: () =>
+        printLabels({ item_id: orderItem?.order_items?._id }),
+      returnDeviceAction: () => {
+        toast.info('Make sure to Download or Save a copy on your device.', {
+          onClose: () => {
+            printOutboundLabel({ item_id: orderItem?.order_items?._id });
+            updateOrderItemsStatus(
+              orderItem?.order_items?._id,
+              OrderItemStatus.DEVICE_RETURED,
+            );
+          },
+        });
+      },
     }));
   };
 
@@ -38,8 +57,11 @@ export function ActionablesPage() {
 
   useEffect(() => {
     const filters = {
-      status: OrderStatus.CREATED,
-      product_type: [PRODUCT_TYPES.LAPTOPS, PRODUCT_TYPES.TABLETS]?.join(','),
+      status: [
+        OrderItemStatus.CREATED,
+        OrderItemStatus.REVISION_REJECTED,
+      ]?.join(','),
+      // product_type: [PRODUCT_TYPES.LAPTOPS, PRODUCT_TYPES.TABLETS]?.join(','),
     };
 
     const controller = new AbortController();

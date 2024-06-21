@@ -650,6 +650,12 @@ export const ACTIONABLES_MANAGEMENT_COLUMNS = [
     enableSort: true,
     keyName: 'updatedAt',
   },
+  {
+    label: 'Updated',
+    order: 8,
+    enableSort: true,
+    keyName: 'updatedAt',
+  },
 ];
 
 export const PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS = [
