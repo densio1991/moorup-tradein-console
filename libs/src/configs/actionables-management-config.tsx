@@ -51,28 +51,27 @@ export const actionablesManagementParsingConfig = {
   },
   Actions: ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['_id'])) return '--';
-    console.log(row)
     switch (row['order_items']?.status) {
       case OrderItemStatus.CREATED:
-        return (
-            <AppButton
-              type="button"
-              variant="fill"
-              width="fit-content"
-              padding='4px 20px'
-              icon={faPrint}
-              onClick={() => row.printLabelAction()}
-            >
-              Print Labels
-            </AppButton>
-          );
-      case OrderItemStatus.REVISION_REJECTED: 
         return (
           <AppButton
             type="button"
             variant="fill"
             width="fit-content"
-            padding='4px 20px'
+            padding="4px 20px"
+            icon={faPrint}
+            onClick={() => row.printLabelAction()}
+          >
+            Print Labels
+          </AppButton>
+        );
+      case OrderItemStatus.REVISION_REJECTED:
+        return (
+          <AppButton
+            type="button"
+            variant="fill"
+            width="fit-content"
+            padding="4px 20px"
             icon={faBoxesPacking}
             onClick={() => row.returnDeviceAction()}
           >

@@ -5,6 +5,7 @@ import {
   ACTIONS_COLUMN,
   OrderItemStatus,
   PageSubHeader,
+  // ProductTypes,
   Table,
   actionablesManagementParsingConfig,
   useAuth,
@@ -34,19 +35,38 @@ export function ActionablesPage() {
     ...(hasPrintLabelPermission ? ACTIONS_COLUMN : []),
   ];
 
+  const filters = {
+    status: [OrderItemStatus.CREATED, OrderItemStatus.REVISION_REJECTED]?.join(
+      ',',
+    ),
+  };
+
   const addPrintLabelAction = (orderItems: any) => {
-    return orderItems.map((orderItem: any) => ({
+    const filteredOrderItems = orderItems.filter(
+      (orderItem: any) =>
+        orderItem?.order_items?.status === OrderItemStatus.REVISION_REJECTED,
+      //  ||
+      // ((orderItem?.order_items?.product_type === ProductTypes.TABLETS ||
+      //   orderItem?.order_items?.product_type === ProductTypes.LAPTOPS) &&
+      //   orderItem?.order_items?.status === OrderItemStatus.CREATED),
+    );
+    return filteredOrderItems.map((orderItem: any) => ({
       ...orderItem,
+      action: () => printLabels({ item_id: orderItem?.order_items?._id }),
       printLabelAction: () =>
         printLabels({ item_id: orderItem?.order_items?._id }),
       returnDeviceAction: () => {
         toast.info('Make sure to Download or Save a copy on your device.', {
-          onClose: () => {
+          onClose: async () => {
+            await updateOrderItemsStatus(orderItem?.order_items?._id, {
+              status: OrderItemStatus.DEVICE_RETURED,
+            });
             printOutboundLabel({ item_id: orderItem?.order_items?._id });
-            updateOrderItemsStatus(
-              orderItem?.order_items?._id,
-              OrderItemStatus.DEVICE_RETURED,
-            );
+            clearOrderItems({});
+
+            const controller = new AbortController();
+            const signal = controller.signal;
+            getOrderItems(filters, signal);
           },
         });
       },
@@ -56,14 +76,6 @@ export function ActionablesPage() {
   const formattedOrderItems = addPrintLabelAction(orderItems || []);
 
   useEffect(() => {
-    const filters = {
-      status: [
-        OrderItemStatus.CREATED,
-        OrderItemStatus.REVISION_REJECTED,
-      ]?.join(','),
-      // product_type: [PRODUCT_TYPES.LAPTOPS, PRODUCT_TYPES.TABLETS]?.join(','),
-    };
-
     const controller = new AbortController();
     const signal = controller.signal;
 

@@ -625,7 +625,7 @@ export const cancelGiftCard =
   };
 
   export const updateOrderItemsStatus =
-  (orderItemId: any, payload: any) => (dispatch: any) => {
+  (orderItemId: any, payload: any, onSuccess: any = false) => (dispatch: any) => {
     dispatch({
       type: types.UPDATE_ORDER_ITEM_BY_ID.baseType,
       payload,
