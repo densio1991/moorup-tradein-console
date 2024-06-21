@@ -120,6 +120,6 @@ export enum ProductUploadLogsStatus {
 }
 
 export enum ProductUploadLogsTypes {
-  PRODUCTS = 'update-products',
+  PRODUCTS = 'import-products',
   PRICING = 'update-pricing',
 }
