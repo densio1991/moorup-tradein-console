@@ -12,6 +12,7 @@ import {
   PromotionClaimsPage,
   PromotionClaimsPaymentPage,
   PromotionsPage,
+  UploadProductErrorPage,
   UserManagementPage,
 } from './pages';
 import { ConfigurationsPage } from './pages/configurations';
@@ -34,6 +35,10 @@ export function App() {
           <Route
             path="/dashboard/product/upload-pricing-details"
             element={<UploadProductPricingErrorPage />}
+          />
+          <Route
+            path="/dashboard/product/upload-details"
+            element={<UploadProductErrorPage />}
           />
           <Route
             path="/dashboard/product/upload-logs"

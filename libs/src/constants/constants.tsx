@@ -264,6 +264,72 @@ export const PRODUCT_PRICING_UPLOAD_COLUMNS = [
   },
 ]
 
+export const PRODUCT_UPLOAD_COLUMNS = [
+  {
+    label: 'Errors',
+    order: 2,
+    enableSort: false,
+    keyName: 'errors',
+  },
+  {
+    label: 'SKU',
+    order: 3,
+    enableSort: true,
+    keyName: 'payload.sku',
+  },
+  {
+    label: 'Brand',
+    order: 4,
+    enableSort: true,
+    keyName: 'payload.brand',
+  },
+  {
+    label: 'Product Name',
+    order: 5,
+    enableSort: true,
+    keyName: 'payload.name',
+  },
+  {
+    label: 'Product Type',
+    order: 5,
+    enableSort: true,
+    keyName: 'payload.type',
+  },
+  {
+    label: 'Variant Name',
+    order: 6,
+    enableSort: true,
+    keyName: 'payload.variant_name',
+  },
+]
+
+export const PRODUCT_UPLOAD_ATTRIBUTES_COLUMNS = [
+  {
+    label: 'Errors',
+    order: 2,
+    enableSort: false,
+    keyName: 'errors',
+  },
+  {
+    label: 'SKU',
+    order: 3,
+    enableSort: true,
+    keyName: 'payload.sku',
+  },
+  {
+    label: 'Attribute ID',
+    order: 4,
+    enableSort: true,
+    keyName: 'payload.id',
+  },
+  {
+    label: 'Attribute Name',
+    order: 5,
+    enableSort: true,
+    keyName: 'payload.name',
+  }
+]
+
 export const PRODUCT_UPLOAD_LOGS_COLUMNS = [
   {
     label: 'File Name',
