@@ -94,6 +94,10 @@ export const useProduct = () => {
     actions.clearProductUploadLogs(payload)(dispatch);
   }
 
+  const downloadProductUploadTemplate = () => {
+    actions.downloadProductUploadTemplate(activePlatform)(dispatch);
+  }
+
   return {
     state: state.product,
     getProducts,
@@ -117,5 +121,6 @@ export const useProduct = () => {
     getProductUploadLogs,
     clearProductUploadLogs,
     clearUploadProductsErrors,
+    downloadProductUploadTemplate,
   };
 };

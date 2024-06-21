@@ -29,6 +29,7 @@ const productState = {
   isFetchingProductUploadLogs: false,
   productUploadLogs: [],
   uploadProductsError: {},
+  isDownloadingProductUploadTemplate: false,
 };
 
 const productReducer = (state: any, action: any) => {
@@ -428,7 +429,26 @@ const productReducer = (state: any, action: any) => {
         ...state,
         productUploadLogs: [],
       };
-
+      
+    case types.DOWNLOAD_PRODUCT_UPLOAD_TEMPLATE.baseType: {
+      return {
+        ...state,
+        isDownloadingProductUploadTemplate: true,
+      };
+    }
+    case types.DOWNLOAD_PRODUCT_UPLOAD_TEMPLATE.SUCCESS: {
+      return {
+        ...state,
+        isDownloadingProductUploadTemplate: false,
+      };
+    }
+    case types.DOWNLOAD_PRODUCT_UPLOAD_TEMPLATE.FAILED: {
+      return {
+        ...state,
+        isDownloadingProductUploadTemplate: false,
+      };
+    }
+    
     default: 
       return state;
   }
