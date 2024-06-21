@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import { jwtDecode } from 'jwt-decode';
 import { capitalize, isEmpty } from 'lodash';
 import { Chip, StyledIcon } from '../components';
-import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes, ProductUploadLogsStatus, Promotion, PromotionStatus, TIMEZONE } from '../constants';
+import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes, ProductUploadLogsStatus, ProductUploadLogsTypes, Promotion, PromotionStatus, TIMEZONE } from '../constants';
 import { defaultTheme } from './theme';
 
 dayjs.extend(utc)
@@ -579,6 +579,16 @@ export const parseTypes = (type: string, disableFormatting?: boolean) => {
     case ProductTypes.WATCHES:
       color = defaultTheme.danger.text;
       text = 'Watches';
+      break;
+
+    case ProductUploadLogsTypes.PRODUCTS:
+      color = defaultTheme.success.text;
+      text = 'Products';
+      break;
+
+    case ProductUploadLogsTypes.PRICING:
+      color = defaultTheme.warning.text;
+      text = 'Pricing';
       break;
   
     default:

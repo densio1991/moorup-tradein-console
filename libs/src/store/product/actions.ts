@@ -459,7 +459,7 @@ export const getProductUploadLogs =
     });
 
     axiosInstance()
-      .get('/api/products/pricing/logs', { signal: signal, params: { platform } })
+      .get('/api/products/logs', { signal: signal, params: { platform } })
       .then((response) => {
         dispatch({
           type: types.FETCH_PRODUCT_UPLOAD_LOGS.SUCCESS,
