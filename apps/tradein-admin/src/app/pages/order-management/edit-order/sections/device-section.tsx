@@ -1,4 +1,4 @@
-import { OrderItems } from '@tradein-admin/libs';
+import { CopyToClipboardButton, OrderItems } from '@tradein-admin/libs';
 import { CardDetail } from './card-detail';
 
 export const DeviceSection = ({
@@ -24,6 +24,9 @@ export const DeviceSection = ({
           >
             {orderItem.product_variant_id?.name}
           </a>
+          <CopyToClipboardButton
+            textToCopy={orderItem.product_variant_id?.name}
+          />
         </h3>
         <CardDetail
           label="IMEI/Serial"
