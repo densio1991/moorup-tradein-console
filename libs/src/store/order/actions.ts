@@ -606,6 +606,30 @@ export const cancelGiftCard =
       });
   };
 
+  export const updateOrderItemsStatus =
+  (orderItemId: any, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.UPDATE_ORDER_ITEM_BY_ID.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .patch(`/api/orders/items/${orderItemId}/status`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.UPDATE_ORDER_ITEM_BY_ID.SUCCESS,
+          payload: response?.data,
+        });
+ 
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.UPDATE_ORDER_ITEM_BY_ID.FAILED,
+          payload: error,
+        });
+      });
+  };
+
 export const clearOrder = (payload: any) => (dispatch: any) => {
   dispatch({
     type: types.CLEAR_ORDER,payload,
