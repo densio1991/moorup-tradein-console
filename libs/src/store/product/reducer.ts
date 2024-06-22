@@ -28,6 +28,7 @@ const productState = {
   uploadProductsPricingError: [],
   isFetchingProductUploadLogs: false,
   productUploadLogs: [],
+  uploadProductsError: {},
 };
 
 const productReducer = (state: any, action: any) => {
@@ -323,6 +324,20 @@ const productReducer = (state: any, action: any) => {
         products: [],
       };
     }
+    case types.UPLOAD_PRODUCTS_EXCEL.BAD_REQUEST: {
+      return {
+        ...state,
+        isUploadingProductsExcel: false,
+        uploadProductsError: action.payload,
+        products: [],
+      };
+    }
+
+    case types.CLEAR_UPLOAD_PRODUCTS_ERRORS:
+      return {
+        ...state,
+        uploadProductsError: {},
+      };
 
     case types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.baseType: {
       return {

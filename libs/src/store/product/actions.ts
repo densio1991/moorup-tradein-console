@@ -316,7 +316,7 @@ export const updateProductVariant =
   };
 
 export const uploadProductsExcelFile =
-  (file: File, activePlatform: string) => async (dispatch: any) => {
+  (file: File, userId: string, activePlatform: string) => async (dispatch: any) => {
     dispatch({
       type: types.UPLOAD_PRODUCTS_EXCEL.baseType,
       payload: {},
@@ -324,6 +324,8 @@ export const uploadProductsExcelFile =
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('user_id', userId);
+    formData.append('platform', activePlatform);
 
     axiosInstance()
       .post('/api/products/import/excel', formData, {
@@ -341,14 +343,29 @@ export const uploadProductsExcelFile =
         toast.success('Products successfully imported!');
       })
       .catch((error) => {
-        dispatch({
-          type: types.UPLOAD_PRODUCTS_EXCEL.FAILED,
-          payload: error,
-        });
+        if (error.code === BAD_REQUEST) {
+          dispatch({
+            type: types.UPLOAD_PRODUCTS_EXCEL.BAD_REQUEST,
+            payload: error?.response?.data?.data || {},
+          });
+        } else {
+          dispatch({
+            type: types.UPLOAD_PRODUCTS_EXCEL.FAILED,
+            payload: error,
+          });
+        }
 
         getProducts(activePlatform, true)(dispatch);
-        toast.error('Failed to import products.');
+        toast.error('Failed to update products pricing.');
       });
+  };
+
+export const clearUploadProductsErrors =
+  (payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.CLEAR_UPLOAD_PRODUCTS_ERRORS,
+      payload,
+    });
   };
 
 export const downloadProductPricingRevisionTemplate =
@@ -459,7 +476,7 @@ export const getProductUploadLogs =
     });
 
     axiosInstance()
-      .get('/api/products/logs', { signal: signal, params: { platform } })
+      .get('/api/products/upload-logs', { signal: signal, params: { platform } })
       .then((response) => {
         dispatch({
           type: types.FETCH_PRODUCT_UPLOAD_LOGS.SUCCESS,
