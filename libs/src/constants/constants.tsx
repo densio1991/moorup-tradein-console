@@ -65,7 +65,7 @@ export const SIDENAV_ITEMS = [
         activeUrl: /^\/dashboard\/product\/upload-logs/,
         icon: faFileLines,
         disabled: false,
-      }
+      },
     ],
   },
   {
@@ -125,8 +125,8 @@ export const SIDENAV_ITEMS = [
         activeUrl: /^\/dashboard\/promotion\/payment/,
         icon: faCreditCard,
         disabled: false,
-      }
-    ]
+      },
+    ],
   },
   {
     title: 'User Management',
@@ -135,7 +135,7 @@ export const SIDENAV_ITEMS = [
     icon: faUsers,
     disabled: false,
   },
-]
+];
 
 export const SIDENAV_ITEMS_SETTINGS = [
   {
@@ -216,8 +216,8 @@ export const PRODUCT_MANAGEMENT_COLUMNS = [
     order: 6,
     enableSort: true,
     keyName: 'type',
-  }
-]
+  },
+];
 
 export const PRODUCT_PRICING_UPLOAD_COLUMNS = [
   {
@@ -262,7 +262,7 @@ export const PRODUCT_PRICING_UPLOAD_COLUMNS = [
     enableSort: true,
     keyName: 'payload.not_working_damaged',
   },
-]
+];
 
 export const PRODUCT_UPLOAD_COLUMNS = [
   {
@@ -366,8 +366,8 @@ export const PRODUCT_UPLOAD_LOGS_COLUMNS = [
     order: 7,
     enableSort: true,
     keyName: 'createdAt',
-  }
-]
+  },
+];
 
 export const ORDER_MANAGEMENT_COLUMNS = [
   {
@@ -720,8 +720,8 @@ export const PROMOTION_CLAIMS_MANAGEMENT_COLUMNS = [
     order: 10,
     enableSort: true,
     keyName: 'status',
-  }
-]
+  },
+];
 
 export const ACTIONABLES_MANAGEMENT_COLUMNS = [
   {
@@ -805,14 +805,14 @@ export const PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS = [
     enableSort: true,
     keyName: 'createdAt',
   },
-]
+];
 
 export const ACTIONS_COLUMN = [
   {
     label: 'Actions',
     order: 99,
     enableSort: false,
-    keyName: ''
+    keyName: '',
   },
 ];
 
@@ -1409,7 +1409,7 @@ export const MODAL_TYPES = {
   BULK_OVERRIDE_CLAIM_STATUS: 'BULK_OVERRIDE_CLAIM_STATUS',
   EXPORT_PRODUCTS: 'EXPORT_PRODUCTS',
   IMPORT_PRODUCTS: 'IMPORT_PRODUCTS',
-}
+};
 
 export const PROMOTION_STATUS = [
   { value: 'active', label: 'Active' },
@@ -1429,7 +1429,7 @@ export const ADD_PROMOTION_DETAILS_PAYLOAD = {
   new_device_purchase_start_date: null,
   new_device_purchase_end_date: null,
   claim_deadline: null,
-}
+};
 
 export const ADD_PROMOTION_PRODUCTS_PAYLOAD = {
   product_name: '',
@@ -1450,7 +1450,7 @@ export const ADD_CLAIM_RECEIPT_PAYLOAD = {
 };
 
 export const ADD_ORDER_PROMOTION_CLAIM_PAYLOAD = {
-  claims: [ADD_CLAIM_RECEIPT_PAYLOAD]
+  claims: [ADD_CLAIM_RECEIPT_PAYLOAD],
 };
 
 export const ADD_PROMOTION_STEPS_ITEM = {
@@ -1525,14 +1525,14 @@ export const COLLECTION_ORDER_ITEM_STATUS = [
   OrderItemStatus.CREATED,
   OrderItemStatus.CANCELLED,
   OrderItemStatus.HOLD,
-]
+];
 
 export const VALIDATION_ORDER_ITEM_STATUS = [
   OrderItemStatus.RECEIVED,
   OrderItemStatus.LABEL_SENT,
   OrderItemStatus.FOR_REVISION,
   OrderItemStatus.REVISION_REJECTED,
-]
+];
 
 export const COMPLETION_ORDER_ITEM_STATUS = [
   OrderItemStatus.EVALUATED,
@@ -1547,7 +1547,7 @@ export const OVERRIDE_CLAIM_STATUSES = [
   { value: ClaimStatus.CANCELLED, label: 'Cancelled' },
   { value: ClaimStatus.PENDING, label: 'Pending' },
   { value: ClaimStatus.REJECTED, label: 'Rejected' },
-]
+];
 
 export const CLAIM_STATUSES = [
   { value: ClaimStatus.APPROVED, label: 'Approved' },
@@ -1557,7 +1557,7 @@ export const CLAIM_STATUSES = [
   { value: ClaimStatus.PENDING, label: 'Pending' },
   { value: ClaimStatus.PROCESSING, label: 'Processing Payment' },
   { value: ClaimStatus.REJECTED, label: 'Rejected' },
-]
+];
 
 export const MOORUP_CLAIM_STATUSES = [
   { value: ClaimStatus.APPROVED, label: 'Approved' },
@@ -1567,7 +1567,7 @@ export const MOORUP_CLAIM_STATUSES = [
   { value: ClaimStatus.PENDING, label: 'Pending' },
   { value: ClaimStatus.PROCESSING, label: 'Processing Payment' },
   { value: ClaimStatus.REJECTED, label: 'Rejected' },
-]
+];
 
 export const PAGE_SIZES = [
   {
@@ -1585,7 +1585,7 @@ export const PAGE_SIZES = [
   {
     label: '100',
     value: '100',
-  }
+  },
 ];
 
 export const DASHBOARD_MANAGEMENT_ITEMS = [
@@ -1598,7 +1598,10 @@ export const PRODUCT_MANAGEMENT_ITEMS = [
   { value: PermissionCodes.EDIT_PRODUCT, label: 'Edit Product' },
   { value: PermissionCodes.IMPORT_PRODUCTS, label: 'Import Products' },
   { value: PermissionCodes.EXPORT_PRODUCTS, label: 'Export Products' },
-  { value: PermissionCodes.EXPORT_PRODUCT_UPLOAD_TEMPLATE, label: 'Export Product Upload Template' },
+  {
+    value: PermissionCodes.EXPORT_PRODUCT_UPLOAD_TEMPLATE,
+    label: 'Export Product Upload Template',
+  },
 ];
 
 export const ORDER_MANAGEMENT_ITEMS = [
@@ -1607,7 +1610,10 @@ export const ORDER_MANAGEMENT_ITEMS = [
   { value: PermissionCodes.EDIT_IMEI_SERIAL, label: 'Edit IMEI/Serial' },
   { value: PermissionCodes.RESEND_LABEL, label: 'Resend Label' },
   { value: PermissionCodes.MARK_AS_RECEIVED, label: 'Mark as Received' },
-  { value: PermissionCodes.UPDATE_ORDER_ITEM_STATUS, label: 'Update Order Item Status' },
+  {
+    value: PermissionCodes.UPDATE_ORDER_ITEM_STATUS,
+    label: 'Update Order Item Status',
+  },
   { value: PermissionCodes.CANCEL_ITEM, label: 'Cancel Item' },
   { value: PermissionCodes.CANCEL_GIFT_CARDS, label: 'Cancel Gift Card' },
   { value: PermissionCodes.ADD_ORDER_CLAIMS, label: 'Add Order Claim' },
@@ -1620,14 +1626,26 @@ export const USER_MANAGEMENT_ITEMS = [
   { value: PermissionCodes.VIEW_USERS, label: 'View Users' },
   { value: PermissionCodes.ADD_USER, label: 'Add User' },
   { value: PermissionCodes.EDIT_USER_DETAILS, label: 'Edit User Details' },
-  { value: PermissionCodes.EDIT_USER_PERMISSIONS, label: 'Edit User Permissions' },
+  {
+    value: PermissionCodes.EDIT_USER_PERMISSIONS,
+    label: 'Edit User Permissions',
+  },
 ];
 
 export const PROMOTION_MANAGEMENT_ITEMS = [
   { value: PermissionCodes.VIEW_PROMOTIONS, label: 'View Promotions' },
   { value: PermissionCodes.ADD_PROMOTION, label: 'Add Promotion' },
   { value: PermissionCodes.EDIT_PROMOTION, label: 'Edit Promotion' },
-  { value: PermissionCodes.VIEW_PROMOTION_CLAIMS, label: 'View Promotion Claims' },
-  { value: PermissionCodes.UPDATE_PROMOTION_CLAIM, label: 'Update Promotion Claim' },
-  { value: PermissionCodes.PROCESS_PROMOTION_CLAIM_PAYMENT, label: 'Process Promotion Claim Payment' },
+  {
+    value: PermissionCodes.VIEW_PROMOTION_CLAIMS,
+    label: 'View Promotion Claims',
+  },
+  {
+    value: PermissionCodes.UPDATE_PROMOTION_CLAIM,
+    label: 'Update Promotion Claim',
+  },
+  {
+    value: PermissionCodes.PROCESS_PROMOTION_CLAIM_PAYMENT,
+    label: 'Process Promotion Claim Payment',
+  },
 ];

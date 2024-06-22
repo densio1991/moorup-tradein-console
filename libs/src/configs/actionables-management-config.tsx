@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faPrint } from '@fortawesome/free-solid-svg-icons';
+import { faPrint, faBoxesPacking } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty } from 'lodash';
 import { AppButton } from '../components';
 import { capitalizeFirstLetter, formatDate, parseStatus } from '../helpers';
+import { OrderItemStatus } from '../constants';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
   menuItems?: any;
+  index: number;
 }
 
 export const actionablesManagementParsingConfig = {
@@ -49,17 +51,34 @@ export const actionablesManagementParsingConfig = {
   },
   Actions: ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['_id'])) return '--';
-    return (
-      <AppButton
-        type="button"
-        variant="fill"
-        width="fit-content"
-        padding='4px 20px'
-        icon={faPrint}
-        onClick={() => row.action()}
-      >
-        Print Labels
-      </AppButton>
-    );
+    switch (row['order_items']?.status) {
+      case OrderItemStatus.CREATED:
+        return (
+          <AppButton
+            type="button"
+            variant="fill"
+            width="fit-content"
+            padding="4px 20px"
+            icon={faPrint}
+            onClick={() => row.printLabelAction()}
+          >
+            Print Labels
+          </AppButton>
+        );
+      case OrderItemStatus.REVISION_REJECTED:
+        return (
+          <AppButton
+            type="button"
+            variant="fill"
+            width="fit-content"
+            padding="4px 20px"
+            icon={faBoxesPacking}
+            onClick={() => row.returnDeviceAction()}
+          >
+            Return Device
+          </AppButton>
+        );
+      default:
+    }
   },
 };
