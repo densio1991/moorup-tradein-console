@@ -324,7 +324,7 @@ export function TemplatesPage() {
           </FormWrapper>
         </PageContainer>
         {hasEditPlatformConfigsPermissions && (
-          <FormGroup>
+          <div className='flex justify-end gap-4'>
             <AppButton
               type="button"
               variant="fill"
@@ -343,7 +343,7 @@ export function TemplatesPage() {
             >
               Submit
             </AppButton>
-          </FormGroup>
+          </div>
         )}
       </div>
     </LoaderContainer>

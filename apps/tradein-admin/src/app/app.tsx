@@ -13,14 +13,11 @@ import {
   PromotionClaimsPaymentPage,
   PromotionsPage,
   UploadProductErrorPage,
-  TemplateEditorPage,
   UserManagementPage,
 } from './pages';
 import { ConfigurationsPage } from './pages/configurations';
 import { UploadProductPricingErrorPage } from './pages/product-management/upload-pricing-details';
 import { ProductUploadLogsPage } from './pages/product-upload-logs';
-import { EditEmailTemplatePage } from './pages/templates/edit-email-template';
-import { EditSMSTemplatePage } from './pages/templates/edit-sms-template';
 import { TemplatesPage } from './pages/templates';
 
 export function App() {
