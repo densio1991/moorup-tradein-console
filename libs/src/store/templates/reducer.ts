@@ -66,6 +66,25 @@ const templateReducer = (state: any, action: any) => {
       };
     }
 
+    case types.REQUEST_TEMPLATE_CHANGE.baseType: {
+      return {
+        ...state,
+        isRequestingTemplateChange: true,
+      };
+    }
+    case types.REQUEST_TEMPLATE_CHANGE.SUCCESS: {
+      return {
+        ...state,
+        isRequestingTemplateChange: false,
+      };
+    }
+    case types.REQUEST_TEMPLATE_CHANGE.FAILED: {
+      return {
+        ...state,
+        isRequestingTemplateChange: false,
+      };
+    }
+
     case types.UPDATE_TEMPLATE.baseType: {
       return {
         ...state,

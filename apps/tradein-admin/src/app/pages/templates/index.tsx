@@ -15,6 +15,7 @@ import {
   extractInitialValue,
   useTemplate,
   parseTemplateValue,
+  formatToReadable,
 } from '@tradein-admin/libs';
 import { useFormik } from 'formik';
 import { capitalize, isEmpty } from 'lodash';
@@ -245,11 +246,10 @@ export function TemplatesPage() {
     state: templateState,
     getTemplates,
     clearTemplates,
+    requestTemplateChange,
   } = useTemplate();
-  const { activePlatform, platformConfig, isFetchingPlatformConfig } =
-    authState;
-  const { templates = [], isFetchingTemplates } =
-  templateState;
+  const { activePlatform } = authState;
+  const { templates = [], isFetchingTemplates } = templateState;
   const [activePill, setActivePill] = useState(0);
 
   useEffect(() => {
@@ -275,12 +275,13 @@ export function TemplatesPage() {
 
   const onSubmit = (values: any) => {
     const payload = {
-      ...TEST_DATA[activePill],
-      template: parseTemplateValue(TEST_DATA[activePill].template, values),
+      ...templates[activePill],
+      template: parseTemplateValue(templates[activePill].template, values),
     }
 
     console.log(payload);
     // updatePlatformConfig(platformId, values);
+    requestTemplateChange(templates[activePill]._id, payload);
   };
 
   const handleChangeTemplate = (index: any) => {
@@ -288,8 +289,8 @@ export function TemplatesPage() {
   }
 
   const initialValues = useMemo(() => {
-    return extractInitialValue(TEST_DATA[activePill].template)
-  }, [activePill]);
+    return extractInitialValue(templates[activePill]?.template)
+  }, [activePill, templates]);
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -297,11 +298,11 @@ export function TemplatesPage() {
     onSubmit,
   });
 
-  const labels = TEST_DATA.map((template: any) => {
-    return capitalize(template.template_name?.replace(/-/g, " "))
+  const labels = templates.map((template: any) => {
+    return formatToReadable(template.template_name);
   });
 
-  const contents = TEST_DATA.map((template: any) => {
+  const contents = templates.map((template: any) => {
     return <TemplateForm formik={formik} template={template.template} />;
   });
 
@@ -330,7 +331,7 @@ export function TemplatesPage() {
               variant="fill"
               width="fit-content"
               onClick={() => console.log("preview")}
-              disabled={compareJSON(platformConfig, formik.values)}
+              disabled={compareJSON(initialValues, formik.values)}
             >
               Preview
             </AppButton>
@@ -339,7 +340,7 @@ export function TemplatesPage() {
               variant="fill"
               width="fit-content"
               onClick={() => onSubmit(formik.values)}
-              disabled={compareJSON(platformConfig, formik.values)}
+              disabled={compareJSON(initialValues, formik.values)}
             >
               Submit
             </AppButton>

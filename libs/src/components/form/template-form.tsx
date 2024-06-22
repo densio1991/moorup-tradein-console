@@ -1,6 +1,7 @@
 import { capitalize, get } from 'lodash';
 import { AppButton, GenericModal, StyledInput, StyledInputCustomize } from '../';
 import { useState } from 'react';
+import { formatToReadable } from '../../helpers';
 
 export const TemplateForm = (
   {formik, template }: {formik: any, template: any}
@@ -12,7 +13,7 @@ export const TemplateForm = (
   const handleCustomize = (fieldId: string, field: any, section: any) => {
     setCustomizeFieldData({
       fieldId,
-      label: field.label ?? capitalize(`${section.field?.replace(/_/g, " ")} ${field.order}`),
+      label: field.label ?? capitalize(`${formatToReadable(section.field)} ${field.order}`),
       ...field,
     });
     setCustomizeFieldValue(field.value);
@@ -65,6 +66,7 @@ export const TemplateForm = (
             field.label
               ? `${section.field}.${field.label}`
               : `${section.field}[${idx}]`;
+          const fieldLabel = formatToReadable(field.label)
 
           if (field.confirmation) {
             fields.push(
@@ -72,9 +74,9 @@ export const TemplateForm = (
                 key={idx}
                 type="text"
                 id={fieldId}
-                label={field.label}
+                label={fieldLabel}
                 name={fieldId}
-                placeholder={field.label}
+                placeholder={fieldLabel}
                 onChange={formik.handleChange}
                 value={get(formik.values, fieldId, '')}
                 onBlur={formik.handleBlur}
@@ -91,10 +93,10 @@ export const TemplateForm = (
                 key={idx}
                 type="text"
                 id={fieldId}
-                label={field.label}
+                label={fieldLabel}
                 name={fieldId}
                 disabled={!section.editable}
-                placeholder={field.label}
+                placeholder={fieldLabel}
                 onChange={formik.handleChange}
                 value={get(formik.values, fieldId, '')}
                 onBlur={formik.handleBlur}
@@ -109,7 +111,7 @@ export const TemplateForm = (
 
         return (
           <div key={idx}>
-            <h4 className="pb-4 capitalize">{section.field?.replace(/_/g, " ")}</h4>
+            <h4 className="pb-4 capitalize">{formatToReadable(section.field)}</h4>
             {fields}
           </div>
         );

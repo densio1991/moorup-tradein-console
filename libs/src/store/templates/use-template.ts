@@ -17,8 +17,12 @@ export const useTemplate = () => {
     actions.clearTemplates(payload)(dispatch);
   }
 
-  const createTemplate = (payload: any, currentTemplateId: string) => {
-    actions.createTemplate(payload, currentTemplateId, activePlatform)(dispatch);
+  const createTemplate = (currentTemplateId: string, payload: any) => {
+    actions.createTemplate(currentTemplateId, payload, activePlatform)(dispatch);
+  }
+
+  const requestTemplateChange = (currentTemplateId: string, payload: any) => {
+    actions.requestTemplateChange(currentTemplateId, payload, activePlatform)(dispatch);
   }
 
   const updateTemplate = (id: string, currentTemplateId: string, payload: any) => {
@@ -26,10 +30,11 @@ export const useTemplate = () => {
   }
 
   return {
-    state: state.user,
+    state: state.template,
     getTemplates,
     clearTemplates,
     createTemplate,
+    requestTemplateChange,
     updateTemplate,
   };
 };

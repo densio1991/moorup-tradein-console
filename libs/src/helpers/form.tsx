@@ -1,4 +1,4 @@
-import { get, isEmpty } from "lodash";
+import { capitalize, get, isEmpty } from "lodash";
 
 export const extractInitialValue = (template: any[] = []) => {
   let initialValue: any = {};
@@ -42,4 +42,8 @@ export const parseTemplateValue = (template: any[], formValues: any) => {
   console.log({templateValue});
 
   return templateValue;
+}
+
+export const formatToReadable = (title: string = "") => {
+  return capitalize(title?.replace(/[_-]/g, " "));
 }

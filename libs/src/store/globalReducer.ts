@@ -16,7 +16,7 @@ const rootReducer = (state: any, action: any) => {
     promotion: promotionReducer(state.promotion, action),
     order: orderReducer(state.order, action),
     common: commonReducer(state.common, action),
-    template: templateReducer(state.common, action),
+    template: templateReducer(state.template, action),
   };
 };
 

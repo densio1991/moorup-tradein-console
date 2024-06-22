@@ -33,14 +33,14 @@ export const getTemplates = (payload: any, platform: string, signal?: AbortSigna
     });
 };
 
-export const createTemplate = (payload: any, currentTemplateId: string, platform: string) => (dispatch: any) => {
+export const createTemplate = (currentTemplateId: string, payload: any, platform: string) => (dispatch: any) => {
   dispatch({
     type: types.CREATE_TEMPLATE.baseType,
     payload,
   });
 
   axiosInstance()
-    .post('/api/admins', payload)
+    .post('/api/template', payload)
     .then((response) => {
       dispatch({
         type: types.CREATE_TEMPLATE.SUCCESS,
@@ -57,7 +57,35 @@ export const createTemplate = (payload: any, currentTemplateId: string, platform
       });
 
       getTemplates(currentTemplateId, platform)(dispatch);
-      toast.error('Failed to add user!');
+      toast.error('Failed to add template!');
+    });
+};
+
+export const requestTemplateChange = (currentTemplateId: string, payload: any, platform: string) => (dispatch: any) => {
+  dispatch({
+    type: types.REQUEST_TEMPLATE_CHANGE.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .post(`/api/template/request-change/${currentTemplateId}`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.REQUEST_TEMPLATE_CHANGE.SUCCESS,
+        payload: response?.data,
+      });
+
+      getTemplates(currentTemplateId, platform)(dispatch);
+      toast.success('Template change request successfully submitted!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.REQUEST_TEMPLATE_CHANGE.FAILED,
+        payload: error,
+      });
+
+      getTemplates(currentTemplateId, platform)(dispatch);
+      toast.error('Failed to submit template change request!');
     });
 };
 
@@ -85,7 +113,7 @@ export const updateTemplate = (id: string, currentTemplateId: string, platform: 
       });
 
       getTemplates(currentTemplateId, platform)(dispatch);
-      toast.error('Failed to update user!');
+      toast.error('Failed to update template!');
     });
 };
 
