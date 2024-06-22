@@ -62,8 +62,15 @@ export function Pill({ label, onClick, active }: PillProps) {
   return <PillStyled onClick={onClick} active={active}>{label}</PillStyled>;
 }
 
-export function VerticalPills({ labels, contents }: { labels: string[]; contents: React.ReactNode[] }) {
+export function VerticalPills({ labels, contents, onChange }: { labels: string[]; onChange?: (index: string) => void, contents: React.ReactNode[] }) {
   const [activePill, setActivePill] = useState<number>(0);
+
+  const handleChange = (index: any) => {
+    if (onChange) {
+      onChange(index);
+    }
+    setActivePill(index)
+  }
 
   return (
     <StyledDiv>
@@ -72,7 +79,7 @@ export function VerticalPills({ labels, contents }: { labels: string[]; contents
           <Pill
             key={index}
             label={label}
-            onClick={() => setActivePill(index)}
+            onClick={() => handleChange(index)}
             active={activePill === index}
           />
         ))}
