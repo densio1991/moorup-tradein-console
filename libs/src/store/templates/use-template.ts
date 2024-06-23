@@ -17,10 +17,6 @@ export const useTemplate = () => {
     actions.clearTemplates(payload)(dispatch);
   }
 
-  const createTemplate = (currentTemplateId: string, payload: any) => {
-    actions.createTemplate(currentTemplateId, payload, activePlatform)(dispatch);
-  }
-
   const requestTemplateChange = (currentTemplateId: string, payload: any) => {
     actions.requestTemplateChange(currentTemplateId, payload, activePlatform)(dispatch);
   }
@@ -29,12 +25,26 @@ export const useTemplate = () => {
     actions.updateTemplate(id, currentTemplateId, activePlatform, payload)(dispatch);
   }
 
+  const requestTemplatePreview = (payload: any) => {
+    actions.requestTemplatePreview(payload)(dispatch);
+  }
+
+  const clearTemplatePreview = (payload: any) => {
+    actions.clearTemplatePreview(payload)(dispatch);
+  }
+
+  const setActivePill = (payload: any) => {
+    actions.setActivePill(payload)(dispatch);
+  }
+
   return {
     state: state.template,
     getTemplates,
     clearTemplates,
-    createTemplate,
     requestTemplateChange,
     updateTemplate,
+    requestTemplatePreview,
+    clearTemplatePreview,
+    setActivePill,
   };
 };

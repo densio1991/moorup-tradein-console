@@ -5,8 +5,11 @@ import * as types from './action-types';
 const templateState = {
   templates: [],
   isFetchingTemplates: true,
-  isCreatingTemplate: false,
   isUpdatingTemplate: false,
+  isRequestingTemplateChange: false,
+  isRequestingTemplatePreview: false,
+  templatePreview: {},
+  activePill: 0,
 };
 
 const templateReducer = (state: any, action: any) => {
@@ -47,25 +50,6 @@ const templateReducer = (state: any, action: any) => {
         templates: [],
       };
 
-    case types.CREATE_TEMPLATE.baseType: {
-      return {
-        ...state,
-        isCreatingTemplate: true,
-      };
-    }
-    case types.CREATE_TEMPLATE.SUCCESS: {
-      return {
-        ...state,
-        isCreatingTemplate: false,
-      };
-    }
-    case types.CREATE_TEMPLATE.FAILED: {
-      return {
-        ...state,
-        isCreatingTemplate: false,
-      };
-    }
-
     case types.REQUEST_TEMPLATE_CHANGE.baseType: {
       return {
         ...state,
@@ -105,6 +89,39 @@ const templateReducer = (state: any, action: any) => {
         isUpdatingTemplate: false,
       };
     }
+
+    case types.REQUEST_TEMPLATE_PREVIEW.baseType: {
+      return {
+        ...state,
+        isRequestingTemplatePreview: true,
+      };
+    }
+    case types.REQUEST_TEMPLATE_PREVIEW.SUCCESS: {
+      return {
+        ...state,
+        isRequestingTemplatePreview: false,
+        templatePreview: action?.payload?.data
+      };
+    }
+    case types.REQUEST_TEMPLATE_PREVIEW.FAILED: {
+      return {
+        ...state,
+        isRequestingTemplatePreview: false,
+        templatePreview: {},
+      };
+    }
+
+    case types.CLEAR_TEMPLATE_PREVIEW:
+      return {
+        ...state,
+        templatePreview: [],
+      };
+
+    case types.SET_ACTIVE_PILL:
+      return {
+        ...state,
+        activePill: action.payload,
+      };
 
     default:
       return state;

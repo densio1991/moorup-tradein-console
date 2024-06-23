@@ -33,34 +33,6 @@ export const getTemplates = (payload: any, platform: string, signal?: AbortSigna
     });
 };
 
-export const createTemplate = (currentTemplateId: string, payload: any, platform: string) => (dispatch: any) => {
-  dispatch({
-    type: types.CREATE_TEMPLATE.baseType,
-    payload,
-  });
-
-  axiosInstance()
-    .post('/api/template', payload)
-    .then((response) => {
-      dispatch({
-        type: types.CREATE_TEMPLATE.SUCCESS,
-        payload: response?.data,
-      });
-
-      getTemplates(currentTemplateId, platform)(dispatch);
-      toast.success('Template successfully added!');
-    })
-    .catch((error) => {
-      dispatch({
-        type: types.CREATE_TEMPLATE.FAILED,
-        payload: error,
-      });
-
-      getTemplates(currentTemplateId, platform)(dispatch);
-      toast.error('Failed to add template!');
-    });
-};
-
 export const requestTemplateChange = (currentTemplateId: string, payload: any, platform: string) => (dispatch: any) => {
   dispatch({
     type: types.REQUEST_TEMPLATE_CHANGE.baseType,
@@ -68,7 +40,7 @@ export const requestTemplateChange = (currentTemplateId: string, payload: any, p
   });
 
   axiosInstance()
-    .post(`/api/template/request-change/${currentTemplateId}`, payload)
+    .patch(`/api/template/request-change/${currentTemplateId}`, payload)
     .then((response) => {
       dispatch({
         type: types.REQUEST_TEMPLATE_CHANGE.SUCCESS,
@@ -120,6 +92,44 @@ export const updateTemplate = (id: string, currentTemplateId: string, platform: 
 export const clearTemplates = (payload: any) => (dispatch: any) => {
   dispatch({
     type: types.CLEAR_TEMPLATES,
+    payload,
+  });
+};
+
+export const requestTemplatePreview = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.REQUEST_TEMPLATE_PREVIEW.baseType,
+    payload,
+  });
+
+  axiosInstance()
+    .post('/api/template/request-change-preview', payload)
+    .then((response) => {
+      dispatch({
+        type: types.REQUEST_TEMPLATE_PREVIEW.SUCCESS,
+        payload: response?.data,
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.REQUEST_TEMPLATE_PREVIEW.FAILED,
+        payload: error,
+      });
+
+      toast.error('Failed to preview template.');
+    });
+};
+
+export const clearTemplatePreview = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CLEAR_TEMPLATE_PREVIEW,
+    payload,
+  });
+};
+
+export const setActivePill = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_ACTIVE_PILL,
     payload,
   });
 };
