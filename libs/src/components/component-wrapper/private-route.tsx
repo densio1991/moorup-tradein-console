@@ -55,6 +55,7 @@ export function PrivateRoute(): JSX.Element {
         '/dashboard/promotion/payment': hasViewPromotionClaimsPaymentPermission,
         '/dashboard/user': hasViewUsersPermission,
         '/dashboard/configurations': hasViewPlatformConfigsPermissions,
+        '/dashboard/templates/email': hasViewPlatformConfigsPermissions,
         // There should be no static entry for dynamic paths in the permissions object
       };
   

@@ -7,4 +7,5 @@ export * from './promotion';
 export * from './provider';
 export * from './user';
 export * from './order';
+export * from './templates';
 

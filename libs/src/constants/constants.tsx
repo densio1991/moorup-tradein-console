@@ -150,7 +150,7 @@ export const SIDENAV_ITEMS_SETTINGS = [
     url: '/dashboard/templates',
     activeUrl: /\/dashboard\/templates/,
     icon: faEnvelopesBulk,
-    disabled: true,
+    disabled: false,
     submenu: [
       {
         title: 'Email',
@@ -164,14 +164,14 @@ export const SIDENAV_ITEMS_SETTINGS = [
         url: '/dashboard/templates/sms',
         activeUrl: /^\/dashboard\/templates\/sms/,
         icon: faMessage,
-        disabled: false,
+        disabled: true,
       },
       {
         title: 'Approvals',
         url: '/dashboard/templates/approvals',
         activeUrl: /^\/dashboard\/templates\/approvals/,
         icon: faEnvelopeCircleCheck,
-        disabled: false,
+        disabled: true,
       },
     ],
   },
@@ -1649,3 +1649,6 @@ export const PROMOTION_MANAGEMENT_ITEMS = [
     label: 'Process Promotion Claim Payment',
   },
 ];
+
+export const ENCRYPTION_KEY = 'mDv8pK79066huHFdlQ2CPKbXxC0rjXRt';
+export const INITIALIZATION_VECTOR = 'ey';

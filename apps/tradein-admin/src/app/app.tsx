@@ -18,6 +18,7 @@ import {
 import { ConfigurationsPage } from './pages/configurations';
 import { UploadProductPricingErrorPage } from './pages/product-management/upload-pricing-details';
 import { ProductUploadLogsPage } from './pages/product-upload-logs';
+import { TemplatesPage } from './pages/templates';
 
 export function App() {
   return (
@@ -72,6 +73,10 @@ export function App() {
           <Route
             path="/dashboard/configurations"
             element={<ConfigurationsPage />}
+          />
+          <Route
+            path="/dashboard/templates/email"
+            element={<TemplatesPage />}
           />
         </Route>
 

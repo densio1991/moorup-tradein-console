@@ -44,7 +44,10 @@ export enum ClaimStatus {
 
 export enum DefaultStatus {
   ACTIVE = 'active',
-  INACTIVE = 'inactive'
+  INACTIVE = 'inactive',
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
 }
 
 export enum PromotionStatus {
