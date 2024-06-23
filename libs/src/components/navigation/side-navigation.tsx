@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faAngleDown, faAngleRight, faArrowRightFromBracket, faGears } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleRight, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, MenuItem, MenuItemStyles, Sidebar, SubMenu } from 'react-pro-sidebar';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -319,16 +319,6 @@ export function SideBar(): JSX.Element {
                       }
                     })
                   }
-                  </Menu>
-                  <Menu menuItemStyles={menuItemStyles}>
-                    <MenuItem 
-                      key='configs'
-                      onClick={() => navigate('/dashboard/templates/email')} 
-                      active={/^\/dashboard\/templates/?.test(pathname)}
-                      icon={<StyledIcon icon={faGears} />}
-                    >
-                      Templates
-                    </MenuItem>
                   </Menu>
                 </>
               )

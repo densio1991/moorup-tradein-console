@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isEmpty, isUndefined } from 'lodash';
-import { InputHTMLAttributes, useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { isUndefined } from 'lodash';
+import { InputHTMLAttributes } from 'react';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
+import styled, { css } from 'styled-components';
+import { defaultTheme } from '../../helpers';
+import { FormGroup } from '../form';
+import { StyledIcon } from '../styled';
 
 const StyledInputContainer = styled.div<{ error?: boolean }>`
   position: relative;
   display: flex;
   flex-direction: column;
-  margin-bottom: ${(props) => (isUndefined(props.error) ? '0px' : '20px')};
+  margin-bottom: ${(props) => (isUndefined(props.error) ? '0px' : '10px')};
   width: 100%;
 
   & > svg {
@@ -18,7 +23,7 @@ const StyledInputContainer = styled.div<{ error?: boolean }>`
     color: #ccc;
     transition: 0.3s;
   }
-  
+
   &.inputWithIcon {
     position: relative;
   }
@@ -30,17 +35,38 @@ const StyledInputLabel = styled.label`
   color: inherit;
 `;
 
-const StyledInputField = styled.input<{ error?: boolean, name?: string }>`
+const StyledInputField = styled.input<{
+  error?: boolean;
+  name?: string;
+  disabled?: boolean;
+}>`
   padding: 10px;
   border: 1px solid ${(props) => (props.error ? '#f44336' : '#ccc')};
-  border-radius: ${(props) => (props.name === 'search' ? '20px' : '4px')}; /* Adjusted border-radius */
+  border-radius: ${(props) => (props.name === 'search' ? '20px' : '4px')};
   outline: none;
   transition: border-color 0.2s ease-in-out;
-  padding-right: 30px; /* Added padding for the icon */
+  padding-right: 30px;
 
-  &:focus, &:hover {
-    border-color: #01463a;
-  }
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      cursor: not-allowed;
+      background-color: #f0f0f0;
+
+      &:focus,
+      &:hover {
+        border-color: #ccc;
+      }
+    `}
+
+  ${({ disabled }) =>
+    !disabled &&
+    css`
+      &:focus,
+      &:hover {
+        border-color: #01463a;
+      }
+    `}
 
   &::placeholder {
     color: #ccc;
@@ -57,6 +83,7 @@ const CustomizeLabel = styled.div`
   font-size: 12px;
   margin-top: 5px;
   text-align: right;
+  cursor: pointer;
 `;
 
 interface StyledInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -64,9 +91,9 @@ interface StyledInputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: boolean;
   errorMessage?: string;
   name: string;
-  enableHoverImage?: boolean;
   onCustomize: any;
   value: any;
+  info?: any;
 }
 
 export function StyledInputCustomize({
@@ -79,12 +106,38 @@ export function StyledInputCustomize({
   value,
   onBlur,
   onCustomize,
+  info,
   ...inputProps
 }: StyledInputProps): JSX.Element {
-
   return (
     <StyledInputContainer error={error}>
-      {label && <StyledInputLabel>{label}</StyledInputLabel>}
+      <FormGroup marginBottom="4px">
+        {label ? <StyledInputLabel>{label}</StyledInputLabel> : <span />}
+        {info && (
+          <>
+            <StyledIcon
+              data-tooltip-id={name}
+              icon={faCircleExclamation}
+              color={defaultTheme.default.text}
+              disabled
+            />
+            <ReactTooltip
+              id={name}
+              place="right"
+              variant="info"
+              render={() => (
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {info.map((item: any, idx: number) => (
+                    <span
+                      key={idx}
+                    >{`{{${item.field}}} ${item.description}`}</span>
+                  ))}
+                </div>
+              )}
+            />
+          </>
+        )}
+      </FormGroup>
       <StyledInputField
         type={type}
         placeholder={placeholder}
@@ -95,7 +148,10 @@ export function StyledInputCustomize({
         disabled={true}
         {...inputProps}
       />
-      <CustomizeLabel onClick={onCustomize}>Customize</CustomizeLabel>
+      <FormGroup>
+        <span />
+        <CustomizeLabel onClick={onCustomize}>Customize</CustomizeLabel>
+      </FormGroup>
       {!isUndefined(error) && error && (
         <ErrorMessage>{errorMessage}</ErrorMessage>
       )}

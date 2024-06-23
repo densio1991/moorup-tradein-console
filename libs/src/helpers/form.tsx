@@ -1,7 +1,8 @@
-import { capitalize, get, isEmpty } from "lodash";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { capitalize, get, isEmpty } from 'lodash';
 
 export const extractInitialValue = (template: any[] = []) => {
-  let initialValue: any = {};
+  const initialValue: any = {};
 
   template.forEach((section) => {
     const sectionData: any = {};
@@ -17,13 +18,11 @@ export const extractInitialValue = (template: any[] = []) => {
     initialValue[section.field] = !isEmpty(sectionData) ? sectionData : sectionList;
   })
 
-  // console.log({initialValue});
-
   return initialValue;
 }
 
 export const parseTemplateValue = (template: any[], formValues: any) => {
-  let templateValue: any = [...template];
+  const templateValue: any = [...template];
 
   templateValue.map((section: any) => {
     section.content = section?.content?.map((field: any, idx: number) => {
@@ -39,11 +38,9 @@ export const parseTemplateValue = (template: any[], formValues: any) => {
     return section;
   })
 
-  console.log({templateValue});
-
   return templateValue;
 }
 
-export const formatToReadable = (title: string = "") => {
-  return capitalize(title?.replace(/[_-]/g, " "));
+export const formatToReadable = (title: string = '') => {
+  return capitalize(title?.replace(/[_-]/g, ' '));
 }

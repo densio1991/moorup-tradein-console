@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import styled from 'styled-components';
 
@@ -62,8 +63,8 @@ export function Pill({ label, onClick, active }: PillProps) {
   return <PillStyled onClick={onClick} active={active}>{label}</PillStyled>;
 }
 
-export function VerticalPills({ labels, contents, onChange }: { labels: string[]; onChange?: (index: string) => void, contents: React.ReactNode[] }) {
-  const [activePill, setActivePill] = useState<number>(0);
+export function VerticalPills({ labels, contents, onChange, defaultActive = 0 }: { labels: string[]; onChange?: (index: string) => void, contents: React.ReactNode[], defaultActive?: number }) {
+  const [activePill, setActivePill] = useState<number>(defaultActive);
 
   const handleChange = (index: any) => {
     if (onChange) {

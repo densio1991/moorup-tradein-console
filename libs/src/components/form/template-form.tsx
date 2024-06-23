@@ -1,13 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { capitalize, get } from 'lodash';
-import { AppButton, GenericModal, StyledInput, StyledInputCustomize } from '../';
 import { useState } from 'react';
+import { AppButton, GenericModal, StyledInput, StyledInputCustomize } from '../';
 import { formatToReadable } from '../../helpers';
 
 export const TemplateForm = (
   {formik, template }: {formik: any, template: any}
 ) => {
   const [customizeFieldData, setCustomizeFieldData] = useState<any>({});
-  const [customizeFieldValue, setCustomizeFieldValue] = useState("");
+  const [customizeFieldValue, setCustomizeFieldValue] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCustomize = (fieldId: string, field: any, section: any) => {
@@ -22,7 +23,7 @@ export const TemplateForm = (
 
   const resetConfirmModal = () => {
     setCustomizeFieldData({});
-    setCustomizeFieldValue("");
+    setCustomizeFieldValue('');
     setIsModalOpen(false);
   }
 
@@ -40,13 +41,9 @@ export const TemplateForm = (
           type="text"
           id={fieldId}
           name={fieldId}
-          label={customizeFieldData.label}
+          label={capitalize(customizeFieldData.label)}
           value={customizeFieldValue}
           onChange={(event) => setCustomizeFieldValue(event.target.value)}
-          // error={Boolean(
-          //   get(formik.touched, fieldId) && get(formik.errors, fieldId),
-          // )}
-          // errorMessage={get(formik.errors, fieldId)}
         />
         <div className="flex gap-2">
           <AppButton type="button" variant="outlined" onClick={resetConfirmModal}>Cancel</AppButton>
@@ -85,6 +82,7 @@ export const TemplateForm = (
                 )}
                 errorMessage={get(formik.errors, fieldId)}
                 onCustomize={() => handleCustomize(fieldId, field, section)}
+                info={field.staticValues}
               />,
             );
           } else {
@@ -118,7 +116,7 @@ export const TemplateForm = (
       })}
       <GenericModal
         title="Confirmation"
-        subtitle={"Customize the following?"}
+        subtitle={'Customize the following?'}
         content={renderModalContentAndActions()}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
