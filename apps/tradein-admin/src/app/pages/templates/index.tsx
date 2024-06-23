@@ -2,255 +2,49 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   AppButton,
+  CenterModal,
+  DefaultStatus,
   FormContainer,
   FormGroup,
   FormWrapper,
+  HTMLRenderer,
   LoaderContainer,
   PageContainer,
+  TemplateForm,
   VerticalPills,
   compareJSON,
-  TemplateForm,
+  extractInitialValue,
+  formatToReadable,
+  parseTemplateValue,
   useAuth,
   usePermission,
-  extractInitialValue,
   useTemplate,
-  parseTemplateValue,
-  formatToReadable,
 } from '@tradein-admin/libs';
 import { useFormik } from 'formik';
-import { capitalize, isEmpty } from 'lodash';
-import { useEffect, useMemo, useState } from 'react';
-
-const TEST_DATA = [
-  {
-    "_id": "66710d4f58f992d9b098bb8f",
-    "template_name": "device-assessment",
-    "platform": "office-works",
-    "state": "active",
-    "template": [
-      {
-        "field": "header_section",
-        "type": "text",
-        "editable": true,
-        "content": [
-          {
-            "order": 1,
-            "label": "Greetings",
-            "value": "asdasdasdasdasdasdasd"
-          },
-          {
-            "order": 2,
-            "label": "Message",
-            "value": "Your Trade-In Application Has been Successful"
-          }
-        ]
-      },
-      {
-        "field": "body_section",
-        "type": "paragraph",
-        "editable": true,
-        "content": [
-          {
-            "label": "Greetings",
-            "value": "Dear {first_name}",
-            "confirmation": true
-          },
-          {
-            "label": "Body",
-            "value": "Thanks for applying to trade-in your device. Good news, we're pleased to offer you a ${offer_value}.00 {platform} Card for your old device. You'll save money and help save the environment by reducing e-waste.",
-            "confirmation": true
-          },
-          {
-            "label": "Order",
-            "value": "Your Order Number is : {order_id}",
-            "confirmation": true
-          }
-        ]
-      },
-      {
-        "field": "whats_next_section",
-        "type": "bullet",
-        "editable": true,
-        "content": [
-          {
-            "order": 1,
-            "value": "Gift Card expires {expiry}",
-            "confirmation": true
-          },
-          {
-            "order": 2,
-            "value": "{platform} gift cards can be redeemed at {platform} stores nationwide and on the {platform} website.",
-            "confirmation": true
-          },
-          {
-            "order": 3,
-            "value": "Use your {platform} Gift Card at the checkout. you can use the gift card multiple times until it runs out of credit.",
-            "confirmation": true
-          },
-          {
-            "order": 4,
-            "value": "{platform} gift cards cannot be redeemed for cash, returned for a refund or exchanged. Unused balances are not refundable or transferrable",
-            "confirmation": true
-          },
-          {
-            "order": 5,
-            "value": "{platform} is not responsible for lost or stolen gift cards",
-            "confirmation": true
-          },
-          {
-            "order": 6,
-            "value": "Remaining Gift Card balances can be checked online or in stroe. For more information contact us on {contact} or visit {platformDomain} - Technology and Appliances Store in NZ",
-            "confirmation": true
-          }
-        ]
-      },
-      {
-        "field": "questions_section",
-        "type": "paragraph",
-        "editable": true,
-        "content": [
-          {
-            "order": 1,
-            "value": "We're here to help! Visit us online at {supportUrl}/help-centre for customer support. You can also email us at {supportEmail}",
-            "confirmation": true
-          },
-          {
-            "order": 2,
-            "value": "asdasdasdasdasdasdasa"
-          },
-          {
-            "order": 3,
-            "value": "asdasdasdasdasdasdasdasdsad"
-          },
-          {
-            "order": 4,
-            "value": "asdasdasdasdasdasdasd"
-          }
-        ]
-      }
-    ],
-    "__v": 0
-  },
-  {
-    "_id": "66710d4f58f992d9b098bb8f",
-    "template_name": "post-assessment",
-    "platform": "office-works",
-    "state": "active",
-    "template": [
-      {
-        "field": "header_section",
-        "type": "text",
-        "editable": true,
-        "content": [
-          {
-            "order": 1,
-            "label": "Greetings",
-            "value": "Hello"
-          },
-          {
-            "order": 2,
-            "label": "Message",
-            "value": "Your Trade-In Application Has been Successful"
-          }
-        ]
-      },
-      {
-        "field": "body_section",
-        "type": "paragraph",
-        "editable": true,
-        "content": [
-          {
-            "label": "Greetings",
-            "value": "Dear {first_name}",
-            "confirmation": true
-          },
-          {
-            "label": "Body",
-            "value": "Thanks for applying to trade-in your device. Good news, we're pleased to offer you a ${offer_value}.00 {platform} Card for your old device. You'll save money and help save the environment by reducing e-waste.",
-            "confirmation": true
-          },
-          {
-            "label": "Order",
-            "value": "Your Order Number is : {order_id}",
-            "confirmation": true
-          }
-        ]
-      },
-      {
-        "field": "whats_next_section",
-        "type": "bullet",
-        "editable": true,
-        "content": [
-          {
-            "order": 1,
-            "value": "Gift Card expires {expiry}",
-            "confirmation": true
-          },
-          {
-            "order": 2,
-            "value": "{platform} gift cards can be redeemed at {platform} stores nationwide and on the {platform} website.",
-            "confirmation": true
-          },
-          {
-            "order": 3,
-            "value": "Use your {platform} Gift Card at the checkout. you can use the gift card multiple times until it runs out of credit.",
-            "confirmation": true
-          },
-          {
-            "order": 4,
-            "value": "{platform} gift cards cannot be redeemed for cash, returned for a refund or exchanged. Unused balances are not refundable or transferrable",
-            "confirmation": true
-          },
-          {
-            "order": 5,
-            "value": "{platform} is not responsible for lost or stolen gift cards",
-            "confirmation": true
-          },
-          {
-            "order": 6,
-            "value": "Remaining Gift Card balances can be checked online or in stroe. For more information contact us on {contact} or visit {platformDomain} - Technology and Appliances Store in NZ",
-            "confirmation": true
-          }
-        ]
-      },
-      {
-        "field": "questions_section",
-        "type": "paragraph",
-        "editable": true,
-        "content": [
-          {
-            "order": 1,
-            "value": "We're here to help! Visit us online at {supportUrl}/help-centre for customer support. You can also email us at {supportEmail}"
-          },
-          {
-            "order": 2,
-            "value": "asdasdasdasdasdasdasa"
-          },
-          {
-            "order": 3,
-            "value": "asdasdasdasdasdasdasdasdsad"
-          }
-        ]
-      }
-    ],
-    "__v": 0
-  }
-]
+import { isEmpty } from 'lodash';
+import { useEffect, useMemo } from 'react';
 
 export function TemplatesPage() {
   const { hasEditPlatformConfigsPermissions } = usePermission();
-  const {
-    state: authState,
-  } = useAuth();
+  const { state: authState } = useAuth();
   const {
     state: templateState,
     getTemplates,
     clearTemplates,
     requestTemplateChange,
+    requestTemplatePreview,
+    clearTemplatePreview,
+    setActivePill,
   } = useTemplate();
-  const { activePlatform } = authState;
-  const { templates = [], isFetchingTemplates } = templateState;
-  const [activePill, setActivePill] = useState(0);
+  const { activePlatform, userDetails } = authState;
+  const {
+    templates = [],
+    isFetchingTemplates,
+    isRequestingTemplatePreview,
+    templatePreview,
+    isRequestingTemplateChange,
+    activePill,
+  } = templateState;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -266,6 +60,7 @@ export function TemplatesPage() {
 
       // Clear data on unmount
       clearTemplates({});
+      setActivePill(0);
     };
   }, [activePlatform]);
 
@@ -275,21 +70,41 @@ export function TemplatesPage() {
 
   const onSubmit = (values: any) => {
     const payload = {
-      ...templates[activePill],
-      template: parseTemplateValue(templates[activePill].template, values),
-    }
+      admin_id: userDetails?._id,
+      status: DefaultStatus.PENDING,
+      platform: activePlatform,
+      current: templates[activePill]?._id,
+      incoming: {
+        platform: activePlatform,
+        template_name: templates[activePill].template_name,
+        template_gateway: templates[activePill].template_gateway,
+        subject: templates[activePill].subject,
+        template: parseTemplateValue(templates[activePill].template, values),
+      },
+    };
 
-    console.log(payload);
-    // updatePlatformConfig(platformId, values);
     requestTemplateChange(templates[activePill]._id, payload);
+  };
+
+  const onPreview = (values: any) => {
+    const payload = {
+      ...templates[activePill],
+      admin_id: userDetails?._id,
+      current: templates[activePill]?._id,
+      incoming: {
+        template: parseTemplateValue(templates[activePill].template, values),
+      },
+    };
+
+    requestTemplatePreview(payload);
   };
 
   const handleChangeTemplate = (index: any) => {
     setActivePill(index);
-  }
+  };
 
   const initialValues = useMemo(() => {
-    return extractInitialValue(templates[activePill]?.template)
+    return extractInitialValue(templates[activePill]?.template);
   }, [activePill, templates]);
 
   const formik = useFormik({
@@ -307,46 +122,67 @@ export function TemplatesPage() {
   });
 
   return (
-    <LoaderContainer
-      color="#01463a"
-      margin="20px"
-      padding="10px"
-      height="auto"
-      bgColor="transparent"
-      loading={isFetchingTemplates}
-      title="Email Templates"
-    >
-      <div style={{ marginTop: '20px' }}>
-        <PageContainer>
-          <FormWrapper padding="0px" width="100%">
-            <FormContainer onSubmit={formik.handleSubmit}>
-              <VerticalPills labels={labels} contents={contents} onChange={handleChangeTemplate} />
-            </FormContainer>
-          </FormWrapper>
-        </PageContainer>
-        {hasEditPlatformConfigsPermissions && (
-          <div className='flex justify-end gap-4'>
-            <AppButton
-              type="button"
-              variant="fill"
-              width="fit-content"
-              onClick={() => console.log("preview")}
-              disabled={compareJSON(initialValues, formik.values)}
-            >
-              Preview
-            </AppButton>
-            <AppButton
-              type="button"
-              variant="fill"
-              width="fit-content"
-              onClick={() => onSubmit(formik.values)}
-              disabled={compareJSON(initialValues, formik.values)}
-            >
-              Submit
-            </AppButton>
-          </div>
-        )}
-      </div>
-    </LoaderContainer>
+    <>
+      <LoaderContainer
+        color="#01463a"
+        margin="20px"
+        padding="10px"
+        height="auto"
+        bgColor="transparent"
+        loading={
+          isFetchingTemplates ||
+          isRequestingTemplatePreview ||
+          isRequestingTemplateChange
+        }
+        title="Email Templates"
+      >
+        <div style={{ marginTop: '20px' }}>
+          <PageContainer>
+            <FormWrapper padding="0px" width="100%">
+              <FormContainer onSubmit={formik.handleSubmit}>
+                <VerticalPills
+                  labels={labels}
+                  contents={contents}
+                  defaultActive={activePill}
+                  onChange={handleChangeTemplate}
+                />
+              </FormContainer>
+            </FormWrapper>
+          </PageContainer>
+          {hasEditPlatformConfigsPermissions && (
+            <FormGroup>
+              <span />
+              <FormGroup>
+                <AppButton
+                  type="button"
+                  variant="outlined"
+                  width="fit-content"
+                  onClick={() => onPreview(formik.values)}
+                >
+                  Preview
+                </AppButton>
+                <AppButton
+                  type="button"
+                  variant="fill"
+                  width="fit-content"
+                  onClick={() => onSubmit(formik.values)}
+                  disabled={compareJSON(initialValues, formik.values)}
+                >
+                  Submit
+                </AppButton>
+              </FormGroup>
+            </FormGroup>
+          )}
+        </div>
+      </LoaderContainer>
+      <CenterModal
+        isOpen={!isEmpty(templatePreview)}
+        onClose={() => {
+          clearTemplatePreview(false);
+        }}
+      >
+        <HTMLRenderer htmlContent={templatePreview?.htmlRender} />
+      </CenterModal>
+    </>
   );
 }

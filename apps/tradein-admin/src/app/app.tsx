@@ -74,7 +74,10 @@ export function App() {
             path="/dashboard/configurations"
             element={<ConfigurationsPage />}
           />
-          <Route path="/dashboard/templates/email" element={<TemplatesPage />} />
+          <Route
+            path="/dashboard/templates/email"
+            element={<TemplatesPage />}
+          />
         </Route>
 
         {/* Will redirect authenticated users to /dashboard */}
