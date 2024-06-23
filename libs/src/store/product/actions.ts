@@ -414,6 +414,52 @@ export const downloadProductPricingRevisionTemplate =
       });
   };
 
+export const downloadProductUploadTemplate =
+  (platform: string) => (dispatch: any) => {
+    dispatch({
+      type: types.DOWNLOAD_PRODUCT_UPLOAD_TEMPLATE.baseType,
+      payload: platform,
+    });
+
+    axiosInstance()
+      .get('/api/products/import/download-template', {
+        params: { platform: platform },
+        responseType: 'blob',
+      })
+      .then((response) => {
+        const blob = new Blob([response.data], {
+          type: response.headers['content-type'],
+        });
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'import-products-template.xlsx';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        dispatch({
+          type: types.DOWNLOAD_PRODUCT_UPLOAD_TEMPLATE.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.DOWNLOAD_PRODUCT_UPLOAD_TEMPLATE.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.DOWNLOAD_PRODUCT_UPLOAD_TEMPLATE.FAILED,
+            payload: error,
+          });
+          toast.error('Failed to export product upload template.');
+        }
+      });
+  };
+
 export const uploadProductsPricingTemplate =
   (file: File, userId: string, activePlatform: string) =>
   async (dispatch: any) => {

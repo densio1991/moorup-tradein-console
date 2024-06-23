@@ -9,7 +9,6 @@ import {
   Loader,
   RadioGroup,
   RadioOption,
-  TEMPLATE_LINK,
   exportToCSV,
   useAuth,
   useCommon,
@@ -17,7 +16,7 @@ import {
   useProduct,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 export function ExportFileForm() {
   const { state: commonState, setSideModalState } = useCommon();
@@ -26,10 +25,16 @@ export function ExportFileForm() {
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
 
-  const { state: productState, downloadProductPricingRevisionTemplate } =
-    useProduct();
-  const { products, isDownloadingProductPricingRevisionTemplate } =
-    productState;
+  const {
+    state: productState,
+    downloadProductPricingRevisionTemplate,
+    downloadProductUploadTemplate,
+  } = useProduct();
+  const {
+    products,
+    isDownloadingProductPricingRevisionTemplate,
+    isDownloadingProductUploadTemplate,
+  } = productState;
 
   const {
     hasExportProductsPermission,
@@ -57,15 +62,6 @@ export function ExportFileForm() {
     );
   }
 
-  const downloadAnchorRef = useRef<HTMLAnchorElement>(null);
-  const handleDownloadClick = () => {
-    const fileUrl = TEMPLATE_LINK;
-    if (downloadAnchorRef.current) {
-      downloadAnchorRef.current.href = fileUrl;
-      downloadAnchorRef.current.click();
-    }
-  };
-
   const closeModal = () => {
     setExportFileType(null);
     setSideModalState({
@@ -88,7 +84,7 @@ export function ExportFileForm() {
 
       case 'product_upload_template':
         // Download product upload template
-        handleDownloadClick();
+        downloadProductUploadTemplate();
         break;
 
       case 'product_pricing_upload_template':
@@ -103,7 +99,8 @@ export function ExportFileForm() {
     closeModal();
   };
 
-  return isDownloadingProductPricingRevisionTemplate ? (
+  return isDownloadingProductPricingRevisionTemplate ||
+    isDownloadingProductUploadTemplate ? (
     <Loader />
   ) : (
     <FormWrapper
@@ -139,7 +136,6 @@ export function ExportFileForm() {
           >
             Export
           </AppButton>
-          <a ref={downloadAnchorRef} style={{ display: 'none' }} download />
         </FormGroup>
       </FormGroup>
     </FormWrapper>
