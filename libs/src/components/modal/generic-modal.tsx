@@ -35,7 +35,7 @@ const ModalWrapper = styled.div<{ isOpen: boolean }>`
   max-height: calc(100vh - 100px);
   border-radius: 4px;
   width: 100%;
-  max-width: 400px;
+  max-width: 600px;
   padding: 20px;
 `;
 
