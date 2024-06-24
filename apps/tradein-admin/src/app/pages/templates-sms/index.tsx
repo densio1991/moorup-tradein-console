@@ -11,10 +11,11 @@ import {
   LoaderContainer,
   PageContainer,
   TemplateForm,
+  TemplateTypes,
   VerticalPills,
+  capitalizeFirstLetters,
   compareJSON,
   extractInitialValue,
-  formatToReadable,
   parseTemplateValue,
   useAuth,
   usePermission,
@@ -24,7 +25,7 @@ import { useFormik } from 'formik';
 import { isEmpty } from 'lodash';
 import { useEffect, useMemo } from 'react';
 
-export function TemplatesPage() {
+export function SmsTemplatesPage() {
   const { hasEditPlatformConfigsPermissions } = usePermission();
   const { state: authState } = useAuth();
   const {
@@ -51,7 +52,7 @@ export function TemplatesPage() {
     const signal = controller.signal;
 
     if (!isEmpty(activePlatform)) {
-      getTemplates(activePlatform, signal);
+      getTemplates(TemplateTypes.SMS, signal);
     }
 
     return () => {
@@ -83,7 +84,11 @@ export function TemplatesPage() {
       },
     };
 
-    requestTemplateChange(templates[activePill]._id, payload);
+    requestTemplateChange(
+      templates[activePill]._id,
+      payload,
+      TemplateTypes.SMS,
+    );
   };
 
   const onPreview = (values: any) => {
@@ -114,7 +119,7 @@ export function TemplatesPage() {
   });
 
   const labels = templates.map((template: any) => {
-    return formatToReadable(template.template_name);
+    return capitalizeFirstLetters(template.template_name);
   });
 
   const contents = templates.map((template: any) => {
@@ -134,7 +139,7 @@ export function TemplatesPage() {
           isRequestingTemplatePreview ||
           isRequestingTemplateChange
         }
-        title="Email Templates"
+        title="SMS Templates"
       >
         <div style={{ marginTop: '20px' }}>
           <PageContainer>

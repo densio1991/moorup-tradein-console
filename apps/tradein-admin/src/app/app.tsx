@@ -2,23 +2,26 @@ import { NotFound, PrivateRoute, PublicRoute } from '@tradein-admin/libs';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import {
   ActionablesPage,
+  ConfigurationsPage,
   DashboardPage,
   DiscrepancyPage,
   EditOrderPage,
   EditProductPage,
+  EmailTemplatesPage,
   LoginPage,
   OrderManagementPage,
   ProductManagementPage,
+  ProductUploadLogsPage,
   PromotionClaimsPage,
   PromotionClaimsPaymentPage,
   PromotionsPage,
+  SmsTemplatesPage,
+  TemplateApprovalByIdPage,
+  TemplateApprovalPage,
   UploadProductErrorPage,
+  UploadProductPricingErrorPage,
   UserManagementPage,
 } from './pages';
-import { ConfigurationsPage } from './pages/configurations';
-import { UploadProductPricingErrorPage } from './pages/product-management/upload-pricing-details';
-import { ProductUploadLogsPage } from './pages/product-upload-logs';
-import { TemplatesPage } from './pages/templates';
 
 export function App() {
   return (
@@ -29,6 +32,10 @@ export function App() {
           <Route path="/dashboard/" element={<DashboardPage />} />
           <Route path="/dashboard/product/:id" element={<EditProductPage />} />
           <Route path="/dashboard/order/:id" element={<EditOrderPage />} />
+          <Route
+            path="/dashboard/templates/approvals/:id"
+            element={<TemplateApprovalByIdPage />}
+          />
           <Route
             path="/dashboard/product/list"
             element={<ProductManagementPage />}
@@ -76,7 +83,15 @@ export function App() {
           />
           <Route
             path="/dashboard/templates/email"
-            element={<TemplatesPage />}
+            element={<EmailTemplatesPage />}
+          />
+          <Route
+            path="/dashboard/templates/sms"
+            element={<SmsTemplatesPage />}
+          />
+          <Route
+            path="/dashboard/templates/approvals"
+            element={<TemplateApprovalPage />}
           />
         </Route>
 

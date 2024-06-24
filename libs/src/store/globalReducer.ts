@@ -5,8 +5,8 @@ import { commonReducer, commonState } from './common';
 import { orderReducer, orderState } from './order';
 import { productReducer, productState } from './product';
 import { promotionReducer, promotionState } from './promotion';
-import { userReducer, userState } from './user';
 import { templateReducer, templateState } from './templates';
+import { userReducer, userState } from './user';
 
 const rootReducer = (state: any, action: any) => {
   return {

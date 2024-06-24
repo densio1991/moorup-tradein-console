@@ -17,12 +17,8 @@ export const useTemplate = () => {
     actions.clearTemplates(payload)(dispatch);
   }
 
-  const requestTemplateChange = (currentTemplateId: string, payload: any) => {
-    actions.requestTemplateChange(currentTemplateId, payload, activePlatform)(dispatch);
-  }
-
-  const updateTemplate = (id: string, currentTemplateId: string, payload: any) => {
-    actions.updateTemplate(id, currentTemplateId, activePlatform, payload)(dispatch);
+  const requestTemplateChange = (currentTemplateId: string, payload: any, type: string) => {
+    actions.requestTemplateChange(currentTemplateId, payload, type, activePlatform)(dispatch);
   }
 
   const requestTemplatePreview = (payload: any) => {
@@ -37,14 +33,38 @@ export const useTemplate = () => {
     actions.setActivePill(payload)(dispatch);
   }
 
+  const getTemplateApprovals = (payload: any, signal: AbortSignal) => {
+    actions.getTemplateApprovals(payload, signal)(dispatch);
+  }
+
+  const clearTemplateApprovals = (payload: any) => {
+    actions.clearTemplateApprovals(payload)(dispatch);
+  }
+
+  const getTemplateApprovalById = (payload: any, signal: AbortSignal) => {
+    actions.getTemplateApprovalById(payload, signal)(dispatch);
+  }
+
+  const clearTemplateApproval = (payload: any) => {
+    actions.clearTemplateApproval(payload)(dispatch);
+  }
+
+  const processTemplateApproval = (payload: any, approvalId: string) => {
+    actions.processTemplateApproval(payload, approvalId)(dispatch);
+  }
+
   return {
     state: state.template,
     getTemplates,
     clearTemplates,
     requestTemplateChange,
-    updateTemplate,
     requestTemplatePreview,
     clearTemplatePreview,
     setActivePill,
+    getTemplateApprovals,
+    clearTemplateApprovals,
+    getTemplateApprovalById,
+    clearTemplateApproval,
+    processTemplateApproval,
   };
 };

@@ -38,6 +38,10 @@ export const capitalizeFirstLetter = (string: string) => {
   return capitalize(string);
 };
 
+export const capitalizeFirstLetters = (text: string): string => {
+  return text?.replace(/\b\w/g, char => char?.toUpperCase());
+};
+
 export const validateExpiry = (date: any) => {
   if (date && date !== '') {
     const currentTime = Date.now() / 1000; // Convert to seconds

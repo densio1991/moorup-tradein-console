@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { capitalize, get } from 'lodash';
+import { get } from 'lodash';
 import { useState } from 'react';
 import { AppButton, GenericModal, StyledInput, StyledInputCustomize } from '../';
-import { formatToReadable } from '../../helpers';
+import { capitalizeFirstLetters, formatToReadable } from '../../helpers';
 
 export const TemplateForm = (
   {formik, template }: {formik: any, template: any}
@@ -14,7 +14,7 @@ export const TemplateForm = (
   const handleCustomize = (fieldId: string, field: any, section: any) => {
     setCustomizeFieldData({
       fieldId,
-      label: field.label ?? capitalize(`${formatToReadable(section.field)} ${field.order}`),
+      label: field.label ?? capitalizeFirstLetters(`${formatToReadable(section.field)} ${field.order}`),
       ...field,
     });
     setCustomizeFieldValue(field.value);
@@ -41,7 +41,7 @@ export const TemplateForm = (
           type="text"
           id={fieldId}
           name={fieldId}
-          label={capitalize(customizeFieldData.label)}
+          label={capitalizeFirstLetters(customizeFieldData.label)}
           value={customizeFieldValue}
           onChange={(event) => setCustomizeFieldValue(event.target.value)}
         />
@@ -63,7 +63,7 @@ export const TemplateForm = (
             field.label
               ? `${section.field}.${field.label}`
               : `${section.field}[${idx}]`;
-          const fieldLabel = formatToReadable(field.label)
+          const fieldLabel = capitalizeFirstLetters(formatToReadable(field.label))
 
           if (field.confirmation) {
             fields.push(

@@ -127,3 +127,8 @@ export enum ProductUploadLogsTypes {
   PRODUCTS = 'import-products',
   PRICING = 'update-pricing',
 }
+
+export enum TemplateTypes {
+  EMAIL = 'email',
+  SMS = 'sms',
+}
