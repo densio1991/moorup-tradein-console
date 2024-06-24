@@ -164,14 +164,14 @@ export const SIDENAV_ITEMS_SETTINGS = [
         url: '/dashboard/templates/sms',
         activeUrl: /^\/dashboard\/templates\/sms/,
         icon: faMessage,
-        disabled: true,
+        disabled: false,
       },
       {
         title: 'Approvals',
         url: '/dashboard/templates/approvals',
         activeUrl: /^\/dashboard\/templates\/approvals/,
         icon: faEnvelopeCircleCheck,
-        disabled: true,
+        disabled: false,
       },
     ],
   },
@@ -804,6 +804,39 @@ export const PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS = [
     order: 12,
     enableSort: true,
     keyName: 'createdAt',
+  },
+];
+
+export const TEMPLATE_APPROVALS_COLUMNS = [
+  {
+    label: 'Template Name',
+    order: 2,
+    enableSort: true,
+    keyName: 'current.template_name',
+  },
+  {
+    label: 'Requested By',
+    order: 3,
+    enableSort: true,
+    keyName: 'admin_id.first_name',
+  },
+  {
+    label: 'Status',
+    order: 4,
+    enableSort: true,
+    keyName: 'status',
+  },
+  {
+    label: 'Created',
+    order: 5,
+    enableSort: true,
+    keyName: 'createdAt',
+  },
+  {
+    label: 'Updated',
+    order: 6,
+    enableSort: true,
+    keyName: 'updatedAt',
   },
 ];
 
