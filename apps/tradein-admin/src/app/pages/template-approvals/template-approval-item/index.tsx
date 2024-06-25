@@ -86,7 +86,7 @@ export function TemplateApprovalByIdPage() {
               width="100px"
               onClick={() =>
                 processTemplateApproval(
-                  { type: DefaultStatus.REJECTED },
+                  { type: DefaultStatus.APPROVED },
                   templateApprovalId,
                 )
               }
