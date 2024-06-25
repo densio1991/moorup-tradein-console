@@ -3,6 +3,7 @@ import { get } from 'lodash';
 import { useState } from 'react';
 import { AppButton, GenericModal, StyledInput, StyledInputCustomize } from '../';
 import { capitalizeFirstLetters, formatToReadable } from '../../helpers';
+import { StyledTextarea } from '../input/styled-textearea';
 
 export const TemplateForm = (
   {formik, template }: {formik: any, template: any}
@@ -11,7 +12,7 @@ export const TemplateForm = (
   const [customizeFieldValue, setCustomizeFieldValue] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleCustomize = (fieldId: string, field: any, section: any) => {
+  const handleCustomize = (fieldId: string, section: any, field: any) => {
     setCustomizeFieldData({
       fieldId,
       label: field.label ?? capitalizeFirstLetters(`${formatToReadable(section.field)} ${field.order}`),
@@ -37,7 +38,7 @@ export const TemplateForm = (
     
     return (
       <div className='flex flex-col gap-4'>
-        <StyledInput
+        <StyledTextarea
           type="text"
           id={fieldId}
           name={fieldId}
@@ -63,7 +64,8 @@ export const TemplateForm = (
             field.label
               ? `${section.field}.${field.label}`
               : `${section.field}[${idx}]`;
-          const fieldLabel = capitalizeFirstLetters(formatToReadable(field.label))
+          const fieldLabel = capitalizeFirstLetters(formatToReadable(field.label));
+          const fieldValue = get(formik.values, fieldId, '');
 
           if (field.confirmation) {
             fields.push(
@@ -75,13 +77,17 @@ export const TemplateForm = (
                 name={fieldId}
                 placeholder={fieldLabel}
                 onChange={formik.handleChange}
-                value={get(formik.values, fieldId, '')}
+                value={fieldValue}
                 onBlur={formik.handleBlur}
                 error={Boolean(
                   get(formik.touched, fieldId) && get(formik.errors, fieldId),
                 )}
                 errorMessage={get(formik.errors, fieldId)}
-                onCustomize={() => handleCustomize(fieldId, field, section)}
+                onCustomize={() => handleCustomize(
+                  fieldId,
+                  section,
+                  {...field, value: fieldValue},
+                )}
                 info={field.staticValues}
               />,
             );
