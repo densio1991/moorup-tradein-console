@@ -18,6 +18,7 @@ export enum OrderItemStatus {
   REVISED = 'revised',
   REVISION_REJECTED = 'revision-rejected',
   HOLD = 'hold',
+  DEVICE_RETURED = 'device-returned',
 }
 
 export enum DropdownOrderItemStatus {
@@ -43,7 +44,10 @@ export enum ClaimStatus {
 
 export enum DefaultStatus {
   ACTIVE = 'active',
-  INACTIVE = 'inactive'
+  INACTIVE = 'inactive',
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
 }
 
 export enum PromotionStatus {
@@ -117,4 +121,14 @@ export enum PermissionCodes {
 export enum ProductUploadLogsStatus {
   SUCCESS = 'success',
   FAILED = 'failed',
+}
+
+export enum ProductUploadLogsTypes {
+  PRODUCTS = 'import-products',
+  PRICING = 'update-pricing',
+}
+
+export enum TemplateTypes {
+  EMAIL = 'email',
+  SMS = 'sms',
 }

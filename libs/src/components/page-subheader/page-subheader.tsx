@@ -32,6 +32,7 @@ const RightSection = styled.div`
   display: flex;
   align-items: center;
   margin-left: auto;
+  column-gap: 8px;
 `;
 
 interface PageSubHeaderProps {

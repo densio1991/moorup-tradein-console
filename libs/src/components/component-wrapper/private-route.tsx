@@ -55,6 +55,9 @@ export function PrivateRoute(): JSX.Element {
         '/dashboard/promotion/payment': hasViewPromotionClaimsPaymentPermission,
         '/dashboard/user': hasViewUsersPermission,
         '/dashboard/configurations': hasViewPlatformConfigsPermissions,
+        '/dashboard/templates/email': hasViewPlatformConfigsPermissions,
+        '/dashboard/templates/sms': hasViewPlatformConfigsPermissions,
+        '/dashboard/templates/approvals': hasViewPlatformConfigsPermissions,
         // There should be no static entry for dynamic paths in the permissions object
       };
   
@@ -71,6 +74,7 @@ export function PrivateRoute(): JSX.Element {
         const dynamicPaths = [
           { pattern: /^\/dashboard\/order\/[^/]+$/, permission: hasViewOrderDetailsPermission },
           { pattern: /^\/dashboard\/product\/[^/]+$/, permission: hasEditProductPermission },
+          { pattern: /^\/dashboard\/templates\/approvals\/[^/]+$/, permission: hasViewPlatformConfigsPermissions },
         ];
         
         for (const { pattern, permission } of dynamicPaths) {

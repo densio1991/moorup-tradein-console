@@ -22,11 +22,16 @@ export const useCommon = () => {
     actions.setShowSideNav(payload)(dispatch);
   }
 
+  const setRedirect = (payload: any) => {
+    actions.setRedirect(payload)(dispatch);
+  }
+
   return {
     state: state.common,
     setSideModalState,
     setCenterModalState,
     setSearchTerm,
     setShowSideNav,
+    setRedirect,
   };
 };

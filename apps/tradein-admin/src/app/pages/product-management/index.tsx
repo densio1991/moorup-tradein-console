@@ -53,6 +53,7 @@ export function ProductManagementPage() {
     uploadProductsExcelFile,
     uploadProductsPricingTemplate,
     clearUploadProductsPricingTemplateErrors,
+    clearUploadProductsErrors,
   } = useProduct();
   const { state: authState } = useAuth();
   const {
@@ -61,6 +62,7 @@ export function ProductManagementPage() {
     isUploadingProductsExcel,
     isUploadingProductsPricingTemplate,
     uploadProductsPricingError,
+    uploadProductsError,
   } = state;
   const { activePlatform } = authState;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
@@ -82,6 +84,7 @@ export function ProductManagementPage() {
 
     if (!isEmpty(activePlatform)) {
       clearUploadProductsPricingTemplateErrors([]);
+      clearUploadProductsErrors([]);
       getProducts(true, signal);
       getProductTypes(signal);
       getProductStatuses(signal);
@@ -107,6 +110,18 @@ export function ProductManagementPage() {
       setSearchTerm('');
     };
   }, [uploadProductsPricingError]);
+
+  useEffect(() => {
+    if (!isEmpty(uploadProductsError)) {
+      navigate('/dashboard/product/upload-details');
+    }
+
+    return () => {
+      // Clear data on unmount
+      clearProducts({});
+      setSearchTerm('');
+    };
+  }, [uploadProductsError]);
 
   const renderForm = () => {
     switch (sideModalState.view) {
