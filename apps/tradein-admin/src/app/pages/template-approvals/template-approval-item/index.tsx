@@ -62,7 +62,7 @@ export function TemplateApprovalByIdPage() {
     };
   }, [redirectTo]);
 
-  const renderMjmlContent = (content: string) => {
+  const renderContent = (content: string) => {
     return <HTMLRenderer htmlContent={content} />;
   };
 
@@ -124,7 +124,7 @@ export function TemplateApprovalByIdPage() {
             >
               Current
             </Typography>
-            {renderMjmlContent(templateApproval?.current?.html || '')}
+            {renderContent(templateApproval?.current?.output || '')}
           </GridItem>
           <GridItem>
             <Typography
@@ -135,7 +135,7 @@ export function TemplateApprovalByIdPage() {
             >
               Incoming
             </Typography>
-            {renderMjmlContent(templateApproval?.incoming?.html || '')}
+            {renderContent(templateApproval?.incoming?.output || '')}
           </GridItem>
         </Grid>
       </LoaderContainer>
