@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { get } from 'lodash';
 import { useState } from 'react';
-import { AppButton, GenericModal, StyledInput, StyledInputCustomize } from '../';
+import { AppButton, GenericModal, StyledInputCustomize } from '../';
 import { capitalizeFirstLetters, formatToReadable } from '../../helpers';
 import { StyledTextarea } from '../input/styled-textearea';
 
@@ -89,26 +89,23 @@ export const TemplateForm = (
                   {...field, value: fieldValue},
                 )}
                 info={field.staticValues}
+                variant='text-area'
               />,
             );
           } else {
             fields.push(
-              <StyledInput
-                key={idx}
+              <StyledTextarea
                 type="text"
+                key={idx}
                 id={fieldId}
-                label={fieldLabel}
                 name={fieldId}
-                disabled={!section.editable}
+                label={fieldLabel}
                 placeholder={fieldLabel}
+                disabled={!section.editable}
                 onChange={formik.handleChange}
                 value={get(formik.values, fieldId, '')}
-                onBlur={formik.handleBlur}
-                error={Boolean(
-                  get(formik.touched, fieldId) && get(formik.errors, fieldId),
-                )}
-                errorMessage={get(formik.errors, fieldId)}
-              />,
+                withMarginBottom={true}
+              />
             );
           }
         });

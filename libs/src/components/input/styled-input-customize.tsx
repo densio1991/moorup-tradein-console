@@ -7,6 +7,7 @@ import styled, { css } from 'styled-components';
 import { defaultTheme } from '../../helpers';
 import { FormGroup } from '../form';
 import { StyledIcon } from '../styled';
+import { StyledTextarea } from './styled-textearea';
 
 const StyledInputContainer = styled.div<{ error?: boolean }>`
   position: relative;
@@ -94,6 +95,9 @@ interface StyledInputProps extends InputHTMLAttributes<HTMLInputElement> {
   onCustomize: any;
   value: any;
   info?: any;
+  variant?: 
+  | 'input-field'
+  | 'text-area';
 }
 
 export function StyledInputCustomize({
@@ -104,11 +108,60 @@ export function StyledInputCustomize({
   errorMessage,
   name,
   value,
+  onChange,
   onBlur,
   onCustomize,
   info,
+  variant = 'input-field',
   ...inputProps
 }: StyledInputProps): JSX.Element {
+
+  const renderInputVariant = (variant: string) => {
+    switch (variant) {
+      case 'input-field':
+        return (
+          <StyledInputField
+            type={type}
+            placeholder={placeholder}
+            onBlur={onBlur}
+            error={error}
+            value={value}
+            name={name}
+            disabled={true}
+            {...inputProps}
+          />
+        );
+
+      case 'text-area':
+        return (
+          <StyledTextarea
+            type={type}
+            placeholder={placeholder}
+            error={error}
+            value={value}
+            name={name}
+            disabled={true}
+            readOnly={true}
+            rows={1}
+          />
+        );
+    
+      default:
+        return (
+          <StyledInputField
+            type={type}
+            placeholder={placeholder}
+            onBlur={onBlur}
+            error={error}
+            value={value}
+            name={name}
+            disabled={true}
+            {...inputProps}
+          />
+        );
+    }
+  }
+
   return (
     <StyledInputContainer error={error}>
       <FormGroup marginBottom="4px">
@@ -138,16 +191,7 @@ export function StyledInputCustomize({
           </>
         )}
       </FormGroup>
-      <StyledInputField
-        type={type}
-        placeholder={placeholder}
-        onBlur={onBlur}
-        error={error}
-        value={value}
-        name={name}
-        disabled={true}
-        {...inputProps}
-      />
+      {renderInputVariant(variant)}
       <FormGroup>
         <span />
         <CustomizeLabel onClick={onCustomize}>Customize</CustomizeLabel>
