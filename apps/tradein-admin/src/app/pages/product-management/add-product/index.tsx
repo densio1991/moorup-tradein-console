@@ -42,7 +42,9 @@ const validationSchema = Yup.object().shape({
   image_url: Yup.string()
     .required('Image URL is required.')
     .url('Enter a valid URL'),
-  site_url: Yup.string().required('Site URL is required.'),
+  site_url: Yup.string()
+    .required('Site URL is required.')
+    .url('Enter a valid URL'),
 });
 
 export function AddProductForm() {
