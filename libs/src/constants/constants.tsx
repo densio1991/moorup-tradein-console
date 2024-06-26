@@ -175,7 +175,7 @@ export const SIDENAV_ITEMS_SETTINGS = [
       },
     ],
   },
-]
+];
 
 export const DEFAULT_COLUMN = [
   {
@@ -301,7 +301,7 @@ export const PRODUCT_UPLOAD_COLUMNS = [
     enableSort: true,
     keyName: 'payload.variant_name',
   },
-]
+];
 
 export const PRODUCT_UPLOAD_ATTRIBUTES_COLUMNS = [
   {
@@ -327,8 +327,8 @@ export const PRODUCT_UPLOAD_ATTRIBUTES_COLUMNS = [
     order: 5,
     enableSort: true,
     keyName: 'payload.name',
-  }
-]
+  },
+];
 
 export const PRODUCT_UPLOAD_LOGS_COLUMNS = [
   {
@@ -1165,7 +1165,7 @@ export const CURRENCIES = [
   { value: 'TJS', label: 'Tajikistani Somoni (TJS)' },
   { value: 'TMT', label: 'Turkmenistani Manat (TMT)' },
   { value: 'TND', label: 'Tunisian Dinar (TND)' },
-  { value: 'TOP', label: 'Tongan Pa\'anga (TOP)' },
+  { value: 'TOP', label: "Tongan Pa'anga (TOP)" },
   { value: 'TRY', label: 'Turkish Lira (TRY)' },
   { value: 'TTD', label: 'Trinidad and Tobago Dollar (TTD)' },
   { value: 'TVD', label: 'Tuvaluan Dollar (TVD)' },
@@ -1552,6 +1552,7 @@ export interface Promotion {
   products: Product[];
   price: number;
   image_url: string;
+  claim_deadline: string;
 }
 
 export const COLLECTION_ORDER_ITEM_STATUS = [
