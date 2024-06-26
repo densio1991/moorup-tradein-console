@@ -48,20 +48,13 @@ interface FormValues {
   [key: string]: any; // Index signature to allow dynamic access
 }
 
-const specialChars = /[{}\|\^~\[\]`<>#%" ]/;
-
 const validationSchema = Yup.object().shape({
   display_name: Yup.string().required('Display Name is required'),
   model: Yup.string().required('Model is required'),
   year: Yup.string().required('Year is required'),
   image_url: Yup.string()
     .required('Image URL is required.')
-    .url('Enter a valid URL')
-    .test(
-      'no-special-characters',
-      'URL contains invalid characters',
-      (value) => !specialChars.test(value),
-    ),
+    .url('Enter a valid URL'),
   site_url: Yup.string()
     .required('Site URL is required.')
     .url('Enter a valid URL'),
