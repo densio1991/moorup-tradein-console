@@ -1,0 +1,15 @@
+import { createActionTypes } from '../../helpers';
+
+export const FETCH_TEMPLATES = createActionTypes('FETCH_TEMPLATES');
+export const REQUEST_TEMPLATE_CHANGE = createActionTypes('REQUEST_TEMPLATE_CHANGE');
+export const UPDATE_TEMPLATE = createActionTypes('UPDATE_TEMPLATE');
+export const REQUEST_TEMPLATE_PREVIEW = createActionTypes('REQUEST_TEMPLATE_PREVIEW');
+export const FETCH_TEMPLATE_APPROVALS = createActionTypes('FETCH_TEMPLATE_APPROVALS');
+export const FETCH_TEMPLATE_APPROVAL_BY_ID = createActionTypes('FETCH_TEMPLATE_APPROVAL_BY_ID');
+export const PROCESS_TEMPLATE_APPROVAL = createActionTypes('PROCESS_TEMPLATE_APPROVAL');
+
+export const CLEAR_TEMPLATES = 'CLEAR_TEMPLATES';
+export const CLEAR_TEMPLATE_PREVIEW = 'CLEAR_TEMPLATE_PREVIEW';
+export const SET_ACTIVE_PILL = 'SET_ACTIVE_PILL';
+export const CLEAR_TEMPLATE_APPROVALS = 'CLEAR_TEMPLATE_APPROVALS';
+export const CLEAR_TEMPLATE_APPROVAL = 'CLEAR_TEMPLATE_APPROVAL';

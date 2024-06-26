@@ -5,6 +5,7 @@ import { commonReducer, commonState } from './common';
 import { orderReducer, orderState } from './order';
 import { productReducer, productState } from './product';
 import { promotionReducer, promotionState } from './promotion';
+import { templateReducer, templateState } from './templates';
 import { userReducer, userState } from './user';
 
 const rootReducer = (state: any, action: any) => {
@@ -15,6 +16,7 @@ const rootReducer = (state: any, action: any) => {
     promotion: promotionReducer(state.promotion, action),
     order: orderReducer(state.order, action),
     common: commonReducer(state.common, action),
+    template: templateReducer(state.template, action),
   };
 };
 
@@ -25,6 +27,7 @@ const initialState = {
   promotion: promotionState,
   order: orderState,
   common: commonState,
+  template: templateState,
 };
 
 export const useAppReducer = () => useReducer(rootReducer, initialState);

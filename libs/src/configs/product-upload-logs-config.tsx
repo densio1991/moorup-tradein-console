@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
-import { formatDate, parseStatus } from '../helpers';
+import { formatDate, parseStatus, parseTypes } from '../helpers';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
@@ -32,6 +32,10 @@ export const productUploadLogsParsingConfig = {
   'Upload Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['status'])) return '--';
     return parseStatus(row['status']);
+  },
+  'Upload Type': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['type'])) return '--';
+    return parseTypes(row['type'], true);
   },
   'Uploaded By': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['done_by'])) return '--';

@@ -13,6 +13,7 @@ const commonState = {
   },
   searchTerm: '',
   showSideNav: true,
+  redirectTo: null,
 };
 
 const commonReducer = (state: any, action: any) => {
@@ -39,6 +40,12 @@ const commonReducer = (state: any, action: any) => {
       return {
         ...state,
         showSideNav: action.payload,
+      };
+
+    case types.SET_REDIRECT:
+      return {
+        ...state,
+        redirectTo: action.payload,
       };
 
     default:
