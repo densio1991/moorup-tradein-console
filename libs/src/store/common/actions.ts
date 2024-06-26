@@ -28,3 +28,11 @@ export const setShowSideNav = (payload: any) => (dispatch: any) => {
     payload,
   });
 };
+
+
+export const setRedirect = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_REDIRECT,
+    payload,
+  });
+};

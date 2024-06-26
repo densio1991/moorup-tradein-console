@@ -1,5 +1,8 @@
+import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { ReactNode } from 'react';
 import styled from 'styled-components';
+import { IconButton } from '../button';
+import { FormGroup } from '../form';
 
 interface CenterModalProps {
   isOpen: boolean;
@@ -40,6 +43,16 @@ export function CenterModal({ isOpen, onClose, children }: CenterModalProps): JS
     <>
       <Overlay isOpen={isOpen} />
       <CenterModalWrapper isOpen={isOpen}>
+        <FormGroup margin='20px'>
+          <span />
+          <IconButton
+            tooltipLabel="Close"
+            icon={faClose}
+            onClick={() => {
+              onClose()
+            }}
+          />
+        </FormGroup>
         {children}
       </CenterModalWrapper>
     </>

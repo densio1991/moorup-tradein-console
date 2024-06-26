@@ -67,7 +67,11 @@ export const useProduct = () => {
   }
 
   const uploadProductsExcelFile = (payload: any) => {
-    actions.uploadProductsExcelFile(payload, activePlatform)(dispatch);
+    actions.uploadProductsExcelFile(payload, userDetails._id, activePlatform)(dispatch);
+  }
+
+  const clearUploadProductsErrors = (payload: any) => {
+    actions.clearUploadProductsErrors(payload)(dispatch);
   }
 
   const downloadProductPricingRevisionTemplate = () => {
@@ -88,6 +92,10 @@ export const useProduct = () => {
 
   const clearProductUploadLogs = (payload: any) => {
     actions.clearProductUploadLogs(payload)(dispatch);
+  }
+
+  const downloadProductUploadTemplate = () => {
+    actions.downloadProductUploadTemplate(activePlatform)(dispatch);
   }
 
   return {
@@ -112,5 +120,7 @@ export const useProduct = () => {
     clearUploadProductsPricingTemplateErrors,
     getProductUploadLogs,
     clearProductUploadLogs,
+    clearUploadProductsErrors,
+    downloadProductUploadTemplate,
   };
 };

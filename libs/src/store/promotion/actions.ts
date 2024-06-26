@@ -319,21 +319,21 @@ export const bulkUpdatePromotionClaimStatus = (payload: any, filter: any, active
     });
 };
 
-export const bulkUpdatePromotionClaimMoorupStatus = (payload: any, activePlatform: string) => (dispatch: any) => {
+export const bulkUpdatePromotionClaimMoorupStatus = (payload: any, filter: any, activePlatform: string) => (dispatch: any) => {
   dispatch({
     type: types.BULK_UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.baseType,
     payload,
   });
 
   axiosInstance()
-    .patch('/api/claims/moorup-status', payload)
+    .patch('/api/claims/moorup-status/bulk', payload)
     .then((response) => {
       dispatch({
         type: types.BULK_UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.SUCCESS,
         payload: response?.data,
       });
 
-      getPromotionClaims({}, activePlatform)(dispatch);
+      getPromotionClaims(filter, activePlatform)(dispatch);
       toast.success('Moorup status successfully updated!');
     })
     .catch((error) => {
@@ -342,7 +342,7 @@ export const bulkUpdatePromotionClaimMoorupStatus = (payload: any, activePlatfor
         payload: error,
       });
 
-      getPromotionClaims({}, activePlatform)(dispatch);
+      getPromotionClaims(filter, activePlatform)(dispatch);
       toast.error('Failed to update moorup status.');
     });
 };

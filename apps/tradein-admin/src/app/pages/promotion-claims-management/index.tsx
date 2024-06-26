@@ -6,11 +6,9 @@ import {
   AppButton,
   CLAIM_STATUSES,
   ClaimStatus,
-  ConfirmationModalTypes,
   Divider,
   FormGroup,
   FormWrapper,
-  GenericModal,
   IconButton,
   MODAL_TYPES,
   MOORUP_CLAIM_STATUSES,
@@ -27,7 +25,6 @@ import {
   Table,
   exportPromotionClaims,
   getCurrencySymbol,
-  hasEmptyValue,
   promotionClaimsManagementParsingConfig,
   useAuth,
   useCommon,
@@ -48,14 +45,12 @@ export function PromotionClaimsPage() {
     getPromotionClaims,
     clearPromotionClaims,
     setConfirmationModalState,
-    updatePromotionClaimMoorupStatus,
-    updatePromotionClaimStatus,
     bulkUpdatePromotionClaimStatus,
+    bulkUpdatePromotionClaimMoorupStatus,
   } = usePromotion();
   const {
     promotionClaims,
     isFetchingPromotionClaims,
-    confirmationModalState,
     isUpdatingPromotionClaimMoorupStatus,
     isUpdatingPromotionClaimStatus,
   } = state;
@@ -63,22 +58,6 @@ export function PromotionClaimsPage() {
   const { activePlatform, userDetails } = authState;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
-
-  const [claimToApprove, setClaimToApprove] = useState({
-    product_name: '',
-    amount: 0,
-    currency: '',
-  });
-
-  const [claimToReject, setClaimToReject] = useState({
-    remarks: '',
-  });
-
-  const [claimToOverride, setClaimToOverride] = useState({
-    remarks: '',
-    status: '',
-    user_id: userDetails?._id,
-  });
 
   const [selectedClaimStatuses, setSelectedClaimStatuses] = useState<string[]>(
     [],
@@ -179,185 +158,11 @@ export function PromotionClaimsPage() {
   };
 
   const handleSubmitBulkOverrideClaimStatus = (values: any) => {
-    // const filters = {
-    //   status: ClaimStatus.PENDING,
-    //   include_all: true,
-    // };
-
-    // When the API is available
-    // bulkUpdatePromotionClaimMoorupStatus(values?.claims);
-
-    // Workaround to make the feature work w/o the bulk API
-    const claims = values?.claims || [];
-    claims.forEach((claim: any) => {
-      updatePromotionClaimMoorupStatus(claim, claim.id);
-    });
-  };
-
-  const renderModalContentAndActions = () => {
-    switch (confirmationModalState.view) {
-      case ConfirmationModalTypes.APPROVE_CLAIM_REGULAR:
-        return (
-          <div style={{ width: '100%' }}>
-            <FormGroup>
-              <StyledReactSelect
-                label="Product Purchased"
-                name="product_purchased"
-                options={confirmationModalState?.data || []}
-                isMulti={false}
-                placeholder="Select product purchased"
-                value={claimToApprove.product_name}
-                onChange={(selectedOption) => {
-                  setClaimToApprove({
-                    product_name: selectedOption.data.product_name,
-                    amount: selectedOption.data.amount,
-                    currency: selectedOption.data.currency,
-                  });
-                }}
-              />
-            </FormGroup>
-            <FormGroup>
-              <AppButton
-                variant="outlined"
-                width="100%"
-                onClick={() => onCloseModal()}
-              >
-                Cancel
-              </AppButton>
-              <AppButton
-                width="100%"
-                onClick={() => {
-                  const filters = {
-                    status: ClaimStatus.PENDING,
-                    moorup_status: ClaimStatus.APPROVED,
-                    include_all: true,
-                  };
-
-                  updatePromotionClaimStatus(
-                    { ...claimToApprove, status: ClaimStatus.APPROVED },
-                    confirmationModalState.id,
-                    filters,
-                  );
-                  onCloseModal();
-                }}
-                disabled={hasEmptyValue(claimToApprove)}
-              >
-                Approve
-              </AppButton>
-            </FormGroup>
-          </div>
-        );
-
-      case ConfirmationModalTypes.REJECT_CLAIM_REGULAR:
-        return (
-          <div style={{ width: '100%' }}>
-            <FormGroup>
-              <StyledInput
-                type="text"
-                id="remarks"
-                label="Rejection Remarks"
-                name="remarks"
-                placeholder="Set rejection remarks"
-                onChange={(e) => setClaimToReject({ remarks: e.target.value })}
-                value={claimToReject.remarks}
-              />
-            </FormGroup>
-            <FormGroup>
-              <AppButton
-                variant="outlined"
-                width="100%"
-                onClick={() => onCloseModal()}
-              >
-                Cancel
-              </AppButton>
-              <AppButton
-                variant="error"
-                width="100%"
-                onClick={() => {
-                  const filters = {
-                    status: ClaimStatus.PENDING,
-                    moorup_status: ClaimStatus.APPROVED,
-                    include_all: true,
-                  };
-
-                  updatePromotionClaimStatus(
-                    { ...claimToApprove, status: ClaimStatus.REJECTED },
-                    confirmationModalState.id,
-                    filters,
-                  );
-                  onCloseModal();
-                }}
-                disabled={hasEmptyValue(claimToReject)}
-              >
-                Reject
-              </AppButton>
-            </FormGroup>
-          </div>
-        );
-
-      case ConfirmationModalTypes.OVERRIDE_CLAIM_STATUS:
-        return (
-          <div style={{ width: '100%' }}>
-            <FormGroup>
-              <StyledReactSelect
-                label="Status"
-                name="moorup_status"
-                options={confirmationModalState?.data || []}
-                isMulti={false}
-                placeholder="Set status"
-                value={claimToOverride.status}
-                onChange={(selectedOption) => {
-                  setClaimToOverride({
-                    ...claimToOverride,
-                    status: selectedOption.value,
-                  });
-                }}
-              />
-            </FormGroup>
-            <FormGroup>
-              <StyledInput
-                type="text"
-                id="update_remarks"
-                label="Update Remarks"
-                name="update_remarks"
-                placeholder="Set update remarks"
-                onChange={(e) =>
-                  setClaimToOverride({
-                    ...claimToOverride,
-                    remarks: e.target.value,
-                  })
-                }
-                value={claimToOverride.remarks}
-              />
-            </FormGroup>
-            <FormGroup>
-              <AppButton
-                variant="outlined"
-                width="100%"
-                onClick={() => onCloseModal()}
-              >
-                Cancel
-              </AppButton>
-              <AppButton
-                width="100%"
-                onClick={() => {
-                  updatePromotionClaimMoorupStatus(
-                    claimToOverride,
-                    confirmationModalState.id,
-                  );
-                  onCloseModal();
-                }}
-                disabled={hasEmptyValue(claimToOverride)}
-              >
-                Submit
-              </AppButton>
-            </FormGroup>
-          </div>
-        );
-
-      default:
-        return;
-    }
+    const filters = {
+      status: ClaimStatus.PENDING,
+      include_all: true,
+    };
+    bulkUpdatePromotionClaimMoorupStatus(values?.claims, filters);
   };
 
   const addActions = (claims: any) => {
@@ -440,22 +245,6 @@ export function PromotionClaimsPage() {
       data: {},
       title: '',
       id: '',
-    });
-
-    setClaimToApprove({
-      product_name: '',
-      amount: 0,
-      currency: '',
-    });
-
-    setClaimToReject({
-      remarks: '',
-    });
-
-    setClaimToOverride({
-      remarks: '',
-      status: '',
-      user_id: userDetails?._id,
     });
   };
 
@@ -764,13 +553,6 @@ export function PromotionClaimsPage() {
         }
         parsingConfig={promotionClaimsManagementParsingConfig}
         onChangeSelection={handleChangeSelection}
-      />
-      <GenericModal
-        title="Confirmation"
-        subtitle={confirmationModalState.subtitle}
-        content={renderModalContentAndActions()}
-        isOpen={confirmationModalState.open}
-        onClose={() => onCloseModal()}
       />
       <SideModal
         isOpen={sideModalState?.open}

@@ -113,10 +113,12 @@ export function BulkOverrideClaimStatus({
         user_id: userDetails?._id,
       });
     });
-  }
+  };
 
   const promotionId = selectedRows[0]?.promotion_id?._id;
-  const canApplyToAll = selectedRows.every((claim: any) => claim?.promotion_id?._id === promotionId);
+  const canApplyToAll = selectedRows.every(
+    (claim: any) => claim?.promotion_id?._id === promotionId,
+  );
 
   return (
     <FormWrapper formTitle="Override Claim Moorup Status">
@@ -185,11 +187,13 @@ export function BulkOverrideClaimStatus({
               </FormGroup>
               {index === 0 && canApplyToAll && selectedRows.length > 1 && (
                 <div className="flex justify-end mb-2">
-                  <AppButton 
+                  <AppButton
                     type="button"
                     width="fit-content"
-                    disabled={hasEmptyValue(formik.values.claims[index])} 
-                    onClick={() => applySelectionToAll(formik.values.claims[index])}
+                    disabled={hasEmptyValue(formik.values.claims[index])}
+                    onClick={() =>
+                      applySelectionToAll(formik.values.claims[index])
+                    }
                   >
                     Apply to all
                   </AppButton>

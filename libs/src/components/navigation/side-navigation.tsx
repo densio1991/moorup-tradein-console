@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faAngleDown, faAngleRight, faArrowRightFromBracket, faGears } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDown, faAngleRight, faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu, MenuItem, MenuItemStyles, Sidebar, SubMenu } from 'react-pro-sidebar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Logo from '../../Moorup.png';
 import {
-    SIDENAV_ITEMS
+  SIDENAV_ITEMS,
+  SIDENAV_ITEMS_SETTINGS
 } from '../../constants';
 import { hexToRgba } from '../../helpers';
 import { usePermission } from '../../hooks';
@@ -65,6 +66,19 @@ export function SideBar(): JSX.Element {
 
       case 'User Management':
         return hasViewUsersPermission;
+    
+      default:
+        return false;
+    }
+  });
+
+  const filteredSideNavSettingsItems = SIDENAV_ITEMS_SETTINGS.filter((item) => {
+    switch (item.title) {
+      case 'Configurations':
+        return hasViewPlatformConfigsPermissions;
+      
+      case 'Templates':
+        return hasViewPlatformConfigsPermissions;
     
       default:
         return false;
@@ -244,15 +258,67 @@ export function SideBar(): JSX.Element {
                       Settings
                     </Typography>
                   </div>
-                  <Menu menuItemStyles={menuItemStyles}>
-                    <MenuItem 
-                      key='configs'
-                      onClick={() => navigate('/dashboard/configurations')} 
-                      active={/^\/dashboard\/configurations/?.test(pathname)}
-                      icon={<StyledIcon icon={faGears} />}
-                    >
-                      Configurations
-                    </MenuItem>
+                  
+                  <Menu
+                    menuItemStyles={menuItemStyles}
+                    renderExpandIcon={(params) => <StyledIcon icon={params.open ? faAngleDown : faAngleRight} />}
+                    transitionDuration={400}
+                  >
+                  {
+                    filteredSideNavSettingsItems.map((item, index) => {
+                      if (item.submenu) {
+                        const filteredSideNavSettingsSubItems = item.submenu.filter((item) => {
+                          switch (item.title) {
+                            case 'Email':
+                              return hasViewPlatformConfigsPermissions
+    
+                            case 'SMS':
+                              return hasViewPlatformConfigsPermissions;
+    
+                            case 'Approvals':
+                              return hasViewPlatformConfigsPermissions;
+                          
+                            default:
+                              return false;
+                          }
+                        })
+    
+                        return (
+                          <SubMenu 
+                            label={item.title} 
+                            key={index} 
+                            icon={<StyledIcon icon={item.icon} />}
+                            disabled={item.disabled}
+                            defaultOpen={item.activeUrl?.test(pathname)}
+                          >
+                            {filteredSideNavSettingsSubItems?.map((subItem, subIndex) => (
+                              <MenuItem
+                                key={subIndex}
+                                onClick={() => navigate(subItem.url)}
+                                active={subItem.activeUrl?.test(pathname)}
+                                disabled={subItem.disabled}
+                                icon={<StyledIcon icon={subItem.icon} />}
+                              >
+                                {subItem.title}
+                              </MenuItem>
+                            ))}
+                          </SubMenu>
+                        );
+                      } else {
+                        return (
+                          <MenuItem 
+                            key={index} 
+                            onClick={() => navigate(item.url)} 
+                            active={item.activeUrl?.test(pathname)}
+                            icon={<StyledIcon icon={item.icon} />}
+                            disabled={item.disabled}
+                          >
+                            {item.title}
+                          </MenuItem>
+                        )
+                      }
+                    })
+                  }
                   </Menu>
                 </>
               )

@@ -28,6 +28,8 @@ const productState = {
   uploadProductsPricingError: [],
   isFetchingProductUploadLogs: false,
   productUploadLogs: [],
+  uploadProductsError: {},
+  isDownloadingProductUploadTemplate: false,
 };
 
 const productReducer = (state: any, action: any) => {
@@ -323,6 +325,20 @@ const productReducer = (state: any, action: any) => {
         products: [],
       };
     }
+    case types.UPLOAD_PRODUCTS_EXCEL.BAD_REQUEST: {
+      return {
+        ...state,
+        isUploadingProductsExcel: false,
+        uploadProductsError: action.payload,
+        products: [],
+      };
+    }
+
+    case types.CLEAR_UPLOAD_PRODUCTS_ERRORS:
+      return {
+        ...state,
+        uploadProductsError: {},
+      };
 
     case types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.baseType: {
       return {
@@ -413,7 +429,26 @@ const productReducer = (state: any, action: any) => {
         ...state,
         productUploadLogs: [],
       };
-
+      
+    case types.DOWNLOAD_PRODUCT_UPLOAD_TEMPLATE.baseType: {
+      return {
+        ...state,
+        isDownloadingProductUploadTemplate: true,
+      };
+    }
+    case types.DOWNLOAD_PRODUCT_UPLOAD_TEMPLATE.SUCCESS: {
+      return {
+        ...state,
+        isDownloadingProductUploadTemplate: false,
+      };
+    }
+    case types.DOWNLOAD_PRODUCT_UPLOAD_TEMPLATE.FAILED: {
+      return {
+        ...state,
+        isDownloadingProductUploadTemplate: false,
+      };
+    }
+    
     default: 
       return state;
   }
