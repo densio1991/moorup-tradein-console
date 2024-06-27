@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { faEnvelope, faMessage } from '@fortawesome/free-regular-svg-icons';
 import {
   faBullhorn,
   faCheckToSlot,
   faCreditCard,
   faCube,
+  faEnvelopeCircleCheck,
+  faEnvelopesBulk,
   faFileCircleExclamation,
   faFileInvoice,
   faFileLines,
@@ -142,37 +145,37 @@ export const SIDENAV_ITEMS_SETTINGS = [
     icon: faGears,
     disabled: false,
   },
-  // {
-  //   title: 'Templates',
-  //   url: '/dashboard/templates',
-  //   activeUrl: /\/dashboard\/templates/,
-  //   icon: faEnvelopesBulk,
-  //   disabled: false,
-  //   submenu: [
-  //     {
-  //       title: 'Email',
-  //       url: '/dashboard/templates/email',
-  //       activeUrl: /^\/dashboard\/templates\/email/,
-  //       icon: faEnvelope,
-  //       disabled: false,
-  //     },
-  //     {
-  //       title: 'SMS',
-  //       url: '/dashboard/templates/sms',
-  //       activeUrl: /^\/dashboard\/templates\/sms/,
-  //       icon: faMessage,
-  //       disabled: false,
-  //     },
-  //     {
-  //       title: 'Approvals',
-  //       url: '/dashboard/templates/approvals',
-  //       activeUrl: /^\/dashboard\/templates\/approvals/,
-  //       icon: faEnvelopeCircleCheck,
-  //       disabled: false,
-  //     },
-  //   ],
-  // },
-];
+  {
+    title: 'Templates',
+    url: '/dashboard/templates',
+    activeUrl: /\/dashboard\/templates/,
+    icon: faEnvelopesBulk,
+    disabled: false,
+    submenu: [
+      {
+        title: 'Email',
+        url: '/dashboard/templates/email',
+        activeUrl: /^\/dashboard\/templates\/email/,
+        icon: faEnvelope,
+        disabled: false,
+      },
+      {
+        title: 'SMS',
+        url: '/dashboard/templates/sms',
+        activeUrl: /^\/dashboard\/templates\/sms/,
+        icon: faMessage,
+        disabled: false,
+      },
+      {
+        title: 'Approvals',
+        url: '/dashboard/templates/approvals',
+        activeUrl: /^\/dashboard\/templates\/approvals/,
+        icon: faEnvelopeCircleCheck,
+        disabled: false,
+      },
+    ],
+  },
+]
 
 export const DEFAULT_COLUMN = [
   {
@@ -1162,7 +1165,7 @@ export const CURRENCIES = [
   { value: 'TJS', label: 'Tajikistani Somoni (TJS)' },
   { value: 'TMT', label: 'Turkmenistani Manat (TMT)' },
   { value: 'TND', label: 'Tunisian Dinar (TND)' },
-  { value: 'TOP', label: "Tongan Pa'anga (TOP)" },
+  { value: 'TOP', label: 'Tongan Pa\'anga (TOP)' },
   { value: 'TRY', label: 'Turkish Lira (TRY)' },
   { value: 'TTD', label: 'Trinidad and Tobago Dollar (TTD)' },
   { value: 'TVD', label: 'Tuvaluan Dollar (TVD)' },

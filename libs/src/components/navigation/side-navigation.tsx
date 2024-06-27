@@ -77,8 +77,8 @@ export function SideBar(): JSX.Element {
       case 'Configurations':
         return hasViewPlatformConfigsPermissions;
       
-      case 'Templates':
-        return hasViewPlatformConfigsPermissions;
+      // case 'Templates':
+      //   return hasViewPlatformConfigsPermissions;
     
       default:
         return false;
