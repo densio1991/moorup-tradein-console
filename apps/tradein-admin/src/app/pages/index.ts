@@ -18,4 +18,4 @@ export { TemplateApprovalByIdPage } from './template-approvals/template-approval
 export { EmailTemplatesPage } from './templates-email';
 export { SmsTemplatesPage } from './templates-sms';
 export { UserManagementPage } from './user-management';
-
+export { PaymentPage } from './payments';

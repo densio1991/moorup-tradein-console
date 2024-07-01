@@ -218,6 +218,7 @@ export function EditUserPermissionForm({ data }: any) {
                       PermissionCodes.VIEW_DISCREPANCIES,
                       PermissionCodes.VIEW_ACTIONABLES,
                       PermissionCodes.PRINT_LABEL,
+                      PermissionCodes.VIEW_PAYMENTS,
                     ]),
                   ],
                 });
@@ -238,6 +239,7 @@ export function EditUserPermissionForm({ data }: any) {
                       PermissionCodes.VIEW_DISCREPANCIES,
                       PermissionCodes.VIEW_ACTIONABLES,
                       PermissionCodes.PRINT_LABEL,
+                      PermissionCodes.VIEW_PAYMENTS,
                     ]),
                   ],
                 });
