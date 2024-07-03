@@ -7,6 +7,7 @@ import {
 } from '@tradein-admin/libs';
 import { PageSubHeader } from '@tradein-admin/libs';
 import { useEffect } from 'react';
+import { sampleRes } from './sample-res';
 
 export const PaymentPage = () => {
   const headers = [...ORDER_PAYMENTS_MANAGEMENT_COLUMNS];
@@ -27,7 +28,8 @@ export const PaymentPage = () => {
       <Table
         label="Payments"
         headers={headers}
-        rows={paymentsItem}
+        rows={sampleRes.data}
+        // rows={paymentsItem} // comment out this when api is in dev
         isLoading={isFetchingPayments}
       />
     </>
