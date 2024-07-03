@@ -45,6 +45,23 @@ export function ActionablesPage() {
     return orderItems.map((orderItem: any) => ({
       ...orderItem,
       action: () => printLabels({ item_id: orderItem?.order_items?._id }),
+      printLabelAction: () =>
+        printLabels({ item_id: orderItem?.order_items?._id }),
+      returnDeviceAction: () => {
+        toast.info('Make sure to Download or Save a copy on your device.', {
+          onClose: async () => {
+            await updateOrderItemsStatus(orderItem?.order_items?._id, {
+              status: OrderItemStatus.DEVICE_RETURED,
+            });
+            printOutboundLabel({ item_id: orderItem?.order_items?._id });
+            clearOrderItems({});
+
+            const controller = new AbortController();
+            const signal = controller.signal;
+            getOrderItems(filters, signal);
+          },
+        });
+      },
     }));
   };
 
