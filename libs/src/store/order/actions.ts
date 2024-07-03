@@ -656,6 +656,36 @@ export const cancelGiftCard =
       });
   };
 
+export const getAllOrderPayments =
+  (platform: any, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.FETCH_ORDER_PAYMENTS.baseType,
+      platform,
+    });
+
+    axiosInstance()
+      .get(`/api/orders/flat-file-data?platform=${platform}`, { signal: signal })
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_ORDER_PAYMENTS.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.FETCH_ORDER_PAYMENTS.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.FETCH_ORDER_PAYMENTS.FAILED,
+            payload: error,
+          });
+        }
+      });
+  };
+
 export const clearOrder = (payload: any) => (dispatch: any) => {
   dispatch({
     type: types.CLEAR_ORDER,

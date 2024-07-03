@@ -135,7 +135,7 @@ export const useOrder = () => {
   };
 
   const fetchOrderPayments = (signal: AbortSignal) => {
-    actions.getAllOrders(activePlatform, signal)(dispatch);
+    actions.getAllOrderPayments(activePlatform, signal)(dispatch);
   };
 
   const fetchOrderPaymentById = (id: any, signal: AbortSignal) => {
