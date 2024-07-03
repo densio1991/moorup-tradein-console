@@ -134,6 +134,14 @@ export const useOrder = () => {
     actions.cancelGiftCard(id, payload, signal)(dispatch);
   };
 
+  const fetchOrderPayments = (signal: AbortSignal) => {
+    actions.getAllOrders(activePlatform, signal)(dispatch);
+  };
+
+  const fetchOrderPaymentById = (id: any, signal: AbortSignal) => {
+    actions.getOrderById(id, signal)(dispatch);
+  };
+
   const clearOrder = () => {
     actions.clearOrder({})(dispatch);
   }
@@ -168,5 +176,7 @@ export const useOrder = () => {
     updateOrderItemsStatus,
     cancelGiftCard,
     clearOrder,
+    fetchOrderPayments,
+    fetchOrderPaymentById,
   };
 };

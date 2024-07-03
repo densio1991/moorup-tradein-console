@@ -776,6 +776,45 @@ export const ACTIONABLES_MANAGEMENT_COLUMNS = [
   },
 ];
 
+export const ORDER_PAYMENTS_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Device ID',
+    order: 2,
+    enableSort: true,
+    keyName: 'device_id',
+  },
+  {
+    label: 'Customer Name',
+    order: 3,
+    enableSort: true,
+    keyName: 'customer_name',
+  },
+  {
+    label: 'Customer Email Address',
+    order: 4,
+    enableSort: true,
+    keyName: 'customer_email_address',
+  },
+  {
+    label: 'Voucher Amount',
+    order: 5,
+    enableSort: true,
+    keyName: 'voucher_amount',
+  },
+  {
+    label: 'Payment Type',
+    order: 6,
+    enableSort: true,
+    keyName: 'payment_type',
+  },
+  {
+    label: 'Payment Reference',
+    order: 7,
+    enableSort: true,
+    keyName: 'payment_reference',
+  }
+];
+
 export const PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS = [
   {
     label: 'Claim Number',

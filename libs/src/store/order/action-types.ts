@@ -23,6 +23,8 @@ export const UPDATE_ORDER_ITEM_IMEI_SERIAL = createActionTypes('UPDATE_ORDER_ITE
 export const FETCH_GIFT_CARD_STATUS = createActionTypes('FETCH_GIFT_CARD_STATUS');
 export const CANCEL_GIFT_CARD = createActionTypes('CANCEL_GIFT_CARD');
 export const GENERATE_OUTBOUND_LABEL = createActionTypes('GENERATE_OUTBOUND_LABEL');
+export const FETCH_ORDER_PAYMENTS = createActionTypes('FETCH_ORDER_PAYMENTS');
+export const FETCH_ORDER_PAYMENT_BY_ID = createActionTypes('FETCH_ORDER_PAYMENT_BY_ID');
 
 // Base action types
 export const SET_ORDERS = 'SET_ORDERS';

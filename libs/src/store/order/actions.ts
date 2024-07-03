@@ -58,6 +58,10 @@ export const getAllOrders =
           type: types.FETCH_ORDERS.SUCCESS,
           payload: response?.data,
         });
+        dispatch({
+          type: types.FETCH_ORDER_PAYMENTS.SUCCESS,
+          payload: response?.data
+        })
       })
       .catch((error) => {
         if (error.code === CANCELLED_AXIOS) {
@@ -65,9 +69,13 @@ export const getAllOrders =
             type: types.FETCH_ORDERS.CANCELLED,
             payload: error,
           });
+          dispatch({
+            type: types.FETCH_ORDER_PAYMENTS.CANCELLED,
+            payload: error,
+          });
         } else {
           dispatch({
-            type: types.FETCH_ORDERS.FAILED,
+            type: types.FETCH_ORDER_PAYMENTS.FAILED,
             payload: error,
           });
         }
@@ -638,7 +646,7 @@ export const cancelGiftCard =
           type: types.UPDATE_ORDER_ITEM_BY_ID.SUCCESS,
           payload: response?.data,
         });
- 
+
       })
       .catch((error) => {
         dispatch({
