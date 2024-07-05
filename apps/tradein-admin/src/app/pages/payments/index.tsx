@@ -1,4 +1,6 @@
 import {
+  ACTIONS_COLUMN,
+  clearOrderPaymentItems,
   ORDER_PAYMENTS_MANAGEMENT_COLUMNS,
   Table,
   useAuth,
@@ -7,20 +9,33 @@ import {
 } from '@tradein-admin/libs';
 import { PageSubHeader } from '@tradein-admin/libs';
 import { useEffect } from 'react';
-import { sampleRes } from './sample-res';
+import { isEmpty } from 'lodash';
 
 export const PaymentPage = () => {
-  const headers = [...ORDER_PAYMENTS_MANAGEMENT_COLUMNS];
   const { state: authState } = useAuth();
+  const { activePlatform } = authState;
   const { state, fetchOrderPayments } = useOrder();
   const { paymentsItem, isFetchingPayments } = state;
   const { hasViewPaymentsPermission } = usePermission();
 
+  const headers = [
+    ...ORDER_PAYMENTS_MANAGEMENT_COLUMNS,
+    ...(hasViewPaymentsPermission ? ACTIONS_COLUMN : []),
+  ];
+
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
-    fetchOrderPayments(signal);
-  }, []);
+
+    if (!isEmpty(activePlatform)) {
+      fetchOrderPayments(signal);
+    }
+
+    return () => {
+      controller.abort();
+      clearOrderPaymentItems({});
+    };
+  }, [activePlatform]);
 
   return (
     <>
@@ -28,8 +43,7 @@ export const PaymentPage = () => {
       <Table
         label="Payments"
         headers={headers}
-        rows={sampleRes.data}
-        // rows={paymentsItem} // comment out this when api is in dev
+        rows={paymentsItem === null ? [] : paymentsItem} // assign as empty list if item = null
         isLoading={isFetchingPayments}
       />
     </>

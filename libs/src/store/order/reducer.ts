@@ -473,6 +473,14 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.CLEAR_ORDER_PAYMENT_ITEMS: {
+      return {
+        ...state,
+        isFetchingPayments: true,
+        paymentsItem: [],
+      };
+    }
+
 
     default:
       return state;

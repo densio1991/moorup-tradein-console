@@ -716,6 +716,13 @@ export const getOrderPaymentById =
       });
   };
 
+export const clearOrderPaymentItems = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CLEAR_ORDER_PAYMENT_ITEMS,
+    payload,
+  });
+};
+
 export const clearOrder = (payload: any) => (dispatch: any) => {
   dispatch({
     type: types.CLEAR_ORDER,
