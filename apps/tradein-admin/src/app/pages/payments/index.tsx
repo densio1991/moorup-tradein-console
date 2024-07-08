@@ -1,5 +1,6 @@
 import {
   ACTIONS_COLUMN,
+  AppButton,
   clearOrderPaymentItems,
   ORDER_PAYMENTS_MANAGEMENT_COLUMNS,
   Table,
@@ -10,12 +11,14 @@ import {
 import { PageSubHeader } from '@tradein-admin/libs';
 import { useEffect } from 'react';
 import { isEmpty } from 'lodash';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import moment from 'moment';
 
 export const PaymentPage = () => {
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
-  const { state, fetchOrderPayments } = useOrder();
-  const { paymentsItem, isFetchingPayments } = state;
+  const { state, fetchOrderPayments, downloadOrderPaymentFile } = useOrder();
+  const { paymentsItem, isFetchingPayments, isDownloadingPaymentFile } = state;
   const { hasViewPaymentsPermission } = usePermission();
 
   const headers = [
@@ -39,7 +42,24 @@ export const PaymentPage = () => {
 
   return (
     <>
-      <PageSubHeader withSearch />
+      <PageSubHeader
+        withSearch
+        leftControls={
+          <AppButton
+            width="fit-content"
+            icon={faDownload}
+            disabled={isDownloadingPaymentFile}
+            onClick={() =>
+              downloadOrderPaymentFile({
+                platform: activePlatform,
+                'generation-date': moment().format('YYYY-MM-DD'),
+              })
+            }
+          >
+            Download File
+          </AppButton>
+        }
+      />
       <Table
         label="Payments"
         headers={headers}

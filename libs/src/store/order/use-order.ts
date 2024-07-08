@@ -142,6 +142,10 @@ export const useOrder = () => {
     actions.getOrderById(id, signal)(dispatch);
   };
 
+  const downloadOrderPaymentFile = (id: any, signal?: AbortSignal) => {
+    actions.downloadOrderPaymentFile(id, signal)(dispatch);
+  };
+
   const clearOrder = () => {
     actions.clearOrder({})(dispatch);
   }
@@ -188,5 +192,6 @@ export const useOrder = () => {
     fetchOrderPaymentById,
     addOrderNote,
     upsertZendeskLink,
+    downloadOrderPaymentFile,
   };
 };

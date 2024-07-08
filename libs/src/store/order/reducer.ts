@@ -31,6 +31,7 @@ const orderState = {
   isFetchingPayments: false,
   isAddingOrderNote: false,
   isSavingZendeskLink: false,
+  isDownloadingPaymentFile: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -405,6 +406,25 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isUpdatingImeiSerial: false,
+      };
+    }
+
+    case types.DOWNLOAD_ORDER_PAYMENT_FILE.baseType: {
+      return {
+        ...state,
+        isDownloadingPaymentFile: true,
+      };
+    }
+    case types.DOWNLOAD_ORDER_PAYMENT_FILE.SUCCESS: {
+      return {
+        ...state,
+        isDownloadingPaymentFile: false,
+      };
+    }
+    case types.DOWNLOAD_ORDER_PAYMENT_FILE.FAILED: {
+      return {
+        ...state,
+        isDownloadingPaymentFile: false,
       };
     }
 
