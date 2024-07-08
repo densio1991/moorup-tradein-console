@@ -10,6 +10,7 @@ import {
   EmailTemplatesPage,
   LoginPage,
   OrderManagementPage,
+  PaymentPage,
   ProductManagementPage,
   ProductUploadLogsPage,
   PromotionClaimsPage,
@@ -64,6 +65,8 @@ export function App() {
             path="/dashboard/order/actionables"
             element={<ActionablesPage />}
           />
+          <Route path="/dashboard/order/payments" element={<PaymentPage />} />
+
           <Route path="/dashboard/user" element={<UserManagementPage />} />
           <Route
             path="/dashboard/promotion/list"

@@ -58,6 +58,10 @@ export const getAllOrders =
           type: types.FETCH_ORDERS.SUCCESS,
           payload: response?.data,
         });
+        dispatch({
+          type: types.FETCH_ORDER_PAYMENTS.SUCCESS,
+          payload: response?.data
+        })
       })
       .catch((error) => {
         if (error.code === CANCELLED_AXIOS) {
@@ -65,9 +69,13 @@ export const getAllOrders =
             type: types.FETCH_ORDERS.CANCELLED,
             payload: error,
           });
+          dispatch({
+            type: types.FETCH_ORDER_PAYMENTS.CANCELLED,
+            payload: error,
+          });
         } else {
           dispatch({
-            type: types.FETCH_ORDERS.FAILED,
+            type: types.FETCH_ORDER_PAYMENTS.FAILED,
             payload: error,
           });
         }
@@ -638,7 +646,7 @@ export const cancelGiftCard =
           type: types.UPDATE_ORDER_ITEM_BY_ID.SUCCESS,
           payload: response?.data,
         });
- 
+
       })
       .catch((error) => {
         dispatch({
@@ -647,6 +655,73 @@ export const cancelGiftCard =
         });
       });
   };
+
+export const getAllOrderPayments =
+  (platform: any, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.FETCH_ORDER_PAYMENTS.baseType,
+      platform,
+    });
+
+    axiosInstance()
+      .get(`/api/orders/flat-file-data?platform=${platform}`, { signal: signal })
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_ORDER_PAYMENTS.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.FETCH_ORDER_PAYMENTS.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.FETCH_ORDER_PAYMENTS.FAILED,
+            payload: error,
+          });
+        }
+      });
+  };
+
+export const getOrderPaymentById =
+  (payload: any, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.FETCH_ORDER_PAYMENT_BY_ID.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .get(`/api/orders/flat-file-data/${payload}`, { signal: signal })
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_ORDER_PAYMENT_BY_ID.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.FETCH_ORDER_PAYMENT_BY_ID.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.FETCH_ORDER_PAYMENT_BY_ID.FAILED,
+            payload: error,
+          });
+        }
+      });
+  };
+
+export const clearOrderPaymentItems = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CLEAR_ORDER_PAYMENT_ITEMS,
+    payload,
+  });
+};
 
 export const clearOrder = (payload: any) => (dispatch: any) => {
   dispatch({

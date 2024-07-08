@@ -13,6 +13,7 @@ import {
   faGears,
   faHouse,
   faList,
+  faMoneyBill,
   faPenToSquare,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
@@ -95,6 +96,13 @@ export const SIDENAV_ITEMS = [
         activeUrl: /^\/dashboard\/order\/actionables/,
         icon: faFileCircleExclamation,
         disabled: false,
+      },
+      {
+        title: 'Payments',
+        url: '/dashboard/order/payments',
+        activeUrl: /^\/dashboard\/order\/payments/,
+        icon: faMoneyBill,
+        disabled: false
       },
     ],
   },
@@ -766,6 +774,45 @@ export const ACTIONABLES_MANAGEMENT_COLUMNS = [
     enableSort: true,
     keyName: 'updatedAt',
   },
+];
+
+export const ORDER_PAYMENTS_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Device ID',
+    order: 2,
+    enableSort: true,
+    keyName: 'deviceId',
+  },
+  {
+    label: 'Customer Name',
+    order: 3,
+    enableSort: true,
+    keyName: 'customerName',
+  },
+  {
+    label: 'Customer Email Address',
+    order: 4,
+    enableSort: true,
+    keyName: 'customerEmailAddress',
+  },
+  {
+    label: 'Payment Amount',
+    order: 5,
+    enableSort: true,
+    keyName: 'paymentAmount',
+  },
+  {
+    label: 'Payment Type',
+    order: 6,
+    enableSort: true,
+    keyName: 'payment_type',
+  },
+  {
+    label: 'Payment Reference',
+    order: 7,
+    enableSort: true,
+    keyName: 'payment_reference',
+  }
 ];
 
 export const PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS = [
@@ -1653,6 +1700,7 @@ export const ORDER_MANAGEMENT_ITEMS = [
   { value: PermissionCodes.VIEW_DISCREPANCIES, label: 'View Discrepancies' },
   { value: PermissionCodes.VIEW_ACTIONABLES, label: 'View Actionables' },
   { value: PermissionCodes.PRINT_LABEL, label: 'Print Label' },
+  { value: PermissionCodes.VIEW_PAYMENTS, label: 'View Payments' },
 ];
 
 export const USER_MANAGEMENT_ITEMS = [

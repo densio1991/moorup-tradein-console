@@ -48,25 +48,28 @@ export function SideBar(): JSX.Element {
     hasViewPromotionClaimsPaymentPermission,
     hasViewUsersPermission,
     hasViewPlatformConfigsPermissions,
+    hasViewPaymentsPermission
   } = usePermission();
+
+
 
   const filteredSideNavItems = SIDENAV_ITEMS.filter((item) => {
     switch (item.title) {
       case 'Home':
         return hasViewDashboardPermission;
-      
+
       case 'Product Management':
         return hasViewProductsPermission;
 
       case 'Order Management':
-        return hasViewOrdersPermission || hasViewDiscrepanciesPermission || hasViewActionablesPermission;
+        return hasViewOrdersPermission || hasViewDiscrepanciesPermission || hasViewActionablesPermission || hasViewPaymentsPermission;
 
       case 'Promotion Management':
         return hasViewPromotionsPermission || hasViewPromotionClaimsPermission || hasViewPromotionClaimsPaymentPermission;
 
       case 'User Management':
         return hasViewUsersPermission;
-    
+
       default:
         return false;
     }
@@ -76,10 +79,10 @@ export function SideBar(): JSX.Element {
     switch (item.title) {
       case 'Configurations':
         return hasViewPlatformConfigsPermissions;
-      
+
       case 'Templates':
         return hasViewPlatformConfigsPermissions;
-    
+
       default:
         return false;
     }
@@ -129,10 +132,9 @@ export function SideBar(): JSX.Element {
       }
     },
   };
-
   return (
     <div style={{ display: 'flex', height: '100vh', zIndex: '999'}}>
-      <Sidebar 
+      <Sidebar
         onBackdropClick={() => setShowSideNav(false)}
         breakPoint='lg'
         onBreakPoint={(broken) => setShowSideNav(!broken)}
@@ -156,7 +158,8 @@ export function SideBar(): JSX.Element {
                 hasViewPromotionsPermission ||
                 hasViewPromotionClaimsPermission ||
                 hasViewPromotionClaimsPaymentPermission ||
-                hasViewUsersPermission
+                hasViewUsersPermission ||
+                hasViewPaymentsPermission
               )
               && (
                 <div style={{ padding: '0 24px', marginBottom: '8px' }}>
@@ -203,16 +206,19 @@ export function SideBar(): JSX.Element {
 
                         case 'Upload Logs':
                           return hasViewProductsPermission;
-                      
+
+                        case 'Payments':
+                            return hasViewPaymentsPermission;
+
                         default:
                           return false;
                       }
                     })
 
                     return (
-                      <SubMenu 
-                        label={item.title} 
-                        key={index} 
+                      <SubMenu
+                        label={item.title}
+                        key={index}
                         icon={<StyledIcon icon={item.icon} />}
                         disabled={item.disabled}
                         defaultOpen={item.activeUrl?.test(pathname)}
@@ -232,9 +238,9 @@ export function SideBar(): JSX.Element {
                     );
                   } else {
                     return (
-                      <MenuItem 
-                        key={index} 
-                        onClick={() => navigate(item.url)} 
+                      <MenuItem
+                        key={index}
+                        onClick={() => navigate(item.url)}
                         active={item.activeUrl?.test(pathname)}
                         icon={<StyledIcon icon={item.icon} />}
                         disabled={item.disabled}
@@ -258,7 +264,7 @@ export function SideBar(): JSX.Element {
                       Settings
                     </Typography>
                   </div>
-                  
+
                   <Menu
                     menuItemStyles={menuItemStyles}
                     renderExpandIcon={(params) => <StyledIcon icon={params.open ? faAngleDown : faAngleRight} />}
@@ -271,22 +277,22 @@ export function SideBar(): JSX.Element {
                           switch (item.title) {
                             case 'Email':
                               return hasViewPlatformConfigsPermissions
-    
+
                             case 'SMS':
                               return hasViewPlatformConfigsPermissions;
-    
+
                             case 'Approvals':
                               return hasViewPlatformConfigsPermissions;
-                          
+
                             default:
                               return false;
                           }
                         })
-    
+
                         return (
-                          <SubMenu 
-                            label={item.title} 
-                            key={index} 
+                          <SubMenu
+                            label={item.title}
+                            key={index}
                             icon={<StyledIcon icon={item.icon} />}
                             disabled={item.disabled}
                             defaultOpen={item.activeUrl?.test(pathname)}
@@ -306,9 +312,9 @@ export function SideBar(): JSX.Element {
                         );
                       } else {
                         return (
-                          <MenuItem 
-                            key={index} 
-                            onClick={() => navigate(item.url)} 
+                          <MenuItem
+                            key={index}
+                            onClick={() => navigate(item.url)}
                             active={item.activeUrl?.test(pathname)}
                             icon={<StyledIcon icon={item.icon} />}
                             disabled={item.disabled}
@@ -325,9 +331,9 @@ export function SideBar(): JSX.Element {
             }
           </div>
           <Menu menuItemStyles={menuItemStyles}>
-            <MenuItem 
-              key='logout' 
-              onClick={() => logoutUser()} 
+            <MenuItem
+              key='logout'
+              onClick={() => logoutUser()}
               icon={<StyledIcon icon={faArrowRightFromBracket} />}
             >
               Logout

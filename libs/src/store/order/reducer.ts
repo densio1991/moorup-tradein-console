@@ -27,6 +27,8 @@ const orderState = {
   isFetchingGiftCard: false,
   isUpdatingGiftCard: false,
   isModalOpen: false,
+  paymentsItem: [],
+  isFetchingPayments: false
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -258,8 +260,8 @@ const orderReducer = (state = orderState, action: any) => {
         isUpdatingOrderItem: false,
       };
     }
-    case types.UPDATE_SHIPPING_STATUS_BY_ID.FAILED: 
-    case types.CANCEL_ORDER_ITEM_BY_ID.FAILED: 
+    case types.UPDATE_SHIPPING_STATUS_BY_ID.FAILED:
+    case types.CANCEL_ORDER_ITEM_BY_ID.FAILED:
     case types.RECEIVE_ORDER_ITEM_BY_ID.FAILED: {
       return {
         ...state,
@@ -412,6 +414,73 @@ const orderReducer = (state = orderState, action: any) => {
         giftCard: {},
       };
     }
+
+    case types.FETCH_ORDER_PAYMENTS.baseType: {
+      return {
+        ...state,
+        isFetchingPayments: true,
+        paymentsItem: [],
+      };
+    }
+    case types.FETCH_ORDER_PAYMENTS.SUCCESS: {
+      return {
+        ...state,
+        isFetchingPayments: false,
+        paymentsItem: action.payload?.data,
+      };
+    }
+    case types.FETCH_ORDER_PAYMENTS.FAILED: {
+      return {
+        ...state,
+        isFetchingPayments: false,
+        paymentsItem: [],
+      };
+    }
+    case types.FETCH_ORDER_PAYMENTS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingPayments: true,
+        paymentsItem: [],
+      };
+    }
+
+    case types.FETCH_ORDER_PAYMENT_BY_ID.baseType: {
+      return {
+        ...state,
+        isFetchingPayments: true,
+        paymentsItem: {},
+      };
+    }
+    case types.FETCH_ORDER_PAYMENT_BY_ID.SUCCESS: {
+      return {
+        ...state,
+        isFetchingPayments: false,
+        paymentsItem: action.payload?.data,
+      };
+    }
+    case types.FETCH_ORDER_PAYMENT_BY_ID.FAILED: {
+      return {
+        ...state,
+        isFetchingPayments: false,
+        paymentsItem: {},
+      };
+    }
+    case types.FETCH_ORDER_PAYMENT_BY_ID.CANCELLED: {
+      return {
+        ...state,
+        isFetchingPayments: true,
+        paymentsItem: {},
+      };
+    }
+
+    case types.CLEAR_ORDER_PAYMENT_ITEMS: {
+      return {
+        ...state,
+        isFetchingPayments: true,
+        paymentsItem: [],
+      };
+    }
+
 
     default:
       return state;
