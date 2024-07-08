@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
-import { formatDate, parseStatus } from '../helpers';
-import { OrderItemStatus } from '../constants';
+import { formatDate, parseStatus } from '../../helpers';
+import { OrderItemStatus } from '../../constants';
+import { AppButton } from '../../components';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
@@ -39,8 +40,52 @@ export const unsentDevicesManagementParsingConfig = {
   },
   'Devices Awaiting': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['order_items'])) return '--';
-    const orderItems = row ? row['order_items'] : null;
+    const orderItems = row ? row['order_items'] : [];
     const orderCount = orderItems.filter((item: any) => item.status === OrderItemStatus.CREATED)?.length;
     return orderCount;
   },
+};
+
+export const unsentDevicesTableParsingConfig = {
+  'Device ID': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['line_item_number'])) return '--';
+    return row['line_item_number'];
+  },
+  'Device Name': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['product_name'])) return '--';
+    return row['product_name'];
+  },
+  'IMEI/Serial': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['imei_serial'])) return '--';
+    return row['imei_serial'];
+  },
+  'Extension Date': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['sendInDeadlineDate'])) return '--';
+    return formatDate(row['sendInDeadlineDate']);
+  },
+  Actions: ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['_id'])) return '--';
+    return (
+      <div className='flex gap-2'>
+        <AppButton
+          type="button"
+          variant="fill"
+          width="fit-content"
+          padding="4px 20px"
+          onClick={() => row.extendDeadlineAction()}
+        >
+          Extend
+        </AppButton>
+          <AppButton
+          type="button"
+          variant="outlined"
+          width="fit-content"
+          padding="4px 20px"
+          onClick={() => row.cancelOrderItemAction()}
+        >
+          Cancel
+        </AppButton>
+      </div>
+    )
+  }
 };

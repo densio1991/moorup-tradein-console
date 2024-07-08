@@ -40,6 +40,14 @@ export const useOrder = () => {
     actions.updateOrderItemById(id, orderId, payload)(dispatch);
   }
 
+  const extendSendinDeadline = (id: any, payload: any) => {
+    actions.updateSendinDeadline(id, payload)(dispatch);
+  }
+
+  const logCustomerNonContact = (id: any, payload: any) => {
+    actions.logCustomerNonContact(id, payload)(dispatch);
+  }
+
   const cancelOrderItemById = (id: any) => {
     const orderId = state.order?.order?._id;
     const payload = { status: OrderItemStatus.CANCELLED }
@@ -188,5 +196,7 @@ export const useOrder = () => {
     fetchOrderPaymentById,
     addOrderNote,
     upsertZendeskLink,
+    logCustomerNonContact,
+    extendSendinDeadline,
   };
 };

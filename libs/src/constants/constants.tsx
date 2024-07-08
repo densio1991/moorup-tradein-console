@@ -90,13 +90,13 @@ export const SIDENAV_ITEMS = [
         icon: faPenToSquare,
         disabled: false,
       },
-      {
-        title: 'Actionables',
-        url: '/dashboard/order/actionables',
-        activeUrl: /^\/dashboard\/order\/actionables/,
-        icon: faFileCircleExclamation,
-        disabled: false,
-      },
+      // {
+      //   title: 'Actionables',
+      //   url: '/dashboard/order/actionables',
+      //   activeUrl: /^\/dashboard\/order\/actionables/,
+      //   icon: faFileCircleExclamation,
+      //   disabled: false,
+      // },
       {
         title: 'Payments',
         url: '/dashboard/order/payments',

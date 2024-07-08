@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { faClose } from '@fortawesome/free-solid-svg-icons';
 import { ReactNode } from 'react';
 import styled from 'styled-components';
@@ -8,6 +9,7 @@ interface CenterModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: ReactNode;
+  title?: any;
 }
 
 const Overlay = styled.div<{ isOpen: boolean }>`
@@ -38,13 +40,13 @@ const CenterModalWrapper = styled.div<{ isOpen: boolean }>`
   max-height: calc(100vh - 100px);
 `;
 
-export function CenterModal({ isOpen, onClose, children }: CenterModalProps): JSX.Element {
+export function CenterModal({ isOpen, onClose, children, title }: CenterModalProps): JSX.Element {
   return (
     <>
       <Overlay isOpen={isOpen} />
       <CenterModalWrapper isOpen={isOpen}>
         <FormGroup margin='20px'>
-          <span />
+          {title || <span />}
           <IconButton
             tooltipLabel="Close"
             icon={faClose}

@@ -1,5 +1,4 @@
-export * from './actionables-management-config';
-export * from './unsent-devices-management-config';
+export * from './actionables';
 export * from './discrepancy-management-config';
 export * from './order-logs-config';
 export * from './order-management-config';

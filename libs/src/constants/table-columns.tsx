@@ -629,6 +629,38 @@ export const UNSENT_DEVICES_MANAGEMENT_COLUMNS = [
   },
 ];
 
+export const UNSENT_DEVICES_TABLE_COLUMNS = [
+  {
+    label: 'Device ID',
+    order: 2,
+    enableSort: true,
+    keyName: 'order_number',
+  },
+  {
+    label: 'Device Name',
+    order: 3,
+    enableSort: true,
+    keyName: 'createdAt',
+  },
+  {
+    label: 'IMEI/Serial',
+    order: 4,
+    enableSort: true,
+    keyName: 'order_type',
+  },
+  {
+    label: 'Extension Date',
+    order: 5,
+    enableSort: true,
+    keyName: 'user_id.first_name',
+  },
+  {
+    label: 'Actions',
+    order: 6,
+    keyName: 'isExtended',
+  },
+];
+
 export const PROMOTION_CLAIMS_PAYMENT_MANAGEMENT_COLUMNS = [
   {
     label: 'Claim Number',

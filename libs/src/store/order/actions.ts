@@ -454,6 +454,56 @@ export const updateShipmentStatus =
       });
   };
 
+export const updateSendinDeadline =
+  (orderId: string, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.UPDATE_ORDER_SENDIN_DEADLINE.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .patch(`/api/order/items/${orderId}/extend`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.UPDATE_ORDER_SENDIN_DEADLINE.SUCCESS,
+          payload: response?.data,
+        });
+        getOrderById(orderId)(dispatch);
+        toast.success('Send-in Deadline extended!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.UPDATE_ORDER_SENDIN_DEADLINE.FAILED,
+          payload: error,
+        });
+      });
+  };
+
+export const logCustomerNonContact =
+  (orderId: string, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.LOG_CUSTOMER_NONCONTACT.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .patch(`/api/order/${orderId}/non-contact`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.LOG_CUSTOMER_NONCONTACT.SUCCESS,
+          payload: response?.data,
+        });
+        getOrderById(orderId)(dispatch);
+        toast.success('Customer contact logged!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.LOG_CUSTOMER_NONCONTACT.FAILED,
+          payload: error,
+        });
+      });
+  };
+
 export const setToggleModal = (payload: any) => (dispatch: any) => {
   dispatch({
     type: types.SET_TOGGLE_MODAL,

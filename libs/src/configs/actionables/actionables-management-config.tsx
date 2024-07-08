@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faPrint, faBoxesPacking } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty } from 'lodash';
-import { AppButton } from '../components';
-import { capitalizeFirstLetter, formatDate, parseStatus } from '../helpers';
-import { OrderItemStatus } from '../constants';
+import { AppButton } from '../../components';
+import { capitalizeFirstLetter, formatDate, parseStatus } from '../../helpers';
+import { OrderItemStatus } from '../../constants';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };

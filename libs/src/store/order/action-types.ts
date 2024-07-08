@@ -27,6 +27,8 @@ export const FETCH_ORDER_PAYMENTS = createActionTypes('FETCH_ORDER_PAYMENTS');
 export const FETCH_ORDER_PAYMENT_BY_ID = createActionTypes('FETCH_ORDER_PAYMENT_BY_ID');
 export const ADD_ORDER_NOTE = createActionTypes('ADD_ORDER_NOTE');
 export const UPSERT_ZENDESK_LINK = createActionTypes('UPSERT_ZENDESK_LINK');
+export const UPDATE_ORDER_SENDIN_DEADLINE = createActionTypes('UPDATE_ORDER_SENDIN_DEADLINE');
+export const LOG_CUSTOMER_NONCONTACT = createActionTypes('LOG_CUSTOMER_NONCONTACT');
 
 // Base action types
 export const SET_ORDERS = 'SET_ORDERS';
