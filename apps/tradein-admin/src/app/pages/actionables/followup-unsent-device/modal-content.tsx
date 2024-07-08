@@ -100,11 +100,23 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
       modalData.view === ConfirmationModalTypes.EXTEND_SENDIN_DEADLINE &&
       !isEmpty(selectedRow)
     ) {
-      const payload: any[] = [];
-      extendSendinDeadline(order?.id, payload);
-      console.log('EXTEND ONE: ', newDeadline, selectedRow);
+      const payload = [
+        {
+          sendInDeadlineDate: moment(newDeadline).format('YYYY-MM-DD'),
+          orderItemId: selectedRow._id,
+        },
+      ];
+      console.log('EXTEND ONE: ', payload, selectedRow);
+      extendSendinDeadline(order?._id, payload);
     } else {
-      console.log('EXTEND ALL: ', newDeadline);
+      const payload = filteredOrderItems.map((orderItem: any) => {
+        return {
+          sendInDeadlineDate: moment(newDeadline).format('YYYY-MM-DD'),
+          orderItemId: orderItem._id,
+        };
+      });
+      console.log('EXTEND ALL: ', payload);
+      extendSendinDeadline(order?._id, payload);
     }
   };
 

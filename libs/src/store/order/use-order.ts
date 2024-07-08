@@ -106,6 +106,10 @@ export const useOrder = () => {
     actions.setActiveOrderItem(orderItem)(dispatch);
   }
 
+  const setActiveOrder = (order: any) => {
+    actions.setActiveOrder(order)(dispatch);
+  }
+
   const clearOrders = () => {
     actions.clearOrders({})(dispatch);
   }
@@ -183,6 +187,7 @@ export const useOrder = () => {
     openModal,
     closeModal,
     setActiveOrderItem,
+    setActiveOrder,
     clearOrders,
     sendBox,
     printLabels,

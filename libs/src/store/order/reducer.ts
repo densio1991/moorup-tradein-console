@@ -390,6 +390,13 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.SET_ACTIVE_ORDER: {
+      return {
+        ...state,
+        order: action.payload,
+      };
+    }
+
     case types.CLEAR_ORDERS: {
       return {
         ...state,

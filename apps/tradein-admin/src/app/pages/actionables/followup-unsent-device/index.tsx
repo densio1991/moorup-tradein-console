@@ -16,18 +16,38 @@ import { useEffect, useMemo, useState } from 'react';
 import { FollowUpUnsentDeviceModal } from './modal-content';
 
 export function FollowUpUnsentDevicePage() {
-  const { state, fetchOrders, clearOrders } = useOrder();
-  const { orders, isFetchingOrders } = state;
+  const { state, fetchOrders, clearOrder, clearOrders, setActiveOrder } =
+    useOrder();
+  const { orders, order, isFetchingOrders } = state;
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
-  const [activeOrder, setActiveOrder] = useState<any>({});
+  const [selectedRow, setSelectedRow] = useState<any>({});
 
   const headers = UNSENT_DEVICES_MANAGEMENT_COLUMNS;
 
   const handleRowClick = (row: any) => {
-    console.log(row);
     setActiveOrder(row);
+    setSelectedRow(row);
   };
+
+  const hasUnsentOrderItems = (orderItems: any[]) => {
+    return orderItems?.some(
+      (item: any) => item?.status === OrderItemStatus.CREATED,
+    );
+  };
+
+  useEffect(() => {
+    if (order && hasUnsentOrderItems(order?.order_items)) {
+      setSelectedRow(order);
+    } else {
+      if (!isEmpty(selectedRow)) {
+        const controller = new AbortController();
+        const signal = controller.signal;
+        fetchOrders(signal);
+        setSelectedRow({});
+      }
+    }
+  }, [order]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -41,15 +61,14 @@ export function FollowUpUnsentDevicePage() {
       controller.abort();
 
       // Clear data on unmount
+      clearOrder();
       clearOrders();
     };
   }, [activePlatform]);
 
   const filteredOrders = useMemo(() => {
     return orders.filter((order: any) =>
-      order.order_items?.some(
-        (item: any) => item?.status === OrderItemStatus.CREATED,
-      ),
+      hasUnsentOrderItems(order?.order_items),
     );
   }, [orders]);
 
@@ -68,18 +87,18 @@ export function FollowUpUnsentDevicePage() {
         title={
           <h4
             className="text-lg cursor-pointer hover:text-emerald-800"
-            onClick={() => openInNewTab(`/dashboard/order/${activeOrder?._id}`)}
+            onClick={() => openInNewTab(`/dashboard/order/${selectedRow?._id}`)}
           >
-            {activeOrder?.order_number}
+            {selectedRow?.order_number}
           </h4>
         }
-        isOpen={!isEmpty(activeOrder)}
+        isOpen={!isEmpty(selectedRow)}
         onClose={() => {
-          setActiveOrder({});
+          setSelectedRow({});
         }}
       >
         <div className="pb-5">
-          <FollowUpUnsentDeviceModal order={activeOrder} />
+          <FollowUpUnsentDeviceModal order={selectedRow} />
         </div>
       </CenterModal>
     </>

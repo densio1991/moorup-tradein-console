@@ -472,6 +472,7 @@ export const updateSendinDeadline =
         toast.success('Send-in Deadline extended!');
       })
       .catch((error) => {
+        getOrderById(orderId)(dispatch);
         dispatch({
           type: types.UPDATE_ORDER_SENDIN_DEADLINE.FAILED,
           payload: error,
@@ -514,6 +515,13 @@ export const setToggleModal = (payload: any) => (dispatch: any) => {
 export const setActiveOrderItem = (payload: any) => (dispatch: any) => {
   dispatch({
     type: types.SET_ACTIVE_ORDER_ITEM,
+    payload,
+  });
+};
+
+export const setActiveOrder = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.SET_ACTIVE_ORDER,
     payload,
   });
 };
