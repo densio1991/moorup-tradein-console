@@ -24,9 +24,10 @@ type Props = {
 export function FollowUpUnsentDeviceModal({ order }: Props) {
   const {
     state,
-    patchOrderItemById,
+    cancelOrderById,
     extendSendinDeadline,
     logCustomerNonContact,
+    patchOrderItemById,
   } = useOrder();
   const [modalData, setModalData] = useState<any>({});
   const [selectedRow, setSelectedRow] = useState<any>({});
@@ -106,7 +107,6 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
           orderItemId: selectedRow._id,
         },
       ];
-      console.log('EXTEND ONE: ', payload, selectedRow);
       extendSendinDeadline(order?._id, payload);
     } else {
       const payload = filteredOrderItems.map((orderItem: any) => {
@@ -115,7 +115,6 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
           orderItemId: orderItem._id,
         };
       });
-      console.log('EXTEND ALL: ', payload);
       extendSendinDeadline(order?._id, payload);
     }
   };
@@ -125,17 +124,15 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
       modalData.view === ConfirmationModalTypes.CANCEL_ORDER_ITEM &&
       !isEmpty(selectedRow)
     ) {
-      console.log('CANCEL ONE: ', selectedRow);
       patchOrderItemById(selectedRow?._id, {
         status: OrderItemStatus.CANCELLED,
       });
     } else if (
       modalData.view === ConfirmationModalTypes.CANCEL_ORDER_NON_CONTACTABLE
     ) {
-      logCustomerNonContact(order?.id, {});
-      console.log('CANCEL ALL - Non Contactable');
+      cancelOrderById(order?._id);
     } else {
-      console.log('CANCEL ALL');
+      cancelOrderById(order?._id);
     }
   };
 

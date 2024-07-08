@@ -462,7 +462,7 @@ export const updateSendinDeadline =
     });
 
     axiosInstance()
-      .patch(`/api/order/items/${orderId}/extend`, payload)
+      .patch('/api/orders/items/sendin-deadline', payload)
       .then((response) => {
         dispatch({
           type: types.UPDATE_ORDER_SENDIN_DEADLINE.SUCCESS,
@@ -472,7 +472,6 @@ export const updateSendinDeadline =
         toast.success('Send-in Deadline extended!');
       })
       .catch((error) => {
-        getOrderById(orderId)(dispatch);
         dispatch({
           type: types.UPDATE_ORDER_SENDIN_DEADLINE.FAILED,
           payload: error,
@@ -488,7 +487,7 @@ export const logCustomerNonContact =
     });
 
     axiosInstance()
-      .patch(`/api/order/${orderId}/non-contact`, payload)
+      .post(`/api/orders/${orderId}/non-contact`, payload)
       .then((response) => {
         dispatch({
           type: types.LOG_CUSTOMER_NONCONTACT.SUCCESS,
