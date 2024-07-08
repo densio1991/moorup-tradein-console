@@ -729,3 +729,57 @@ export const clearOrder = (payload: any) => (dispatch: any) => {
     payload,
   });
 };
+
+export const addOrderNote = (orderId: string, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.ADD_ORDER_NOTE.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .post('/api/orders/notes', payload)
+      .then((response) => {
+        dispatch({
+          type: types.ADD_ORDER_NOTE.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderById(orderId)(dispatch);
+        toast.success('Note added successfully!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.ADD_ORDER_NOTE.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to add note.');
+      });
+  };
+
+  export const upsertZendeskLink = (orderId: string, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.UPSERT_ZENDESK_LINK.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .patch(`/api/orders/${orderId}/insert-zendesk-link`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.UPSERT_ZENDESK_LINK.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderById(orderId)(dispatch);
+        toast.success('Successfully saved zendesk link!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.UPSERT_ZENDESK_LINK.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to save zendesk link.');
+      });
+  };
