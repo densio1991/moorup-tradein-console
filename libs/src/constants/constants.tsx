@@ -887,6 +887,54 @@ export const TEMPLATE_APPROVALS_COLUMNS = [
   },
 ];
 
+export const ORDER_LOGS_COLUMNS = [
+  {
+    label: 'Timestamp',
+    order: 2,
+    enableSort: true,
+    keyName: 'timestamp',
+  },
+  {
+    label: 'Description',
+    order: 3,
+    enableSort: true,
+    keyName: 'description',
+  },
+  {
+    label: 'Initiator',
+    order: 4,
+    enableSort: true,
+    keyName: 'triggered_by',
+  },
+  {
+    label: 'Status',
+    order: 5,
+    enableSort: true,
+    keyName: 'status',
+  }
+];
+
+export const ORDER_NOTES_COLUMNS = [
+  {
+    label: 'Timestamp',
+    order: 2,
+    enableSort: true,
+    keyName: 'createdAt',
+  },
+  {
+    label: 'Note',
+    order: 3,
+    enableSort: true,
+    keyName: 'note',
+  },
+  {
+    label: 'Author',
+    order: 4,
+    enableSort: true,
+    keyName: 'createdBy.first_name',
+  }
+];
+
 export const ACTIONS_COLUMN = [
   {
     label: 'Actions',

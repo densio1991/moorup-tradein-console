@@ -133,3 +133,8 @@ export enum TemplateTypes {
   EMAIL = 'email',
   SMS = 'sms',
 }
+
+export enum LogTypes {
+  SYSTEM = 'system',
+  USER = 'user',
+}
