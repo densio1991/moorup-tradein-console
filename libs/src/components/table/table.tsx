@@ -329,7 +329,10 @@ export function Table({
     setCurrentPage(pageNumber);
     setSelectedIndex(new Set([]));
     setIsAllSelected(false);
-    onChangeSelection([]);
+    
+    if (onChangeSelection) {
+      onChangeSelection([])
+    }
   }
 
   const filteredRows = searchTerm

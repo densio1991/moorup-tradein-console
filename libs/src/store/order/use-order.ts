@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext } from 'react';
+import { toast } from 'react-toastify';
 import { OrderItemStatus } from '../../constants';
 import { RootContext } from '../provider';
 import * as actions from './actions';
-import { toast } from 'react-toastify';
 
 export const useOrder = () => {
   const { state, dispatch } = useContext(RootContext);
@@ -146,6 +146,14 @@ export const useOrder = () => {
     actions.clearOrder({})(dispatch);
   }
 
+  const addOrderNote = (orderId: string, payload: any) => {
+    actions.addOrderNote(orderId, payload)(dispatch);
+  }
+
+  const upsertZendeskLink = (orderId: string, payload: any) => {
+    actions.upsertZendeskLink(orderId, payload)(dispatch);
+  }
+
   return {
     state: state.order,
     getOrderItems,
@@ -178,5 +186,7 @@ export const useOrder = () => {
     clearOrder,
     fetchOrderPayments,
     fetchOrderPaymentById,
+    addOrderNote,
+    upsertZendeskLink,
   };
 };

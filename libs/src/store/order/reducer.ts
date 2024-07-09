@@ -28,7 +28,9 @@ const orderState = {
   isUpdatingGiftCard: false,
   isModalOpen: false,
   paymentsItem: [],
-  isFetchingPayments: false
+  isFetchingPayments: false,
+  isAddingOrderNote: false,
+  isSavingZendeskLink: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -481,6 +483,47 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.ADD_ORDER_NOTE.baseType: {
+      return {
+        ...state,
+        isAddingOrderNote: true,
+        isFetchingOrder: true,
+        order: {},
+      };
+    }
+    case types.ADD_ORDER_NOTE.SUCCESS: {
+      return {
+        ...state,
+        isAddingOrderNote: false,
+      };
+    }
+    case types.ADD_ORDER_NOTE.FAILED: {
+      return {
+        ...state,
+        isAddingOrderNote: false,
+      };
+    }
+
+    case types.UPSERT_ZENDESK_LINK.baseType: {
+      return {
+        ...state,
+        isSavingZendeskLink: true,
+        isFetchingOrder: true,
+        order: {},
+      };
+    }
+    case types.UPSERT_ZENDESK_LINK.SUCCESS: {
+      return {
+        ...state,
+        isSavingZendeskLink: false,
+      };
+    }
+    case types.UPSERT_ZENDESK_LINK.FAILED: {
+      return {
+        ...state,
+        isSavingZendeskLink: false,
+      };
+    }
 
     default:
       return state;
