@@ -773,6 +773,39 @@ export const getOrderPaymentById =
       });
   };
 
+export const downloadOrderPaymentFile =
+  (payload: any, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.DOWNLOAD_ORDER_PAYMENT_FILE.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .get('/api/orders/download-flat-file', { 
+        signal: signal,
+        params: payload,
+      })
+      .then((response) => {
+        dispatch({
+          type: types.DOWNLOAD_ORDER_PAYMENT_FILE.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.DOWNLOAD_ORDER_PAYMENT_FILE.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.DOWNLOAD_ORDER_PAYMENT_FILE.FAILED,
+            payload: error,
+          });
+        }
+      });
+  };
+
 export const clearOrderPaymentItems = (payload: any) => (dispatch: any) => {
   dispatch({
     type: types.CLEAR_ORDER_PAYMENT_ITEMS,
