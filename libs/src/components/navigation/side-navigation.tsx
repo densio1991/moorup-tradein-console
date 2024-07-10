@@ -192,6 +192,9 @@ export function SideBar(): JSX.Element {
                         case 'Actionables':
                           return hasViewActionablesPermission;
 
+                        case 'Unsent Devices':
+                          return hasViewActionablesPermission;
+
                         case 'Promotions':
                           return hasViewPromotionsPermission;
 

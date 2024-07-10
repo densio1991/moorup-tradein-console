@@ -22,6 +22,7 @@ import {
   UploadProductErrorPage,
   UploadProductPricingErrorPage,
   UserManagementPage,
+  FollowUpUnsentDevicePage,
 } from './pages';
 
 export function App() {
@@ -61,12 +62,12 @@ export function App() {
             path="/dashboard/order/discrepancy"
             element={<DiscrepancyPage />}
           />
-          <Route
-            path="/dashboard/order/actionables"
-            element={<ActionablesPage />}
-          />
           <Route path="/dashboard/order/payments" element={<PaymentPage />} />
 
+          <Route
+            path="/dashboard/order/actionables/follow-up/unsent-devices"
+            element={<FollowUpUnsentDevicePage />}
+          />
           <Route path="/dashboard/user" element={<UserManagementPage />} />
           <Route
             path="/dashboard/promotion/list"

@@ -40,6 +40,14 @@ export const useOrder = () => {
     actions.updateOrderItemById(id, orderId, payload)(dispatch);
   }
 
+  const extendSendinDeadline = (id: any, payload: any) => {
+    actions.updateSendinDeadline(id, payload)(dispatch);
+  }
+
+  const logCustomerNonContact = (id: any, payload: any) => {
+    actions.logCustomerNonContact(id, payload)(dispatch);
+  }
+
   const cancelOrderItemById = (id: any) => {
     const orderId = state.order?.order?._id;
     const payload = { status: OrderItemStatus.CANCELLED }
@@ -96,6 +104,10 @@ export const useOrder = () => {
 
   const setActiveOrderItem = (orderItem: any) => {
     actions.setActiveOrderItem(orderItem)(dispatch);
+  }
+
+  const setActiveOrder = (order: any) => {
+    actions.setActiveOrder(order)(dispatch);
   }
 
   const clearOrders = () => {
@@ -179,6 +191,7 @@ export const useOrder = () => {
     openModal,
     closeModal,
     setActiveOrderItem,
+    setActiveOrder,
     clearOrders,
     sendBox,
     printLabels,
@@ -192,6 +205,8 @@ export const useOrder = () => {
     fetchOrderPaymentById,
     addOrderNote,
     upsertZendeskLink,
+    logCustomerNonContact,
+    extendSendinDeadline,
     downloadOrderPaymentFile,
   };
 };

@@ -312,6 +312,44 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.UPDATE_ORDER_SENDIN_DEADLINE.baseType: {
+      return {
+        ...state,
+        isUpdatingSendinDeadline: true,
+      };
+    }
+    case types.UPDATE_ORDER_SENDIN_DEADLINE.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingSendinDeadline: false,
+      };
+    }
+    case types.UPDATE_ORDER_SENDIN_DEADLINE.FAILED: {
+      return {
+        ...state,
+        isUpdatingSendinDeadline: false,
+      };
+    }
+
+    case types.LOG_CUSTOMER_NONCONTACT.baseType: {
+      return {
+        ...state,
+        isUpdatingContactLogs: true,
+      };
+    }
+    case types.LOG_CUSTOMER_NONCONTACT.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingContactLogs: false,
+      };
+    }
+    case types.LOG_CUSTOMER_NONCONTACT.FAILED: {
+      return {
+        ...state,
+        isUpdatingContactLogs: false,
+      };
+    }
+
     case types.CANCEL_GIFT_CARD.baseType: {
       return {
         ...state,
@@ -350,6 +388,13 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         activeOrderItem: action.payload,
+      };
+    }
+
+    case types.SET_ACTIVE_ORDER: {
+      return {
+        ...state,
+        order: action.payload,
       };
     }
 

@@ -1,4 +1,5 @@
 export { ActionablesPage } from './actionables';
+export { FollowUpUnsentDevicePage } from './actionables/followup-unsent-device';
 export { ConfigurationsPage } from './configurations';
 export { DashboardPage } from './dashboard';
 export { DiscrepancyPage } from './discrepancy';
