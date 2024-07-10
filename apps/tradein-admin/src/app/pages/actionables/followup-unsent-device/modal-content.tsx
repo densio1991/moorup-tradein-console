@@ -11,6 +11,7 @@ import {
   Table,
   UNSENT_DEVICES_TABLE_COLUMNS,
   unsentDevicesTableParsingConfig,
+  useAuth,
   useOrder,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
@@ -24,11 +25,13 @@ type Props = {
 export function FollowUpUnsentDeviceModal({ order }: Props) {
   const {
     state,
-    cancelOrderById,
     extendSendinDeadline,
     logCustomerNonContact,
     patchOrderItemById,
+    bulkCancelOrderItems,
   } = useOrder();
+  const { state: authState } = useAuth();
+  const { userDetails } = authState;
   const [modalData, setModalData] = useState<any>({});
   const [selectedRow, setSelectedRow] = useState<any>({});
   const [newDeadline, setNewDeadline] = useState<any>();
@@ -119,6 +122,19 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
     }
   };
 
+  const generateBulkCancelPayload = (orderItems: any[], remarks: any) => {
+    const payload: any[] = [];
+
+    orderItems?.forEach((orderItem: any) => {
+      payload.push({
+        remarks: remarks,
+        orderItemId: orderItem?._id,
+      });
+    });
+
+    return payload;
+  };
+
   const handleCancelDevice = () => {
     if (
       modalData.view === ConfirmationModalTypes.CANCEL_ORDER_ITEM &&
@@ -130,9 +146,17 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
     } else if (
       modalData.view === ConfirmationModalTypes.CANCEL_ORDER_NON_CONTACTABLE
     ) {
-      cancelOrderById(order?._id);
+      const payload = generateBulkCancelPayload(
+        order?.order_items,
+        'Customer Not Contactable',
+      );
+      bulkCancelOrderItems(payload);
     } else {
-      cancelOrderById(order?._id);
+      const payload = generateBulkCancelPayload(
+        order?.order_items,
+        'Cancel all devices',
+      );
+      bulkCancelOrderItems(payload);
     }
   };
 
@@ -174,43 +198,6 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
                   handleExtendSendinDeadline();
                   onCloseModal();
                 }}
-              >
-                Confirm
-              </AppButton>
-            </FormGroup>
-          </div>
-        );
-        return (
-          <div className="w-full">
-            <FormGroup>
-              <StyledDatePicker
-                dateInput={{
-                  onChange: handleDateChange,
-                  placeholder: 'Set Date',
-                  value: newDeadline,
-                  name: 'send_in_deadline',
-                  onBlur: () => {},
-                  error: !newDeadline,
-                  errorMessage: 'This is required',
-                }}
-                label="Set Device Send In Deadline Date"
-                onChange={() => {}}
-              />
-            </FormGroup>
-            <FormGroup>
-              <AppButton
-                variant="outlined"
-                width="100%"
-                onClick={() => onCloseModal()}
-              >
-                Cancel
-              </AppButton>
-              <AppButton
-                width="100%"
-                onClick={() => {
-                  onCloseModal();
-                }}
-                disabled={!newDeadline}
               >
                 Confirm
               </AppButton>
@@ -286,7 +273,11 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
               type="button"
               variant="fill"
               width="fit-content"
-              onClick={() => logCustomerNonContact(order?.id, {})}
+              onClick={() =>
+                logCustomerNonContact(order?._id, {
+                  user_id: userDetails?._id,
+                })
+              }
               disabled={isUpdatingContactLogs}
             >
               No Customer Contact

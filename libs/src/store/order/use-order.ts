@@ -54,6 +54,11 @@ export const useOrder = () => {
     actions.cancelOrderItemById(id, orderId, payload)(dispatch);
   }
 
+  const bulkCancelOrderItems = (payload: any) => {
+    const orderId = state.order?.order?._id;
+    actions.bulkCancelOrderItems(orderId, payload)(dispatch);
+  }
+
   const removeOrderById = (payload: any) => {
     actions.deleteOrderById(payload, activePlatform)(dispatch);
   }
@@ -208,5 +213,6 @@ export const useOrder = () => {
     logCustomerNonContact,
     extendSendinDeadline,
     downloadOrderPaymentFile,
+    bulkCancelOrderItems,
   };
 };
