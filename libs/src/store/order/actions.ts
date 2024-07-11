@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from 'react-toastify';
-import { CANCELLED_AXIOS } from '../../constants';
+import { BAD_REQUEST, CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
@@ -825,11 +825,20 @@ export const downloadOrderPaymentFile =
             type: types.DOWNLOAD_ORDER_PAYMENT_FILE.CANCELLED,
             payload: error,
           });
+        } else if (error.code === BAD_REQUEST) {
+          dispatch({
+            type: types.DOWNLOAD_ORDER_PAYMENT_FILE.FAILED,
+            payload: error,
+          });
+
+          toast.error('No data available for the selected date; no file generated for export. Please choose another date.');
         } else {
           dispatch({
             type: types.DOWNLOAD_ORDER_PAYMENT_FILE.FAILED,
             payload: error,
           });
+
+          toast.error('Failed to download file.');
         }
       });
   };
