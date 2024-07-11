@@ -13,6 +13,7 @@ import {
   faGears,
   faHouse,
   faList,
+  faMoneyBill,
   faPenToSquare,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
@@ -89,10 +90,24 @@ export const SIDENAV_ITEMS = [
         icon: faPenToSquare,
         disabled: false,
       },
+      // {
+      //   title: 'Actionables',
+      //   url: '/dashboard/order/actionables',
+      //   activeUrl: /^\/dashboard\/order\/actionables/,
+      //   icon: faFileCircleExclamation,
+      //   disabled: false,
+      // },
       {
-        title: 'Actionables',
-        url: '/dashboard/order/actionables',
-        activeUrl: /^\/dashboard\/order\/actionables/,
+        title: 'Payments',
+        url: '/dashboard/order/payments',
+        activeUrl: /^\/dashboard\/order\/payments/,
+        icon: faMoneyBill,
+        disabled: false
+      },
+      {
+        title: 'Unsent Devices',
+        url: '/dashboard/order/actionables/follow-up/unsent-devices',
+        activeUrl: /^\/dashboard\/order\/actionables\/follow-up\/unsent-devices/,
         icon: faFileCircleExclamation,
         disabled: false,
       },
@@ -1653,6 +1668,7 @@ export const ORDER_MANAGEMENT_ITEMS = [
   { value: PermissionCodes.VIEW_DISCREPANCIES, label: 'View Discrepancies' },
   { value: PermissionCodes.VIEW_ACTIONABLES, label: 'View Actionables' },
   { value: PermissionCodes.PRINT_LABEL, label: 'Print Label' },
+  { value: PermissionCodes.VIEW_PAYMENTS, label: 'View Payments' },
 ];
 
 export const USER_MANAGEMENT_ITEMS = [

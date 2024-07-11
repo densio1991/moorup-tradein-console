@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useContext } from 'react';
+import { toast } from 'react-toastify';
 import { OrderItemStatus } from '../../constants';
 import { RootContext } from '../provider';
 import * as actions from './actions';
-import { toast } from 'react-toastify';
 
 export const useOrder = () => {
   const { state, dispatch } = useContext(RootContext);
@@ -40,10 +40,23 @@ export const useOrder = () => {
     actions.updateOrderItemById(id, orderId, payload)(dispatch);
   }
 
+  const extendSendinDeadline = (id: any, payload: any) => {
+    actions.updateSendinDeadline(id, payload)(dispatch);
+  }
+
+  const logCustomerNonContact = (id: any, payload: any) => {
+    actions.logCustomerNonContact(id, payload)(dispatch);
+  }
+
   const cancelOrderItemById = (id: any) => {
     const orderId = state.order?.order?._id;
     const payload = { status: OrderItemStatus.CANCELLED }
     actions.cancelOrderItemById(id, orderId, payload)(dispatch);
+  }
+
+  const bulkCancelOrderItems = (payload: any) => {
+    const orderId = state.order?.order?._id;
+    actions.bulkCancelOrderItems(orderId, payload)(dispatch);
   }
 
   const removeOrderById = (payload: any) => {
@@ -98,6 +111,10 @@ export const useOrder = () => {
     actions.setActiveOrderItem(orderItem)(dispatch);
   }
 
+  const setActiveOrder = (order: any) => {
+    actions.setActiveOrder(order)(dispatch);
+  }
+
   const clearOrders = () => {
     actions.clearOrders({})(dispatch);
   }
@@ -134,8 +151,28 @@ export const useOrder = () => {
     actions.cancelGiftCard(id, payload, signal)(dispatch);
   };
 
+  const fetchOrderPayments = (signal: AbortSignal) => {
+    actions.getAllOrderPayments(activePlatform, signal)(dispatch);
+  };
+
+  const fetchOrderPaymentById = (id: any, signal: AbortSignal) => {
+    actions.getOrderById(id, signal)(dispatch);
+  };
+
+  const downloadOrderPaymentFile = (id: any, signal?: AbortSignal) => {
+    actions.downloadOrderPaymentFile(id, signal)(dispatch);
+  };
+
   const clearOrder = () => {
     actions.clearOrder({})(dispatch);
+  }
+
+  const addOrderNote = (orderId: string, payload: any) => {
+    actions.addOrderNote(orderId, payload)(dispatch);
+  }
+
+  const upsertZendeskLink = (orderId: string, payload: any) => {
+    actions.upsertZendeskLink(orderId, payload)(dispatch);
   }
 
   return {
@@ -159,6 +196,7 @@ export const useOrder = () => {
     openModal,
     closeModal,
     setActiveOrderItem,
+    setActiveOrder,
     clearOrders,
     sendBox,
     printLabels,
@@ -168,5 +206,13 @@ export const useOrder = () => {
     updateOrderItemsStatus,
     cancelGiftCard,
     clearOrder,
+    fetchOrderPayments,
+    fetchOrderPaymentById,
+    addOrderNote,
+    upsertZendeskLink,
+    logCustomerNonContact,
+    extendSendinDeadline,
+    downloadOrderPaymentFile,
+    bulkCancelOrderItems,
   };
 };

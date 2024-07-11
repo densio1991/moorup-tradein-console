@@ -6,7 +6,23 @@ import utc from 'dayjs/plugin/utc';
 import { jwtDecode } from 'jwt-decode';
 import { capitalize, isEmpty } from 'lodash';
 import { Chip, StyledIcon } from '../components';
-import { CURRENCY_SYMBOLS, ClaimStatus, CreditTypes, DefaultStatus, OrderPaymentStatus, OrderStatus, OrderTypes, ProductTypes, ProductUploadLogsStatus, ProductUploadLogsTypes, Promotion, PromotionStatus, TIMEZONE } from '../constants';
+import {
+  CURRENCY_SYMBOLS,
+  ClaimStatus,
+  CreditTypes,
+  DefaultStatus,
+  LogTypes,
+  OrderPaymentStatus,
+  OrderStatus,
+  OrderTypes,
+  ProductTypes,
+  ProductUploadLogsStatus,
+  ProductUploadLogsTypes,
+  Promotion,
+  PromotionStatus,
+  TIMEZONE,
+} from '../constants';
+import { formatToReadable } from './form';
 import { defaultTheme } from './theme';
 
 dayjs.extend(utc)
@@ -525,6 +541,7 @@ export const parseStatus = (value: string) => {
     default:
       textColor = defaultTheme.default.text;
       bgColor = defaultTheme.default.background;
+      text = capitalizeFirstLetters(formatToReadable(text))
       break;
   }
 
@@ -594,6 +611,16 @@ export const parseTypes = (type: string, disableFormatting?: boolean) => {
       color = defaultTheme.warning.text;
       text = 'Pricing';
       break;
+
+    case LogTypes.SYSTEM:
+      color = defaultTheme.default.text;
+      text = 'System';
+      break;
+
+    case LogTypes.USER:
+      color = defaultTheme.default.text;
+      text = 'User';
+      break;
   
     default:
       break;
@@ -643,3 +670,8 @@ export const parsePromotionStatus = (promotion: Promotion) => {
 export const isNullOrEmpty = (value: any): boolean => {
   return value === null || value === '';
 };
+
+export const openInNewTab = (url: string): void => {
+  const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+  if (newWindow) newWindow.opener = null
+}

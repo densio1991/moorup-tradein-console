@@ -1,4 +1,5 @@
 export { ActionablesPage } from './actionables';
+export { FollowUpUnsentDevicePage } from './actionables/followup-unsent-device';
 export { ConfigurationsPage } from './configurations';
 export { DashboardPage } from './dashboard';
 export { DiscrepancyPage } from './discrepancy';
@@ -18,4 +19,4 @@ export { TemplateApprovalByIdPage } from './template-approvals/template-approval
 export { EmailTemplatesPage } from './templates-email';
 export { SmsTemplatesPage } from './templates-sms';
 export { UserManagementPage } from './user-management';
-
+export { PaymentPage } from './payments';

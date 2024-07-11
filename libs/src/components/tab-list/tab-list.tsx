@@ -8,7 +8,7 @@ const TabListContainer = styled.div`
 `;
 
 const Tab = styled.div<{ active: boolean }>`
-  padding: 10px;
+  padding: 10px 20px;
   cursor: pointer;
   background-color: ${({ active }) => (active ? 'white' : 'transparent')};
   border-radius: 4px;

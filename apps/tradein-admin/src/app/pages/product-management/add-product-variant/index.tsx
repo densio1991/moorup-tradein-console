@@ -32,6 +32,7 @@ import { useFormik } from 'formik';
 import { isEmpty } from 'lodash';
 import { useState } from 'react';
 import styled from 'styled-components';
+import * as Yup from 'yup';
 
 const AccordionContainer = styled.div`
   display: flex;
@@ -96,6 +97,17 @@ const VariantItemsContainer = styled.div`
   margin-bottom: 10px;
 `;
 
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required('Name is required.'),
+  sku: Yup.string().required('SKU is required'),
+  image_url: Yup.string()
+    .required('Image URL is required.')
+    .url('Enter a valid URL'),
+  site_url: Yup.string()
+    .required('Site URL is required.')
+    .url('Enter a valid URL'),
+});
+
 export function AddProductVariantForm() {
   const {
     state: productState,
@@ -134,6 +146,7 @@ export function AddProductVariantForm() {
 
   const formik = useFormik({
     initialValues: [PRODUCT_VARIANT_PAYLOAD],
+    validationSchema,
     onSubmit,
   });
 

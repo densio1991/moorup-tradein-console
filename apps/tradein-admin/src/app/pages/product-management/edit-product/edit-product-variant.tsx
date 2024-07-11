@@ -57,8 +57,12 @@ const VariantItemsContainer = styled.div`
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('Name is required.'),
   sku: Yup.string().required('SKU is required'),
-  image_url: Yup.string().required('Image URL is required.'),
-  site_url: Yup.string().required('Site URL is required.'),
+  image_url: Yup.string()
+    .required('Image URL is required.')
+    .url('Enter a valid URL'),
+  site_url: Yup.string()
+    .required('Site URL is required.')
+    .url('Enter a valid URL'),
 });
 
 export function EditProductVariant({ productData }: { productData: any }) {

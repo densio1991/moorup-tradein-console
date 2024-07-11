@@ -27,6 +27,11 @@ const orderState = {
   isFetchingGiftCard: false,
   isUpdatingGiftCard: false,
   isModalOpen: false,
+  paymentsItem: [],
+  isFetchingPayments: false,
+  isAddingOrderNote: false,
+  isSavingZendeskLink: false,
+  isDownloadingPaymentFile: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -258,8 +263,8 @@ const orderReducer = (state = orderState, action: any) => {
         isUpdatingOrderItem: false,
       };
     }
-    case types.UPDATE_SHIPPING_STATUS_BY_ID.FAILED: 
-    case types.CANCEL_ORDER_ITEM_BY_ID.FAILED: 
+    case types.UPDATE_SHIPPING_STATUS_BY_ID.FAILED:
+    case types.CANCEL_ORDER_ITEM_BY_ID.FAILED:
     case types.RECEIVE_ORDER_ITEM_BY_ID.FAILED: {
       return {
         ...state,
@@ -307,6 +312,44 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.UPDATE_ORDER_SENDIN_DEADLINE.baseType: {
+      return {
+        ...state,
+        isUpdatingSendinDeadline: true,
+      };
+    }
+    case types.UPDATE_ORDER_SENDIN_DEADLINE.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingSendinDeadline: false,
+      };
+    }
+    case types.UPDATE_ORDER_SENDIN_DEADLINE.FAILED: {
+      return {
+        ...state,
+        isUpdatingSendinDeadline: false,
+      };
+    }
+
+    case types.LOG_CUSTOMER_NONCONTACT.baseType: {
+      return {
+        ...state,
+        isUpdatingContactLogs: true,
+      };
+    }
+    case types.LOG_CUSTOMER_NONCONTACT.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingContactLogs: false,
+      };
+    }
+    case types.LOG_CUSTOMER_NONCONTACT.FAILED: {
+      return {
+        ...state,
+        isUpdatingContactLogs: false,
+      };
+    }
+
     case types.CANCEL_GIFT_CARD.baseType: {
       return {
         ...state,
@@ -345,6 +388,13 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         activeOrderItem: action.payload,
+      };
+    }
+
+    case types.SET_ACTIVE_ORDER: {
+      return {
+        ...state,
+        order: action.payload,
       };
     }
 
@@ -404,12 +454,139 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.DOWNLOAD_ORDER_PAYMENT_FILE.baseType: {
+      return {
+        ...state,
+        isDownloadingPaymentFile: true,
+      };
+    }
+    case types.DOWNLOAD_ORDER_PAYMENT_FILE.SUCCESS: {
+      return {
+        ...state,
+        isDownloadingPaymentFile: false,
+      };
+    }
+    case types.DOWNLOAD_ORDER_PAYMENT_FILE.FAILED: {
+      return {
+        ...state,
+        isDownloadingPaymentFile: false,
+      };
+    }
+
     case types.CLEAR_ORDER: {
       return {
         ...state,
         isFetchingOrder: true,
         order: {},
         giftCard: {},
+      };
+    }
+
+    case types.FETCH_ORDER_PAYMENTS.baseType: {
+      return {
+        ...state,
+        isFetchingPayments: true,
+        paymentsItem: [],
+      };
+    }
+    case types.FETCH_ORDER_PAYMENTS.SUCCESS: {
+      return {
+        ...state,
+        isFetchingPayments: false,
+        paymentsItem: action.payload?.data,
+      };
+    }
+    case types.FETCH_ORDER_PAYMENTS.FAILED: {
+      return {
+        ...state,
+        isFetchingPayments: false,
+        paymentsItem: [],
+      };
+    }
+    case types.FETCH_ORDER_PAYMENTS.CANCELLED: {
+      return {
+        ...state,
+        isFetchingPayments: true,
+        paymentsItem: [],
+      };
+    }
+
+    case types.FETCH_ORDER_PAYMENT_BY_ID.baseType: {
+      return {
+        ...state,
+        isFetchingPayments: true,
+        paymentsItem: {},
+      };
+    }
+    case types.FETCH_ORDER_PAYMENT_BY_ID.SUCCESS: {
+      return {
+        ...state,
+        isFetchingPayments: false,
+        paymentsItem: action.payload?.data,
+      };
+    }
+    case types.FETCH_ORDER_PAYMENT_BY_ID.FAILED: {
+      return {
+        ...state,
+        isFetchingPayments: false,
+        paymentsItem: {},
+      };
+    }
+    case types.FETCH_ORDER_PAYMENT_BY_ID.CANCELLED: {
+      return {
+        ...state,
+        isFetchingPayments: true,
+        paymentsItem: {},
+      };
+    }
+
+    case types.CLEAR_ORDER_PAYMENT_ITEMS: {
+      return {
+        ...state,
+        isFetchingPayments: true,
+        paymentsItem: [],
+      };
+    }
+
+    case types.ADD_ORDER_NOTE.baseType: {
+      return {
+        ...state,
+        isAddingOrderNote: true,
+        isFetchingOrder: true,
+        order: {},
+      };
+    }
+    case types.ADD_ORDER_NOTE.SUCCESS: {
+      return {
+        ...state,
+        isAddingOrderNote: false,
+      };
+    }
+    case types.ADD_ORDER_NOTE.FAILED: {
+      return {
+        ...state,
+        isAddingOrderNote: false,
+      };
+    }
+
+    case types.UPSERT_ZENDESK_LINK.baseType: {
+      return {
+        ...state,
+        isSavingZendeskLink: true,
+        isFetchingOrder: true,
+        order: {},
+      };
+    }
+    case types.UPSERT_ZENDESK_LINK.SUCCESS: {
+      return {
+        ...state,
+        isSavingZendeskLink: false,
+      };
+    }
+    case types.UPSERT_ZENDESK_LINK.FAILED: {
+      return {
+        ...state,
+        isSavingZendeskLink: false,
       };
     }
 

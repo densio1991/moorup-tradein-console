@@ -38,6 +38,7 @@ export function usePermission() {
   const hasProcessPromotionClaimPaymentPermission = permissions.includes(PermissionCodes.PROCESS_PROMOTION_CLAIM_PAYMENT);
   const hasViewPlatformConfigsPermissions = permissions.includes(PermissionCodes.VIEW_PLATFORM_CONFIGS);
   const hasEditPlatformConfigsPermissions = permissions.includes(PermissionCodes.EDIT_PLATFORM_CONFIGS);
+  const hasViewPaymentsPermission = permissions.includes(PermissionCodes.VIEW_PAYMENTS);
 
   return {
     hasViewDashboardPermission,
@@ -72,5 +73,6 @@ export function usePermission() {
     hasProcessPromotionClaimPaymentPermission,
     hasViewPlatformConfigsPermissions,
     hasEditPlatformConfigsPermissions,
+    hasViewPaymentsPermission,
   };
 }

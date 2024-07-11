@@ -33,6 +33,7 @@ interface TableProps {
   menuItems?: any;
   rightControls?: any;
   parsingConfig?: { [key: string]: (value: any) => any };
+  onRowClick?: (value: any) => any;
   margin?: string;
   onChangeSelection?: any;
 }
@@ -278,7 +279,8 @@ export function Table({
   rightControls,
   parsingConfig = {},
   margin = '4px 20px',
-  onChangeSelection,
+  onChangeSelection = () => {},
+  onRowClick,
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{ key: string; direction: string }>({ key: '_id', direction: 'desc' });
   const [currentPage, setCurrentPage] = useState(1);
@@ -301,7 +303,9 @@ export function Table({
   };
 
   const handleRowClick = (row: any) => {
-    if (!isEmpty(row?.viewURL)) {
+    if (onRowClick) {
+      onRowClick(row);
+    } else if (!isEmpty(row?.viewURL)) {
       navigate(row?.viewURL);
     }
   };
@@ -329,7 +333,10 @@ export function Table({
     setCurrentPage(pageNumber);
     setSelectedIndex(new Set([]));
     setIsAllSelected(false);
-    onChangeSelection([]);
+    
+    if (onChangeSelection) {
+      onChangeSelection([])
+    }
   }
 
   const filteredRows = searchTerm
@@ -480,7 +487,7 @@ export function Table({
           </Thead>
           <Tbody>
             {itemsToDisplay?.map((row: any, index: any) => (
-              <Tr key={index} onClick={() => handleRowClick(row)} hover={!isEmpty(row?.viewURL)}>
+              <Tr key={index} onClick={() => handleRowClick(row)} hover={!!onRowClick || !isEmpty(row?.viewURL)}>
                 {enableCheckbox && (
                   <Td key="select-all">
                     <Checkbox
