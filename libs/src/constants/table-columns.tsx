@@ -795,7 +795,7 @@ export const ORDER_LOGS_COLUMNS = [
     keyName: 'description',
   },
   {
-    label: 'Initiator',
+    label: 'Initiated By',
     order: 4,
     enableSort: true,
     keyName: 'triggered_by',
