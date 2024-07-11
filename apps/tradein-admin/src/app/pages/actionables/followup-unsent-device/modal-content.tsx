@@ -55,7 +55,6 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
   };
 
   const handleDateChange = (fieldName: string, date: Date | null) => {
-    console.log(fieldName, date);
     setNewDeadline(
       moment(date)
         .utc()
