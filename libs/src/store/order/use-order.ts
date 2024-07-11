@@ -9,6 +9,7 @@ export const useOrder = () => {
   const { state, dispatch } = useContext(RootContext);
   const {
     activePlatform,
+    userDetails,
   } = state.auth;
 
   const getOrderItems = (payload: any, signal: AbortSignal) => {
@@ -175,6 +176,14 @@ export const useOrder = () => {
     actions.upsertZendeskLink(orderId, payload)(dispatch);
   }
 
+  const importPaymentsFlatFile = (payload: any) => {
+    actions.importPaymentsFlatFile(payload, userDetails._id, activePlatform)(dispatch);
+  }
+
+  const clearUploadPaymentErrors = () => {
+    actions.clearUploadPaymentErrors([])(dispatch);
+  }
+
   return {
     state: state.order,
     getOrderItems,
@@ -214,5 +223,7 @@ export const useOrder = () => {
     extendSendinDeadline,
     downloadOrderPaymentFile,
     bulkCancelOrderItems,
+    importPaymentsFlatFile,
+    clearUploadPaymentErrors,
   };
 };

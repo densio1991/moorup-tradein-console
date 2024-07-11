@@ -19,6 +19,7 @@ import {
   SmsTemplatesPage,
   TemplateApprovalByIdPage,
   TemplateApprovalPage,
+  UploadPaymentErrorPage,
   UploadProductErrorPage,
   UploadProductPricingErrorPage,
   UserManagementPage,
@@ -62,6 +63,10 @@ export function App() {
             element={<DiscrepancyPage />}
           />
           <Route path="/dashboard/order/payments" element={<PaymentPage />} />
+          <Route
+            path="/dashboard/order/payments-upload-details"
+            element={<UploadPaymentErrorPage />}
+          />
           <Route
             path="/dashboard/actionables/follow-up-device-not-sent"
             element={<FollowUpUnsentDevicePage />}
