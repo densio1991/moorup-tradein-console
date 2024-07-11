@@ -3,6 +3,7 @@ import {
   DetailCardContainer,
   OrderItems,
   OrderItemStatus,
+  useAuth,
   useOrder,
   usePermission,
 } from '@tradein-admin/libs';
@@ -26,9 +27,14 @@ const ValidationOffer = ({
   const { hasUpdateOrderItemStatusPermission, hasPrintLabelPermission } =
     usePermission();
   const { isGeneratingLabels } = state;
+  const { state: authState } = useAuth();
+  const { userDetails } = authState;
 
   const handlePrintLabel = (orderItemId: any) => {
-    printOutboundLabel({ item_id: orderItemId });
+    printOutboundLabel({
+      item_id: orderItemId,
+      admin_id: userDetails?._id,
+    });
   };
 
   const handleStatus = (item: OrderItems) => {

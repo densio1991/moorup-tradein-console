@@ -84,9 +84,9 @@ export const useOrder = () => {
     actions.resendOrderItemShipmentLabel(id)(dispatch);
   };
 
-  const receiveOrderItemById = (id: any) => {
+  const receiveOrderItemById = (id: any, payload: any) => {
     const orderId = state.order?.order?._id;
-    actions.receiveOrderItemById(id, orderId)(dispatch);
+    actions.receiveOrderItemById(id, orderId, payload)(dispatch);
   };
 
   const evaluateOrderItemById = (id: any, payload: any) => {
