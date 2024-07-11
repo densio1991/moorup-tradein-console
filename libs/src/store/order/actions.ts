@@ -479,6 +479,34 @@ export const updateSendinDeadline =
       });
   };
 
+export const bulkCancelOrderItems =
+  (orderId: any, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.BULK_CANCEL_ORDER_ITEMS.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .patch('/api/order/items/cancel-bulk', payload)
+      .then((response) => {
+        dispatch({
+          type: types.BULK_CANCEL_ORDER_ITEMS.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderById(orderId)(dispatch);
+        toast.success('Order items successfully cancelled!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.BULK_CANCEL_ORDER_ITEMS.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to update order item status.');
+      });
+  };
+
 export const logCustomerNonContact =
   (orderId: string, payload: any) => (dispatch: any) => {
     dispatch({
@@ -487,7 +515,7 @@ export const logCustomerNonContact =
     });
 
     axiosInstance()
-      .post(`/api/orders/${orderId}/non-contact`, payload)
+      .patch(`/api/orders/${orderId}/non-contact`, payload)
       .then((response) => {
         dispatch({
           type: types.LOG_CUSTOMER_NONCONTACT.SUCCESS,

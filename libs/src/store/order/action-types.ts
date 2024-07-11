@@ -30,6 +30,7 @@ export const UPSERT_ZENDESK_LINK = createActionTypes('UPSERT_ZENDESK_LINK');
 export const UPDATE_ORDER_SENDIN_DEADLINE = createActionTypes('UPDATE_ORDER_SENDIN_DEADLINE');
 export const LOG_CUSTOMER_NONCONTACT = createActionTypes('LOG_CUSTOMER_NONCONTACT');
 export const DOWNLOAD_ORDER_PAYMENT_FILE = createActionTypes('DOWNLOAD_ORDER_PAYMENT_FILE');
+export const BULK_CANCEL_ORDER_ITEMS = createActionTypes('BULK_CANCEL_ORDER_ITEMS');
 
 // Base action types
 export const SET_ORDERS = 'SET_ORDERS';
