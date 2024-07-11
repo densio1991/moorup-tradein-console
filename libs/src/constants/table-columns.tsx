@@ -762,22 +762,28 @@ export const ORDER_PAYMENTS_MANAGEMENT_COLUMNS = [
     keyName: 'customerEmailAddress',
   },
   {
-    label: 'Payment Amount',
+    label: 'Evaluated Date',
     order: 5,
+    enableSort: true,
+    keyName: 'updatedAt',
+  },
+  {
+    label: 'Payment Amount',
+    order: 6,
     enableSort: true,
     keyName: 'paymentAmount',
   },
   {
     label: 'Payment Type',
-    order: 6,
+    order: 7,
     enableSort: true,
-    keyName: 'payment_type',
+    keyName: 'paymentType',
   },
   {
     label: 'Payment Reference',
-    order: 7,
+    order: 8,
     enableSort: true,
-    keyName: 'payment_reference',
+    keyName: 'paymentReference',
   }
 ];
 

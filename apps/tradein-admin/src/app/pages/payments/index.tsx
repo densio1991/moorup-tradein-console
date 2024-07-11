@@ -10,6 +10,7 @@ import {
   IconButton,
   MODAL_TYPES,
   ORDER_PAYMENTS_MANAGEMENT_COLUMNS,
+  orderPaymentParsingConfig,
   PageSubHeader,
   SideModal,
   StyledDatePicker,
@@ -174,6 +175,7 @@ export const PaymentPage = () => {
         headers={headers}
         rows={paymentsItem || []}
         isLoading={isFetchingPayments}
+        parsingConfig={orderPaymentParsingConfig}
       />
       <SideModal
         isOpen={sideModalState?.open}
