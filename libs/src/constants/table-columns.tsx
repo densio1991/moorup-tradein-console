@@ -834,3 +834,54 @@ export const ORDER_NOTES_COLUMNS = [
     keyName: 'createdBy.first_name',
   }
 ];
+
+export const ORDER_PAYMENT_FLAT_FILE_DETAILS_COLUMNS = [
+  {
+    label: 'Errors',
+    order: 2,
+    enableSort: false,
+    keyName: 'errors',
+  },
+  {
+    label: 'Device ID',
+    order: 3,
+    enableSort: true,
+    keyName: 'payload.deviceId',
+  },
+  {
+    label: 'Customer Name',
+    order: 4,
+    enableSort: true,
+    keyName: 'payload.customerName',
+  },
+  {
+    label: 'Customer Email Address',
+    order: 5,
+    enableSort: true,
+    keyName: 'payload.customerEmailAddress',
+  },
+  {
+    label: 'Evaluated Date',
+    order: 6,
+    enableSort: true,
+    keyName: 'payload.updatedAt',
+  },
+  {
+    label: 'Payment Amount',
+    order: 7,
+    enableSort: true,
+    keyName: 'payload.paymentAmount',
+  },
+  {
+    label: 'Payment Type',
+    order: 8,
+    enableSort: true,
+    keyName: 'payload.paymentType',
+  },
+  {
+    label: 'Payment Reference',
+    order: 8,
+    enableSort: true,
+    keyName: 'payload.paymentReference',
+  },
+];

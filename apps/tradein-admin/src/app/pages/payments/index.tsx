@@ -5,6 +5,7 @@ import {
   AppButton,
   clearOrderPaymentItems,
   Divider,
+  DropdownButton,
   FormGroup,
   FormWrapper,
   IconButton,
@@ -15,6 +16,7 @@ import {
   SideModal,
   StyledDatePicker,
   Table,
+  UploadFileModal,
   useAuth,
   useCommon,
   useOrder,
@@ -22,18 +24,32 @@ import {
 import { isEmpty } from 'lodash';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const PaymentPage = () => {
+  const navigate = useNavigate();
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
-  const { state, fetchOrderPayments, downloadOrderPaymentFile } = useOrder();
-  const { paymentsItem, isFetchingPayments, isDownloadingPaymentFile } = state;
+  const {
+    state,
+    fetchOrderPayments,
+    downloadOrderPaymentFile,
+    importPaymentsFlatFile,
+  } = useOrder();
+  const {
+    paymentsItem,
+    isFetchingPayments,
+    isDownloadingPaymentFile,
+    isImportingPaymentsFlatFile,
+    importPaymentsFlatFileError,
+  } = state;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
   const [exportDate, setExportDate] = useState<any>();
   const [exportDateInputError, setExportDateInputError] = useState<boolean>();
   const [exportDateInputErrorMessage, setExportDateInputErrorMessage] =
     useState<string>();
+  const [isOpenUploadModal, setIsOpenUploadModal] = useState(false);
 
   const headers = [...ORDER_PAYMENTS_MANAGEMENT_COLUMNS];
 
@@ -67,18 +83,7 @@ export const PaymentPage = () => {
   };
 
   const handleDateChange = (_: string, date: Date | null) => {
-    setExportDate(
-      moment(date)
-        .utc()
-        .set({
-          hour: 0,
-          minute: 0,
-          second: 0,
-          millisecond: 0,
-        })
-        .toDate(),
-    );
-
+    setExportDate(date);
     setExportDateInputError(false);
     setExportDateInputErrorMessage('');
   };
@@ -130,7 +135,8 @@ export const PaymentPage = () => {
                   onClick={() => {
                     downloadOrderPaymentFile({
                       platform: activePlatform,
-                      'generation-date': moment().format('YYYY-MM-DD'),
+                      'generation-date':
+                        moment(exportDate).format('YYYY-MM-DD'),
                     });
 
                     onCloseModal();
@@ -148,10 +154,42 @@ export const PaymentPage = () => {
     }
   };
 
+  const renderAddProductAction = () => {
+    const importFlatFileItems = [
+      {
+        label: 'Import File',
+        onClick: () => setIsOpenUploadModal(true),
+      },
+    ];
+
+    return (
+      <DropdownButton
+        id="importFlatfile"
+        dropdownItems={importFlatFileItems}
+        disabled={isFetchingPayments}
+      >
+        Import
+      </DropdownButton>
+    );
+  };
+
+  useEffect(() => {
+    if (!isEmpty(importPaymentsFlatFileError)) {
+      navigate('/dashboard/order/payments-upload-details');
+    }
+
+    return () => {
+      // Clear data on unmount
+      clearOrderPaymentItems({});
+      setSearchTerm('');
+    };
+  }, [importPaymentsFlatFileError]);
+
   return (
     <>
       <PageSubHeader
         withSearch
+        leftControls={renderAddProductAction()}
         rightControls={
           <>
             <IconButton
@@ -174,7 +212,7 @@ export const PaymentPage = () => {
         label="Payments"
         headers={headers}
         rows={paymentsItem || []}
-        isLoading={isFetchingPayments}
+        isLoading={isFetchingPayments || isImportingPaymentsFlatFile}
         parsingConfig={orderPaymentParsingConfig}
       />
       <SideModal
@@ -185,6 +223,12 @@ export const PaymentPage = () => {
       >
         {renderSideModalContent()}
       </SideModal>
+      <UploadFileModal
+        isOpen={isOpenUploadModal}
+        closeModal={() => setIsOpenUploadModal(false)}
+        modalTitle="Select a file to import flat file"
+        onUploadFile={importPaymentsFlatFile}
+      />
     </>
   );
 };
