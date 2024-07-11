@@ -225,9 +225,13 @@ export const EditOrderPage = () => {
     } else if (newValue.status === OrderItemStatus.EVALUATED) {
       evaluateOrderItemById(orderItem.line_item_number, {
         platform: activePlatform,
+        admin_id: userDetails?._id,
       });
     } else {
-      patchOrderItemById(orderItem._id, { status: newValue.status });
+      patchOrderItemById(orderItem._id, {
+        status: newValue.status,
+        admin_id: userDetails?._id,
+      });
     }
     setSelectedItem({} as OrderItems);
   };

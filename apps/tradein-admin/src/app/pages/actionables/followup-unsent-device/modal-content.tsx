@@ -141,6 +141,7 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
     ) {
       patchOrderItemById(selectedRow?._id, {
         status: OrderItemStatus.CANCELLED,
+        admin_id: userDetails?._id,
       });
     } else if (
       modalData.view === ConfirmationModalTypes.CANCEL_ORDER_NON_CONTACTABLE

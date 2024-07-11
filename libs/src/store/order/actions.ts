@@ -310,15 +310,14 @@ export const deleteOrderById =
       });
   };
 
-export const receiveOrderItemById =
-  (orderItemId: any, orderId: any) => (dispatch: any) => {
+export const receiveOrderItemById = (orderItemId: any, orderId: any, payload: any) => (dispatch: any) => {
     dispatch({
       type: types.RECEIVE_ORDER_ITEM_BY_ID.baseType,
       orderItemId,
     });
 
     axiosInstance()
-      .patch(`/api/orders/receive/${orderItemId}`)
+      .patch(`/api/orders/receive/${orderItemId}`, payload)
       .then((response) => {
         dispatch({
           type: types.RECEIVE_ORDER_ITEM_BY_ID.SUCCESS,
