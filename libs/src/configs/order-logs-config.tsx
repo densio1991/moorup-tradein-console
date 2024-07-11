@@ -2,7 +2,8 @@
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
 import { isEmpty } from 'lodash';
 import { AppButton } from '../components';
-import { formatDate, parseStatus } from '../helpers';
+import { LogTypes } from '../constants';
+import { capitalizeFirstLetters, formatDate, formatToReadable, parseStatus } from '../helpers';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
@@ -11,21 +12,37 @@ interface ParsingFunctionParams {
 }
 
 export const orderLogsParsingConfig = {
-  'Initiator': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['triggered_by'])) return '--';
-    return row['triggered_by'];
+  'Initiated By': ({ row }: ParsingFunctionParams) => {
+    switch (row['type']) {
+      case LogTypes.SYSTEM: {
+        return capitalizeFirstLetters(LogTypes.SYSTEM);
+      }
+
+      case LogTypes.USER: {
+        if (!row || isEmpty(row['triggered_by'])) return '--';
+        return row['triggered_by'];
+      }
+    
+      default:
+        return '--';
+    }
   },
   'Description': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['description'])) return '--';
-    return row['description'];
+
+    if (!isEmpty(row['identifier'])) {
+      return `${capitalizeFirstLetters(formatToReadable(row['description']))}: ${row['identifier']}`
+    }
+
+    return capitalizeFirstLetters(formatToReadable(row['description']));
   },
   'Status': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['status'])) return '--';
     return parseStatus(row['status']);
   },
   'Timestamp': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['timestamp'])) return '--';
-    return formatDate(row['timestamp'], 'DD/MM/YYYY - hh:mmA');
+    if (!row || isEmpty(row['createdAt'])) return '--';
+    return formatDate(row['createdAt'], 'DD/MM/YYYY - hh:mmA');
   },
   'Actions': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['email_notification'])) return '--';

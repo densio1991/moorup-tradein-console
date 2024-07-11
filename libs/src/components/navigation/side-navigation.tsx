@@ -51,8 +51,6 @@ export function SideBar(): JSX.Element {
     hasViewPaymentsPermission
   } = usePermission();
 
-
-
   const filteredSideNavItems = SIDENAV_ITEMS.filter((item) => {
     switch (item.title) {
       case 'Home':
@@ -62,7 +60,10 @@ export function SideBar(): JSX.Element {
         return hasViewProductsPermission;
 
       case 'Order Management':
-        return hasViewOrdersPermission || hasViewDiscrepanciesPermission || hasViewActionablesPermission || hasViewPaymentsPermission;
+        return hasViewOrdersPermission || hasViewDiscrepanciesPermission || hasViewPaymentsPermission;
+
+      case 'Actionables':
+        return hasViewActionablesPermission;
 
       case 'Promotion Management':
         return hasViewPromotionsPermission || hasViewPromotionClaimsPermission || hasViewPromotionClaimsPaymentPermission;
@@ -143,7 +144,7 @@ export function SideBar(): JSX.Element {
         rootStyles={{
           color: '#216A4C'
         }}
-        width='280px'
+        width='300px'
       >
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Image src={Logo} alt="" />
@@ -189,10 +190,7 @@ export function SideBar(): JSX.Element {
                         case 'Discrepancy':
                           return hasViewDiscrepanciesPermission;
 
-                        case 'Actionables':
-                          return hasViewActionablesPermission;
-
-                        case 'Unsent Devices':
+                        case 'Follow-Up Device Not Sent':
                           return hasViewActionablesPermission;
 
                         case 'Promotions':

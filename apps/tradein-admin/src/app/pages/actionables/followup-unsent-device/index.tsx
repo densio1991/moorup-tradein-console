@@ -9,6 +9,7 @@ import {
   UNSENT_DEVICES_MANAGEMENT_COLUMNS,
   unsentDevicesManagementParsingConfig,
   useAuth,
+  useCommon,
   useOrder,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
@@ -21,6 +22,7 @@ export function FollowUpUnsentDevicePage() {
   const { orders, order, isFetchingOrders } = state;
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
+  const { setSearchTerm } = useCommon();
   const [selectedRow, setSelectedRow] = useState<any>({});
 
   const headers = UNSENT_DEVICES_MANAGEMENT_COLUMNS;
@@ -63,6 +65,7 @@ export function FollowUpUnsentDevicePage() {
       // Clear data on unmount
       clearOrder();
       clearOrders();
+      setSearchTerm('');
     };
   }, [activePlatform]);
 
@@ -76,7 +79,7 @@ export function FollowUpUnsentDevicePage() {
     <>
       <PageSubHeader withSearch />
       <Table
-        label="Followup - Unsent Devices"
+        label="Follow-Up Device Not Sent"
         isLoading={isFetchingOrders}
         headers={headers}
         rows={filteredOrders || []}

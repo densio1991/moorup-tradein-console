@@ -6,7 +6,6 @@ import {
   faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  ACTIONS_COLUMN,
   AccordionContainer,
   AccordionContent,
   AccordionHeader,
@@ -284,7 +283,7 @@ export const EditOrderPage = () => {
   };
 
   const renderTabs = () => {
-    const logsHeaders = [...ORDER_LOGS_COLUMNS, ...ACTIONS_COLUMN];
+    const logsHeaders = [...ORDER_LOGS_COLUMNS];
     const notesHeaders = [...ORDER_NOTES_COLUMNS];
 
     const sortedLogList = (order?.log_list || []).sort(
