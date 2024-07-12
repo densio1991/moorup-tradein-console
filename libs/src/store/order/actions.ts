@@ -819,11 +819,11 @@ export const downloadOrderPaymentFile =
         });
         const url = window.URL.createObjectURL(blob);
 
-        let filename:string = response.headers['Content-Disposition'].split('=')[1];
+       // let filename:string = response.headers['Content-Disposition'].split('=')[1];
 
         const link = document.createElement('a');
         link.href = url;
-        link.download = filename ?? 'flat-file.xlsx';
+        link.download = 'flat-file.xlsx';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
