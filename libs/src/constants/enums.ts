@@ -19,6 +19,7 @@ export enum OrderItemStatus {
   REVISION_REJECTED = 'revision-rejected',
   HOLD = 'hold',
   DEVICE_RETURED = 'device-returned',
+  IN_TRANSIT = 'in-transit',
 }
 
 export enum DropdownOrderItemStatus {

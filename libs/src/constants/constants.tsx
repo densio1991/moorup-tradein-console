@@ -904,6 +904,7 @@ export interface Promotion {
 export const COLLECTION_ORDER_ITEM_STATUS = [
   OrderItemStatus.CREATED,
   OrderItemStatus.CANCELLED,
+  OrderItemStatus.IN_TRANSIT,
 ];
 
 export const VALIDATION_ORDER_ITEM_STATUS = [
