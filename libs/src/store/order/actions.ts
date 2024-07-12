@@ -811,6 +811,7 @@ export const downloadOrderPaymentFile =
       .get('/api/orders/download-flat-file', { 
         signal: signal,
         params: payload,
+        responseType: 'blob',
       })
       .then((response) => {
         const blob = new Blob([response.data], {
@@ -818,11 +819,11 @@ export const downloadOrderPaymentFile =
         });
         const url = window.URL.createObjectURL(blob);
 
-        const filename = response.headers['Content-Disposition'].split('=')[1];
+        let filename:string = response.headers['Content-Disposition'].split('=')[1];
 
         const link = document.createElement('a');
         link.href = url;
-        link.download = filename;
+        link.download = filename ?? 'flat-file.xlsx';
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
