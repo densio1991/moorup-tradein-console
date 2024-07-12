@@ -20,7 +20,7 @@ export const orderPaymentParsingConfig = {
     if (!row || isEmpty(row['customerEmailAddress'])) return '--';
     return row['customerEmailAddress'];
   },
-  'Payment Amount': ({ row }: ParsingFunctionParams) => {
+  'Quoted Amount': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['paymentAmount'])) return '--';
     return row['paymentAmount'];
   },
