@@ -813,6 +813,18 @@ export const downloadOrderPaymentFile =
         params: payload,
       })
       .then((response) => {
+        const blob = new Blob([response.data], {
+          type: response.headers['content-type'],
+        });
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'flat-file.xlsx';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
         dispatch({
           type: types.DOWNLOAD_ORDER_PAYMENT_FILE.SUCCESS,
           payload: response?.data,
