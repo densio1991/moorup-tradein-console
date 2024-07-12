@@ -768,7 +768,7 @@ export const ORDER_PAYMENTS_MANAGEMENT_COLUMNS = [
     keyName: 'updatedAt',
   },
   {
-    label: 'Payment Amount',
+    label: 'Quoted Amount',
     order: 6,
     enableSort: true,
     keyName: 'paymentAmount',
