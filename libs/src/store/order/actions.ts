@@ -818,9 +818,11 @@ export const downloadOrderPaymentFile =
         });
         const url = window.URL.createObjectURL(blob);
 
+        const filename = response.headers['Content-Disposition'].split('=')[1];
+
         const link = document.createElement('a');
         link.href = url;
-        link.download = 'flat-file.xlsx';
+        link.download = filename;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
