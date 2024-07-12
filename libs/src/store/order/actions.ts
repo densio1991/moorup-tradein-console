@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from 'react-toastify';
-import { CANCELLED_AXIOS } from '../../constants';
+import { BAD_REQUEST, CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
@@ -310,15 +310,14 @@ export const deleteOrderById =
       });
   };
 
-export const receiveOrderItemById =
-  (orderItemId: any, orderId: any) => (dispatch: any) => {
+export const receiveOrderItemById = (orderItemId: any, orderId: any, payload: any) => (dispatch: any) => {
     dispatch({
       type: types.RECEIVE_ORDER_ITEM_BY_ID.baseType,
       orderItemId,
     });
 
     axiosInstance()
-      .patch(`/api/orders/receive/${orderItemId}`)
+      .patch(`/api/orders/receive/${orderItemId}`, payload)
       .then((response) => {
         dispatch({
           type: types.RECEIVE_ORDER_ITEM_BY_ID.SUCCESS,
@@ -825,11 +824,20 @@ export const downloadOrderPaymentFile =
             type: types.DOWNLOAD_ORDER_PAYMENT_FILE.CANCELLED,
             payload: error,
           });
+        } else if (error.code === BAD_REQUEST) {
+          dispatch({
+            type: types.DOWNLOAD_ORDER_PAYMENT_FILE.FAILED,
+            payload: error,
+          });
+
+          toast.error('No data available for the selected date; no file generated for export. Please choose another date.');
         } else {
           dispatch({
             type: types.DOWNLOAD_ORDER_PAYMENT_FILE.FAILED,
             payload: error,
           });
+
+          toast.error('Failed to download file.');
         }
       });
   };
@@ -900,4 +908,58 @@ export const addOrderNote = (orderId: string, payload: any) => (dispatch: any) =
 
         toast.error('Failed to save zendesk link.');
       });
+  };
+
+export const importPaymentsFlatFile =
+  (file: File, userId: string, activePlatform: string) =>
+  async (dispatch: any) => {
+    dispatch({
+      type: types.IMPORT_PAYMENTS_FLAT_FILE.baseType,
+      payload: {},
+    });
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('user_id', userId);
+    formData.append('platform', activePlatform);
+
+    axiosInstance()
+      .patch('/api/payments/bulk', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(() => {
+        dispatch({
+          type: types.IMPORT_PAYMENTS_FLAT_FILE.SUCCESS,
+          payload: {},
+        });
+
+        getAllOrderPayments(activePlatform)(dispatch);
+        toast.success('Payments successfully updated!');
+      })
+      .catch((error) => {
+        if (error.code === BAD_REQUEST) {
+          dispatch({
+            type: types.IMPORT_PAYMENTS_FLAT_FILE.BAD_REQUEST,
+            payload: error?.response?.data?.data?.invalidEntries || [],
+          });
+        } else {
+          dispatch({
+            type: types.IMPORT_PAYMENTS_FLAT_FILE.FAILED,
+            payload: error,
+          });
+        }
+
+        getAllOrderPayments(activePlatform)(dispatch);
+        toast.error('Failed to import flat file.');
+      });
+  };
+
+export const clearUploadPaymentErrors =
+  (payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.CLEAR_ORDER_PAYMENT_ERRORS,
+      payload,
+    });
   };

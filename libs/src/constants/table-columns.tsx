@@ -762,22 +762,28 @@ export const ORDER_PAYMENTS_MANAGEMENT_COLUMNS = [
     keyName: 'customerEmailAddress',
   },
   {
-    label: 'Payment Amount',
+    label: 'Evaluated Date',
     order: 5,
+    enableSort: true,
+    keyName: 'updatedAt',
+  },
+  {
+    label: 'Payment Amount',
+    order: 6,
     enableSort: true,
     keyName: 'paymentAmount',
   },
   {
     label: 'Payment Type',
-    order: 6,
+    order: 7,
     enableSort: true,
-    keyName: 'payment_type',
+    keyName: 'paymentType',
   },
   {
     label: 'Payment Reference',
-    order: 7,
+    order: 8,
     enableSort: true,
-    keyName: 'payment_reference',
+    keyName: 'paymentReference',
   }
 ];
 
@@ -795,7 +801,7 @@ export const ORDER_LOGS_COLUMNS = [
     keyName: 'description',
   },
   {
-    label: 'Initiator',
+    label: 'Initiated By',
     order: 4,
     enableSort: true,
     keyName: 'triggered_by',
@@ -827,4 +833,55 @@ export const ORDER_NOTES_COLUMNS = [
     enableSort: true,
     keyName: 'createdBy.first_name',
   }
+];
+
+export const ORDER_PAYMENT_FLAT_FILE_DETAILS_COLUMNS = [
+  {
+    label: 'Errors',
+    order: 2,
+    enableSort: false,
+    keyName: 'errors',
+  },
+  {
+    label: 'Device ID',
+    order: 3,
+    enableSort: true,
+    keyName: 'payload.deviceId',
+  },
+  {
+    label: 'Customer Name',
+    order: 4,
+    enableSort: true,
+    keyName: 'payload.customerName',
+  },
+  {
+    label: 'Customer Email Address',
+    order: 5,
+    enableSort: true,
+    keyName: 'payload.customerEmailAddress',
+  },
+  {
+    label: 'Evaluated Date',
+    order: 6,
+    enableSort: true,
+    keyName: 'payload.updatedAt',
+  },
+  {
+    label: 'Payment Amount',
+    order: 7,
+    enableSort: true,
+    keyName: 'payload.paymentAmount',
+  },
+  {
+    label: 'Payment Type',
+    order: 8,
+    enableSort: true,
+    keyName: 'payload.paymentType',
+  },
+  {
+    label: 'Payment Reference',
+    order: 8,
+    enableSort: true,
+    keyName: 'payload.paymentReference',
+  },
 ];

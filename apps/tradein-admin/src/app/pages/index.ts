@@ -6,6 +6,8 @@ export { DiscrepancyPage } from './discrepancy';
 export { LoginPage } from './login';
 export { OrderManagementPage } from './order-management';
 export { EditOrderPage } from './order-management/edit-order';
+export { PaymentPage } from './payments';
+export { UploadPaymentErrorPage } from './payments/upload-payment-details';
 export { ProductManagementPage } from './product-management';
 export { EditProductPage } from './product-management/edit-product';
 export { UploadProductErrorPage } from './product-management/upload-details';
@@ -19,4 +21,4 @@ export { TemplateApprovalByIdPage } from './template-approvals/template-approval
 export { EmailTemplatesPage } from './templates-email';
 export { SmsTemplatesPage } from './templates-sms';
 export { UserManagementPage } from './user-management';
-export { PaymentPage } from './payments';
+

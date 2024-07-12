@@ -28,7 +28,7 @@ export function ActionablesPage() {
   } = useOrder();
   const { state: authState } = useAuth();
   const { orderItems, isFetchingOrderItems } = state;
-  const { activePlatform } = authState;
+  const { activePlatform, userDetails } = authState;
 
   const headers = [
     ...ACTIONABLES_MANAGEMENT_COLUMNS,
@@ -52,16 +52,27 @@ export function ActionablesPage() {
     );
     return filteredOrderItems.map((orderItem: any) => ({
       ...orderItem,
-      action: () => printLabels({ item_id: orderItem?.order_items?._id }),
+      action: () =>
+        printLabels({
+          item_id: orderItem?.order_items?._id,
+          admin_id: userDetails?._id,
+        }),
       printLabelAction: () =>
-        printLabels({ item_id: orderItem?.order_items?._id }),
+        printLabels({
+          item_id: orderItem?.order_items?._id,
+          admin_id: userDetails?._id,
+        }),
       returnDeviceAction: () => {
         toast.info('Make sure to Download or Save a copy on your device.', {
           onClose: async () => {
             await updateOrderItemsStatus(orderItem?.order_items?._id, {
               status: OrderItemStatus.DEVICE_RETURED,
+              admin_id: userDetails?._id,
             });
-            printOutboundLabel({ item_id: orderItem?.order_items?._id });
+            printOutboundLabel({
+              item_id: orderItem?.order_items?._id,
+              admin_id: userDetails?._id,
+            });
             clearOrderItems({});
 
             const controller = new AbortController();

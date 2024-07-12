@@ -1,13 +1,13 @@
 import { NotFound, PrivateRoute, PublicRoute } from '@tradein-admin/libs';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import {
-  ActionablesPage,
   ConfigurationsPage,
   DashboardPage,
   DiscrepancyPage,
   EditOrderPage,
   EditProductPage,
   EmailTemplatesPage,
+  FollowUpUnsentDevicePage,
   LoginPage,
   OrderManagementPage,
   PaymentPage,
@@ -19,10 +19,10 @@ import {
   SmsTemplatesPage,
   TemplateApprovalByIdPage,
   TemplateApprovalPage,
+  UploadPaymentErrorPage,
   UploadProductErrorPage,
   UploadProductPricingErrorPage,
   UserManagementPage,
-  FollowUpUnsentDevicePage,
 } from './pages';
 
 export function App() {
@@ -63,9 +63,12 @@ export function App() {
             element={<DiscrepancyPage />}
           />
           <Route path="/dashboard/order/payments" element={<PaymentPage />} />
-
           <Route
-            path="/dashboard/order/actionables/follow-up/unsent-devices"
+            path="/dashboard/order/payments-upload-details"
+            element={<UploadPaymentErrorPage />}
+          />
+          <Route
+            path="/dashboard/actionables/follow-up-device-not-sent"
             element={<FollowUpUnsentDevicePage />}
           />
           <Route path="/dashboard/user" element={<UserManagementPage />} />

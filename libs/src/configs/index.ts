@@ -3,6 +3,8 @@ export * from './discrepancy-management-config';
 export * from './order-logs-config';
 export * from './order-management-config';
 export * from './order-notes-config';
+export * from './order-payment-config';
+export * from './order-payment-upload-config';
 export * from './product-attributes-upload-config';
 export * from './product-management-config';
 export * from './product-pricing-upload-config';

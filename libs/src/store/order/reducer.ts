@@ -32,6 +32,8 @@ const orderState = {
   isAddingOrderNote: false,
   isSavingZendeskLink: false,
   isDownloadingPaymentFile: false,
+  isImportingPaymentsFlatFile: false,
+  importPaymentsFlatFileError: [],
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -589,6 +591,42 @@ const orderReducer = (state = orderState, action: any) => {
         isSavingZendeskLink: false,
       };
     }
+
+    case types.IMPORT_PAYMENTS_FLAT_FILE.baseType: {
+      return {
+        ...state,
+        isImportingPaymentsFlatFile: true,
+        paymentsItem: [],
+        isFetchingPayments: true,
+      };
+    }
+    case types.IMPORT_PAYMENTS_FLAT_FILE.SUCCESS: {
+      return {
+        ...state,
+        isImportingPaymentsFlatFile: false,
+      };
+    }
+    case types.IMPORT_PAYMENTS_FLAT_FILE.FAILED: {
+      return {
+        ...state,
+        isImportingPaymentsFlatFile: false,
+        paymentsItem: [],
+      };
+    }
+    case types.IMPORT_PAYMENTS_FLAT_FILE.BAD_REQUEST: {
+      return {
+        ...state,
+        isImportingPaymentsFlatFile: false,
+        importPaymentsFlatFileError: action.payload,
+        paymentsItem: [],
+      };
+    }
+
+    case types.CLEAR_ORDER_PAYMENT_ERRORS:
+      return {
+        ...state,
+        importPaymentsFlatFileError: [],
+      };
 
     default:
       return state;

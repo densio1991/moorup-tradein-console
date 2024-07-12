@@ -6,7 +6,6 @@ import {
   faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  ACTIONS_COLUMN,
   AccordionContainer,
   AccordionContent,
   AccordionHeader,
@@ -221,14 +220,19 @@ export const EditOrderPage = () => {
         platform: activePlatform,
         revision_price: newValue.revised_offer,
         revision_reasons: newValue.reason?.split(','),
+        admin_id: userDetails?._id,
       };
       reviseOfferByItemId(orderItem.line_item_number, payload);
     } else if (newValue.status === OrderItemStatus.EVALUATED) {
       evaluateOrderItemById(orderItem.line_item_number, {
         platform: activePlatform,
+        admin_id: userDetails?._id,
       });
     } else {
-      patchOrderItemById(orderItem._id, { status: newValue.status });
+      patchOrderItemById(orderItem._id, {
+        status: newValue.status,
+        admin_id: userDetails?._id,
+      });
     }
     setSelectedItem({} as OrderItems);
   };
@@ -284,7 +288,7 @@ export const EditOrderPage = () => {
   };
 
   const renderTabs = () => {
-    const logsHeaders = [...ORDER_LOGS_COLUMNS, ...ACTIONS_COLUMN];
+    const logsHeaders = [...ORDER_LOGS_COLUMNS];
     const notesHeaders = [...ORDER_NOTES_COLUMNS];
 
     const sortedLogList = (order?.log_list || []).sort(

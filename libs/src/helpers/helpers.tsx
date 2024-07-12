@@ -392,7 +392,7 @@ export const formatDate = (date: Date, format='DD/MM/YYYY') => {
   return dayjs(date).tz(TIMEZONE).format(format);
 }
 
-export const parseStatus = (value: string) => {
+export const parseStatus = (value: string, width: string = '100px') => {
   let text = value;
   let textColor = defaultTheme.disabled.text;
   let bgColor = defaultTheme.disabled.background;
@@ -545,7 +545,7 @@ export const parseStatus = (value: string) => {
       break;
   }
 
-  return <Chip value={text} textColor={textColor} bgColor={bgColor} width='100px'/>
+  return <Chip value={text} textColor={textColor} bgColor={bgColor} width={width}/>
 }
 
 export const hexToRgba = (hex: string, alpha: number) => {

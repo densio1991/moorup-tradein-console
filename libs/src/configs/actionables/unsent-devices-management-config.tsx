@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
-import { formatDate, parseStatus } from '../../helpers';
-import { OrderItemStatus } from '../../constants';
 import { AppButton } from '../../components';
+import { OrderItemStatus } from '../../constants';
+import { formatDate, parseStatus } from '../../helpers';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
@@ -21,7 +21,7 @@ export const unsentDevicesManagementParsingConfig = {
   },
   'Order Type': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['credit_type'])) return '--';
-    return parseStatus(row['credit_type']);
+    return parseStatus(row['credit_type'], '150px');
   },
   'Customer Name': ({ row }: ParsingFunctionParams) => {
     const userDetails = row ? row['user_id'] : null;
