@@ -60,8 +60,8 @@ export const unsentDevicesTableParsingConfig = {
     return row['imei_serial'];
   },
   'Extension Date': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['sendInDeadlineDate'])) return '--';
-    return formatDate(row['sendInDeadlineDate']);
+    if (!row || isEmpty(row['send_in_deadline_date'])) return '--';
+    return formatDate(row['send_in_deadline_date']);
   },
   Actions: ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['_id'])) return '--';
