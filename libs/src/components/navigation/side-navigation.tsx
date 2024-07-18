@@ -48,7 +48,14 @@ export function SideBar(): JSX.Element {
     hasViewPromotionClaimsPaymentPermission,
     hasViewUsersPermission,
     hasViewPlatformConfigsPermissions,
-    hasViewPaymentsPermission
+    hasViewPaymentsPermission,
+    hasViewActionablesFollowUpDeviceNotSentPermission,
+    hasViewActionablesFollowUpRecycleOfferPermission,
+    hasViewActionablesFollowUpRevisionOfferPermission,
+    hasViewActionablesForRecyclePermission,
+    hasViewActionablesForReturnPermission,
+    hasViewActionablesLockedDevicesCurrentLockPermission,
+    hasViewActionablesLockedDevicesForRetestPermission,
   } = usePermission();
 
   const filteredSideNavItems = SIDENAV_ITEMS.filter((item) => {
@@ -60,10 +67,10 @@ export function SideBar(): JSX.Element {
         return hasViewProductsPermission;
 
       case 'Order Management':
-        return hasViewOrdersPermission || hasViewDiscrepanciesPermission || hasViewPaymentsPermission;
+        return hasViewOrdersPermission || hasViewDiscrepanciesPermission || hasViewPaymentsPermission || hasViewActionablesPermission;
 
       case 'Actionables':
-        return hasViewActionablesPermission;
+        return hasViewActionablesFollowUpDeviceNotSentPermission || hasViewActionablesFollowUpRecycleOfferPermission || hasViewActionablesFollowUpRevisionOfferPermission || hasViewActionablesForRecyclePermission || hasViewActionablesForReturnPermission || hasViewActionablesLockedDevicesCurrentLockPermission || hasViewActionablesLockedDevicesForRetestPermission;
 
       case 'Promotion Management':
         return hasViewPromotionsPermission || hasViewPromotionClaimsPermission || hasViewPromotionClaimsPaymentPermission;
@@ -160,7 +167,14 @@ export function SideBar(): JSX.Element {
                 hasViewPromotionClaimsPermission ||
                 hasViewPromotionClaimsPaymentPermission ||
                 hasViewUsersPermission ||
-                hasViewPaymentsPermission
+                hasViewPaymentsPermission ||
+                hasViewActionablesFollowUpDeviceNotSentPermission ||
+                hasViewActionablesFollowUpRecycleOfferPermission || 
+                hasViewActionablesFollowUpRevisionOfferPermission || 
+                hasViewActionablesForRecyclePermission ||
+                hasViewActionablesForReturnPermission ||
+                hasViewActionablesLockedDevicesCurrentLockPermission ||
+                hasViewActionablesLockedDevicesForRetestPermission
               )
               && (
                 <div style={{ padding: '0 24px', marginBottom: '8px' }}>
@@ -191,7 +205,7 @@ export function SideBar(): JSX.Element {
                           return hasViewDiscrepanciesPermission;
 
                         case 'Follow-Up Device Not Sent':
-                          return hasViewActionablesPermission;
+                          return hasViewActionablesFollowUpDeviceNotSentPermission;
 
                         case 'Promotions':
                           return hasViewPromotionsPermission;

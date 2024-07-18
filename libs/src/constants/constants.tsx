@@ -1001,6 +1001,10 @@ export const ORDER_MANAGEMENT_ITEMS = [
   { value: PermissionCodes.VIEW_ACTIONABLES, label: 'View Actionables' },
   { value: PermissionCodes.PRINT_LABEL, label: 'Print Label' },
   { value: PermissionCodes.VIEW_PAYMENTS, label: 'View Payments' },
+  { value: PermissionCodes.VIEW_ORDER_LOGS, label: 'View Order Logs' },
+  { value: PermissionCodes.VIEW_ORDER_NOTES, label: 'View Order Notes' },
+  { value: PermissionCodes.ADD_ORDER_NOTE, label: 'Add Order Note' },
+  { value: PermissionCodes.ADD_ZENDESK_LINK, label: 'Add Zendesk Link' },
 ];
 
 export const USER_MANAGEMENT_ITEMS = [
@@ -1029,6 +1033,16 @@ export const PROMOTION_MANAGEMENT_ITEMS = [
     value: PermissionCodes.PROCESS_PROMOTION_CLAIM_PAYMENT,
     label: 'Process Promotion Claim Payment',
   },
+];
+
+export const ACTIONABLES_ITEMS = [
+  { value: PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_DEVICE_NOT_SENT, label: 'View Follow-Up Device Not Sent' },
+  { value: PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_REVISION_OFFER, label: 'View Follow-Up Revision Offer' },
+  { value: PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_RECYCLE_OFFER, label: 'View Follow-Up Recycle Offer' },
+  { value: PermissionCodes.VIEW_ACTIONABLES_DEVICES_FOR_RECYCLE, label: 'View Devices For Recycle' },
+  { value: PermissionCodes.VIEW_ACTIONABLES_DEVICES_FOR_RETURN, label: 'View Devices For Return' },
+  { value: PermissionCodes.VIEW_ACTIONABLES_LOCKED_DEVICES_FOR_RETEST, label: 'View Locked Devices - For Retest' },
+  { value: PermissionCodes.VIEW_ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK, label: 'View Locked Devices - Current Lock' },
 ];
 
 export const ENCRYPTION_KEY = 'mDv8pK79066huHFdlQ2CPKbXxC0rjXRt';

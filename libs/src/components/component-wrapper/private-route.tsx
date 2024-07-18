@@ -40,7 +40,8 @@ export function PrivateRoute(): JSX.Element {
     hasViewPlatformConfigsPermissions,
     hasViewOrderDetailsPermission,
     hasEditProductPermission,
-    hasViewPaymentsPermission
+    hasViewPaymentsPermission,
+    hasViewActionablesFollowUpDeviceNotSentPermission,
   } = usePermission();
 
   useEffect(() => {
@@ -50,7 +51,8 @@ export function PrivateRoute(): JSX.Element {
         '/dashboard/product/list': hasViewProductsPermission,
         '/dashboard/order/list': hasViewOrdersPermission,
         '/dashboard/order/discrepancy': hasViewDiscrepanciesPermission,
-        '/dashboard/actionables/follow-up-device-not-sent': hasViewActionablesPermission,
+        '/dashboard/order/actionables': hasViewActionablesPermission,
+        '/dashboard/actionables/follow-up-device-not-sent': hasViewActionablesFollowUpDeviceNotSentPermission,
         '/dashboard/order/payments': hasViewPaymentsPermission,
         '/dashboard/promotion/list': hasViewPromotionsPermission,
         '/dashboard/promotion/claims': hasViewPromotionClaimsPermission,
