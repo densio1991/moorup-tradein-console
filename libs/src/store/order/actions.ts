@@ -486,7 +486,7 @@ export const bulkCancelOrderItems =
     });
 
     axiosInstance()
-      .patch('/api/order/items/cancel-bulk', payload)
+      .patch('/api/orders/items/cancel-bulk', payload)
       .then((response) => {
         dispatch({
           type: types.BULK_CANCEL_ORDER_ITEMS.SUCCESS,

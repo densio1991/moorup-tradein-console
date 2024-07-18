@@ -652,7 +652,7 @@ export const UNSENT_DEVICES_TABLE_COLUMNS = [
     label: 'Extension Date',
     order: 5,
     enableSort: true,
-    keyName: 'user_id.first_name',
+    keyName: 'send_in_deadline_date',
   },
   {
     label: 'Actions',

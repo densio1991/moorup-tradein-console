@@ -123,6 +123,10 @@ export const EditOrderPage = () => {
     hasUpdateOrderItemStatusPermission,
     hasResendLabelPermission,
     hasViewPromotionClaimsPermission,
+    hasViewOrderLogsPermission,
+    hasViewOrderNotesPermission,
+    hasAddOrderNotePermission,
+    hasAddZendeskLinkPermission,
   } = usePermission();
 
   const { state: authState } = useAuth();
@@ -303,7 +307,7 @@ export const EditOrderPage = () => {
 
     const logList = addActions(sortedLogList || []);
 
-    const tabs: string[] = ['Order Details', 'Logs', 'Notes'];
+    const tabs: string[] = ['Order Details'];
     const tabContent: React.ReactNode[] = [
       <LoaderContainer
         margin="5px 20px 0px 20px"
@@ -456,66 +460,82 @@ export const EditOrderPage = () => {
           )}
         </StatusModal>
       </LoaderContainer>,
-      <Table
-        label="System Log"
-        isLoading={isFetchingOrder}
-        headers={logsHeaders}
-        rows={logList || []}
-        parsingConfig={orderLogsParsingConfig}
-      />,
-      <>
-        <PageSubHeader
-          marginTop="5px"
-          overflowx="auto"
-          leftControls={
-            <>
-              <AppButton
-                type="button"
-                variant="fill"
-                width="fit-content"
-                padding="8px 20px"
-                icon={faPlus}
-                onClick={() => {
-                  setModalType('add-note');
-                  setIsOpenModal(true);
-                }}
-              >
-                Add Note
-              </AppButton>
-              <AppButton
-                type="button"
-                variant="fill"
-                width="fit-content"
-                padding="8px 20px"
-                icon={faPlus}
-                onClick={() => {
-                  setModalType('add-zendesk-link');
-                  setIsOpenModal(true);
-                }}
-              >
-                {isEmpty(order?.zendesk_link)
-                  ? 'Add Zendesk Link'
-                  : 'Update Zendesk Link'}
-              </AppButton>
-              <StyledLink
-                href={order?.zendesk_link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Typography variant="body2">{order?.zendesk_link}</Typography>
-              </StyledLink>
-            </>
-          }
-        />
-        <Table
-          label="Notes"
-          isLoading={isFetchingOrder}
-          headers={notesHeaders}
-          rows={sortedNoteList || []}
-          parsingConfig={orderNotesParsingConfig}
-        />
-      </>,
     ];
+
+    if (hasViewOrderLogsPermission) {
+      tabs.push('Logs');
+      tabContent.push(
+        <Table
+          label="System Log"
+          isLoading={isFetchingOrder}
+          headers={logsHeaders}
+          rows={logList || []}
+          parsingConfig={orderLogsParsingConfig}
+        />,
+      );
+    }
+
+    if (hasViewOrderNotesPermission) {
+      tabs.push('Notes');
+      tabContent.push(
+        <>
+          <PageSubHeader
+            marginTop="5px"
+            overflowx="auto"
+            leftControls={
+              <>
+                {hasAddOrderNotePermission && (
+                  <AppButton
+                    type="button"
+                    variant="fill"
+                    width="fit-content"
+                    padding="8px 20px"
+                    icon={faPlus}
+                    onClick={() => {
+                      setModalType('add-note');
+                      setIsOpenModal(true);
+                    }}
+                  >
+                    Add Note
+                  </AppButton>
+                )}
+                {hasAddZendeskLinkPermission && (
+                  <AppButton
+                    type="button"
+                    variant="fill"
+                    width="fit-content"
+                    padding="8px 20px"
+                    icon={faPlus}
+                    onClick={() => {
+                      setModalType('add-zendesk-link');
+                      setIsOpenModal(true);
+                    }}
+                  >
+                    {isEmpty(order?.zendesk_link)
+                      ? 'Add Zendesk Link'
+                      : 'Update Zendesk Link'}
+                  </AppButton>
+                )}
+                <StyledLink
+                  href={order?.zendesk_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Typography variant="body2">{order?.zendesk_link}</Typography>
+                </StyledLink>
+              </>
+            }
+          />
+          <Table
+            label="Notes"
+            isLoading={isFetchingOrder}
+            headers={notesHeaders}
+            rows={sortedNoteList || []}
+            parsingConfig={orderNotesParsingConfig}
+          />
+        </>,
+      );
+    }
 
     return <TabList tabs={tabs}>{tabContent}</TabList>;
   };

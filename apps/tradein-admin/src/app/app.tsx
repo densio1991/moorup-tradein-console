@@ -1,6 +1,7 @@
 import { NotFound, PrivateRoute, PublicRoute } from '@tradein-admin/libs';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import {
+  ActionablesPage,
   ConfigurationsPage,
   DashboardPage,
   DiscrepancyPage,
@@ -61,6 +62,10 @@ export function App() {
           <Route
             path="/dashboard/order/discrepancy"
             element={<DiscrepancyPage />}
+          />
+          <Route
+            path="/dashboard/order/actionables"
+            element={<ActionablesPage />}
           />
           <Route path="/dashboard/order/payments" element={<PaymentPage />} />
           <Route
