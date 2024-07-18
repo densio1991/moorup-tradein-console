@@ -98,6 +98,13 @@ export const SIDENAV_ITEMS = [
         icon: faMoneyBill,
         disabled: false
       },
+      {
+        title: 'Actionables',
+        url: '/dashboard/order/actionables',
+        activeUrl: /^\/dashboard\/order\/actionables/,
+        icon: faCircleExclamation,
+        disabled: false
+      },
     ],
   },
   {

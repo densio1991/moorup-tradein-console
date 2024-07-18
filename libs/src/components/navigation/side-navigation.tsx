@@ -204,6 +204,9 @@ export function SideBar(): JSX.Element {
                         case 'Discrepancy':
                           return hasViewDiscrepanciesPermission;
 
+                        case 'Actionables':
+                          return hasViewActionablesPermission;
+
                         case 'Follow-Up Device Not Sent':
                           return hasViewActionablesFollowUpDeviceNotSentPermission;
 
