@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import {
   CenterModal,
+  Loader,
   openInNewTab,
   OrderItemStatus,
   PageSubHeader,
@@ -24,10 +25,12 @@ export function FollowUpUnsentDevicePage() {
   const { activePlatform } = authState;
   const { setSearchTerm } = useCommon();
   const [selectedRow, setSelectedRow] = useState<any>({});
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const headers = UNSENT_DEVICES_MANAGEMENT_COLUMNS;
 
   const handleRowClick = (row: any) => {
+    setIsModalOpen(true);
     setActiveOrder(row);
     setSelectedRow(row);
   };
@@ -47,6 +50,8 @@ export function FollowUpUnsentDevicePage() {
         const signal = controller.signal;
         fetchOrders(signal);
         setSelectedRow({});
+      } else {
+        setIsModalOpen(false);
       }
     }
   }, [order]);
@@ -92,16 +97,23 @@ export function FollowUpUnsentDevicePage() {
             className="text-lg cursor-pointer hover:text-emerald-800"
             onClick={() => openInNewTab(`/dashboard/order/${selectedRow?._id}`)}
           >
-            {selectedRow?.order_number}
+            {selectedRow?.order_number || 'Loading...'}
           </h4>
         }
-        isOpen={!isEmpty(selectedRow)}
+        isOpen={isModalOpen}
         onClose={() => {
+          setIsModalOpen(false);
           setSelectedRow({});
         }}
       >
         <div className="pb-5">
-          <FollowUpUnsentDeviceModal order={selectedRow} />
+          {isModalOpen && isEmpty(selectedRow) ? (
+            <div className="py-8">
+              <Loader />
+            </div>
+          ) : (
+            <FollowUpUnsentDeviceModal order={selectedRow} />
+          )}
         </div>
       </CenterModal>
     </>
