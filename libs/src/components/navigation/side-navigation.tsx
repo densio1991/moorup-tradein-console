@@ -151,7 +151,7 @@ export function SideBar(): JSX.Element {
         rootStyles={{
           color: '#216A4C'
         }}
-        width='300px'
+        width='320px'
       >
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Image src={Logo} alt="" />
