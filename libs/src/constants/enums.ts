@@ -166,7 +166,13 @@ export enum LockTypes {
   PASSCODE = 'passcode',
   ICLOUD = 'icloud',
   GOOGLE = 'google',
-  MDM = 'mdm',
   SAMSUNG = 'samsung',
-  OTHERS = 'others'
-};
+  MDM = 'mdm',
+  OTHERS = 'others',
+}
+
+export enum LockStatus {
+  LOCKED = 'locked',
+  UNLOCKED = 'unlocked',
+  RETEST = 'retest',
+}

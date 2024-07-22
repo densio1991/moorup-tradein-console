@@ -976,3 +976,75 @@ export const ORDER_PAYMENT_FLAT_FILE_DETAILS_COLUMNS = [
     keyName: 'payload.paymentReference',
   },
 ];
+
+export const ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK_COLUMNS = [
+  {
+    label: 'Order Number',
+    order: 2,
+    enableSort: true,
+    keyName: 'order_number',
+  },
+  {
+    label: 'Order Date',
+    order: 3,
+    enableSort: true,
+    keyName: 'createdAt',
+  },
+  {
+    label: 'Customer Name',
+    order: 3,
+    enableSort: true,
+    keyName: 'user_details.first_name',
+  },
+  {
+    label: 'Device ID',
+    order: 4,
+    enableSort: true,
+    keyName: 'order_items.line_item_number',
+  },
+  {
+    label: 'Prior Lock Check',
+    order: 5,
+    enableSort: true,
+    keyName: 'order_items.lock',
+  },
+  {
+    label: 'Retest Count',
+    order: 6,
+    enableSort: true,
+    keyName: 'order_items.lock.retestCount',
+  },
+];
+
+export const ACTIONABLES_LOCKED_DEVICES_FOR_RETEST_COLUMNS = [
+  {
+    label: 'Order Number',
+    order: 2,
+    enableSort: true,
+    keyName: 'order_number',
+  },
+  {
+    label: 'Order Date',
+    order: 3,
+    enableSort: true,
+    keyName: 'createdAt',
+  },
+  {
+    label: 'Customer Name',
+    order: 3,
+    enableSort: true,
+    keyName: 'user_details.first_name',
+  },
+  {
+    label: 'Device ID',
+    order: 4,
+    enableSort: true,
+    keyName: 'order_items.line_item_number',
+  },
+  {
+    label: 'Lock Type',
+    order: 5,
+    enableSort: true,
+    keyName: 'order_items.lock.type',
+  },
+];

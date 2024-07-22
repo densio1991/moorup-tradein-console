@@ -42,7 +42,12 @@ export function PrivateRoute(): JSX.Element {
     hasEditProductPermission,
     hasViewPaymentsPermission,
     hasViewActionablesFollowUpDeviceNotSentPermission,
+    hasViewActionablesFollowUpRecycleOfferPermission,
     hasViewActionablesFollowUpRevisionOfferPermission,
+    hasViewActionablesForRecyclePermission,
+    hasViewActionablesForReturnPermission,
+    hasViewActionablesLockedDevicesCurrentLockPermission,
+    hasViewActionablesLockedDevicesForRetestPermission,
   } = usePermission();
 
   useEffect(() => {
@@ -55,6 +60,9 @@ export function PrivateRoute(): JSX.Element {
         '/dashboard/order/actionables': hasViewActionablesPermission,
         '/dashboard/actionables/follow-up-device-not-sent': hasViewActionablesFollowUpDeviceNotSentPermission,
         '/dashboard/actionables/follow-up-revision-offer': hasViewActionablesFollowUpRevisionOfferPermission,
+        '/dashboard/actionables/follow-up-recycle-offer': hasViewActionablesFollowUpRecycleOfferPermission,
+        '/dashboard/actionables/locked-devices-current-lock': hasViewActionablesLockedDevicesCurrentLockPermission,
+        '/dashboard/actionables/locked-devices-for-retest': hasViewActionablesLockedDevicesForRetestPermission,
         '/dashboard/order/payments': hasViewPaymentsPermission,
         '/dashboard/promotion/list': hasViewPromotionsPermission,
         '/dashboard/promotion/claims': hasViewPromotionClaimsPermission,

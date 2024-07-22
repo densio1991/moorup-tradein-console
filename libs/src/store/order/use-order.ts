@@ -13,7 +13,7 @@ export const useOrder = () => {
     token,
   } = state.auth;
 
-  const getOrderItems = (payload: any, signal: AbortSignal) => {
+  const getOrderItems = (payload: any, signal?: AbortSignal) => {
     actions.getOrderItems(payload, activePlatform, signal)(dispatch, token);
   }
 
@@ -21,11 +21,11 @@ export const useOrder = () => {
     actions.clearOrderItems(payload)(dispatch);
   }
 
-  const fetchOrders = (signal: AbortSignal) => {
+  const fetchOrders = (signal?: AbortSignal) => {
     actions.getAllOrders(activePlatform, signal)(dispatch, token);
   };
 
-  const fetchOrderById = (id: any, signal: AbortSignal) => {
+  const fetchOrderById = (id: any, signal?: AbortSignal) => {
     actions.getOrderById(id, signal)(dispatch, token);
   };
 
@@ -165,11 +165,11 @@ export const useOrder = () => {
     actions.cancelGiftCard(id, payload, signal)(dispatch, token);
   };
 
-  const fetchOrderPayments = (signal: AbortSignal) => {
+  const fetchOrderPayments = (signal?: AbortSignal) => {
     actions.getAllOrderPayments(activePlatform, signal)(dispatch, token);
   };
 
-  const fetchOrderPaymentById = (id: any, signal: AbortSignal) => {
+  const fetchOrderPaymentById = (id: any, signal?: AbortSignal) => {
     actions.getOrderById(id, signal)(dispatch, token);
   };
 
