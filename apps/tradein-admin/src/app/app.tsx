@@ -25,6 +25,7 @@ import {
   UploadProductPricingErrorPage,
   UserManagementPage,
 } from './pages';
+import { FollowUpRevisionOfferPage } from './pages/actionables/followup-revision-offer';
 
 export function App() {
   return (
@@ -75,6 +76,10 @@ export function App() {
           <Route
             path="/dashboard/actionables/follow-up-device-not-sent"
             element={<FollowUpUnsentDevicePage />}
+          />
+          <Route
+            path="/dashboard/actionables/follow-up-revision-offer"
+            element={<FollowUpRevisionOfferPage />}
           />
           <Route path="/dashboard/user" element={<UserManagementPage />} />
           <Route

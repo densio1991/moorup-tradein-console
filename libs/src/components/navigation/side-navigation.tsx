@@ -210,6 +210,9 @@ export function SideBar(): JSX.Element {
                         case 'Follow-Up Device Not Sent':
                           return hasViewActionablesFollowUpDeviceNotSentPermission;
 
+                        case 'Follow-Up Revision Offer':
+                          return hasViewActionablesFollowUpRevisionOfferPermission;
+
                         case 'Promotions':
                           return hasViewPromotionsPermission;
 

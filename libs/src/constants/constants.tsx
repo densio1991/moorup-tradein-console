@@ -9,6 +9,7 @@ import {
   faEnvelopeCircleCheck,
   faEnvelopesBulk,
   faFileCircleExclamation,
+  faFileEdit,
   faFileInvoice,
   faFileLines,
   faGears,
@@ -120,7 +121,14 @@ export const SIDENAV_ITEMS = [
         activeUrl: /^\/dashboard\/actionables\/follow-up-device-not-sent/,
         icon: faFileCircleExclamation,
         disabled: false,
-      }
+      },
+      {
+        title: 'Follow-Up Revision Offer',
+        url: '/dashboard/actionables/follow-up-revision-offer',
+        activeUrl: /^\/dashboard\/actionables\/follow-up-revision-offer/,
+        icon: faFileEdit,
+        disabled: false,
+      },
     ],
   },
   {

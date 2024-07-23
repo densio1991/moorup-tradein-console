@@ -616,16 +616,10 @@ export const UNSENT_DEVICES_MANAGEMENT_COLUMNS = [
     keyName: 'user_id.first_name',
   },
   {
-    label: 'Extended Prior',
+    label: 'Devices Revised',
     order: 6,
     enableSort: true,
-    keyName: 'isExtended',
-  },
-  {
-    label: 'Devices Awaiting',
-    order: 7,
-    enableSort: true,
-    keyName: 'awaitingDevices',
+    keyName: 'revisedDevices',
   },
 ];
 
