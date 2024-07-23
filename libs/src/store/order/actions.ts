@@ -60,8 +60,8 @@ export const getAllOrders =
         });
         dispatch({
           type: types.FETCH_ORDER_PAYMENTS.SUCCESS,
-          payload: response?.data
-        })
+          payload: response?.data,
+        });
       })
       .catch((error) => {
         if (error.code === CANCELLED_AXIOS) {
@@ -310,7 +310,8 @@ export const deleteOrderById =
       });
   };
 
-export const receiveOrderItemById = (orderItemId: any, orderId: any, payload: any) => (dispatch: any) => {
+export const receiveOrderItemById =
+  (orderItemId: any, orderId: any, payload: any) => (dispatch: any) => {
     dispatch({
       type: types.RECEIVE_ORDER_ITEM_BY_ID.baseType,
       orderItemId,
@@ -369,34 +370,34 @@ export const evaluateOrderItemById =
   };
 
 export const reviseOfferByItemId =
-(orderItemNumber: any, orderId: any, payload: any) => (dispatch: any) => {
-  dispatch({
-    type: types.REVISE_OFFER_BY_ITEM_ID.baseType,
-    orderItemNumber,
-  });
-
-  axiosInstance()
-    .patch(`/api/order/item/${orderItemNumber}/revise-offer`, payload)
-    .then((response) => {
-      dispatch({
-        type: types.REVISE_OFFER_BY_ITEM_ID.SUCCESS,
-        payload: response?.data,
-      });
-
-      getOrderById(orderId)(dispatch);
-      getOrderShipments(orderId)(dispatch);
-      setToggleModal(false)(dispatch);
-      toast.success('Order item successfully updated!');
-    })
-    .catch((error) => {
-      dispatch({
-        type: types.REVISE_OFFER_BY_ITEM_ID.FAILED,
-        payload: error,
-      });
-
-      toast.error('Failed to update order item status.');
+  (orderItemNumber: any, orderId: any, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.REVISE_OFFER_BY_ITEM_ID.baseType,
+      orderItemNumber,
     });
-};
+
+    axiosInstance()
+      .post(`/api/orders/${orderItemNumber}/revise-offer`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.REVISE_OFFER_BY_ITEM_ID.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderById(orderId)(dispatch);
+        getOrderShipments(orderId)(dispatch);
+        setToggleModal(false)(dispatch);
+        toast.success('Order item successfully updated!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.REVISE_OFFER_BY_ITEM_ID.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to update order item status.');
+      });
+  };
 
 export const cancelOrderItemById =
   (orderItemId: any, orderId: any, payload: any) => (dispatch: any) => {
@@ -716,8 +717,9 @@ export const cancelGiftCard =
       });
   };
 
-  export const updateOrderItemsStatus =
-  (orderItemId: any, payload: any, onSuccess: any = false) => (dispatch: any) => {
+export const updateOrderItemsStatus =
+  (orderItemId: any, payload: any, onSuccess: any = false) =>
+  (dispatch: any) => {
     dispatch({
       type: types.UPDATE_ORDER_ITEM_BY_ID.baseType,
       payload,
@@ -730,7 +732,6 @@ export const cancelGiftCard =
           type: types.UPDATE_ORDER_ITEM_BY_ID.SUCCESS,
           payload: response?.data,
         });
-
       })
       .catch((error) => {
         dispatch({
@@ -748,7 +749,9 @@ export const getAllOrderPayments =
     });
 
     axiosInstance()
-      .get(`/api/orders/flat-file-data?platform=${platform}`, { signal: signal })
+      .get(`/api/orders/flat-file-data?platform=${platform}`, {
+        signal: signal,
+      })
       .then((response) => {
         dispatch({
           type: types.FETCH_ORDER_PAYMENTS.SUCCESS,
@@ -808,7 +811,7 @@ export const downloadOrderPaymentFile =
     });
 
     axiosInstance()
-      .get('/api/orders/download-flat-file', { 
+      .get('/api/orders/download-flat-file', {
         signal: signal,
         params: payload,
         responseType: 'blob',
@@ -819,7 +822,7 @@ export const downloadOrderPaymentFile =
         });
         const url = window.URL.createObjectURL(blob);
 
-       // let filename:string = response.headers['Content-Disposition'].split('=')[1];
+        // let filename:string = response.headers['Content-Disposition'].split('=')[1];
 
         const link = document.createElement('a');
         link.href = url;
@@ -845,7 +848,9 @@ export const downloadOrderPaymentFile =
             payload: error,
           });
 
-          toast.error('No data available for the selected date; no file generated for export. Please choose another date.');
+          toast.error(
+            'No data available for the selected date; no file generated for export. Please choose another date.',
+          );
         } else {
           dispatch({
             type: types.DOWNLOAD_ORDER_PAYMENT_FILE.FAILED,
@@ -871,7 +876,8 @@ export const clearOrder = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const addOrderNote = (orderId: string, payload: any) => (dispatch: any) => {
+export const addOrderNote =
+  (orderId: string, payload: any) => (dispatch: any) => {
     dispatch({
       type: types.ADD_ORDER_NOTE.baseType,
       payload,
@@ -898,7 +904,8 @@ export const addOrderNote = (orderId: string, payload: any) => (dispatch: any) =
       });
   };
 
-  export const upsertZendeskLink = (orderId: string, payload: any) => (dispatch: any) => {
+export const upsertZendeskLink =
+  (orderId: string, payload: any) => (dispatch: any) => {
     dispatch({
       type: types.UPSERT_ZENDESK_LINK.baseType,
       payload,
@@ -971,10 +978,9 @@ export const importPaymentsFlatFile =
       });
   };
 
-export const clearUploadPaymentErrors =
-  (payload: any) => (dispatch: any) => {
-    dispatch({
-      type: types.CLEAR_ORDER_PAYMENT_ERRORS,
-      payload,
-    });
-  };
+export const clearUploadPaymentErrors = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CLEAR_ORDER_PAYMENT_ERRORS,
+    payload,
+  });
+};
