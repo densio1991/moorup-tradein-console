@@ -34,6 +34,9 @@ const orderState = {
   isDownloadingPaymentFile: false,
   isImportingPaymentsFlatFile: false,
   importPaymentsFlatFileError: [],
+  orderFollowups: [],
+  isFetchingOrderFollowups: false,
+  isUpdatingOrderFollowups: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -330,6 +333,47 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isUpdatingSendinDeadline: false,
+      };
+    }
+
+    case types.FETCH_ORDER_FOLLOWUP.baseType: {
+      return {
+        ...state,
+        isFetchingOrderFollowups: true,
+        orderFollowups: [],
+      };
+    }
+    case types.FETCH_ORDER_FOLLOWUP.SUCCESS: {
+      return {
+        ...state,
+        isFetchingOrderFollowups: false,
+        orderFollowups: action.payload?.data,
+      };
+    }
+    case types.FETCH_ORDER_FOLLOWUP.FAILED: {
+      return {
+        ...state,
+        isFetchingOrderFollowups: false,
+        orderFollowups: [],
+      };
+    }
+
+    case types.UPDATE_ORDER_FOLLOWUP.baseType: {
+      return {
+        ...state,
+        isUpdatingOrderFollowups: true,
+      };
+    }
+    case types.UPDATE_ORDER_FOLLOWUP.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingOrderFollowups: false,
+      };
+    }
+    case types.UPDATE_ORDER_FOLLOWUP.FAILED: {
+      return {
+        ...state,
+        isUpdatingOrderFollowups: false,
       };
     }
 

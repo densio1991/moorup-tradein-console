@@ -506,6 +506,62 @@ export const bulkCancelOrderItems =
       });
   };
 
+export const getOrderFollowups =
+  (orderId: any, payload: any, signal?: AbortSignal) => (dispatch: any) => {
+    dispatch({
+      type: types.UPDATE_ORDER_FOLLOWUP.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .get('/api/orders/follow-up', {params: payload, signal: signal})
+      .then((response) => {
+        dispatch({
+          type: types.UPDATE_ORDER_FOLLOWUP.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderById(orderId)(dispatch);
+        toast.success('Order items successfully cancelled!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.UPDATE_ORDER_FOLLOWUP.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to update order item status.');
+      });
+  };
+
+export const updateOrderFollowups =
+  (orderId: any, payload: any) => (dispatch: any) => {
+    dispatch({
+      type: types.UPDATE_ORDER_FOLLOWUP.baseType,
+      payload,
+    });
+
+    axiosInstance()
+      .post('/api/orders/follow-up', payload)
+      .then((response) => {
+        dispatch({
+          type: types.UPDATE_ORDER_FOLLOWUP.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderById(orderId)(dispatch);
+        toast.success('Order items successfully cancelled!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.UPDATE_ORDER_FOLLOWUP.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to update order item status.');
+      });
+  };
+
 export const logCustomerNonContact =
   (orderId: string, payload: any) => (dispatch: any, token?: string) => {
     dispatch({

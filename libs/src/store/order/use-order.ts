@@ -33,6 +33,14 @@ export const useOrder = () => {
     actions.updateOrderById(id, payload)(dispatch, token);
   }
 
+  const fetchOrderFollowups = (id: any, payload: any, signal: AbortSignal) => {
+    actions.getOrderFollowups(id, payload, signal)(dispatch);
+  };
+
+  const updateOrderFollowups = async (id: any, payload: any) => {
+    actions.updateOrderFollowups(id, payload)(dispatch);
+  }
+
   const cancelOrderById = async (id: any) => {
     actions.cancelOrderById(id)(dispatch, token);
   }
@@ -226,5 +234,7 @@ export const useOrder = () => {
     bulkCancelOrderItems,
     importPaymentsFlatFile,
     clearUploadPaymentErrors,
+    fetchOrderFollowups,
+    updateOrderFollowups,
   };
 };

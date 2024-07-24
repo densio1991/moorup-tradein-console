@@ -7,8 +7,8 @@ import {
   OrderItemStatus,
   PageSubHeader,
   Table,
-  UNSENT_DEVICES_MANAGEMENT_COLUMNS,
-  unsentDevicesManagementParsingConfig,
+  REVISED_DEVICES_MANAGEMENT_COLUMNS,
+  revisedDevicesManagementParsingConfig,
   useAuth,
   useCommon,
   useOrder,
@@ -27,7 +27,7 @@ export function FollowUpRevisionOfferPage() {
   const [selectedRow, setSelectedRow] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const headers = UNSENT_DEVICES_MANAGEMENT_COLUMNS;
+  const headers = REVISED_DEVICES_MANAGEMENT_COLUMNS;
 
   const handleRowClick = (row: any) => {
     setIsModalOpen(true);
@@ -88,7 +88,7 @@ export function FollowUpRevisionOfferPage() {
         isLoading={isFetchingOrders}
         headers={headers}
         rows={filteredOrders || []}
-        parsingConfig={unsentDevicesManagementParsingConfig}
+        parsingConfig={revisedDevicesManagementParsingConfig}
         onRowClick={handleRowClick}
       />
       <CenterModal

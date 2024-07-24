@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useMemo, useState } from 'react';
+import { isEmpty } from 'lodash';
 import {
   AppButton,
   ConfirmationModalTypes,
@@ -8,39 +10,29 @@ import {
   GenericModal,
   OrderItemStatus,
   Table,
-  UNSENT_DEVICES_TABLE_COLUMNS,
-  unsentDevicesTableParsingConfig,
+  REVISED_DEVICES_TABLE_COLUMNS,
+  revisedDevicesTableParsingConfig,
   useAuth,
   useOrder,
 } from '@tradein-admin/libs';
-import { isEmpty } from 'lodash';
-import moment from 'moment';
-import { useMemo, useState } from 'react';
 
 type Props = {
   order: any;
 };
 
 export function FollowUpRevisionOfferModal({ order }: Props) {
-  const {
-    state,
-    extendSendinDeadline,
-    logCustomerNonContact,
-    patchOrderItemById,
-    bulkCancelOrderItems,
-  } = useOrder();
+  const { state, updateOrderFollowups, logCustomerNonContact } = useOrder();
   const { state: authState } = useAuth();
   const { userDetails } = authState;
   const [modalData, setModalData] = useState<any>({});
   const [selectedRow, setSelectedRow] = useState<any>({});
-  const [newDeadline, setNewDeadline] = useState<any>();
   const {
     isUpdatingSendinDeadline,
     isUpdatingContactLogs,
     isUpdatingOrderItem,
   } = state;
 
-  const headers = UNSENT_DEVICES_TABLE_COLUMNS;
+  const headers = REVISED_DEVICES_TABLE_COLUMNS;
 
   const onCloseModal = () => {
     setModalData({
@@ -59,14 +51,14 @@ export function FollowUpRevisionOfferModal({ order }: Props) {
       ) || [];
     return filteredOrderItems.map((orderItem: any) => ({
       ...orderItem,
-      extendDeadlineAction: () =>
+      acceptRevisionAction: () =>
         setModalData({
           open: true,
           view: ConfirmationModalTypes.ACCEPT_REVISION,
           title: 'Accept',
           subtitle: `Do you wish to accept revision for ${orderItem?.line_item_number}?`,
         }),
-      cancelOrderItemAction: () => {
+      returnDeviceAction: () => {
         setSelectedRow(orderItem);
         setModalData({
           open: true,
@@ -82,65 +74,73 @@ export function FollowUpRevisionOfferModal({ order }: Props) {
     return addRowActions(order);
   }, [order]);
 
-  const handleExtendSendinDeadline = () => {
+  const handleAcceptRevision = () => {
     if (
       modalData.view === ConfirmationModalTypes.ACCEPT_REVISION &&
       !isEmpty(selectedRow)
     ) {
       const payload = [
         {
-          sendInDeadlineDate: moment(newDeadline).format('YYYY-MM-DD'),
           orderItemId: selectedRow._id,
+          followupType: 'for-revision',
+          action: 'accept',
         },
       ];
-      extendSendinDeadline(order?._id, payload);
+      updateOrderFollowups(order?._id, payload);
     } else {
       const payload = filteredOrderItems.map((orderItem: any) => {
         return {
-          sendInDeadlineDate: moment(newDeadline).format('YYYY-MM-DD'),
           orderItemId: orderItem._id,
+          followupType: 'for-revision',
+          action: 'accept',
         };
       });
-      extendSendinDeadline(order?._id, payload);
+      updateOrderFollowups(order?._id, payload);
     }
   };
 
-  const generateBulkCancelPayload = (orderItems: any[], remarks: any) => {
+  const generateBulkReturnPayload = (orderItems: any[], remarks: any) => {
     const payload: any[] = [];
 
     orderItems?.forEach((orderItem: any) => {
       payload.push({
-        remarks: remarks,
         orderItemId: orderItem?._id,
+        followupType: 'for-revision',
+        action: 'return',
+        remarks: remarks,
       });
     });
 
     return payload;
   };
 
-  const handleCancelDevice = () => {
+  const handleReturnDevice = () => {
     if (
       modalData.view === ConfirmationModalTypes.RETURN_ORDER_ITEM &&
       !isEmpty(selectedRow)
     ) {
-      patchOrderItemById(selectedRow?._id, {
-        status: OrderItemStatus.CANCELLED,
-        admin_id: userDetails?._id,
-      });
+      const payload = [
+        {
+          orderItemId: selectedRow._id,
+          followupType: 'for-revision',
+          action: 'return',
+        },
+      ];
+      updateOrderFollowups(order?._id, payload);
     } else if (
-      modalData.view === ConfirmationModalTypes.CANCEL_ORDER_NON_CONTACTABLE
+      modalData.view === ConfirmationModalTypes.RETURN_ORDER_NON_CONTACTABLE
     ) {
-      const payload = generateBulkCancelPayload(
+      const payload = generateBulkReturnPayload(
         order?.order_items,
         'Customer Not Contactable',
       );
-      bulkCancelOrderItems(payload);
+      updateOrderFollowups(order?._id, payload);
     } else {
-      const payload = generateBulkCancelPayload(
+      const payload = generateBulkReturnPayload(
         order?.order_items,
-        'Cancel all devices',
+        'Return all devices',
       );
-      bulkCancelOrderItems(payload);
+      updateOrderFollowups(order?._id, payload);
     }
   };
 
@@ -161,9 +161,9 @@ export function FollowUpRevisionOfferModal({ order }: Props) {
               </AppButton>
               <AppButton
                 width="100%"
-                disabled={!newDeadline || isUpdatingSendinDeadline}
+                disabled={isUpdatingSendinDeadline}
                 onClick={() => {
-                  handleExtendSendinDeadline();
+                  handleAcceptRevision();
                   onCloseModal();
                 }}
               >
@@ -174,7 +174,7 @@ export function FollowUpRevisionOfferModal({ order }: Props) {
         );
       case ConfirmationModalTypes.RETURN_ALL_ORDER_ITEMS:
       case ConfirmationModalTypes.RETURN_ORDER_ITEM:
-      case ConfirmationModalTypes.CANCEL_ORDER_NON_CONTACTABLE:
+      case ConfirmationModalTypes.RETURN_ORDER_NON_CONTACTABLE:
         return (
           <div className="w-full">
             <FormGroup>
@@ -190,7 +190,7 @@ export function FollowUpRevisionOfferModal({ order }: Props) {
                 width="100%"
                 disabled={isUpdatingOrderItem}
                 onClick={() => {
-                  handleCancelDevice();
+                  handleReturnDevice();
                   onCloseModal();
                 }}
               >
@@ -271,7 +271,7 @@ export function FollowUpRevisionOfferModal({ order }: Props) {
         isLoading={!order}
         headers={headers}
         rows={filteredOrderItems || []}
-        parsingConfig={unsentDevicesTableParsingConfig}
+        parsingConfig={revisedDevicesTableParsingConfig}
       />
       <div className="px-5 pt-4 flex flex justify-end gap-2">
         <AppButton
