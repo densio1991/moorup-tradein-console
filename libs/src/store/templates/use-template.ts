@@ -7,10 +7,11 @@ export const useTemplate = () => {
   const { state, dispatch } = useContext(RootContext);
   const {
     activePlatform,
+    token,
   } = state.auth;
 
   const getTemplates = (payload: any, signal: AbortSignal) => {
-    actions.getTemplates(payload, activePlatform, signal)(dispatch);
+    actions.getTemplates(payload, activePlatform, signal)(dispatch, token);
   }
 
   const clearTemplates = (payload: any) => {
@@ -18,11 +19,11 @@ export const useTemplate = () => {
   }
 
   const requestTemplateChange = (currentTemplateId: string, payload: any, type: string) => {
-    actions.requestTemplateChange(currentTemplateId, payload, type, activePlatform)(dispatch);
+    actions.requestTemplateChange(currentTemplateId, payload, type, activePlatform)(dispatch, token);
   }
 
   const requestTemplatePreview = (payload: any) => {
-    actions.requestTemplatePreview(payload)(dispatch);
+    actions.requestTemplatePreview(payload)(dispatch, token);
   }
 
   const clearTemplatePreview = (payload: any) => {
@@ -34,7 +35,7 @@ export const useTemplate = () => {
   }
 
   const getTemplateApprovals = (payload: any, signal: AbortSignal) => {
-    actions.getTemplateApprovals(payload, signal)(dispatch);
+    actions.getTemplateApprovals(payload, signal)(dispatch, token);
   }
 
   const clearTemplateApprovals = (payload: any) => {
@@ -42,7 +43,7 @@ export const useTemplate = () => {
   }
 
   const getTemplateApprovalById = (payload: any, signal: AbortSignal) => {
-    actions.getTemplateApprovalById(payload, signal)(dispatch);
+    actions.getTemplateApprovalById(payload, signal)(dispatch, token);
   }
 
   const clearTemplateApproval = (payload: any) => {
@@ -50,7 +51,7 @@ export const useTemplate = () => {
   }
 
   const processTemplateApproval = (payload: any, approvalId: string) => {
-    actions.processTemplateApproval(payload, approvalId)(dispatch);
+    actions.processTemplateApproval(payload, approvalId)(dispatch, token);
   }
 
   return {
