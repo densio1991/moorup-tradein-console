@@ -55,8 +55,8 @@ export function FollowUpRevisionOfferModal({ order }: Props) {
         setModalData({
           open: true,
           view: ConfirmationModalTypes.ACCEPT_REVISION,
-          title: 'Accept',
-          subtitle: `Do you wish to accept revision for ${orderItem?.line_item_number}?`,
+          title: 'Accept Revision',
+          subtitle: `Do you wish to mark revision for ${orderItem?.line_item_number} as accepted?`,
         }),
       returnDeviceAction: () => {
         setSelectedRow(orderItem);
@@ -64,7 +64,7 @@ export function FollowUpRevisionOfferModal({ order }: Props) {
           open: true,
           view: ConfirmationModalTypes.RETURN_ORDER_ITEM,
           title: 'Return Device',
-          subtitle: `Do you wish to return ${orderItem.line_item_number}?`,
+          subtitle: `Do you wish to mark ${orderItem.line_item_number} for return?`,
         });
       },
     }));
@@ -254,13 +254,13 @@ export function FollowUpRevisionOfferModal({ order }: Props) {
                 onClick={() =>
                   setModalData({
                     open: true,
-                    view: ConfirmationModalTypes.CANCEL_ORDER_NON_CONTACTABLE,
-                    title: 'Cancel All - Customer Not Contactable',
-                    subtitle: 'Do you wish to Cancel All devices?',
+                    view: ConfirmationModalTypes.RETURN_ORDER_NON_CONTACTABLE,
+                    title: 'Return Device - Not Contactable',
+                    subtitle: 'Do you wish to mark all devices for return?',
                   })
                 }
               >
-                Cancel - Not Contactable
+                Return - Not Contactable
               </AppButton>
             )}
           </div>
@@ -282,8 +282,9 @@ export function FollowUpRevisionOfferModal({ order }: Props) {
             setModalData({
               open: true,
               view: ConfirmationModalTypes.ACCEPT_ALL_REVISION,
-              title: 'Accept All',
-              subtitle: 'Do you wish to Accept All devices?',
+              title: 'Accept All Revisions',
+              subtitle:
+                'Do you wish to mark all devices revisions as accepted?',
             })
           }
         >
@@ -297,8 +298,8 @@ export function FollowUpRevisionOfferModal({ order }: Props) {
             setModalData({
               open: true,
               view: ConfirmationModalTypes.RETURN_ALL_ORDER_ITEMS,
-              title: 'Return All',
-              subtitle: 'Do you wish to Return All devices?',
+              title: 'Return All Device',
+              subtitle: 'Do you wish to mark all devices for return?',
             })
           }
         >
