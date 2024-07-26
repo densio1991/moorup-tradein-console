@@ -54,13 +54,13 @@ export const logoutUser = (payload: any) => (dispatch: any) => {
   }
 };
 
-export const getUserDetailsById = (payload: any) => (dispatch: any) => {
+export const getUserDetailsById = (payload: any) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.GET_USER_DETAILS.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .get(`/api/admins/${payload}`)
     .then((response: { data: any; }) => {
       dispatch({
@@ -76,13 +76,13 @@ export const getUserDetailsById = (payload: any) => (dispatch: any) => {
     });
 };
 
-export const getPlatformConfig = (payload: any, signal?: AbortSignal) => (dispatch: any) => {
+export const getPlatformConfig = (payload: any, signal?: AbortSignal) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.GET_PLATFORM_CONFIG.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .get(`/api/configurations?platform=${payload}`, { signal: signal })
     .then((response: { data: any; }) => {
       dispatch({
@@ -126,13 +126,13 @@ export const clearPlatformConfig = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const updatePlatformConfig = (id: string, activePlatform: string, payload: any) => (dispatch: any) => {
+export const updatePlatformConfig = (id: string, activePlatform: string, payload: any) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.UPDATE_PLATFORM_CONFIG.baseType,
     payload: payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .patch(`/api/configurations/${id}`, payload)
     .then((response) => {
       dispatch({

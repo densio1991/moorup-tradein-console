@@ -7,10 +7,11 @@ export const usePromotion = () => {
   const { state, dispatch } = useContext(RootContext);
   const {
     activePlatform,
+    token,
   } = state.auth;
 
   const getPromotions = (payload: any, signal: AbortSignal) => {
-    actions.getPromotions(payload, activePlatform, signal)(dispatch);
+    actions.getPromotions(payload, activePlatform, signal)(dispatch, token);
   }
 
   const clearPromotions = (payload: any) => {
@@ -18,7 +19,7 @@ export const usePromotion = () => {
   }
 
   const createPromotion = (payload: any, cardImageFile: File, bannerImageFile?: File) => {
-    actions.createPromotion(payload, activePlatform, cardImageFile, bannerImageFile)(dispatch);
+    actions.createPromotion(payload, activePlatform, cardImageFile, bannerImageFile)(dispatch, token);
   }
 
   const setAddPromotionDetailsPayload = (payload: any) => {
@@ -42,7 +43,7 @@ export const usePromotion = () => {
   }
 
   const getPromotionClaims = (payload: any, signal?: AbortSignal) => {
-    actions.getPromotionClaims(payload, activePlatform, signal)(dispatch);
+    actions.getPromotionClaims(payload, activePlatform, signal)(dispatch, token);
   }
 
   const clearPromotionClaims = (payload: any) => {
@@ -50,7 +51,7 @@ export const usePromotion = () => {
   }
 
   const getPromotionById = (payload: any, signal: AbortSignal) => {
-    actions.getPromotionById(payload, signal)(dispatch);
+    actions.getPromotionById(payload, signal)(dispatch, token);
   }
 
   const clearPromotion = (payload: any) => {
@@ -58,7 +59,7 @@ export const usePromotion = () => {
   }
 
   const updatePromotion = (payload: any, promotionId: string, cardImageFile?: File, bannerImageFile?: File) => {
-    actions.updatePromotion(payload, promotionId, activePlatform, cardImageFile, bannerImageFile)(dispatch);
+    actions.updatePromotion(payload, promotionId, activePlatform, cardImageFile, bannerImageFile)(dispatch, token);
   }
 
   const setConfirmationModalState = (payload: any) => {
@@ -66,19 +67,19 @@ export const usePromotion = () => {
   }
 
   const updatePromotionClaimMoorupStatus = (payload: any, promotionId: string) => {
-    actions.updatePromotionClaimMoorupStatus(payload, promotionId, activePlatform)(dispatch);
+    actions.updatePromotionClaimMoorupStatus(payload, promotionId, activePlatform)(dispatch, token);
   }
 
   const updatePromotionClaimStatus = (payload: any, promotionId: string, filter: any) => {
-    actions.updatePromotionClaimStatus(payload, promotionId, filter, activePlatform)(dispatch);
+    actions.updatePromotionClaimStatus(payload, promotionId, filter, activePlatform)(dispatch, token);
   }
 
   const submitOrderPromotionClaim = (payload: any,  filter: any) => {
-    actions.submitOrderPromotionClaim(payload, filter, activePlatform)(dispatch);
+    actions.submitOrderPromotionClaim(payload, filter, activePlatform)(dispatch, token);
   }
 
   const processPromotionClaimPayment = (payload: any, filter: any) => {
-    actions.processPromotionClaimPayment(payload, filter, activePlatform)(dispatch);
+    actions.processPromotionClaimPayment(payload, filter, activePlatform)(dispatch, token);
   }
 
   const setPromotionCardImage = (payload: File) => {
@@ -94,15 +95,15 @@ export const usePromotion = () => {
   }
 
   const bulkUpdatePromotionClaimStatus = (payload: any, filter: any) => {
-    actions.bulkUpdatePromotionClaimStatus(payload, filter, activePlatform)(dispatch);
+    actions.bulkUpdatePromotionClaimStatus(payload, filter, activePlatform)(dispatch, token);
   }
 
   const bulkUpdatePromotionClaimMoorupStatus = (payload: any, filter: any) => {
-    actions.bulkUpdatePromotionClaimMoorupStatus(payload, filter, activePlatform)(dispatch);
+    actions.bulkUpdatePromotionClaimMoorupStatus(payload, filter, activePlatform)(dispatch, token);
   }
 
   const bulkProcessPromotionClaimPayment = (payload: any, filter: any) => {
-    actions.bulkProcessPromotionClaimPayment(payload, filter, activePlatform)(dispatch);
+    actions.bulkProcessPromotionClaimPayment(payload, filter, activePlatform)(dispatch, token);
   }
 
   return {

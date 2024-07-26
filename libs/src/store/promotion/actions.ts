@@ -4,13 +4,13 @@ import { CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
-export const getPromotions = (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any) => {
+export const getPromotions = (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.FETCH_PROMOTIONS.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .get(`/api/promotions?platform=${platform}`, { signal: signal })
     .then((response) => {
       dispatch({
@@ -40,7 +40,7 @@ export const clearPromotions = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const createPromotion = (payload: any, activePlatform: string, cardImageFile: File, bannerImageFile?: File) => (dispatch: any) => {
+export const createPromotion = (payload: any, activePlatform: string, cardImageFile: File, bannerImageFile?: File) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.CREATE_PROMOTION.baseType,
     payload,
@@ -51,7 +51,7 @@ export const createPromotion = (payload: any, activePlatform: string, cardImageF
   formData.append('image_file', cardImageFile);
   if (bannerImageFile) formData.append('banner_image_file', bannerImageFile);
 
-  axiosInstance()
+  axiosInstance(token)
     .post('/api/promotions', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -119,13 +119,13 @@ export const setAddPromotionEligibilityAndFaqsPayload = (payload: any) => (dispa
   });
 };
 
-export const getPromotionClaims = (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any) => {
+export const getPromotionClaims = (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.FETCH_PROMOTION_CLAIMS.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .get(`/api/claims?platform=${platform}`, { params: payload, signal: signal })
     .then((response) => {
       dispatch({
@@ -155,13 +155,13 @@ export const clearPromotionClaims = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const getPromotionById = (payload: any, signal?: AbortSignal) => (dispatch: any) => {
+export const getPromotionById = (payload: any, signal?: AbortSignal) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.FETCH_PROMOTION_BY_ID.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .get(`/api/promotions/${payload}`,  { signal: signal })
     .then((response) => {
       dispatch({
@@ -191,7 +191,7 @@ export const clearPromotion = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const updatePromotion = (payload: any, promotionId: string, activePlatform: string, cardImageFile?: File, bannerImageFile?: File ) => (dispatch: any) => {
+export const updatePromotion = (payload: any, promotionId: string, activePlatform: string, cardImageFile?: File, bannerImageFile?: File ) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.UPDATE_PROMOTION.baseType,
     payload,
@@ -202,7 +202,7 @@ export const updatePromotion = (payload: any, promotionId: string, activePlatfor
   if (cardImageFile) formData.append('image_file', cardImageFile);
   if (bannerImageFile) formData.append('banner_image_file', bannerImageFile);
 
-  axiosInstance()
+  axiosInstance(token)
     .patch(`/api/promotions/${promotionId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -235,13 +235,13 @@ export const setConfirmationModalState = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const updatePromotionClaimMoorupStatus = (payload: any, promotionClaimId: string, activePlatform: string) => (dispatch: any) => {
+export const updatePromotionClaimMoorupStatus = (payload: any, promotionClaimId: string, activePlatform: string) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .patch(`/api/claims/${promotionClaimId}/moorup-status`, payload)
     .then((response) => {
       dispatch({
@@ -263,13 +263,13 @@ export const updatePromotionClaimMoorupStatus = (payload: any, promotionClaimId:
     });
 };
 
-export const updatePromotionClaimStatus = (payload: any, promotionClaimId: string, filter: any, activePlatform: string) => (dispatch: any) => {
+export const updatePromotionClaimStatus = (payload: any, promotionClaimId: string, filter: any, activePlatform: string) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.UPDATE_PROMOTION_CLAIM_STATUS.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .patch(`/api/claims/${promotionClaimId}/status`, payload)
     .then((response) => {
       dispatch({
@@ -291,13 +291,13 @@ export const updatePromotionClaimStatus = (payload: any, promotionClaimId: strin
     });
 };
 
-export const bulkUpdatePromotionClaimStatus = (payload: any, filter: any, activePlatform: string) => (dispatch: any) => {
+export const bulkUpdatePromotionClaimStatus = (payload: any, filter: any, activePlatform: string) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.UPDATE_PROMOTION_CLAIM_STATUS.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .patch('/api/claims/status/bulk', payload)
     .then((response) => {
       dispatch({
@@ -319,13 +319,13 @@ export const bulkUpdatePromotionClaimStatus = (payload: any, filter: any, active
     });
 };
 
-export const bulkUpdatePromotionClaimMoorupStatus = (payload: any, filter: any, activePlatform: string) => (dispatch: any) => {
+export const bulkUpdatePromotionClaimMoorupStatus = (payload: any, filter: any, activePlatform: string) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.BULK_UPDATE_PROMOTION_CLAIM_MOORUP_STATUS.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .patch('/api/claims/moorup-status/bulk', payload)
     .then((response) => {
       dispatch({
@@ -347,13 +347,13 @@ export const bulkUpdatePromotionClaimMoorupStatus = (payload: any, filter: any, 
     });
 };
 
-export const submitOrderPromotionClaim = (payload: any, filter: any, activePlatform: string) => (dispatch: any) => {
+export const submitOrderPromotionClaim = (payload: any, filter: any, activePlatform: string) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.SUBMIT_ORDER_PROMOTION_CLAIM.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .post('/api/claims/submit-receipt', payload)
     .then((response) => {
       dispatch({
@@ -375,13 +375,13 @@ export const submitOrderPromotionClaim = (payload: any, filter: any, activePlatf
     });
 };
 
-export const processPromotionClaimPayment = (payload: any, filter: any, activePlatform: string) => (dispatch: any) => {
+export const processPromotionClaimPayment = (payload: any, filter: any, activePlatform: string) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.PROCESS_PROMOTION_CLAIM_PAYMENT.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .post('/api/claims/payment', payload)
     .then((response) => {
       dispatch({
@@ -417,13 +417,13 @@ export const setPromotionBannerImage = (payload: File) => (dispatch: any) => {
   });
 };
 
-export const bulkProcessPromotionClaimPayment = (payload: any, filter: any, activePlatform: string) => (dispatch: any) => {
+export const bulkProcessPromotionClaimPayment = (payload: any, filter: any, activePlatform: string) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.BULK_PROCESS_PROMOTION_CLAIM_PAYMENT.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .post('/api/claims/payment/bulk', payload)
     .then(() => {
       const selectedIds = payload.map((item: any) => item.claimId);

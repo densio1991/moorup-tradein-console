@@ -5,13 +5,13 @@ import axiosInstance from '../axios';
 import * as commonTypes from '../common/action-types';
 import * as types from './action-types';
 
-export const getTemplates = (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any) => {
+export const getTemplates = (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.FETCH_TEMPLATES.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .get(`/api/template?platform=${platform}&type=${payload}`, { signal: signal })
     .then((response) => {
       dispatch({
@@ -34,13 +34,13 @@ export const getTemplates = (payload: any, platform: string, signal?: AbortSigna
     });
 };
 
-export const requestTemplateChange = (currentTemplateId: string, payload: any, type: string, platform: string) => (dispatch: any) => {
+export const requestTemplateChange = (currentTemplateId: string, payload: any, type: string, platform: string) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.REQUEST_TEMPLATE_CHANGE.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .patch(`/api/template/request-change/${currentTemplateId}`, payload)
     .then((response) => {
       dispatch({
@@ -69,13 +69,13 @@ export const clearTemplates = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const requestTemplatePreview = (payload: any) => (dispatch: any) => {
+export const requestTemplatePreview = (payload: any) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.REQUEST_TEMPLATE_PREVIEW.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .post('/api/template/request-change-preview', payload)
     .then((response) => {
       dispatch({
@@ -107,13 +107,13 @@ export const setActivePill = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const getTemplateApprovals = (payload: any, signal?: AbortSignal) => (dispatch: any) => {
+export const getTemplateApprovals = (payload: any, signal?: AbortSignal) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.FETCH_TEMPLATE_APPROVALS.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .get('/api/template/approvals', { params: payload, signal: signal })
     .then((response) => {
       dispatch({
@@ -143,13 +143,13 @@ export const clearTemplateApprovals = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const getTemplateApprovalById = (payload: any, signal?: AbortSignal) => (dispatch: any) => {
+export const getTemplateApprovalById = (payload: any, signal?: AbortSignal) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.FETCH_TEMPLATE_APPROVAL_BY_ID.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .get(`/api/template/request-change/${payload}`,  { signal: signal })
     .then((response) => {
       dispatch({
@@ -179,13 +179,13 @@ export const clearTemplateApproval = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const processTemplateApproval = (payload: any, approvalId: string) => (dispatch: any) => {
+export const processTemplateApproval = (payload: any, approvalId: string) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.PROCESS_TEMPLATE_APPROVAL.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .patch(`/api/template/approvals/${approvalId}/update-status`, payload)
     .then((response) => {
       dispatch({

@@ -7,6 +7,7 @@ export const useAuth = () => {
   const { state, dispatch } = useContext(RootContext);
   const {
     activePlatform,
+    token,
   } = state.auth;
 
   const loginUser = (payload: any) => {
@@ -18,11 +19,11 @@ export const useAuth = () => {
   }
 
   const getUserDetailsById = (payload: any) => {
-    actions.getUserDetailsById(payload)(dispatch);
+    actions.getUserDetailsById(payload)(dispatch, token);
   }
 
   const getPlatformConfig = (payload: any, signal?: AbortSignal) => {
-    actions.getPlatformConfig(payload, signal)(dispatch);
+    actions.getPlatformConfig(payload, signal)(dispatch, token);
   }
 
   const setActivePlatform = (payload: any) => {
@@ -38,7 +39,7 @@ export const useAuth = () => {
   }
 
   const updatePlatformConfig = (id: string, payload: any) => {
-    actions.updatePlatformConfig(id, activePlatform, payload)(dispatch);
+    actions.updatePlatformConfig(id, activePlatform, payload)(dispatch, token);
   }
 
   return {
