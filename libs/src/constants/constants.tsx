@@ -291,6 +291,7 @@ export interface OrderItems {
   reason: string[];
   questions_answered: QuestionAnswered[];
   revision: any;
+  lock: any
 }
 
 export interface Addresses {
@@ -933,6 +934,7 @@ export const VALIDATION_ORDER_ITEM_STATUS = [
   OrderItemStatus.RECEIVED,
   OrderItemStatus.LABEL_SENT,
   OrderItemStatus.FOR_REVISION,
+  OrderItemStatus.FOR_RETURN,
   OrderItemStatus.REVISION_REJECTED,
   OrderItemStatus.HOLD,
 ];

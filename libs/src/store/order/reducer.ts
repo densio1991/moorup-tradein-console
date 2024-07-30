@@ -37,6 +37,7 @@ const orderState = {
   orderFollowups: [],
   isFetchingOrderFollowups: true,
   isUpdatingOrderFollowups: false,
+  isUpdatingOrderItemLockType: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -393,6 +394,25 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isUpdatingContactLogs: false,
+      };
+    }
+
+    case types.UPDATE_ORDER_ITEM_LOCK_TYPE.baseType: {
+      return {
+        ...state,
+        isUpdatingOrderItemLockType: true,
+      };
+    }
+    case types.UPDATE_ORDER_ITEM_LOCK_TYPE.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingOrderItemLockType: false,
+      };
+    }
+    case types.UPDATE_ORDER_ITEM_LOCK_TYPE.FAILED: {
+      return {
+        ...state,
+        isUpdatingOrderItemLockType: false,
       };
     }
 

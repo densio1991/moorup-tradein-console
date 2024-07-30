@@ -149,6 +149,10 @@ export const useOrder = () => {
     actions.updateOrderItemImeiSerial(orderItemId, orderId, payload)(dispatch, token);
   }
 
+  const updateOrderItemLockType = (orderItemId: string, orderId: any, payload: any) => {
+    actions.updateOrderItemLockType(orderItemId, orderId, payload)(dispatch, token);
+  }
+
   const getGiftCardStatus = (id: any, payload: any, signal?: AbortSignal) => {
     actions.getGiftCardStatus(id, payload, signal)(dispatch, token);
   };
@@ -236,5 +240,6 @@ export const useOrder = () => {
     clearUploadPaymentErrors,
     fetchOrderFollowups,
     updateOrderFollowups,
+    updateOrderItemLockType,
   };
 };

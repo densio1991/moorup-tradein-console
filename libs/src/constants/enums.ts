@@ -18,7 +18,8 @@ export enum OrderItemStatus {
   REVISED = 'revised',
   REVISION_REJECTED = 'revision-rejected',
   HOLD = 'hold',
-  DEVICE_RETURED = 'device-returned',
+  FOR_RETURN = 'for-return',
+  DEVICE_RETURNED = 'device-returned',
 }
 
 export enum DropdownOrderItemStatus {
@@ -160,3 +161,12 @@ export enum LogTypes {
   SYSTEM = 'system',
   USER = 'user',
 }
+
+export enum LockTypes {
+  PASSCODE = 'passcode',
+  ICLOUD = 'icloud',
+  GOOGLE = 'google',
+  MDM = 'mdm',
+  SAMSUNG = 'samsung',
+  OTHERS = 'others'
+};

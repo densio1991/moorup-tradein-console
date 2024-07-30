@@ -507,13 +507,13 @@ export const bulkCancelOrderItems =
   };
 
 export const getOrderFollowups =
-  (payload: any, signal?: AbortSignal) => (dispatch: any) => {
+  (payload: any, signal?: AbortSignal) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.FETCH_ORDER_FOLLOWUP.baseType,
       payload,
     });
 
-    axiosInstance()
+    axiosInstance(token)
       .get('/api/orders/follow-up', {params: payload, signal: signal})
       .then((response) => {
         dispatch({
@@ -537,13 +537,13 @@ export const getOrderFollowups =
   };
 
 export const updateOrderFollowups =
-  (orderId: any, payload: any) => (dispatch: any) => {
+  (orderId: any, payload: any) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.UPDATE_ORDER_FOLLOWUP.baseType,
       payload,
     });
 
-    axiosInstance()
+    axiosInstance(token)
       .post('/api/orders/follow-up', payload)
       .then((response) => {
         dispatch({
@@ -551,7 +551,7 @@ export const updateOrderFollowups =
           payload: response?.data,
         });
 
-        getOrderById(orderId)(dispatch);
+        getOrderById(orderId)(dispatch, token);
         toast.success('Order items successfully updated!');
       })
       .catch((error) => {
@@ -561,6 +561,34 @@ export const updateOrderFollowups =
         });
 
         toast.error('Failed to update order item status.');
+      });
+  };
+
+export const updateOrderItemLockType =
+  (orderItemId: any, orderId: any, payload: any) => (dispatch: any, token?: string) => {
+    dispatch({
+      type: types.UPDATE_ORDER_ITEM_LOCK_TYPE.baseType,
+      payload,
+    });
+
+    axiosInstance(token)
+      .patch(`/api/orders/items/lock-devices/${orderItemId}/lock-status`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.UPDATE_ORDER_ITEM_LOCK_TYPE.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderById(orderId)(dispatch, token);
+        toast.success('Order items lock type successfully updated!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.UPDATE_ORDER_ITEM_LOCK_TYPE.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to update order item lock type.');
       });
   };
 
