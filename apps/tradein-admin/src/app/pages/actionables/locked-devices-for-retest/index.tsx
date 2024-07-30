@@ -26,10 +26,21 @@ import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 
 export function LockedDevicesForRetestPage() {
-  const { state, getLockedDevices, clearLockedDevices } = useOrder();
+  const {
+    state: orderState,
+    getLockedDevices,
+    clearLockedDevices,
+    setLockedDeviceLockStatus,
+    setLockedDeviceStatus,
+  } = useOrder();
+  const {
+    lockedDevices,
+    isFetchingLockedDevices,
+    isUpdatingDeviceLockStatus,
+    isUpdatingLockedDeviceStatus,
+  } = orderState;
   const { state: authState } = useAuth();
-  const { lockedDevices, isFetchingLockedDevices } = state;
-  const { activePlatform } = authState;
+  const { activePlatform, userDetails } = authState;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
 
@@ -118,7 +129,7 @@ export function LockedDevicesForRetestPage() {
                   onClick={() => {
                     const filter = {
                       status: [OrderItemStatus.RECEIVED]?.join(','),
-                      lock_status: [LockStatus.LOCKED]?.join(','),
+                      lock_status: [LockStatus.RETEST]?.join(','),
                       ...(selectedLockType?.length
                         ? {
                             lock_type: selectedLockType.join(','),
@@ -170,7 +181,11 @@ export function LockedDevicesForRetestPage() {
       />
       <Table
         label="Locked Devices - For Retest"
-        isLoading={isFetchingLockedDevices}
+        isLoading={
+          isFetchingLockedDevices ||
+          isUpdatingDeviceLockStatus ||
+          isUpdatingLockedDeviceStatus
+        }
         headers={headers}
         rows={lockedDevices || []}
         parsingConfig={actionablesLockedDevicesForRetestParsingConfig}
@@ -178,19 +193,71 @@ export function LockedDevicesForRetestPage() {
           {
             label: 'Set Unlocked',
             action: (value: any) => {
-              console.log('Unlocked: ', value._id);
+              const filter = {
+                status: [OrderItemStatus.RECEIVED]?.join(','),
+                lock_status: [LockStatus.RETEST]?.join(','),
+                ...(selectedLockType?.length
+                  ? {
+                      lock_type: selectedLockType.join(','),
+                    }
+                  : {}),
+              };
+
+              setLockedDeviceLockStatus(
+                value.order_item._id,
+                {
+                  admin_id: userDetails._id,
+                  device_status: OrderItemStatus.RECEIVED,
+                  lock_status: LockStatus.UNLOCKED,
+                },
+                filter,
+              );
             },
           },
           {
             label: 'For Return',
             action: (value: any) => {
-              console.log('For Return: ', value._id);
+              const filter = {
+                status: [OrderItemStatus.RECEIVED]?.join(','),
+                lock_status: [LockStatus.RETEST]?.join(','),
+                ...(selectedLockType?.length
+                  ? {
+                      lock_type: selectedLockType.join(','),
+                    }
+                  : {}),
+              };
+
+              setLockedDeviceStatus(
+                value.order_item._id,
+                {
+                  admin_id: userDetails._id,
+                  device_status: OrderItemStatus.FOR_RETURN,
+                },
+                filter,
+              );
             },
           },
           {
             label: 'For Recycle',
             action: (value: any) => {
-              console.log('Recycle: ', value._id);
+              const filter = {
+                status: [OrderItemStatus.RECEIVED]?.join(','),
+                lock_status: [LockStatus.RETEST]?.join(','),
+                ...(selectedLockType?.length
+                  ? {
+                      lock_type: selectedLockType.join(','),
+                    }
+                  : {}),
+              };
+
+              setLockedDeviceStatus(
+                value.order_item._id,
+                {
+                  admin_id: userDetails._id,
+                  device_status: OrderItemStatus.FOR_RECYCLE,
+                },
+                filter,
+              );
             },
           },
         ]}

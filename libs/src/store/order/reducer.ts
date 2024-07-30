@@ -40,6 +40,8 @@ const orderState = {
   isUpdatingOrderItemLockType: false,
   lockedDevices: [],
   isFetchingLockedDevices: true,
+  isUpdatingDeviceLockStatus: false,
+  isUpdatingLockedDeviceStatus: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -728,6 +730,48 @@ const orderReducer = (state = orderState, action: any) => {
         ...state,
         isFetchingLockedDevices: true,
         lockedDevices: [],
+      };
+    }
+
+    case types.SET_LOCKED_DEVICE_LOCK_STATUS.baseType: {
+      return {
+        ...state,
+        isUpdatingDeviceLockStatus: true,
+        isFetchingLockedDevices: true,
+        lockedDevices: [],
+      };
+    }
+    case types.SET_LOCKED_DEVICE_LOCK_STATUS.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingDeviceLockStatus: false,
+      };
+    }
+    case types.SET_LOCKED_DEVICE_LOCK_STATUS.FAILED: {
+      return {
+        ...state,
+        isUpdatingDeviceLockStatus: false,
+      };
+    }
+
+    case types.SET_LOCKED_DEVICE_STATUS.baseType: {
+      return {
+        ...state,
+        isUpdatingLockedDeviceStatus: true,
+        isFetchingLockedDevices: true,
+        lockedDevices: [],
+      };
+    }
+    case types.SET_LOCKED_DEVICE_STATUS.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingLockedDeviceStatus: false,
+      };
+    }
+    case types.SET_LOCKED_DEVICE_STATUS.FAILED: {
+      return {
+        ...state,
+        isUpdatingLockedDeviceStatus: false,
       };
     }
 

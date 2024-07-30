@@ -205,6 +205,14 @@ export const useOrder = () => {
     actions.clearLockedDevices(payload)(dispatch);
   }
 
+  const setLockedDeviceLockStatus = (orderItemId: string, payload: any, filter: any) => {
+    actions.setLockedDeviceLockStatus(orderItemId, payload, filter, activePlatform)(dispatch, token);
+  }
+
+  const setLockedDeviceStatus = (orderItemId: string, payload: any, filter: any) => {
+    actions.setLockedDeviceStatus(orderItemId, payload, filter, activePlatform)(dispatch, token);
+  }
+
   return {
     state: state.order,
     getOrderItems,
@@ -251,5 +259,7 @@ export const useOrder = () => {
     updateOrderItemLockType,
     getLockedDevices,
     clearLockedDevices,
+    setLockedDeviceLockStatus,
+    setLockedDeviceStatus,
   };
 };

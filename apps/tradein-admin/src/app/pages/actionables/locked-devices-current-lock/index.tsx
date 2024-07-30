@@ -26,10 +26,21 @@ import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 
 export function LockedDevicesCurrentLockPage() {
-  const { state, getLockedDevices, clearLockedDevices } = useOrder();
+  const {
+    state: orderState,
+    getLockedDevices,
+    clearLockedDevices,
+    setLockedDeviceLockStatus,
+    setLockedDeviceStatus,
+  } = useOrder();
+  const {
+    lockedDevices,
+    isFetchingLockedDevices,
+    isUpdatingLockedDeviceLockStatus,
+    isUpdatingLockedDeviceStatus,
+  } = orderState;
   const { state: authState } = useAuth();
-  const { lockedDevices, isFetchingLockedDevices } = state;
-  const { activePlatform } = authState;
+  const { activePlatform, userDetails } = authState;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
 
@@ -170,7 +181,11 @@ export function LockedDevicesCurrentLockPage() {
       />
       <Table
         label="Locked Devices - Current Lock"
-        isLoading={isFetchingLockedDevices}
+        isLoading={
+          isFetchingLockedDevices ||
+          isUpdatingLockedDeviceLockStatus ||
+          isUpdatingLockedDeviceStatus
+        }
         headers={headers}
         rows={lockedDevices || []}
         parsingConfig={actionablesLockedDevicesCurrentLockParsingConfig}
@@ -178,19 +193,71 @@ export function LockedDevicesCurrentLockPage() {
           {
             label: 'For Retest',
             action: (value: any) => {
-              console.log('For Retest: ', value._id);
+              const filter = {
+                status: [OrderItemStatus.RECEIVED]?.join(','),
+                lock_status: [LockStatus.LOCKED]?.join(','),
+                ...(selectedLockType?.length
+                  ? {
+                      lock_type: selectedLockType.join(','),
+                    }
+                  : {}),
+              };
+
+              setLockedDeviceLockStatus(
+                value.order_item._id,
+                {
+                  admin_id: userDetails._id,
+                  device_status: OrderItemStatus.RECEIVED,
+                  lock_status: LockStatus.RETEST,
+                },
+                filter,
+              );
             },
           },
           {
             label: 'For Return',
             action: (value: any) => {
-              console.log('For Return: ', value._id);
+              const filter = {
+                status: [OrderItemStatus.RECEIVED]?.join(','),
+                lock_status: [LockStatus.LOCKED]?.join(','),
+                ...(selectedLockType?.length
+                  ? {
+                      lock_type: selectedLockType.join(','),
+                    }
+                  : {}),
+              };
+
+              setLockedDeviceStatus(
+                value.order_item._id,
+                {
+                  admin_id: userDetails._id,
+                  device_status: OrderItemStatus.FOR_RETURN,
+                },
+                filter,
+              );
             },
           },
           {
             label: 'For Recycle',
             action: (value: any) => {
-              console.log('For Recycle: ', value._id);
+              const filter = {
+                status: [OrderItemStatus.RECEIVED]?.join(','),
+                lock_status: [LockStatus.LOCKED]?.join(','),
+                ...(selectedLockType?.length
+                  ? {
+                      lock_type: selectedLockType.join(','),
+                    }
+                  : {}),
+              };
+
+              setLockedDeviceStatus(
+                value.order_item._id,
+                {
+                  admin_id: userDetails._id,
+                  device_status: OrderItemStatus.FOR_RECYCLE,
+                },
+                filter,
+              );
             },
           },
         ]}
