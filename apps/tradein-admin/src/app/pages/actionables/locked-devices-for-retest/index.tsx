@@ -17,7 +17,7 @@ import {
   SideModal,
   StyledReactSelect,
   Table,
-  actionablesLockedDevicesCurrentLockParsingConfig,
+  actionablesLockedDevicesForRetestParsingConfig,
   useAuth,
   useCommon,
   useOrder,
@@ -173,7 +173,7 @@ export function LockedDevicesForRetestPage() {
         isLoading={isFetchingLockedDevices}
         headers={headers}
         rows={lockedDevices || []}
-        parsingConfig={actionablesLockedDevicesCurrentLockParsingConfig}
+        parsingConfig={actionablesLockedDevicesForRetestParsingConfig}
         menuItems={[
           {
             label: 'Set Unlocked',

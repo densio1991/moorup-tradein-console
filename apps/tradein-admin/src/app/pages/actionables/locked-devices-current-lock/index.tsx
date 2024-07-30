@@ -176,9 +176,9 @@ export function LockedDevicesCurrentLockPage() {
         parsingConfig={actionablesLockedDevicesCurrentLockParsingConfig}
         menuItems={[
           {
-            label: 'Retest',
+            label: 'For Retest',
             action: (value: any) => {
-              console.log('Retest: ', value._id);
+              console.log('For Retest: ', value._id);
             },
           },
           {

@@ -979,6 +979,12 @@ export const ORDER_PAYMENT_FLAT_FILE_DETAILS_COLUMNS = [
 
 export const ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK_COLUMNS = [
   {
+    label: 'Device ID',
+    order: 1,
+    enableSort: true,
+    keyName: 'order_item.line_item_number',
+  },
+  {
     label: 'Order Number',
     order: 2,
     enableSort: true,
@@ -988,7 +994,7 @@ export const ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK_COLUMNS = [
     label: 'Order Date',
     order: 3,
     enableSort: true,
-    keyName: 'createdAt',
+    keyName: 'order_item.createdAt',
   },
   {
     label: 'Customer Name',
@@ -997,27 +1003,27 @@ export const ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK_COLUMNS = [
     keyName: 'user_details.first_name',
   },
   {
-    label: 'Device ID',
+    label: 'Prior Lock Check',
     order: 4,
     enableSort: true,
-    keyName: 'order_items.line_item_number',
-  },
-  {
-    label: 'Prior Lock Check',
-    order: 5,
-    enableSort: true,
-    keyName: 'order_items.lock',
+    keyName: 'order_item.lock',
   },
   {
     label: 'Retest Count',
-    order: 6,
+    order: 5,
     enableSort: true,
-    keyName: 'order_items.lock.retestCount',
+    keyName: 'order_item.lock.retestCount',
   },
 ];
 
 export const ACTIONABLES_LOCKED_DEVICES_FOR_RETEST_COLUMNS = [
   {
+    label: 'Device ID',
+    order: 1,
+    enableSort: true,
+    keyName: 'order_item.line_item_number',
+  },
+  {
     label: 'Order Number',
     order: 2,
     enableSort: true,
@@ -1027,24 +1033,18 @@ export const ACTIONABLES_LOCKED_DEVICES_FOR_RETEST_COLUMNS = [
     label: 'Order Date',
     order: 3,
     enableSort: true,
-    keyName: 'createdAt',
+    keyName: 'order_item.createdAt',
   },
   {
     label: 'Customer Name',
-    order: 3,
-    enableSort: true,
-    keyName: 'user_details.first_name',
-  },
-  {
-    label: 'Device ID',
     order: 4,
     enableSort: true,
-    keyName: 'order_items.line_item_number',
+    keyName: 'user_details.first_name',
   },
   {
     label: 'Lock Type',
     order: 5,
     enableSort: true,
-    keyName: 'order_items.lock.type',
+    keyName: 'order_item.lock.type',
   },
 ];

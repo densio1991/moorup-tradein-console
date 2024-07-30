@@ -26,27 +26,31 @@ export const actionablesLockedDevicesCurrentLockParsingConfig = {
     return `${firstName} ${lastName}`;
   },
   'Device ID': ({ row }: ParsingFunctionParams) => {
-    const orderItem = row ? row['order_items'] : null;
+    const orderItem = row ? row['order_item'] : null;
     if (!orderItem || isEmpty(orderItem['line_item_number'])) return '--';
     return orderItem['line_item_number'];
   },
   'Prior Lock Check': ({ row }: ParsingFunctionParams) => {
-    const orderItem = row ? row['order_items'] : null;
-    if (!orderItem || isEmpty(orderItem['lock'])) return '--';
-    return !isEmpty(orderItem['lock']);
-  },
-  'Retest Count': ({ row }: ParsingFunctionParams) => {
-    const orderItem = row ? row['order_items'] : null;
+    const orderItem = row ? row['order_item'] : null;
     if (!orderItem || isEmpty(orderItem['lock'])) return '--';
 
     const lock = orderItem ? orderItem['lock'] : null;
-    if (!lock || isEmpty(lock['retestCount'])) return '--';
+    if (!lock || isEmpty(lock['retestCount'])) return 'No';
 
+    return lock['retestCount'] && 'Yes';
+  },
+  'Retest Count': ({ row }: ParsingFunctionParams) => {
+    const orderItem = row ? row['order_item'] : null;
+    if (!orderItem || isEmpty(orderItem['lock'])) return '--';
+
+    const lock = orderItem ? orderItem['lock'] : null;
+    if (!lock || isEmpty(lock['retestCount'])) return 0;
     return lock['retestCount'] || 0;
   },
   'Order Date': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['createdAt'])) return '--';
-    return formatDate(row['createdAt']);
+    const orderItem = row ? row['order_item'] : null;
+    if (!orderItem || isEmpty(orderItem['createdAt'])) return '--';
+    return formatDate(orderItem['createdAt']);
   },
   'Actions': ({ row, menuItems, index }: ParsingFunctionParams) => {
     if (!row || isEmpty(menuItems)) return '--';

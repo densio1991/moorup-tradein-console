@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
 import { StyledMenuIcon } from '../../components';
-import { formatDate } from '../../helpers';
+import { formatDate, parseStatus } from '../../helpers';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
@@ -26,22 +26,23 @@ export const actionablesLockedDevicesForRetestParsingConfig = {
     return `${firstName} ${lastName}`;
   },
   'Device ID': ({ row }: ParsingFunctionParams) => {
-    const orderItem = row ? row['order_items'] : null;
+    const orderItem = row ? row['order_item'] : null;
     if (!orderItem || isEmpty(orderItem['line_item_number'])) return '--';
     return orderItem['line_item_number'];
   },
   'Lock Type': ({ row }: ParsingFunctionParams) => {
-    const orderItem = row ? row['order_items'] : null;
+    const orderItem = row ? row['order_item'] : null;
     if (!orderItem || isEmpty(orderItem['lock'])) return '--';
 
     const lock = orderItem ? orderItem['lock'] : null;
     if (!lock || isEmpty(lock['type'])) return '--';
 
-    return lock['type'];
+    return parseStatus(lock['type']);
   },
   'Order Date': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['createdAt'])) return '--';
-    return formatDate(row['createdAt']);
+    const orderItem = row ? row['order_item'] : null;
+    if (!orderItem || isEmpty(orderItem['createdAt'])) return '--';
+    return formatDate(orderItem['createdAt']);
   },
   'Actions': ({ row, menuItems, index }: ParsingFunctionParams) => {
     if (!row || isEmpty(menuItems)) return '--';
