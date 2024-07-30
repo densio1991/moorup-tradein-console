@@ -9,6 +9,8 @@ import {
   faEnvelopeCircleCheck,
   faEnvelopesBulk,
   faFileCircleExclamation,
+  faFileCircleXmark,
+  faFileEdit,
   faFileInvoice,
   faFileLines,
   faGears,
@@ -120,7 +122,21 @@ export const SIDENAV_ITEMS = [
         activeUrl: /^\/dashboard\/actionables\/follow-up-device-not-sent/,
         icon: faFileCircleExclamation,
         disabled: false,
-      }
+      },
+      {
+        title: 'Follow-Up Revision Offer',
+        url: '/dashboard/actionables/follow-up-revision-offer',
+        activeUrl: /^\/dashboard\/actionables\/follow-up-revision-offer/,
+        icon: faFileEdit,
+        disabled: false,
+      },
+      {
+        title: 'Follow-Up Recycle Offer',
+        url: '/dashboard/actionables/follow-up-recycle-offer',
+        activeUrl: /^\/dashboard\/actionables\/follow-up-recycle-offer/,
+        icon: faFileCircleXmark,
+        disabled: false,
+      },
     ],
   },
   {
@@ -275,6 +291,7 @@ export interface OrderItems {
   reason: string[];
   questions_answered: QuestionAnswered[];
   revision: any;
+  lock: any
 }
 
 export interface Addresses {
@@ -917,6 +934,7 @@ export const VALIDATION_ORDER_ITEM_STATUS = [
   OrderItemStatus.RECEIVED,
   OrderItemStatus.LABEL_SENT,
   OrderItemStatus.FOR_REVISION,
+  OrderItemStatus.FOR_RETURN,
   OrderItemStatus.REVISION_REJECTED,
   OrderItemStatus.HOLD,
 ];

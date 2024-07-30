@@ -18,6 +18,7 @@ import {
   FormGroup,
   GenericModal,
   LoaderContainer,
+  LockTypes,
   ORDER_LOGS_COLUMNS,
   ORDER_NOTES_COLUMNS,
   OrderItemStatus,
@@ -28,6 +29,7 @@ import {
   StyledIcon,
   StyledInput,
   StyledLink,
+  StyledReactSelect,
   TabList,
   Table,
   Typography,
@@ -49,7 +51,6 @@ import Completion from './completion';
 import QuoteDetails from './quote-details';
 import { EditForm } from './status/edit-form';
 import ValidationOffer from './validation-offer';
-
 type AccordionStates = {
   quote: boolean;
   claims: boolean;
@@ -109,6 +110,7 @@ export const EditOrderPage = () => {
     clearOrder,
     addOrderNote,
     upsertZendeskLink,
+    updateOrderItemLockType,
   } = useOrder();
 
   const {
@@ -117,6 +119,7 @@ export const EditOrderPage = () => {
     isUpdatingOrder,
     isFetchingOrder,
     isUpdatingImeiSerial,
+    isUpdatingOrderItemLockType,
   } = state;
 
   const {
@@ -149,6 +152,7 @@ export const EditOrderPage = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalType, setModalType] = useState('');
   const [noteInput, setNoteInput] = useState('');
+  const [lockType, setLockType] = useState('');
   const [noteInputErrorMessage, setNoteInputErrorMessage] = useState('');
   const [noteInputError, setNoteInputError] = useState(false);
   const [zendeskLink, setZendeskLink] = useState(order.zendesk_link);
@@ -291,6 +295,11 @@ export const EditOrderPage = () => {
     }));
   };
 
+  const handleToggleModal = (type: any, isOpen: boolean) => {
+    setModalType(type);
+    setIsOpenModal(isOpen);
+  };
+
   const renderTabs = () => {
     const logsHeaders = [...ORDER_LOGS_COLUMNS];
     const notesHeaders = [...ORDER_NOTES_COLUMNS];
@@ -406,6 +415,7 @@ export const EditOrderPage = () => {
                     orderItems={validationOrderItems}
                     setStatusModal={setStatusModal}
                     setSelectedItem={setSelectedItem}
+                    setGenericModal={(type) => handleToggleModal(type, true)}
                   />
                 </ScrollableContainer>
               ) : (
@@ -617,6 +627,14 @@ export const EditOrderPage = () => {
         });
         break;
 
+      case 'set-lock-type':
+        updateOrderItemLockType(selectedItem?._id, order._id, {
+          admin_id: userDetails?._id,
+          lock_status: 'locked',
+          lock_type: lockType,
+        });
+        break;
+
       default:
         throw new Error('Case exception.');
     }
@@ -625,6 +643,13 @@ export const EditOrderPage = () => {
   };
 
   const renderModalContentAndActions = (key: string) => {
+    const lockTypeOptions = Object.values(LockTypes).map((item) => {
+      return {
+        label: item.replace('-', ' ').toLocaleUpperCase(),
+        value: item,
+      };
+    });
+
     switch (key) {
       case 'add-note':
         return (
@@ -710,6 +735,48 @@ export const EditOrderPage = () => {
           </>
         );
 
+      case 'set-lock-type':
+        return (
+          <>
+            <FormGroup>
+              <StyledReactSelect
+                label="Lock Type"
+                isMulti={false}
+                options={lockTypeOptions}
+                name="lockType"
+                placeholder="Select Lock type"
+                value={lockType}
+                onChange={(selected) => {
+                  setLockType(selected.value);
+                }}
+              />
+            </FormGroup>
+            <FormGroup margin="0px">
+              <span />
+              <FormGroup margin="0px">
+                <AppButton
+                  type="button"
+                  variant="outlined"
+                  width="fit-content"
+                  padding="8px 20px"
+                  onClick={() => handleReset()}
+                >
+                  Cancel
+                </AppButton>
+                <AppButton
+                  type="button"
+                  variant="fill"
+                  width="fit-content"
+                  padding="8px 20px"
+                  onClick={() => handleSubmit('set-lock-type')}
+                  disabled={isEmpty(lockType) || isUpdatingOrderItemLockType}
+                >
+                  Submit
+                </AppButton>
+              </FormGroup>
+            </FormGroup>
+          </>
+        );
       default:
         break;
     }

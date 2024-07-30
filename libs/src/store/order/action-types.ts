@@ -32,6 +32,9 @@ export const LOG_CUSTOMER_NONCONTACT = createActionTypes('LOG_CUSTOMER_NONCONTAC
 export const DOWNLOAD_ORDER_PAYMENT_FILE = createActionTypes('DOWNLOAD_ORDER_PAYMENT_FILE');
 export const BULK_CANCEL_ORDER_ITEMS = createActionTypes('BULK_CANCEL_ORDER_ITEMS');
 export const IMPORT_PAYMENTS_FLAT_FILE = createActionTypes('IMPORT_PAYMENTS_FLAT_FILE');
+export const FETCH_ORDER_FOLLOWUP = createActionTypes('FETCH_ORDER_FOLLOWUP');
+export const UPDATE_ORDER_FOLLOWUP = createActionTypes('UPDATE_ORDER_FOLLOWUP');
+export const UPDATE_ORDER_ITEM_LOCK_TYPE = createActionTypes('UPDATE_ORDER_ITEM_LOCK_TYPE');
 
 // Base action types
 export const SET_ORDERS = 'SET_ORDERS';

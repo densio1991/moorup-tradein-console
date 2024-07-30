@@ -33,6 +33,14 @@ export const useOrder = () => {
     actions.updateOrderById(id, payload)(dispatch, token);
   }
 
+  const fetchOrderFollowups = (payload: any, signal?: AbortSignal) => {
+    actions.getOrderFollowups(payload, signal)(dispatch);
+  };
+
+  const updateOrderFollowups = async (id: any, payload: any) => {
+    actions.updateOrderFollowups(id, payload)(dispatch);
+  }
+
   const cancelOrderById = async (id: any) => {
     actions.cancelOrderById(id)(dispatch, token);
   }
@@ -141,6 +149,10 @@ export const useOrder = () => {
     actions.updateOrderItemImeiSerial(orderItemId, orderId, payload)(dispatch, token);
   }
 
+  const updateOrderItemLockType = (orderItemId: string, orderId: any, payload: any) => {
+    actions.updateOrderItemLockType(orderItemId, orderId, payload)(dispatch, token);
+  }
+
   const getGiftCardStatus = (id: any, payload: any, signal?: AbortSignal) => {
     actions.getGiftCardStatus(id, payload, signal)(dispatch, token);
   };
@@ -226,5 +238,8 @@ export const useOrder = () => {
     bulkCancelOrderItems,
     importPaymentsFlatFile,
     clearUploadPaymentErrors,
+    fetchOrderFollowups,
+    updateOrderFollowups,
+    updateOrderItemLockType,
   };
 };

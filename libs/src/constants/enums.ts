@@ -18,7 +18,8 @@ export enum OrderItemStatus {
   REVISED = 'revised',
   REVISION_REJECTED = 'revision-rejected',
   HOLD = 'hold',
-  DEVICE_RETURED = 'device-returned',
+  FOR_RETURN = 'for-return',
+  DEVICE_RETURNED = 'device-returned',
 }
 
 export enum DropdownOrderItemStatus {
@@ -86,6 +87,11 @@ export enum ConfirmationModalTypes {
   CANCEL_ORDER_ITEM = 'CANCEL_ORDER_ITEM',
   CANCEL_ALL_ORDER_ITEMS = 'CANCEL_ALL_ORDER_ITEMS',
   CANCEL_ORDER_NON_CONTACTABLE = 'CANCEL_ORDER_NON_CONTACTABLE',
+  ACCEPT_REVISION = 'ACCEPT_REVISION',
+  ACCEPT_ALL_REVISION = 'ACCEPT_ALL_REVISION',
+  RETURN_ORDER_ITEM = 'RETURN_ORDER_ITEM',
+  RETURN_ALL_ORDER_ITEMS = 'RETURN_ALL_ORDER_ITEMS',
+  RETURN_ORDER_NON_CONTACTABLE = 'RETURN_ORDER_NON_CONTACTABLE',
 }
 
 export enum PermissionCodes {
@@ -155,3 +161,12 @@ export enum LogTypes {
   SYSTEM = 'system',
   USER = 'user',
 }
+
+export enum LockTypes {
+  PASSCODE = 'passcode',
+  ICLOUD = 'icloud',
+  GOOGLE = 'google',
+  MDM = 'mdm',
+  SAMSUNG = 'samsung',
+  OTHERS = 'others'
+};

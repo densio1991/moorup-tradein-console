@@ -65,7 +65,7 @@ export function ActionablesPage() {
           toast.info('Make sure to Download or Save a copy on your device.', {
             onClose: async () => {
               await updateOrderItemsStatus(orderItem?.order_items?._id, {
-                status: OrderItemStatus.DEVICE_RETURED,
+                status: OrderItemStatus.DEVICE_RETURNED,
                 admin_id: userDetails?._id,
               });
               printOutboundLabel({
@@ -101,7 +101,7 @@ export function ActionablesPage() {
   //       toast.info('Make sure to Download or Save a copy on your device.', {
   //         onClose: async () => {
   //           await updateOrderItemsStatus(orderItem?.order_items?._id, {
-  //             status: OrderItemStatus.DEVICE_RETURED,
+  //             status: OrderItemStatus.DEVICE_RETURNED,
   //           });
   //           printOutboundLabel({ item_id: orderItem?.order_items?._id });
   //           clearOrderItems({});

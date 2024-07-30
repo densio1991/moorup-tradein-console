@@ -506,6 +506,92 @@ export const bulkCancelOrderItems =
       });
   };
 
+export const getOrderFollowups =
+  (payload: any, signal?: AbortSignal) => (dispatch: any, token?: string) => {
+    dispatch({
+      type: types.FETCH_ORDER_FOLLOWUP.baseType,
+      payload,
+    });
+
+    axiosInstance(token)
+      .get('/api/orders/follow-up', {params: payload, signal: signal})
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_ORDER_FOLLOWUP.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.FETCH_ORDER_FOLLOWUP.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.FETCH_ORDER_FOLLOWUP.FAILED,
+            payload: error,
+          });
+        }
+      });
+  };
+
+export const updateOrderFollowups =
+  (orderId: any, payload: any) => (dispatch: any, token?: string) => {
+    dispatch({
+      type: types.UPDATE_ORDER_FOLLOWUP.baseType,
+      payload,
+    });
+
+    axiosInstance(token)
+      .post('/api/orders/follow-up', payload)
+      .then((response) => {
+        dispatch({
+          type: types.UPDATE_ORDER_FOLLOWUP.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderById(orderId)(dispatch, token);
+        toast.success('Order items successfully updated!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.UPDATE_ORDER_FOLLOWUP.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to update order item status.');
+      });
+  };
+
+export const updateOrderItemLockType =
+  (orderItemId: any, orderId: any, payload: any) => (dispatch: any, token?: string) => {
+    dispatch({
+      type: types.UPDATE_ORDER_ITEM_LOCK_TYPE.baseType,
+      payload,
+    });
+
+    axiosInstance(token)
+      .patch(`/api/orders/items/lock-devices/${orderItemId}/lock-status`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.UPDATE_ORDER_ITEM_LOCK_TYPE.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderById(orderId)(dispatch, token);
+        toast.success('Order items lock type successfully updated!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.UPDATE_ORDER_ITEM_LOCK_TYPE.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to update order item lock type.');
+      });
+  };
+
 export const logCustomerNonContact =
   (orderId: string, payload: any) => (dispatch: any, token?: string) => {
     dispatch({
