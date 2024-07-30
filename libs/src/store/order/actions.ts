@@ -507,9 +507,9 @@ export const bulkCancelOrderItems =
   };
 
 export const getOrderFollowups =
-  (orderId: any, payload: any, signal?: AbortSignal) => (dispatch: any) => {
+  (payload: any, signal?: AbortSignal) => (dispatch: any) => {
     dispatch({
-      type: types.UPDATE_ORDER_FOLLOWUP.baseType,
+      type: types.FETCH_ORDER_FOLLOWUP.baseType,
       payload,
     });
 
@@ -517,20 +517,22 @@ export const getOrderFollowups =
       .get('/api/orders/follow-up', {params: payload, signal: signal})
       .then((response) => {
         dispatch({
-          type: types.UPDATE_ORDER_FOLLOWUP.SUCCESS,
+          type: types.FETCH_ORDER_FOLLOWUP.SUCCESS,
           payload: response?.data,
         });
-
-        getOrderById(orderId)(dispatch);
-        toast.success('Order items successfully cancelled!');
       })
       .catch((error) => {
-        dispatch({
-          type: types.UPDATE_ORDER_FOLLOWUP.FAILED,
-          payload: error,
-        });
-
-        toast.error('Failed to update order item status.');
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.FETCH_ORDER_FOLLOWUP.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.FETCH_ORDER_FOLLOWUP.FAILED,
+            payload: error,
+          });
+        }
       });
   };
 
@@ -550,7 +552,7 @@ export const updateOrderFollowups =
         });
 
         getOrderById(orderId)(dispatch);
-        toast.success('Order items successfully cancelled!');
+        toast.success('Order items successfully updated!');
       })
       .catch((error) => {
         dispatch({

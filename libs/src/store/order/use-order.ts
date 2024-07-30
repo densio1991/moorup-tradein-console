@@ -33,8 +33,8 @@ export const useOrder = () => {
     actions.updateOrderById(id, payload)(dispatch, token);
   }
 
-  const fetchOrderFollowups = (id: any, payload: any, signal: AbortSignal) => {
-    actions.getOrderFollowups(id, payload, signal)(dispatch);
+  const fetchOrderFollowups = (payload: any, signal?: AbortSignal) => {
+    actions.getOrderFollowups(payload, signal)(dispatch);
   };
 
   const updateOrderFollowups = async (id: any, payload: any) => {

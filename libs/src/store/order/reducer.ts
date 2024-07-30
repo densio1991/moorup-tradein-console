@@ -35,7 +35,7 @@ const orderState = {
   isImportingPaymentsFlatFile: false,
   importPaymentsFlatFileError: [],
   orderFollowups: [],
-  isFetchingOrderFollowups: false,
+  isFetchingOrderFollowups: true,
   isUpdatingOrderFollowups: false,
 };
 
@@ -340,21 +340,21 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isFetchingOrderFollowups: true,
-        orderFollowups: [],
+        orders: [],
       };
     }
     case types.FETCH_ORDER_FOLLOWUP.SUCCESS: {
       return {
         ...state,
         isFetchingOrderFollowups: false,
-        orderFollowups: action.payload?.data,
+        orders: action.payload?.data,
       };
     }
     case types.FETCH_ORDER_FOLLOWUP.FAILED: {
       return {
         ...state,
         isFetchingOrderFollowups: false,
-        orderFollowups: [],
+        orders: [],
       };
     }
 

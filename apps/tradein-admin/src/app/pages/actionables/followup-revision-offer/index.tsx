@@ -18,9 +18,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { FollowUpRevisionOfferModal } from './modal-content';
 
 export function FollowUpRevisionOfferPage() {
-  const { state, fetchOrders, clearOrder, clearOrders, setActiveOrder } =
-    useOrder();
-  const { orders, order, isFetchingOrders } = state;
+  const {
+    state,
+    fetchOrderFollowups,
+    clearOrder,
+    clearOrders,
+    setActiveOrder,
+  } = useOrder();
+  const { orders, order, isFetchingOrderFollowups } = state;
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
   const { setSearchTerm } = useCommon();
@@ -28,6 +33,15 @@ export function FollowUpRevisionOfferPage() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const headers = REVISED_DEVICES_MANAGEMENT_COLUMNS;
+
+  const getOrdersForFollowup = (signal?: any) => {
+    const filters = {
+      is_recycled: false,
+      order_item_status: 'for-revision',
+      platform: activePlatform,
+    };
+    fetchOrderFollowups(filters, signal);
+  };
 
   const handleRowClick = (row: any) => {
     setIsModalOpen(true);
@@ -46,9 +60,7 @@ export function FollowUpRevisionOfferPage() {
       setSelectedRow(order);
     } else {
       if (!isEmpty(selectedRow)) {
-        const controller = new AbortController();
-        const signal = controller.signal;
-        fetchOrders(signal);
+        getOrdersForFollowup();
         setSelectedRow({});
       } else {
         setIsModalOpen(false);
@@ -61,7 +73,7 @@ export function FollowUpRevisionOfferPage() {
     const signal = controller.signal;
 
     if (!isEmpty(activePlatform)) {
-      fetchOrders(signal);
+      getOrdersForFollowup(signal);
     }
 
     return () => {
@@ -85,7 +97,7 @@ export function FollowUpRevisionOfferPage() {
       <PageSubHeader withSearch />
       <Table
         label="Follow-Up Revision Offer"
-        isLoading={isFetchingOrders}
+        isLoading={isFetchingOrderFollowups}
         headers={headers}
         rows={filteredOrders || []}
         parsingConfig={revisedDevicesManagementParsingConfig}

@@ -77,8 +77,8 @@ export const revisedDevicesTableParsingConfig = {
     return row['revision']?.product?.name || row['product_name'];
   },
   'Revised Condition Assessment': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['questions_answered'])) return '--';
-    return formatConditionAssessment(row['questions_answered']);
+    if (!row || isEmpty(row['revision'])) return '--';
+    return formatConditionAssessment(row['revision']?.questions_answered || row['questions_answered']);
   },
   'Condition Notes (Reason)': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['revision']?.reasons)) return '--';
