@@ -8,9 +8,11 @@ import {
   EditOrderPage,
   EditProductPage,
   EmailTemplatesPage,
-  FollowUpUnsentDevicePage,
-  FollowUpRevisionOfferPage,
   FollowUpRecycleOfferPage,
+  FollowUpRevisionOfferPage,
+  FollowUpUnsentDevicePage,
+  LockedDevicesCurrentLockPage,
+  LockedDevicesForRetestPage,
   LoginPage,
   OrderManagementPage,
   PaymentPage,
@@ -85,6 +87,14 @@ export function App() {
           <Route
             path="/dashboard/actionables/follow-up-recycle-offer"
             element={<FollowUpRecycleOfferPage />}
+          />
+          <Route
+            path="/dashboard/actionables/locked-devices-current-lock"
+            element={<LockedDevicesCurrentLockPage />}
+          />
+          <Route
+            path="/dashboard/actionables/locked-devices-for-retest"
+            element={<LockedDevicesForRetestPage />}
           />
           <Route path="/dashboard/user" element={<UserManagementPage />} />
           <Route

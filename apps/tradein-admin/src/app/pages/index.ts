@@ -1,7 +1,9 @@
 export { ActionablesPage } from './actionables';
-export { FollowUpUnsentDevicePage } from './actionables/followup-unsent-device';
-export { FollowUpRevisionOfferPage } from './actionables/followup-revision-offer';
 export { FollowUpRecycleOfferPage } from './actionables/followup-recycle-offer';
+export { FollowUpRevisionOfferPage } from './actionables/followup-revision-offer';
+export { FollowUpUnsentDevicePage } from './actionables/followup-unsent-device';
+export { LockedDevicesCurrentLockPage } from './actionables/locked-devices-current-lock';
+export { LockedDevicesForRetestPage } from './actionables/locked-devices-for-retest';
 export { ConfigurationsPage } from './configurations';
 export { DashboardPage } from './dashboard';
 export { DiscrepancyPage } from './discrepancy';
@@ -23,3 +25,4 @@ export { TemplateApprovalByIdPage } from './template-approvals/template-approval
 export { EmailTemplatesPage } from './templates-email';
 export { SmsTemplatesPage } from './templates-sms';
 export { UserManagementPage } from './user-management';
+

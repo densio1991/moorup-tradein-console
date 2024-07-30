@@ -151,7 +151,7 @@ export function SideBar(): JSX.Element {
         rootStyles={{
           color: '#216A4C'
         }}
-        width='300px'
+        width='320px'
       >
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Image src={Logo} alt="" />
@@ -215,6 +215,11 @@ export function SideBar(): JSX.Element {
 
                         case 'Follow-Up Recycle Offer':
                           return hasViewActionablesFollowUpRecycleOfferPermission;
+                        case 'Locked Devices - Current Lock':
+                          return hasViewActionablesLockedDevicesCurrentLockPermission;
+                        
+                        case 'Locked Devices - For Retest':
+                          return hasViewActionablesLockedDevicesForRetestPermission;
 
                         case 'Promotions':
                           return hasViewPromotionsPermission;

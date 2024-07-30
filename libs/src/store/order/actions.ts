@@ -965,6 +965,7 @@ export const addOrderNote = (orderId: string, payload: any) => (dispatch: any, t
           payload: error,
         });
 
+        getOrderById(orderId)(dispatch, token);
         toast.error('Failed to add note.');
       });
   };
@@ -992,6 +993,7 @@ export const addOrderNote = (orderId: string, payload: any) => (dispatch: any, t
           payload: error,
         });
 
+        getOrderById(orderId)(dispatch, token);
         toast.error('Failed to save zendesk link.');
       });
   };
@@ -1049,3 +1051,99 @@ export const clearUploadPaymentErrors =
       payload,
     });
   };
+
+export const getLockedDevices =
+  (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any, token?: string) => {
+    dispatch({
+      type: types.FETCH_LOCKED_DEVICES.baseType,
+      payload,
+    });
+
+    axiosInstance(token)
+      .get(`/api/orders/items/lock-devices?platform=${platform}`, {
+        params: payload,
+        signal: signal,
+      })
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_LOCKED_DEVICES.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.FETCH_LOCKED_DEVICES.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.FETCH_LOCKED_DEVICES.FAILED,
+            payload: error,
+          });
+        }
+      });
+  };
+
+export const clearLockedDevices = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CLEAR_LOCKED_DEVICES,
+    payload,
+  });
+};
+
+export const setLockedDeviceLockStatus = (orderItemId: string, payload: any, filter: any, platform: string) => (dispatch: any, token?: string) => {
+  dispatch({
+    type: types.SET_LOCKED_DEVICE_LOCK_STATUS.baseType,
+    payload,
+  });
+
+  axiosInstance(token)
+    .patch(`/api/orders/items/lock-devices/${orderItemId}/lock-status`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.SET_LOCKED_DEVICE_LOCK_STATUS.SUCCESS,
+        payload: response?.data,
+      });
+
+      getLockedDevices(filter, platform)(dispatch, token);
+      toast.success('Successfully updated device lock status!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.SET_LOCKED_DEVICE_LOCK_STATUS.FAILED,
+        payload: error,
+      });
+
+      getLockedDevices(filter, platform)(dispatch, token);
+      toast.error('Failed to update device lock status.');
+    });
+};
+
+export const setLockedDeviceStatus = (orderItemId: string, payload: any, filter: any, platform: string) => (dispatch: any, token?: string) => {
+  dispatch({
+    type: types.SET_LOCKED_DEVICE_STATUS.baseType,
+    payload,
+  });
+
+  axiosInstance(token)
+    .patch(`/api/orders/items/lock-devices/${orderItemId}/device-status`, payload)
+    .then((response) => {
+      dispatch({
+        type: types.SET_LOCKED_DEVICE_STATUS.SUCCESS,
+        payload: response?.data,
+      });
+
+      getLockedDevices(filter, platform)(dispatch, token);
+      toast.success('Successfully updated device status!');
+    })
+    .catch((error) => {
+      dispatch({
+        type: types.SET_LOCKED_DEVICE_STATUS.FAILED,
+        payload: error,
+      });
+
+      getLockedDevices(filter, platform)(dispatch, token);
+      toast.error('Failed to update device status.');
+    });
+};

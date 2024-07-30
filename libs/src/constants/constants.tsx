@@ -16,11 +16,12 @@ import {
   faGears,
   faHouse,
   faList,
+  faLock,
   faMoneyBill,
   faPenToSquare,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
-import { ClaimStatus, OrderItemStatus, PermissionCodes } from './enums';
+import { ClaimStatus, LockTypes, OrderItemStatus, PermissionCodes } from './enums';
 import { PlatformType } from './interfaces';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
@@ -137,6 +138,20 @@ export const SIDENAV_ITEMS = [
         icon: faFileCircleXmark,
         disabled: false,
       },
+      {
+        title: 'Locked Devices - Current Lock',
+        url: '/dashboard/actionables/locked-devices-current-lock',
+        activeUrl: /^\/dashboard\/actionables\/locked-devices-current-lock/,
+        icon: faLock,
+        disabled: false,
+      },
+      {
+        title: 'Locked Devices - For Retest',
+        url: '/dashboard/actionables/locked-devices-for-retest',
+        activeUrl: /^\/dashboard\/actionables\/locked-devices-for-retest/,
+        icon: faLock,
+        disabled: false,
+      }
     ],
   },
   {
@@ -813,6 +828,8 @@ export const MODAL_TYPES = {
   EXPORT_PRODUCTS: 'EXPORT_PRODUCTS',
   IMPORT_PRODUCTS: 'IMPORT_PRODUCTS',
   DOWNLOAD_FLAT_FILE: 'DOWNLOAD_FLAT_FILE',
+  FILTER_LOCKED_DEVICES_CURRENT_LOCK: 'FILTER_LOCKED_DEVICES_CURRENT_LOCK',
+  FILTER_LOCKED_DEVICES_FOR_RETEST: 'FILTER_LOCKED_DEVICES_FOR_RETEST',
 };
 
 export const PROMOTION_STATUS = [
@@ -972,6 +989,15 @@ export const MOORUP_CLAIM_STATUSES = [
   { value: ClaimStatus.PENDING, label: 'Pending' },
   { value: ClaimStatus.PROCESSING, label: 'Processing Payment' },
   { value: ClaimStatus.REJECTED, label: 'Rejected' },
+];
+
+export const LOCK_TYPES = [
+  { value: LockTypes.GOOGLE, label: 'Google' },
+  { value: LockTypes.ICLOUD, label: 'iCloud' },
+  { value: LockTypes.MDM, label: 'MDM' },
+  { value: LockTypes.PASSCODE, label: 'Passcode' },
+  { value: LockTypes.SAMSUNG, label: 'Samsung' },
+  { value: LockTypes.OTHERS, label: 'Others' },
 ];
 
 export const PAGE_SIZES = [
