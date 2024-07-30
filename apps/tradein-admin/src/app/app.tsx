@@ -9,6 +9,8 @@ import {
   EditProductPage,
   EmailTemplatesPage,
   FollowUpUnsentDevicePage,
+  FollowUpRevisionOfferPage,
+  FollowUpRecycleOfferPage,
   LoginPage,
   OrderManagementPage,
   PaymentPage,
@@ -25,7 +27,6 @@ import {
   UploadProductPricingErrorPage,
   UserManagementPage,
 } from './pages';
-import { FollowUpRevisionOfferPage } from './pages/actionables/followup-revision-offer';
 
 export function App() {
   return (
@@ -80,6 +81,10 @@ export function App() {
           <Route
             path="/dashboard/actionables/follow-up-revision-offer"
             element={<FollowUpRevisionOfferPage />}
+          />
+          <Route
+            path="/dashboard/actionables/follow-up-recycle-offer"
+            element={<FollowUpRecycleOfferPage />}
           />
           <Route path="/dashboard/user" element={<UserManagementPage />} />
           <Route

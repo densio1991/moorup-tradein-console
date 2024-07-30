@@ -213,6 +213,9 @@ export function SideBar(): JSX.Element {
                         case 'Follow-Up Revision Offer':
                           return hasViewActionablesFollowUpRevisionOfferPermission;
 
+                        case 'Follow-Up Recycle Offer':
+                          return hasViewActionablesFollowUpRecycleOfferPermission;
+
                         case 'Promotions':
                           return hasViewPromotionsPermission;
 
