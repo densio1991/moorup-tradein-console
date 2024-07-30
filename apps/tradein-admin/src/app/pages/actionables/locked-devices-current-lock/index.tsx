@@ -26,9 +26,9 @@ import { isEmpty } from 'lodash';
 import { useEffect, useState } from 'react';
 
 export function LockedDevicesCurrentLockPage() {
-  const { state, getOrderItems, clearOrderItems } = useOrder();
+  const { state, getLockedDevices, clearLockedDevices } = useOrder();
   const { state: authState } = useAuth();
-  const { orderItems, isFetchingOrderItems } = state;
+  const { lockedDevices, isFetchingLockedDevices } = state;
   const { activePlatform } = authState;
   const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
   const { sideModalState } = commonState;
@@ -50,7 +50,7 @@ export function LockedDevicesCurrentLockPage() {
         lock_status: [LockStatus.LOCKED]?.join(','),
       };
 
-      getOrderItems(filters, signal);
+      getLockedDevices(filters, signal);
     }
 
     return () => {
@@ -58,7 +58,7 @@ export function LockedDevicesCurrentLockPage() {
 
       // Clear data on unmount
       setSearchTerm('');
-      clearOrderItems({});
+      clearLockedDevices([]);
     };
   }, [activePlatform]);
 
@@ -126,7 +126,7 @@ export function LockedDevicesCurrentLockPage() {
                         : {}),
                     };
 
-                    getOrderItems(filter);
+                    getLockedDevices(filter);
 
                     setSideModalState({
                       ...sideModalState,
@@ -170,9 +170,9 @@ export function LockedDevicesCurrentLockPage() {
       />
       <Table
         label="Locked Devices - Current Lock"
-        isLoading={isFetchingOrderItems}
+        isLoading={isFetchingLockedDevices}
         headers={headers}
-        rows={orderItems || []}
+        rows={lockedDevices || []}
         parsingConfig={actionablesLockedDevicesCurrentLockParsingConfig}
         menuItems={[
           {
@@ -182,15 +182,15 @@ export function LockedDevicesCurrentLockPage() {
             },
           },
           {
-            label: 'Return',
+            label: 'For Return',
             action: (value: any) => {
-              console.log('Return: ', value._id);
+              console.log('For Return: ', value._id);
             },
           },
           {
-            label: 'Recycle',
+            label: 'For Recycle',
             action: (value: any) => {
-              console.log('Recycle: ', value._id);
+              console.log('For Recycle: ', value._id);
             },
           },
         ]}

@@ -1049,3 +1049,43 @@ export const clearUploadPaymentErrors =
       payload,
     });
   };
+
+export const getLockedDevices =
+  (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any, token?: string) => {
+    dispatch({
+      type: types.FETCH_LOCKED_DEVICES.baseType,
+      payload,
+    });
+
+    axiosInstance(token)
+      .get(`/api/orders/items/lock-devices?platform=${platform}`, {
+        params: payload,
+        signal: signal,
+      })
+      .then((response) => {
+        dispatch({
+          type: types.FETCH_LOCKED_DEVICES.SUCCESS,
+          payload: response?.data,
+        });
+      })
+      .catch((error) => {
+        if (error.code === CANCELLED_AXIOS) {
+          dispatch({
+            type: types.FETCH_LOCKED_DEVICES.CANCELLED,
+            payload: error,
+          });
+        } else {
+          dispatch({
+            type: types.FETCH_LOCKED_DEVICES.FAILED,
+            payload: error,
+          });
+        }
+      });
+  };
+
+export const clearLockedDevices = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CLEAR_LOCKED_DEVICES,
+    payload,
+  });
+};

@@ -38,6 +38,8 @@ const orderState = {
   isFetchingOrderFollowups: true,
   isUpdatingOrderFollowups: false,
   isUpdatingOrderItemLockType: false,
+  lockedDevices: [],
+  isFetchingLockedDevices: true,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -691,6 +693,43 @@ const orderReducer = (state = orderState, action: any) => {
         ...state,
         importPaymentsFlatFileError: [],
       };
+
+    case types.FETCH_LOCKED_DEVICES.baseType: {
+      return {
+        ...state,
+        isFetchingLockedDevices: true,
+        lockedDevices: [],
+      };
+    }
+    case types.FETCH_LOCKED_DEVICES.SUCCESS: {
+      return {
+        ...state,
+        isFetchingLockedDevices: false,
+        lockedDevices: action.payload?.data,
+      };
+    }
+    case types.FETCH_LOCKED_DEVICES.FAILED: {
+      return {
+        ...state,
+        isFetchingLockedDevices: false,
+        lockedDevices: [],
+      };
+    }
+    case types.FETCH_LOCKED_DEVICES.CANCELLED: {
+      return {
+        ...state,
+        isFetchingLockedDevices: true,
+        lockedDevices: [],
+      };
+    }
+
+    case types.CLEAR_LOCKED_DEVICES: {
+      return {
+        ...state,
+        isFetchingLockedDevices: true,
+        lockedDevices: [],
+      };
+    }
 
     default:
       return state;

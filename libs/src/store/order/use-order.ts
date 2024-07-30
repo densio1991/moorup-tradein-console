@@ -197,6 +197,14 @@ export const useOrder = () => {
     actions.clearUploadPaymentErrors([])(dispatch);
   }
 
+  const getLockedDevices = (payload: any, signal?: AbortSignal) => {
+    actions.getLockedDevices(payload, activePlatform, signal)(dispatch, token);
+  }
+
+  const clearLockedDevices = (payload: any) => {
+    actions.clearLockedDevices(payload)(dispatch);
+  }
+
   return {
     state: state.order,
     getOrderItems,
@@ -241,5 +249,7 @@ export const useOrder = () => {
     fetchOrderFollowups,
     updateOrderFollowups,
     updateOrderItemLockType,
+    getLockedDevices,
+    clearLockedDevices,
   };
 };
