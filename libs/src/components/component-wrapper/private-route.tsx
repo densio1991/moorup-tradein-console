@@ -40,7 +40,14 @@ export function PrivateRoute(): JSX.Element {
     hasViewPlatformConfigsPermissions,
     hasViewOrderDetailsPermission,
     hasEditProductPermission,
-    hasViewPaymentsPermission
+    hasViewPaymentsPermission,
+    hasViewActionablesFollowUpDeviceNotSentPermission,
+    hasViewActionablesFollowUpRecycleOfferPermission,
+    hasViewActionablesFollowUpRevisionOfferPermission,
+    hasViewActionablesForRecyclePermission,
+    hasViewActionablesForReturnPermission,
+    hasViewActionablesLockedDevicesCurrentLockPermission,
+    hasViewActionablesLockedDevicesForRetestPermission,
   } = usePermission();
 
   useEffect(() => {
@@ -50,7 +57,12 @@ export function PrivateRoute(): JSX.Element {
         '/dashboard/product/list': hasViewProductsPermission,
         '/dashboard/order/list': hasViewOrdersPermission,
         '/dashboard/order/discrepancy': hasViewDiscrepanciesPermission,
-        '/dashboard/actionables/follow-up-device-not-sent': hasViewActionablesPermission,
+        '/dashboard/order/actionables': hasViewActionablesPermission,
+        '/dashboard/actionables/follow-up-device-not-sent': hasViewActionablesFollowUpDeviceNotSentPermission,
+        '/dashboard/actionables/follow-up-revision-offer': hasViewActionablesFollowUpRevisionOfferPermission,
+        '/dashboard/actionables/follow-up-recycle-offer': hasViewActionablesFollowUpRecycleOfferPermission,
+        '/dashboard/actionables/locked-devices-current-lock': hasViewActionablesLockedDevicesCurrentLockPermission,
+        '/dashboard/actionables/locked-devices-for-retest': hasViewActionablesLockedDevicesForRetestPermission,
         '/dashboard/order/payments': hasViewPaymentsPermission,
         '/dashboard/promotion/list': hasViewPromotionsPermission,
         '/dashboard/promotion/claims': hasViewPromotionClaimsPermission,

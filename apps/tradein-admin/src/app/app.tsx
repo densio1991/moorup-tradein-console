@@ -1,13 +1,18 @@
 import { NotFound, PrivateRoute, PublicRoute } from '@tradein-admin/libs';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import {
+  ActionablesPage,
   ConfigurationsPage,
   DashboardPage,
   DiscrepancyPage,
   EditOrderPage,
   EditProductPage,
   EmailTemplatesPage,
+  FollowUpRecycleOfferPage,
+  FollowUpRevisionOfferPage,
   FollowUpUnsentDevicePage,
+  LockedDevicesCurrentLockPage,
+  LockedDevicesForRetestPage,
   LoginPage,
   OrderManagementPage,
   PaymentPage,
@@ -62,6 +67,10 @@ export function App() {
             path="/dashboard/order/discrepancy"
             element={<DiscrepancyPage />}
           />
+          <Route
+            path="/dashboard/order/actionables"
+            element={<ActionablesPage />}
+          />
           <Route path="/dashboard/order/payments" element={<PaymentPage />} />
           <Route
             path="/dashboard/order/payments-upload-details"
@@ -70,6 +79,22 @@ export function App() {
           <Route
             path="/dashboard/actionables/follow-up-device-not-sent"
             element={<FollowUpUnsentDevicePage />}
+          />
+          <Route
+            path="/dashboard/actionables/follow-up-revision-offer"
+            element={<FollowUpRevisionOfferPage />}
+          />
+          <Route
+            path="/dashboard/actionables/follow-up-recycle-offer"
+            element={<FollowUpRecycleOfferPage />}
+          />
+          <Route
+            path="/dashboard/actionables/locked-devices-current-lock"
+            element={<LockedDevicesCurrentLockPage />}
+          />
+          <Route
+            path="/dashboard/actionables/locked-devices-for-retest"
+            element={<LockedDevicesForRetestPage />}
           />
           <Route path="/dashboard/user" element={<UserManagementPage />} />
           <Route

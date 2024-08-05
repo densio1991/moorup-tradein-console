@@ -6,13 +6,13 @@ import * as types from './action-types';
 
 export const getProducts =
   (platform: string, includeVariants?: boolean, signal?: AbortSignal) =>
-  (dispatch: any) => {
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.FETCH_PRODUCTS.baseType,
       payload: platform,
     });
 
-    axiosInstance()
+    axiosInstance(token)
       .get(
         `/api/products?platform=${platform}${includeVariants ? `&include_variants=${includeVariants}` : ''}`,
         { signal: signal },
@@ -45,13 +45,13 @@ export const clearProducts = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const getProductTypes = (signal?: AbortSignal) => (dispatch: any) => {
+export const getProductTypes = (signal?: AbortSignal) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.FETCH_PRODUCT_TYPES.baseType,
     payload: {},
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .get('/api/products/types', { signal: signal })
     .then((response) => {
       dispatch({
@@ -75,13 +75,13 @@ export const getProductTypes = (signal?: AbortSignal) => (dispatch: any) => {
 };
 
 export const getProductCategories =
-  (platform: string, payload: any) => (dispatch: any) => {
+  (platform: string, payload: any) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.FETCH_PRODUCT_CATEGORIES.baseType,
       payload: {},
     });
 
-    axiosInstance()
+    axiosInstance(token)
       .get(`/api/products/categories?platform=${platform}&type=${payload}`)
       .then((response) => {
         dispatch({
@@ -98,13 +98,13 @@ export const getProductCategories =
   };
 
 export const getProductBrands =
-  (platform: string, payload: any) => (dispatch: any) => {
+  (platform: string, payload: any) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.FETCH_PRODUCT_BRANDS.baseType,
       payload: platform,
     });
 
-    axiosInstance()
+    axiosInstance(token)
       .get(`/api/products/brands?platform=${platform}&type=${payload}`)
       .then((response) => {
         dispatch({
@@ -120,13 +120,13 @@ export const getProductBrands =
       });
   };
 
-export const getProductStatuses = (signal?: AbortSignal) => (dispatch: any) => {
+export const getProductStatuses = (signal?: AbortSignal) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.FETCH_PRODUCT_STATUSES.baseType,
     payload: {},
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .get('/api/products/status', { signal: signal })
     .then((response) => {
       dispatch({
@@ -164,13 +164,13 @@ export const setIncludeProductVariant = (payload: any) => (dispatch: any) => {
 };
 
 export const addProduct =
-  (payload: any, activePlatform: any) => (dispatch: any) => {
+  (payload: any, activePlatform: any) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.ADD_PRODUCT.baseType,
       payload: payload,
     });
 
-    axiosInstance()
+    axiosInstance(token)
       .post('/api/products', payload)
       .then((response) => {
         dispatch({
@@ -193,13 +193,13 @@ export const addProduct =
   };
 
 export const getProduct =
-  (id: string, signal?: AbortSignal) => (dispatch: any) => {
+  (id: string, signal?: AbortSignal) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.FETCH_PRODUCT.baseType,
       payload: id,
     });
 
-    axiosInstance()
+    axiosInstance(token)
       .get(`/api/products/${id}`, { signal: signal })
       .then((response) => {
         dispatch({
@@ -229,13 +229,13 @@ export const clearProduct = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const updateProduct = (id: string, payload: any) => (dispatch: any) => {
+export const updateProduct = (id: string, payload: any) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.UPDATE_PRODUCT.baseType,
     payload: payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .patch(`/api/products/${id}`, payload)
     .then((response) => {
       dispatch({
@@ -258,13 +258,13 @@ export const updateProduct = (id: string, payload: any) => (dispatch: any) => {
 };
 
 export const addProductVariant =
-  (id: string, payload: any) => (dispatch: any) => {
+  (id: string, payload: any) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.ADD_PRODUCT_VARIANT.baseType,
       payload: payload,
     });
 
-    axiosInstance()
+    axiosInstance(token)
       .post(`/api/products/${id}/variants`, payload)
       .then((response) => {
         dispatch({
@@ -287,13 +287,13 @@ export const addProductVariant =
   };
 
 export const updateProductVariant =
-  (id: string, productId: string, payload: any) => (dispatch: any) => {
+  (id: string, productId: string, payload: any) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.UPDATE_PRODUCT_VARIANT.baseType,
       payload: payload,
     });
 
-    axiosInstance()
+    axiosInstance(token)
       .patch(`/api/products/variants/${id}`, payload)
       .then((response) => {
         dispatch({
@@ -316,7 +316,7 @@ export const updateProductVariant =
   };
 
 export const uploadProductsExcelFile =
-  (file: File, userId: string, activePlatform: string) => async (dispatch: any) => {
+  (file: File, userId: string, activePlatform: string) => async (dispatch: any, token?: string) => {
     dispatch({
       type: types.UPLOAD_PRODUCTS_EXCEL.baseType,
       payload: {},
@@ -327,7 +327,7 @@ export const uploadProductsExcelFile =
     formData.append('user_id', userId);
     formData.append('platform', activePlatform);
 
-    axiosInstance()
+    axiosInstance(token)
       .post('/api/products/import/excel', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -369,13 +369,13 @@ export const clearUploadProductsErrors =
   };
 
 export const downloadProductPricingRevisionTemplate =
-  (platform: string) => (dispatch: any) => {
+  (platform: string) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.DOWNLOAD_PRODUCT_PRICING_REVISION_TEMPLATE.baseType,
       payload: platform,
     });
 
-    axiosInstance()
+    axiosInstance(token)
       .get('/api/products/pricing/download-template', {
         params: { platform: platform },
         responseType: 'blob',
@@ -415,13 +415,13 @@ export const downloadProductPricingRevisionTemplate =
   };
 
 export const downloadProductUploadTemplate =
-  (platform: string) => (dispatch: any) => {
+  (platform: string) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.DOWNLOAD_PRODUCT_UPLOAD_TEMPLATE.baseType,
       payload: platform,
     });
 
-    axiosInstance()
+    axiosInstance(token)
       .get('/api/products/import/download-template', {
         params: { platform: platform },
         responseType: 'blob',
@@ -462,7 +462,7 @@ export const downloadProductUploadTemplate =
 
 export const uploadProductsPricingTemplate =
   (file: File, userId: string, activePlatform: string) =>
-  async (dispatch: any) => {
+  async (dispatch: any, token?: string) => {
     dispatch({
       type: types.UPLOAD_PRODUCT_PRICING_REVISION.baseType,
       payload: {},
@@ -473,7 +473,7 @@ export const uploadProductsPricingTemplate =
     formData.append('user_id', userId);
     formData.append('platform', activePlatform);
 
-    axiosInstance()
+    axiosInstance(token)
       .post('/api/products/pricing/bulk', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -515,13 +515,13 @@ export const clearUploadProductsPricingTemplateErrors =
   };
 
 export const getProductUploadLogs =
-  (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any) => {
+  (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.FETCH_PRODUCT_UPLOAD_LOGS.baseType,
       payload,
     });
 
-    axiosInstance()
+    axiosInstance(token)
       .get('/api/products/upload-logs', { signal: signal, params: { platform } })
       .then((response) => {
         dispatch({

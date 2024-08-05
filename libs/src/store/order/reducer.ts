@@ -34,6 +34,14 @@ const orderState = {
   isDownloadingPaymentFile: false,
   isImportingPaymentsFlatFile: false,
   importPaymentsFlatFileError: [],
+  orderFollowups: [],
+  isFetchingOrderFollowups: true,
+  isUpdatingOrderFollowups: false,
+  isUpdatingOrderItemLockType: false,
+  lockedDevices: [],
+  isFetchingLockedDevices: true,
+  isUpdatingDeviceLockStatus: false,
+  isUpdatingLockedDeviceStatus: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -333,6 +341,47 @@ const orderReducer = (state = orderState, action: any) => {
       };
     }
 
+    case types.FETCH_ORDER_FOLLOWUP.baseType: {
+      return {
+        ...state,
+        isFetchingOrderFollowups: true,
+        orders: [],
+      };
+    }
+    case types.FETCH_ORDER_FOLLOWUP.SUCCESS: {
+      return {
+        ...state,
+        isFetchingOrderFollowups: false,
+        orders: action.payload?.data,
+      };
+    }
+    case types.FETCH_ORDER_FOLLOWUP.FAILED: {
+      return {
+        ...state,
+        isFetchingOrderFollowups: false,
+        orders: [],
+      };
+    }
+
+    case types.UPDATE_ORDER_FOLLOWUP.baseType: {
+      return {
+        ...state,
+        isUpdatingOrderFollowups: true,
+      };
+    }
+    case types.UPDATE_ORDER_FOLLOWUP.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingOrderFollowups: false,
+      };
+    }
+    case types.UPDATE_ORDER_FOLLOWUP.FAILED: {
+      return {
+        ...state,
+        isUpdatingOrderFollowups: false,
+      };
+    }
+
     case types.LOG_CUSTOMER_NONCONTACT.baseType: {
       return {
         ...state,
@@ -349,6 +398,25 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isUpdatingContactLogs: false,
+      };
+    }
+
+    case types.UPDATE_ORDER_ITEM_LOCK_TYPE.baseType: {
+      return {
+        ...state,
+        isUpdatingOrderItemLockType: true,
+      };
+    }
+    case types.UPDATE_ORDER_ITEM_LOCK_TYPE.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingOrderItemLockType: false,
+      };
+    }
+    case types.UPDATE_ORDER_ITEM_LOCK_TYPE.FAILED: {
+      return {
+        ...state,
+        isUpdatingOrderItemLockType: false,
       };
     }
 
@@ -627,6 +695,85 @@ const orderReducer = (state = orderState, action: any) => {
         ...state,
         importPaymentsFlatFileError: [],
       };
+
+    case types.FETCH_LOCKED_DEVICES.baseType: {
+      return {
+        ...state,
+        isFetchingLockedDevices: true,
+        lockedDevices: [],
+      };
+    }
+    case types.FETCH_LOCKED_DEVICES.SUCCESS: {
+      return {
+        ...state,
+        isFetchingLockedDevices: false,
+        lockedDevices: action.payload?.data,
+      };
+    }
+    case types.FETCH_LOCKED_DEVICES.FAILED: {
+      return {
+        ...state,
+        isFetchingLockedDevices: false,
+        lockedDevices: [],
+      };
+    }
+    case types.FETCH_LOCKED_DEVICES.CANCELLED: {
+      return {
+        ...state,
+        isFetchingLockedDevices: true,
+        lockedDevices: [],
+      };
+    }
+
+    case types.CLEAR_LOCKED_DEVICES: {
+      return {
+        ...state,
+        isFetchingLockedDevices: true,
+        lockedDevices: [],
+      };
+    }
+
+    case types.SET_LOCKED_DEVICE_LOCK_STATUS.baseType: {
+      return {
+        ...state,
+        isUpdatingDeviceLockStatus: true,
+        isFetchingLockedDevices: true,
+        lockedDevices: [],
+      };
+    }
+    case types.SET_LOCKED_DEVICE_LOCK_STATUS.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingDeviceLockStatus: false,
+      };
+    }
+    case types.SET_LOCKED_DEVICE_LOCK_STATUS.FAILED: {
+      return {
+        ...state,
+        isUpdatingDeviceLockStatus: false,
+      };
+    }
+
+    case types.SET_LOCKED_DEVICE_STATUS.baseType: {
+      return {
+        ...state,
+        isUpdatingLockedDeviceStatus: true,
+        isFetchingLockedDevices: true,
+        lockedDevices: [],
+      };
+    }
+    case types.SET_LOCKED_DEVICE_STATUS.SUCCESS: {
+      return {
+        ...state,
+        isUpdatingLockedDeviceStatus: false,
+      };
+    }
+    case types.SET_LOCKED_DEVICE_STATUS.FAILED: {
+      return {
+        ...state,
+        isUpdatingLockedDeviceStatus: false,
+      };
+    }
 
     default:
       return state;

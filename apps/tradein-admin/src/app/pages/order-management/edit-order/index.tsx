@@ -18,6 +18,7 @@ import {
   FormGroup,
   GenericModal,
   LoaderContainer,
+  LockTypes,
   ORDER_LOGS_COLUMNS,
   ORDER_NOTES_COLUMNS,
   OrderItemStatus,
@@ -28,6 +29,7 @@ import {
   StyledIcon,
   StyledInput,
   StyledLink,
+  StyledReactSelect,
   TabList,
   Table,
   Typography,
@@ -49,7 +51,6 @@ import Completion from './completion';
 import QuoteDetails from './quote-details';
 import { EditForm } from './status/edit-form';
 import ValidationOffer from './validation-offer';
-
 type AccordionStates = {
   quote: boolean;
   claims: boolean;
@@ -109,6 +110,7 @@ export const EditOrderPage = () => {
     clearOrder,
     addOrderNote,
     upsertZendeskLink,
+    updateOrderItemLockType,
   } = useOrder();
 
   const {
@@ -117,12 +119,17 @@ export const EditOrderPage = () => {
     isUpdatingOrder,
     isFetchingOrder,
     isUpdatingImeiSerial,
+    isUpdatingOrderItemLockType,
   } = state;
 
   const {
     hasUpdateOrderItemStatusPermission,
     hasResendLabelPermission,
     hasViewPromotionClaimsPermission,
+    hasViewOrderLogsPermission,
+    hasViewOrderNotesPermission,
+    hasAddOrderNotePermission,
+    hasAddZendeskLinkPermission,
   } = usePermission();
 
   const { state: authState } = useAuth();
@@ -145,6 +152,7 @@ export const EditOrderPage = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [modalType, setModalType] = useState('');
   const [noteInput, setNoteInput] = useState('');
+  const [lockType, setLockType] = useState('');
   const [noteInputErrorMessage, setNoteInputErrorMessage] = useState('');
   const [noteInputError, setNoteInputError] = useState(false);
   const [zendeskLink, setZendeskLink] = useState(order.zendesk_link);
@@ -287,6 +295,11 @@ export const EditOrderPage = () => {
     }));
   };
 
+  const handleToggleModal = (type: any, isOpen: boolean) => {
+    setModalType(type);
+    setIsOpenModal(isOpen);
+  };
+
   const renderTabs = () => {
     const logsHeaders = [...ORDER_LOGS_COLUMNS];
     const notesHeaders = [...ORDER_NOTES_COLUMNS];
@@ -303,7 +316,7 @@ export const EditOrderPage = () => {
 
     const logList = addActions(sortedLogList || []);
 
-    const tabs: string[] = ['Order Details', 'Logs', 'Notes'];
+    const tabs: string[] = ['Order Details'];
     const tabContent: React.ReactNode[] = [
       <LoaderContainer
         margin="5px 20px 0px 20px"
@@ -402,6 +415,7 @@ export const EditOrderPage = () => {
                     orderItems={validationOrderItems}
                     setStatusModal={setStatusModal}
                     setSelectedItem={setSelectedItem}
+                    setGenericModal={(type) => handleToggleModal(type, true)}
                   />
                 </ScrollableContainer>
               ) : (
@@ -456,66 +470,82 @@ export const EditOrderPage = () => {
           )}
         </StatusModal>
       </LoaderContainer>,
-      <Table
-        label="System Log"
-        isLoading={isFetchingOrder}
-        headers={logsHeaders}
-        rows={logList || []}
-        parsingConfig={orderLogsParsingConfig}
-      />,
-      <>
-        <PageSubHeader
-          marginTop="5px"
-          overflowx="auto"
-          leftControls={
-            <>
-              <AppButton
-                type="button"
-                variant="fill"
-                width="fit-content"
-                padding="8px 20px"
-                icon={faPlus}
-                onClick={() => {
-                  setModalType('add-note');
-                  setIsOpenModal(true);
-                }}
-              >
-                Add Note
-              </AppButton>
-              <AppButton
-                type="button"
-                variant="fill"
-                width="fit-content"
-                padding="8px 20px"
-                icon={faPlus}
-                onClick={() => {
-                  setModalType('add-zendesk-link');
-                  setIsOpenModal(true);
-                }}
-              >
-                {isEmpty(order?.zendesk_link)
-                  ? 'Add Zendesk Link'
-                  : 'Update Zendesk Link'}
-              </AppButton>
-              <StyledLink
-                href={order?.zendesk_link}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Typography variant="body2">{order?.zendesk_link}</Typography>
-              </StyledLink>
-            </>
-          }
-        />
-        <Table
-          label="Notes"
-          isLoading={isFetchingOrder}
-          headers={notesHeaders}
-          rows={sortedNoteList || []}
-          parsingConfig={orderNotesParsingConfig}
-        />
-      </>,
     ];
+
+    if (hasViewOrderLogsPermission) {
+      tabs.push('Logs');
+      tabContent.push(
+        <Table
+          label="System Log"
+          isLoading={isFetchingOrder}
+          headers={logsHeaders}
+          rows={logList || []}
+          parsingConfig={orderLogsParsingConfig}
+        />,
+      );
+    }
+
+    if (hasViewOrderNotesPermission) {
+      tabs.push('Notes');
+      tabContent.push(
+        <>
+          <PageSubHeader
+            marginTop="5px"
+            overflowx="auto"
+            leftControls={
+              <>
+                {hasAddOrderNotePermission && (
+                  <AppButton
+                    type="button"
+                    variant="fill"
+                    width="fit-content"
+                    padding="8px 20px"
+                    icon={faPlus}
+                    onClick={() => {
+                      setModalType('add-note');
+                      setIsOpenModal(true);
+                    }}
+                  >
+                    Add Note
+                  </AppButton>
+                )}
+                {hasAddZendeskLinkPermission && (
+                  <AppButton
+                    type="button"
+                    variant="fill"
+                    width="fit-content"
+                    padding="8px 20px"
+                    icon={faPlus}
+                    onClick={() => {
+                      setModalType('add-zendesk-link');
+                      setIsOpenModal(true);
+                    }}
+                  >
+                    {isEmpty(order?.zendesk_link)
+                      ? 'Add Zendesk Link'
+                      : 'Update Zendesk Link'}
+                  </AppButton>
+                )}
+                <StyledLink
+                  href={order?.zendesk_link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Typography variant="body2">{order?.zendesk_link}</Typography>
+                </StyledLink>
+              </>
+            }
+          />
+          <Table
+            label="Notes"
+            isLoading={isFetchingOrder}
+            headers={notesHeaders}
+            rows={sortedNoteList || []}
+            parsingConfig={orderNotesParsingConfig}
+          />
+        </>,
+      );
+    }
 
     return <TabList tabs={tabs}>{tabContent}</TabList>;
   };
@@ -597,6 +627,14 @@ export const EditOrderPage = () => {
         });
         break;
 
+      case 'set-lock-type':
+        updateOrderItemLockType(selectedItem?._id, order._id, {
+          admin_id: userDetails?._id,
+          lock_status: 'locked',
+          lock_type: lockType,
+        });
+        break;
+
       default:
         throw new Error('Case exception.');
     }
@@ -605,6 +643,13 @@ export const EditOrderPage = () => {
   };
 
   const renderModalContentAndActions = (key: string) => {
+    const lockTypeOptions = Object.values(LockTypes).map((item) => {
+      return {
+        label: item.replace('-', ' ').toLocaleUpperCase(),
+        value: item,
+      };
+    });
+
     switch (key) {
       case 'add-note':
         return (
@@ -690,6 +735,48 @@ export const EditOrderPage = () => {
           </>
         );
 
+      case 'set-lock-type':
+        return (
+          <>
+            <FormGroup>
+              <StyledReactSelect
+                label="Lock Type"
+                isMulti={false}
+                options={lockTypeOptions}
+                name="lockType"
+                placeholder="Select Lock type"
+                value={lockType}
+                onChange={(selected) => {
+                  setLockType(selected.value);
+                }}
+              />
+            </FormGroup>
+            <FormGroup margin="0px">
+              <span />
+              <FormGroup margin="0px">
+                <AppButton
+                  type="button"
+                  variant="outlined"
+                  width="fit-content"
+                  padding="8px 20px"
+                  onClick={() => handleReset()}
+                >
+                  Cancel
+                </AppButton>
+                <AppButton
+                  type="button"
+                  variant="fill"
+                  width="fit-content"
+                  padding="8px 20px"
+                  onClick={() => handleSubmit('set-lock-type')}
+                  disabled={isEmpty(lockType) || isUpdatingOrderItemLockType}
+                >
+                  Submit
+                </AppButton>
+              </FormGroup>
+            </FormGroup>
+          </>
+        );
       default:
         break;
     }

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isEmpty } from 'lodash';
+import { capitalize, isEmpty } from 'lodash';
 import { AppButton } from '../../components';
 import { OrderItemStatus } from '../../constants';
 import { formatDate, parseStatus } from '../../helpers';
@@ -10,7 +10,7 @@ interface ParsingFunctionParams {
   index: number;
 }
 
-export const unsentDevicesManagementParsingConfig = {
+export const revisedDevicesManagementParsingConfig = {
   'Order ID': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['order_number'])) return '--';
     return row['order_number'];
@@ -34,34 +34,63 @@ export const unsentDevicesManagementParsingConfig = {
     const lastName = userDetails['last_name'] || '';
     return `${firstName} ${lastName}`;
   },
-  'Extended Prior': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['isExtended'])) return 'No';
-    return row['isExtended'] ? 'Yes' : 'No';
-  },
-  'Devices Awaiting': ({ row }: ParsingFunctionParams) => {
+  'Devices Revised': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['order_items'])) return '--';
     const orderItems = row ? row['order_items'] : [];
-    const orderCount = orderItems.filter((item: any) => item.status === OrderItemStatus.CREATED)?.length;
+    const orderCount = orderItems.filter((item: any) => item.status === OrderItemStatus.FOR_REVISION)?.length;
     return orderCount;
   },
 };
 
-export const unsentDevicesTableParsingConfig = {
+const formatConditionAssessment = (questions: any[]) => {
+  const assessments: any = [];
+  questions?.forEach((item: any) => {
+    const criteria = item?.question?.replace('-assessment', '');
+    assessments.push(`${capitalize(criteria)}: ${capitalize(item?.answer)}`)
+  })
+  return assessments.join(' | ');
+}
+
+export const revisedDevicesTableParsingConfig = {
   'Device ID': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['line_item_number'])) return '--';
     return row['line_item_number'];
   },
-  'Device Name': ({ row }: ParsingFunctionParams) => {
+  'Provided Device Details': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['product_name'])) return '--';
     return row['product_name'];
+  },
+  'Condition Assessment': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['questions_answered'])) return '--';
+    return formatConditionAssessment(row['questions_answered']);
   },
   'IMEI/Serial': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['imei_serial'])) return '--';
     return row['imei_serial'];
   },
-  'Extension Date': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['send_in_deadline_date'])) return '--';
-    return formatDate(row['send_in_deadline_date']);
+  'Quote': ({ row }: ParsingFunctionParams) => {
+    if (!row) return '--';
+    return row['original_offer'];
+  },
+  'Moorup Assessment': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['revision'])) return '--';
+    return row['revision']?.product?.name || row['product_name'];
+  },
+  'Revised Condition Assessment': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['revision'])) return '--';
+    return formatConditionAssessment(row['revision']?.questions_answered || row['questions_answered']);
+  },
+  'Condition Notes (Reason)': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['revision']?.reasons)) return '--';
+    return row['revision']?.reasons?.join(', ');
+  },
+  'Revised IMEI/Serial': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['imei_serial'])) return '--';
+    return row['imei_serial'];
+  },
+  'Revised Quote': ({ row }: ParsingFunctionParams) => {
+    if (!row || isEmpty(row['revision'])) return '--';
+    return row['revision']?.price;
   },
   Actions: ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['_id'])) return '--';
@@ -72,18 +101,18 @@ export const unsentDevicesTableParsingConfig = {
           variant="fill"
           width="fit-content"
           padding="4px 20px"
-          onClick={() => row.extendDeadlineAction()}
+          onClick={() => row.acceptRevisionAction()}
         >
-          Extend
+          Accept
         </AppButton>
           <AppButton
           type="button"
           variant="outlined"
           width="fit-content"
           padding="4px 20px"
-          onClick={() => row.cancelOrderItemAction()}
+          onClick={() => row.returnDeviceAction()}
         >
-          Cancel
+          Return
         </AppButton>
       </div>
     )

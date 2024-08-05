@@ -615,16 +615,10 @@ export const UNSENT_DEVICES_MANAGEMENT_COLUMNS = [
     keyName: 'user_id.first_name',
   },
   {
-    label: 'Extended Prior',
+    label: 'Devices Awaiting',
     order: 6,
     enableSort: true,
-    keyName: 'isExtended',
-  },
-  {
-    label: 'Devices Awaiting',
-    order: 7,
-    enableSort: true,
-    keyName: 'awaitingDevices',
+    keyName: 'revisedDevices',
   },
 ];
 
@@ -651,11 +645,108 @@ export const UNSENT_DEVICES_TABLE_COLUMNS = [
     label: 'Extension Date',
     order: 5,
     enableSort: true,
-    keyName: 'user_id.first_name',
+    keyName: 'send_in_deadline_date',
   },
   {
     label: 'Actions',
     order: 6,
+    keyName: 'isExtended',
+  },
+];
+
+export const REVISED_DEVICES_MANAGEMENT_COLUMNS = [
+  {
+    label: 'Order ID',
+    order: 2,
+    enableSort: true,
+    keyName: 'order_number',
+  },
+  {
+    label: 'Order Date',
+    order: 3,
+    enableSort: true,
+    keyName: 'createdAt',
+  },
+  {
+    label: 'Order Type',
+    order: 4,
+    enableSort: true,
+    keyName: 'order_type',
+  },
+  {
+    label: 'Customer Name',
+    order: 5,
+    enableSort: true,
+    keyName: 'user_id.first_name',
+  },
+  {
+    label: 'Devices Revised',
+    order: 6,
+    enableSort: true,
+    keyName: 'revisedDevices',
+  },
+];
+
+export const REVISED_DEVICES_TABLE_COLUMNS = [
+  {
+    label: 'Device ID',
+    order: 2,
+    enableSort: true,
+    keyName: 'order_number',
+  },
+  {
+    label: 'Provided Device Details',
+    order: 3,
+    enableSort: true,
+    keyName: 'createdAt',
+  },
+  {
+    label: 'Condition Assessment',
+    order: 4,
+    enableSort: true,
+    keyName: 'order_type',
+  },
+  {
+    label: 'IMEI/Serial',
+    order: 5,
+    enableSort: true,
+    keyName: 'send_in_deadline_date',
+  },
+  {
+    label: 'Quote',
+    order: 6,
+    enableSort: true,
+    keyName: 'send_in_deadline_date',
+  },
+  {
+    label: 'Moorup Assessment',
+    order: 7,
+    enableSort: true,
+    keyName: 'send_in_deadline_date',
+  },
+  {
+    label: 'Revised Condition Assessment',
+    order: 8,
+    keyName: 'isExtended',
+  },
+  {
+    label: 'Condition Notes (Reason)',
+    order: 9,
+    keyName: 'isExtended',
+  },
+  {
+    label: 'Revised IMEI/Serial',
+    order: 10,
+    keyName: 'isExtended',
+  },
+  {
+    label: 'Revised Quote',
+    order: 11,
+    keyName: 'isExtended',
+  },
+  {
+    label: 'Actions',
+    order: 12,
     keyName: 'isExtended',
   },
 ];
@@ -882,5 +973,77 @@ export const ORDER_PAYMENT_FLAT_FILE_DETAILS_COLUMNS = [
     order: 8,
     enableSort: true,
     keyName: 'payload.paymentReference',
+  },
+];
+
+export const ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK_COLUMNS = [
+  {
+    label: 'Device ID',
+    order: 1,
+    enableSort: true,
+    keyName: 'order_item.line_item_number',
+  },
+  {
+    label: 'Order Number',
+    order: 2,
+    enableSort: true,
+    keyName: 'order_number',
+  },
+  {
+    label: 'Order Date',
+    order: 3,
+    enableSort: true,
+    keyName: 'order_item.createdAt',
+  },
+  {
+    label: 'Customer Name',
+    order: 3,
+    enableSort: true,
+    keyName: 'user_details.first_name',
+  },
+  {
+    label: 'Prior Lock Check',
+    order: 4,
+    enableSort: true,
+    keyName: 'order_item.lock',
+  },
+  {
+    label: 'Retest Count',
+    order: 5,
+    enableSort: true,
+    keyName: 'order_item.lock.retestCount',
+  },
+];
+
+export const ACTIONABLES_LOCKED_DEVICES_FOR_RETEST_COLUMNS = [
+  {
+    label: 'Device ID',
+    order: 1,
+    enableSort: true,
+    keyName: 'order_item.line_item_number',
+  },
+  {
+    label: 'Order Number',
+    order: 2,
+    enableSort: true,
+    keyName: 'order_number',
+  },
+  {
+    label: 'Order Date',
+    order: 3,
+    enableSort: true,
+    keyName: 'order_item.createdAt',
+  },
+  {
+    label: 'Customer Name',
+    order: 4,
+    enableSort: true,
+    keyName: 'user_details.first_name',
+  },
+  {
+    label: 'Lock Type',
+    order: 5,
+    enableSort: true,
+    keyName: 'order_item.lock.type',
   },
 ];

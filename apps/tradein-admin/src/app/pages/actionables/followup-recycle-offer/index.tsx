@@ -7,27 +7,41 @@ import {
   OrderItemStatus,
   PageSubHeader,
   Table,
-  UNSENT_DEVICES_MANAGEMENT_COLUMNS,
-  unsentDevicesManagementParsingConfig,
+  REVISED_DEVICES_MANAGEMENT_COLUMNS,
+  revisedDevicesManagementParsingConfig,
   useAuth,
   useCommon,
   useOrder,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
-import { FollowUpUnsentDeviceModal } from './modal-content';
+import { FollowUpRecycleOfferModal } from './modal-content';
 
-export function FollowUpUnsentDevicePage() {
-  const { state, fetchOrders, clearOrder, clearOrders, setActiveOrder } =
-    useOrder();
-  const { orders, order, isFetchingOrders } = state;
+export function FollowUpRecycleOfferPage() {
+  const {
+    state,
+    fetchOrderFollowups,
+    clearOrder,
+    clearOrders,
+    setActiveOrder,
+  } = useOrder();
+  const { orders, order, isFetchingOrderFollowups } = state;
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
   const { setSearchTerm } = useCommon();
   const [selectedRow, setSelectedRow] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-  const headers = UNSENT_DEVICES_MANAGEMENT_COLUMNS;
+  const headers = REVISED_DEVICES_MANAGEMENT_COLUMNS;
+
+  const getOrdersForFollowup = (signal?: any) => {
+    const filters = {
+      is_recycled: true,
+      order_item_status: 'for-revision',
+      platform: activePlatform,
+    };
+    fetchOrderFollowups(filters, signal);
+  };
 
   const handleRowClick = (row: any) => {
     setIsModalOpen(true);
@@ -37,7 +51,7 @@ export function FollowUpUnsentDevicePage() {
 
   const hasUnsentOrderItems = (orderItems: any[]) => {
     return orderItems?.some(
-      (item: any) => item?.status === OrderItemStatus.CREATED,
+      (item: any) => item?.status === OrderItemStatus.FOR_REVISION,
     );
   };
 
@@ -46,9 +60,7 @@ export function FollowUpUnsentDevicePage() {
       setSelectedRow(order);
     } else {
       if (!isEmpty(selectedRow)) {
-        const controller = new AbortController();
-        const signal = controller.signal;
-        fetchOrders(signal);
+        getOrdersForFollowup();
         setSelectedRow({});
       } else {
         setIsModalOpen(false);
@@ -61,7 +73,7 @@ export function FollowUpUnsentDevicePage() {
     const signal = controller.signal;
 
     if (!isEmpty(activePlatform)) {
-      fetchOrders(signal);
+      getOrdersForFollowup(signal);
     }
 
     return () => {
@@ -84,11 +96,11 @@ export function FollowUpUnsentDevicePage() {
     <>
       <PageSubHeader withSearch />
       <Table
-        label="Follow-Up Device Not Sent"
-        isLoading={isFetchingOrders}
+        label="Follow-Up Recycle Offer"
+        isLoading={isFetchingOrderFollowups}
         headers={headers}
         rows={filteredOrders || []}
-        parsingConfig={unsentDevicesManagementParsingConfig}
+        parsingConfig={revisedDevicesManagementParsingConfig}
         onRowClick={handleRowClick}
       />
       <CenterModal
@@ -112,7 +124,7 @@ export function FollowUpUnsentDevicePage() {
               <Loader />
             </div>
           ) : (
-            <FollowUpUnsentDeviceModal order={selectedRow} />
+            <FollowUpRecycleOfferModal order={selectedRow} />
           )}
         </div>
       </CenterModal>

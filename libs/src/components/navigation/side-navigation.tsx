@@ -48,7 +48,14 @@ export function SideBar(): JSX.Element {
     hasViewPromotionClaimsPaymentPermission,
     hasViewUsersPermission,
     hasViewPlatformConfigsPermissions,
-    hasViewPaymentsPermission
+    hasViewPaymentsPermission,
+    hasViewActionablesFollowUpDeviceNotSentPermission,
+    hasViewActionablesFollowUpRecycleOfferPermission,
+    hasViewActionablesFollowUpRevisionOfferPermission,
+    hasViewActionablesForRecyclePermission,
+    hasViewActionablesForReturnPermission,
+    hasViewActionablesLockedDevicesCurrentLockPermission,
+    hasViewActionablesLockedDevicesForRetestPermission,
   } = usePermission();
 
   const filteredSideNavItems = SIDENAV_ITEMS.filter((item) => {
@@ -60,10 +67,10 @@ export function SideBar(): JSX.Element {
         return hasViewProductsPermission;
 
       case 'Order Management':
-        return hasViewOrdersPermission || hasViewDiscrepanciesPermission || hasViewPaymentsPermission;
+        return hasViewOrdersPermission || hasViewDiscrepanciesPermission || hasViewPaymentsPermission || hasViewActionablesPermission;
 
       case 'Actionables':
-        return hasViewActionablesPermission;
+        return hasViewActionablesFollowUpDeviceNotSentPermission || hasViewActionablesFollowUpRecycleOfferPermission || hasViewActionablesFollowUpRevisionOfferPermission || hasViewActionablesForRecyclePermission || hasViewActionablesForReturnPermission || hasViewActionablesLockedDevicesCurrentLockPermission || hasViewActionablesLockedDevicesForRetestPermission;
 
       case 'Promotion Management':
         return hasViewPromotionsPermission || hasViewPromotionClaimsPermission || hasViewPromotionClaimsPaymentPermission;
@@ -144,7 +151,7 @@ export function SideBar(): JSX.Element {
         rootStyles={{
           color: '#216A4C'
         }}
-        width='300px'
+        width='320px'
       >
         <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
           <Image src={Logo} alt="" />
@@ -160,7 +167,14 @@ export function SideBar(): JSX.Element {
                 hasViewPromotionClaimsPermission ||
                 hasViewPromotionClaimsPaymentPermission ||
                 hasViewUsersPermission ||
-                hasViewPaymentsPermission
+                hasViewPaymentsPermission ||
+                hasViewActionablesFollowUpDeviceNotSentPermission ||
+                hasViewActionablesFollowUpRecycleOfferPermission || 
+                hasViewActionablesFollowUpRevisionOfferPermission || 
+                hasViewActionablesForRecyclePermission ||
+                hasViewActionablesForReturnPermission ||
+                hasViewActionablesLockedDevicesCurrentLockPermission ||
+                hasViewActionablesLockedDevicesForRetestPermission
               )
               && (
                 <div style={{ padding: '0 24px', marginBottom: '8px' }}>
@@ -190,8 +204,22 @@ export function SideBar(): JSX.Element {
                         case 'Discrepancy':
                           return hasViewDiscrepanciesPermission;
 
-                        case 'Follow-Up Device Not Sent':
+                        case 'Actionables':
                           return hasViewActionablesPermission;
+
+                        case 'Follow-Up Device Not Sent':
+                          return hasViewActionablesFollowUpDeviceNotSentPermission;
+
+                        case 'Follow-Up Revision Offer':
+                          return hasViewActionablesFollowUpRevisionOfferPermission;
+
+                        case 'Follow-Up Recycle Offer':
+                          return hasViewActionablesFollowUpRecycleOfferPermission;
+                        case 'Locked Devices - Current Lock':
+                          return hasViewActionablesLockedDevicesCurrentLockPermission;
+                        
+                        case 'Locked Devices - For Retest':
+                          return hasViewActionablesLockedDevicesForRetestPermission;
 
                         case 'Promotions':
                           return hasViewPromotionsPermission;
