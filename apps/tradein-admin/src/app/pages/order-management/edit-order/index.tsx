@@ -230,7 +230,7 @@ export const EditOrderPage = () => {
         revision_reasons: newValue.reason?.split(','),
         admin_id: userDetails?._id,
       };
-      reviseOfferByItemId(orderItem.line_item_number, payload);
+      reviseOfferByItemId(orderItem?._id, payload);
     } else if (newValue.status === OrderItemStatus.EVALUATED) {
       evaluateOrderItemById(orderItem.line_item_number, {
         platform: activePlatform,

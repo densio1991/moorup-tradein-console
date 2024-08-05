@@ -5,7 +5,8 @@ import axiosInstance from '../axios';
 import * as types from './action-types';
 
 export const getOrderItems =
-  (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any, token?: string) => {
+  (payload: any, platform: string, signal?: AbortSignal) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.FETCH_ORDER_ITEMS.baseType,
       payload,
@@ -60,8 +61,8 @@ export const getAllOrders =
         });
         dispatch({
           type: types.FETCH_ORDER_PAYMENTS.SUCCESS,
-          payload: response?.data
-        })
+          payload: response?.data,
+        });
       })
       .catch((error) => {
         if (error.code === CANCELLED_AXIOS) {
@@ -83,7 +84,8 @@ export const getAllOrders =
   };
 
 export const getOrderShipments =
-  (payload: string, signal?: AbortSignal) => (dispatch: any, token?: string) => {
+  (payload: string, signal?: AbortSignal) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.FETCH_ORDER_SHIPMENTS.baseType,
       payload,
@@ -171,31 +173,32 @@ export const updateOrderById =
       });
   };
 
-export const cancelOrderById = (orderId: any) => (dispatch: any, token?: string) => {
-  dispatch({
-    type: types.CANCEL_ORDER_BY_ID.baseType,
-  });
-
-  axiosInstance(token)
-    .patch(`/api/orders/${orderId}/cancel`)
-    .then((response) => {
-      dispatch({
-        type: types.CANCEL_ORDER_BY_ID.SUCCESS,
-      });
-
-      getOrderById(orderId)(dispatch, token);
-      toast.success('Order successfully cancelled!');
-    })
-    .catch((error) => {
-      dispatch({
-        type: types.CANCEL_ORDER_BY_ID.FAILED,
-        payload: error,
-      });
-
-      getOrderById(orderId)(dispatch, token);
-      toast.error('Failed to cancel order.');
+export const cancelOrderById =
+  (orderId: any) => (dispatch: any, token?: string) => {
+    dispatch({
+      type: types.CANCEL_ORDER_BY_ID.baseType,
     });
-};
+
+    axiosInstance(token)
+      .patch(`/api/orders/${orderId}/cancel`)
+      .then((response) => {
+        dispatch({
+          type: types.CANCEL_ORDER_BY_ID.SUCCESS,
+        });
+
+        getOrderById(orderId)(dispatch, token);
+        toast.success('Order successfully cancelled!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.CANCEL_ORDER_BY_ID.FAILED,
+          payload: error,
+        });
+
+        getOrderById(orderId)(dispatch, token);
+        toast.error('Failed to cancel order.');
+      });
+  };
 
 export const resendShipmentLabel =
   (id: any, payload: any) => (dispatch: any, token?: string) => {
@@ -252,7 +255,8 @@ export const resendOrderItemShipmentLabel =
   };
 
 export const updateOrderItemById =
-  (orderItemId: any, orderId: any, payload: any) => (dispatch: any, token?: string) => {
+  (orderItemId: any, orderId: any, payload: any) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.UPDATE_ORDER_ITEM_BY_ID.baseType,
       payload,
@@ -310,7 +314,9 @@ export const deleteOrderById =
       });
   };
 
-export const receiveOrderItemById = (orderItemId: any, orderId: any, payload: any) => (dispatch: any, token?: string) => {
+export const receiveOrderItemById =
+  (orderItemId: any, orderId: any, payload: any) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.RECEIVE_ORDER_ITEM_BY_ID.baseType,
       orderItemId,
@@ -339,7 +345,8 @@ export const receiveOrderItemById = (orderItemId: any, orderId: any, payload: an
   };
 
 export const evaluateOrderItemById =
-  (orderItemId: any, orderId: any, payload: any) => (dispatch: any, token?: string) => {
+  (orderItemId: any, orderId: any, payload: any) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.EVALUATE_ORDER_ITEM_BY_ID.baseType,
       orderItemId,
@@ -369,37 +376,39 @@ export const evaluateOrderItemById =
   };
 
 export const reviseOfferByItemId =
-(orderItemNumber: any, orderId: any, payload: any) => (dispatch: any, token?: string) => {
-  dispatch({
-    type: types.REVISE_OFFER_BY_ITEM_ID.baseType,
-    orderItemNumber,
-  });
-
-  axiosInstance(token)
-    .patch(`/api/order/item/${orderItemNumber}/revise-offer`, payload)
-    .then((response) => {
-      dispatch({
-        type: types.REVISE_OFFER_BY_ITEM_ID.SUCCESS,
-        payload: response?.data,
-      });
-
-      getOrderById(orderId)(dispatch, token);
-      getOrderShipments(orderId)(dispatch, token);
-      setToggleModal(false)(dispatch);
-      toast.success('Order item successfully updated!');
-    })
-    .catch((error) => {
-      dispatch({
-        type: types.REVISE_OFFER_BY_ITEM_ID.FAILED,
-        payload: error,
-      });
-
-      toast.error('Failed to update order item status.');
+  (orderItemNumber: any, orderId: any, payload: any) =>
+  (dispatch: any, token?: string) => {
+    dispatch({
+      type: types.REVISE_OFFER_BY_ITEM_ID.baseType,
+      orderItemNumber,
     });
-};
+
+    axiosInstance(token)
+      .post(`/api/orders/${orderItemNumber}/revise-offer`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.REVISE_OFFER_BY_ITEM_ID.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderById(orderId)(dispatch, token);
+        getOrderShipments(orderId)(dispatch, token);
+        setToggleModal(false)(dispatch);
+        toast.success('Order item successfully updated!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.REVISE_OFFER_BY_ITEM_ID.FAILED,
+          payload: error,
+        });
+
+        toast.error('Failed to update order item status.');
+      });
+  };
 
 export const cancelOrderItemById =
-  (orderItemId: any, orderId: any, payload: any) => (dispatch: any, token?: string) => {
+  (orderItemId: any, orderId: any, payload: any) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.CANCEL_ORDER_ITEM_BY_ID.baseType,
       payload,
@@ -429,7 +438,8 @@ export const cancelOrderItemById =
   };
 
 export const updateShipmentStatus =
-  (shipmentId: string, orderId: string, payload: any) => (dispatch: any, token?: string) => {
+  (shipmentId: string, orderId: string, payload: any) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.UPDATE_SHIPPING_STATUS_BY_ID.baseType,
       payload,
@@ -514,7 +524,7 @@ export const getOrderFollowups =
     });
 
     axiosInstance(token)
-      .get('/api/orders/follow-up', {params: payload, signal: signal})
+      .get('/api/orders/follow-up', { params: payload, signal: signal })
       .then((response) => {
         dispatch({
           type: types.FETCH_ORDER_FOLLOWUP.SUCCESS,
@@ -565,14 +575,18 @@ export const updateOrderFollowups =
   };
 
 export const updateOrderItemLockType =
-  (orderItemId: any, orderId: any, payload: any) => (dispatch: any, token?: string) => {
+  (orderItemId: any, orderId: any, payload: any) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.UPDATE_ORDER_ITEM_LOCK_TYPE.baseType,
       payload,
     });
 
     axiosInstance(token)
-      .patch(`/api/orders/items/lock-devices/${orderItemId}/lock-status`, payload)
+      .patch(
+        `/api/orders/items/lock-devices/${orderItemId}/lock-status`,
+        payload,
+      )
       .then((response) => {
         dispatch({
           type: types.UPDATE_ORDER_ITEM_LOCK_TYPE.SUCCESS,
@@ -722,7 +736,8 @@ export const generateOutboundLabel =
   };
 
 export const updateOrderItemImeiSerial =
-  (orderItemId: string, orderId: string, payload: any) => (dispatch: any, token?: string) => {
+  (orderItemId: string, orderId: string, payload: any) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.baseType,
       payload,
@@ -750,7 +765,8 @@ export const updateOrderItemImeiSerial =
   };
 
 export const getGiftCardStatus =
-  (orderId: any, payload: any, signal?: AbortSignal) => (dispatch: any, token?: string) => {
+  (orderId: any, payload: any, signal?: AbortSignal) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.FETCH_GIFT_CARD_STATUS.baseType,
     });
@@ -774,7 +790,8 @@ export const getGiftCardStatus =
   };
 
 export const cancelGiftCard =
-  (orderId: any, voucherPan: any, signal?: AbortSignal) => (dispatch: any, token?: string) => {
+  (orderId: any, voucherPan: any, signal?: AbortSignal) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.CANCEL_GIFT_CARD.baseType,
     });
@@ -802,8 +819,9 @@ export const cancelGiftCard =
       });
   };
 
-  export const updateOrderItemsStatus =
-  (orderItemId: any, payload: any, onSuccess: any = false) => (dispatch: any, token?: string) => {
+export const updateOrderItemsStatus =
+  (orderItemId: any, payload: any, onSuccess: any = false) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.UPDATE_ORDER_ITEM_BY_ID.baseType,
       payload,
@@ -816,7 +834,6 @@ export const cancelGiftCard =
           type: types.UPDATE_ORDER_ITEM_BY_ID.SUCCESS,
           payload: response?.data,
         });
-
       })
       .catch((error) => {
         dispatch({
@@ -834,7 +851,9 @@ export const getAllOrderPayments =
     });
 
     axiosInstance(token)
-      .get(`/api/orders/flat-file-data?platform=${platform}`, { signal: signal })
+      .get(`/api/orders/flat-file-data?platform=${platform}`, {
+        signal: signal,
+      })
       .then((response) => {
         dispatch({
           type: types.FETCH_ORDER_PAYMENTS.SUCCESS,
@@ -894,7 +913,7 @@ export const downloadOrderPaymentFile =
     });
 
     axiosInstance(token)
-      .get('/api/orders/download-flat-file', { 
+      .get('/api/orders/download-flat-file', {
         signal: signal,
         params: payload,
       })
@@ -916,7 +935,9 @@ export const downloadOrderPaymentFile =
             payload: error,
           });
 
-          toast.error('No data available for the selected date; no file generated for export. Please choose another date.');
+          toast.error(
+            'No data available for the selected date; no file generated for export. Please choose another date.',
+          );
         } else {
           dispatch({
             type: types.DOWNLOAD_ORDER_PAYMENT_FILE.FAILED,
@@ -942,7 +963,8 @@ export const clearOrder = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const addOrderNote = (orderId: string, payload: any) => (dispatch: any, token?: string) => {
+export const addOrderNote =
+  (orderId: string, payload: any) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.ADD_ORDER_NOTE.baseType,
       payload,
@@ -970,7 +992,8 @@ export const addOrderNote = (orderId: string, payload: any) => (dispatch: any, t
       });
   };
 
-  export const upsertZendeskLink = (orderId: string, payload: any) => (dispatch: any, token?: string) => {
+export const upsertZendeskLink =
+  (orderId: string, payload: any) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.UPSERT_ZENDESK_LINK.baseType,
       payload,
@@ -1044,16 +1067,16 @@ export const importPaymentsFlatFile =
       });
   };
 
-export const clearUploadPaymentErrors =
-  (payload: any) => (dispatch: any) => {
-    dispatch({
-      type: types.CLEAR_ORDER_PAYMENT_ERRORS,
-      payload,
-    });
-  };
+export const clearUploadPaymentErrors = (payload: any) => (dispatch: any) => {
+  dispatch({
+    type: types.CLEAR_ORDER_PAYMENT_ERRORS,
+    payload,
+  });
+};
 
 export const getLockedDevices =
-  (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any, token?: string) => {
+  (payload: any, platform: string, signal?: AbortSignal) =>
+  (dispatch: any, token?: string) => {
     dispatch({
       type: types.FETCH_LOCKED_DEVICES.baseType,
       payload,
@@ -1092,58 +1115,68 @@ export const clearLockedDevices = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const setLockedDeviceLockStatus = (orderItemId: string, payload: any, filter: any, platform: string) => (dispatch: any, token?: string) => {
-  dispatch({
-    type: types.SET_LOCKED_DEVICE_LOCK_STATUS.baseType,
-    payload,
-  });
-
-  axiosInstance(token)
-    .patch(`/api/orders/items/lock-devices/${orderItemId}/lock-status`, payload)
-    .then((response) => {
-      dispatch({
-        type: types.SET_LOCKED_DEVICE_LOCK_STATUS.SUCCESS,
-        payload: response?.data,
-      });
-
-      getLockedDevices(filter, platform)(dispatch, token);
-      toast.success('Successfully updated device lock status!');
-    })
-    .catch((error) => {
-      dispatch({
-        type: types.SET_LOCKED_DEVICE_LOCK_STATUS.FAILED,
-        payload: error,
-      });
-
-      getLockedDevices(filter, platform)(dispatch, token);
-      toast.error('Failed to update device lock status.');
+export const setLockedDeviceLockStatus =
+  (orderItemId: string, payload: any, filter: any, platform: string) =>
+  (dispatch: any, token?: string) => {
+    dispatch({
+      type: types.SET_LOCKED_DEVICE_LOCK_STATUS.baseType,
+      payload,
     });
-};
 
-export const setLockedDeviceStatus = (orderItemId: string, payload: any, filter: any, platform: string) => (dispatch: any, token?: string) => {
-  dispatch({
-    type: types.SET_LOCKED_DEVICE_STATUS.baseType,
-    payload,
-  });
+    axiosInstance(token)
+      .patch(
+        `/api/orders/items/lock-devices/${orderItemId}/lock-status`,
+        payload,
+      )
+      .then((response) => {
+        dispatch({
+          type: types.SET_LOCKED_DEVICE_LOCK_STATUS.SUCCESS,
+          payload: response?.data,
+        });
 
-  axiosInstance(token)
-    .patch(`/api/orders/items/lock-devices/${orderItemId}/device-status`, payload)
-    .then((response) => {
-      dispatch({
-        type: types.SET_LOCKED_DEVICE_STATUS.SUCCESS,
-        payload: response?.data,
+        getLockedDevices(filter, platform)(dispatch, token);
+        toast.success('Successfully updated device lock status!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.SET_LOCKED_DEVICE_LOCK_STATUS.FAILED,
+          payload: error,
+        });
+
+        getLockedDevices(filter, platform)(dispatch, token);
+        toast.error('Failed to update device lock status.');
       });
+  };
 
-      getLockedDevices(filter, platform)(dispatch, token);
-      toast.success('Successfully updated device status!');
-    })
-    .catch((error) => {
-      dispatch({
-        type: types.SET_LOCKED_DEVICE_STATUS.FAILED,
-        payload: error,
-      });
-
-      getLockedDevices(filter, platform)(dispatch, token);
-      toast.error('Failed to update device status.');
+export const setLockedDeviceStatus =
+  (orderItemId: string, payload: any, filter: any, platform: string) =>
+  (dispatch: any, token?: string) => {
+    dispatch({
+      type: types.SET_LOCKED_DEVICE_STATUS.baseType,
+      payload,
     });
-};
+
+    axiosInstance(token)
+      .patch(
+        `/api/orders/items/lock-devices/${orderItemId}/device-status`,
+        payload,
+      )
+      .then((response) => {
+        dispatch({
+          type: types.SET_LOCKED_DEVICE_STATUS.SUCCESS,
+          payload: response?.data,
+        });
+
+        getLockedDevices(filter, platform)(dispatch, token);
+        toast.success('Successfully updated device status!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.SET_LOCKED_DEVICE_STATUS.FAILED,
+          payload: error,
+        });
+
+        getLockedDevices(filter, platform)(dispatch, token);
+        toast.error('Failed to update device status.');
+      });
+  };
