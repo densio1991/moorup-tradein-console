@@ -1,4 +1,3 @@
-
 export const DEFAULT_COLUMN = [
   {
     label: 'ID',
@@ -123,7 +122,7 @@ export const PRODUCT_UPLOAD_COLUMNS = [
     enableSort: true,
     keyName: 'payload.variant_name',
   },
-]
+];
 
 export const PRODUCT_UPLOAD_ATTRIBUTES_COLUMNS = [
   {
@@ -149,8 +148,8 @@ export const PRODUCT_UPLOAD_ATTRIBUTES_COLUMNS = [
     order: 5,
     enableSort: true,
     keyName: 'payload.name',
-  }
-]
+  },
+];
 
 export const PRODUCT_UPLOAD_LOGS_COLUMNS = [
   {
@@ -859,7 +858,7 @@ export const ORDER_PAYMENTS_MANAGEMENT_COLUMNS = [
     keyName: 'updatedAt',
   },
   {
-    label: 'Payment Amount',
+    label: 'Quoted Amount',
     order: 6,
     enableSort: true,
     keyName: 'paymentAmount',
@@ -870,12 +869,12 @@ export const ORDER_PAYMENTS_MANAGEMENT_COLUMNS = [
     enableSort: true,
     keyName: 'paymentType',
   },
-  {
-    label: 'Payment Reference',
-    order: 8,
-    enableSort: true,
-    keyName: 'paymentReference',
-  }
+  // {
+  //   label: 'Payment Reference',
+  //   order: 8,
+  //   enableSort: true,
+  //   keyName: 'paymentReference',
+  // }
 ];
 
 export const ORDER_LOGS_COLUMNS = [
@@ -902,7 +901,7 @@ export const ORDER_LOGS_COLUMNS = [
     order: 5,
     enableSort: true,
     keyName: 'status',
-  }
+  },
 ];
 
 export const ORDER_NOTES_COLUMNS = [
@@ -923,7 +922,7 @@ export const ORDER_NOTES_COLUMNS = [
     order: 4,
     enableSort: true,
     keyName: 'createdBy.first_name',
-  }
+  },
 ];
 
 export const ORDER_PAYMENT_FLAT_FILE_DETAILS_COLUMNS = [

@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { isEmpty } from 'lodash';
 import { formatDate } from '../helpers';
+import { isNull } from 'lodash';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
   menuItems?: any;
 }
 
-export const orderPaymentParsingConfig = {  
+export const orderPaymentParsingConfig = {
   'Device ID': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['deviceId'])) return '--';
     return row['deviceId'];
@@ -20,8 +21,8 @@ export const orderPaymentParsingConfig = {
     if (!row || isEmpty(row['customerEmailAddress'])) return '--';
     return row['customerEmailAddress'];
   },
-  'Payment Amount': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['paymentAmount'])) return '--';
+  'Quoted Amount': ({ row }: ParsingFunctionParams) => {
+    if (!row || isNull(row['paymentAmount'])) return '--';
     return row['paymentAmount'];
   },
   'Payment Type': ({ row }: ParsingFunctionParams) => {
