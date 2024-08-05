@@ -10,24 +10,31 @@ interface ParsingFunctionParams {
 
 const StyledLink = styled.a`
   text-decoration: underline;
-  color: #216A4C;
+  color: #216a4c;
   display: inline-block;
   max-width: 300px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: bottom;
-`
+`;
 
-const StyledChip = styled.span<{ value?: string; width?: string; bgColor?: string; textColor?: string }>`
+const StyledChip = styled.span<{
+  value?: string;
+  width?: string;
+  bgColor?: string;
+  textColor?: string;
+}>`
   display: inline-block;
   border-radius: 4px;
   padding: 2px 20px;
   text-decoration: none;
   width: ${(props) => props.width ?? 'auto'};
   text-align: center;
-  background-color: ${(props) => props.bgColor ?? (props.value === 'active' ? '#b0d6d0' : '#ffdbd9')};
-  color: ${(props) => props.textColor ?? (props.value === 'active' ? '#01463A' : '#f7564a')};
+  background-color: ${(props) =>
+    props.bgColor ?? (props.value === 'active' ? '#b0d6d0' : '#ffdbd9')};
+  color: ${(props) =>
+    props.textColor ?? (props.value === 'active' ? '#01463A' : '#f7564a')};
 `;
 
 const ProductChipsContainer = styled.div`
@@ -36,11 +43,10 @@ const ProductChipsContainer = styled.div`
   gap: 4px;
 `;
 
-export const promotionClaimsManagementParsingConfig = {  
+export const promotionClaimsManagementParsingConfig = {
   'Order Number': ({ row }: ParsingFunctionParams) => {
-    const orderDetails = row ? row['order_id'] : null;
-    if (!orderDetails || isEmpty(orderDetails['order_number'])) return '--';
-    return orderDetails['order_number'];
+    if (!row || isEmpty(row['order_number'])) return '--';
+    return row['order_number'];
   },
   'Promotion Name': ({ row }: ParsingFunctionParams) => {
     const promotionDetails = row ? row['promotion_id'] : null;
@@ -49,11 +55,23 @@ export const promotionClaimsManagementParsingConfig = {
   },
   'Promotion Link': ({ row }: ParsingFunctionParams) => {
     const promotionDetails = row ? row['promotion_id'] : null;
-    if (!promotionDetails || isEmpty(promotionDetails['slug']) || isEmpty(row['platformOrigin'])) return '--';
+    if (
+      !promotionDetails ||
+      isEmpty(promotionDetails['slug']) ||
+      isEmpty(row['platformOrigin'])
+    )
+      return '--';
 
-    const promotionLink = `${row['platformOrigin']}/promotions/${promotionDetails?.slug}`
-    return <StyledLink href={promotionLink} target="_blank" rel="noopener noreferrer">{promotionLink}</StyledLink>
-    ;
+    const promotionLink = `${row['platformOrigin']}/promotions/${promotionDetails?.slug}`;
+    return (
+      <StyledLink
+        href={promotionLink}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {promotionLink}
+      </StyledLink>
+    );
   },
   'Receipt Number': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['receipt_number'])) return '--';
@@ -66,7 +84,11 @@ export const promotionClaimsManagementParsingConfig = {
   'Claimed By': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['user_id'])) return '--';
     const userDetails = row ? row['user_id'] : null;
-    if (!userDetails || (isEmpty(userDetails['first_name']) && isEmpty(userDetails['last_name']))) return '--';
+    if (
+      !userDetails ||
+      (isEmpty(userDetails['first_name']) && isEmpty(userDetails['last_name']))
+    )
+      return '--';
     const firstName = userDetails['first_name'] || '';
     const lastName = userDetails['last_name'] || '';
     return `${firstName} ${lastName}`;
@@ -87,36 +109,56 @@ export const promotionClaimsManagementParsingConfig = {
   'Device Model': ({ row }: ParsingFunctionParams) => {
     const orderDetails = row ? row['order_id'] : null;
     if (!orderDetails || isEmpty(orderDetails['order_number'])) return '--';
-  
-    const orderItems = Array.isArray(orderDetails?.order_items) && orderDetails?.order_items?.length > 0 ? orderDetails.order_items : [];
+
+    const orderItems =
+      Array.isArray(orderDetails?.order_items) &&
+      orderDetails?.order_items?.length > 0
+        ? orderDetails.order_items
+        : [];
     const maxItems = 2;
-  
+
     if (orderItems.length <= maxItems) {
       return (
         <ProductChipsContainer>
-          {orderItems.map((item: { product_variant_id: { product_id: { model: any } } }, index: number) => (
-            item.product_variant_id ? (
-              <StyledChip key={index} bgColor='#216A4C' textColor='white'>{item?.product_variant_id?.product_id?.model}</StyledChip>
-            ) : (
-              '--'
-            )
-          ))}
+          {orderItems.map(
+            (
+              item: { product_variant_id: { product_id: { model: any } } },
+              index: number,
+            ) =>
+              item.product_variant_id ? (
+                <StyledChip key={index} bgColor="#216A4C" textColor="white">
+                  {item?.product_variant_id?.product_id?.model}
+                </StyledChip>
+              ) : (
+                '--'
+              ),
+          )}
         </ProductChipsContainer>
       );
     } else {
       const visibleItems = orderItems.slice(0, maxItems);
       const remainingCount = orderItems.length - maxItems;
-  
+
       return (
         <ProductChipsContainer>
-          {visibleItems?.map((item: { product_variant_id: { product_id: { model: any } } }, index: number) => (
-            item.product_variant_id ? (
-              <StyledChip key={index} bgColor='#216A4C' textColor='white'>{item?.product_variant_id?.product_id?.model}</StyledChip>
-            ) : (
-              '--'
-            )
-          ))}
-          <StyledChip key="more" bgColor='#216A4C' textColor='white'>{`+${remainingCount} more`}</StyledChip>
+          {visibleItems?.map(
+            (
+              item: { product_variant_id: { product_id: { model: any } } },
+              index: number,
+            ) =>
+              item.product_variant_id ? (
+                <StyledChip key={index} bgColor="#216A4C" textColor="white">
+                  {item?.product_variant_id?.product_id?.model}
+                </StyledChip>
+              ) : (
+                '--'
+              ),
+          )}
+          <StyledChip
+            key="more"
+            bgColor="#216A4C"
+            textColor="white"
+          >{`+${remainingCount} more`}</StyledChip>
         </ProductChipsContainer>
       );
     }
