@@ -56,11 +56,16 @@ export function ActionablesPage() {
             item_id: orderItem?.order_items?._id,
             admin_id: userDetails?._id,
           }),
-        printLabelAction: () =>
+        printLabelAction: () => {
           printLabels({
             item_id: orderItem?.order_items?._id,
             admin_id: userDetails?._id,
-          }),
+          });
+          clearOrderItems({});
+          const controller = new AbortController();
+          const signal = controller.signal;
+          getOrderItems(filters, signal);
+        },
         returnDeviceAction: () => {
           toast.info('Make sure to Download or Save a copy on your device.', {
             onClose: async () => {
