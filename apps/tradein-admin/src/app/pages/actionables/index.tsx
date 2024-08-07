@@ -14,7 +14,7 @@ import {
   usePermission,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export function ActionablesPage() {
@@ -31,6 +31,8 @@ export function ActionablesPage() {
   const { orderItems, isFetchingOrderItems } = state;
   const { activePlatform, userDetails } = authState;
 
+  const [shippingStatus, setShippingStatus] = useState('todo');
+
   const headers = [
     ...ACTIONABLES_MANAGEMENT_COLUMNS,
     ...(hasPrintLabelPermission ? ACTIONS_COLUMN : []),
@@ -40,6 +42,7 @@ export function ActionablesPage() {
     status: [OrderItemStatus.CREATED, OrderItemStatus.REVISION_REJECTED]?.join(
       ',',
     ),
+    shipping_status: shippingStatus,
   };
 
   const addPrintLabelAction = (orderItems: any) => {
@@ -136,7 +139,7 @@ export function ActionablesPage() {
       // Clear data on unmount
       clearOrderItems({});
     };
-  }, [activePlatform]);
+  }, [activePlatform, shippingStatus]);
 
   return (
     <>
@@ -147,6 +150,22 @@ export function ActionablesPage() {
         headers={headers}
         rows={formattedOrderItems || []}
         parsingConfig={actionablesManagementParsingConfig}
+        filterControls={
+          <div className="flex gap-2">
+            <button
+              className={`px-4 py-1 rounded-md font-medium text-sm ${shippingStatus === 'todo' ? 'bg-emerald-800 text-white' : 'bg-green-100 text-green-600'}`}
+              onClick={() => setShippingStatus('todo')}
+            >
+              TODO
+            </button>
+            <button
+              className={`px-4 py-1 rounded-md font-medium text-sm ${shippingStatus === 'done' ? 'bg-emerald-800 text-white' : 'bg-green-100 text-green-600'} `}
+              onClick={() => setShippingStatus('done')}
+            >
+              DONE
+            </button>
+          </div>
+        }
       />
     </>
   );
