@@ -154,6 +154,9 @@ const ValidationOffer = ({
                 </div>
               </>
             )}
+
+            {/* HIDING THIS FOR NOW. TODO: Re-enable once deployed
+            
             {orderItemActions.length > 0 && (
               <>
                 <hr />
@@ -165,7 +168,7 @@ const ValidationOffer = ({
                   Set Lock Type
                 </button>
               </>
-            )}
+            )} */}
           </DetailCardContainer>
         );
       })}
