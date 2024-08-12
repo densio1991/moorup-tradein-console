@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   DetailCardContainer,
-  Loader,
   OrderItemStatus,
   OrderItems,
   PRODUCT_TYPES,
@@ -10,8 +9,9 @@ import {
   usePermission,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { CardDetail, DeviceSection } from './sections';
+import { DeviceSection } from './sections';
 import OfferSection from './sections/offer-section';
+import { ShippingSection } from './sections/shipping-section';
 
 type CollectionProps = {
   orderId: string;
@@ -157,33 +157,11 @@ const Collection = ({
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
             <DeviceSection orderItem={item} orderId={orderId} />
             <OfferSection orderItem={item} />
-            <hr />
-            <div className="flex flex-col mb-2">
-              <div className="flex justify-between">
-                <h4>Shipping</h4>
-              </div>
-              {isFetchingShipments ? (
-                <Loader />
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-dataEntry sm:gap-2">
-                  <CardDetail label="Courier" value={shipment?.slug} />
-                  <CardDetail
-                    label="Shipping Status"
-                    value={shipment?.status}
-                  />
-                  <CardDetail
-                    label="Direction #"
-                    value={shipment?.direction}
-                    copy
-                  />
-                  <CardDetail
-                    label="Inbound Tracking #"
-                    value={shipment?.tracking_number}
-                    copy
-                  />
-                </div>
-              )}
-            </div>
+            <ShippingSection
+              isLoading={isFetchingShipments}
+              orderItem={item}
+              shipments={shipments}
+            />
             {shipmentActions.length > 0 && !isCancelled && (
               <>
                 <hr />

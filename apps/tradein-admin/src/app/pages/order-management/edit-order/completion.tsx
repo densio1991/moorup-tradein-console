@@ -2,14 +2,17 @@
 import {
   DetailCardContainer,
   OrderItems,
+  useOrder,
   usePermission,
 } from '@tradein-admin/libs';
 import { CardDetail, DeviceSection } from './sections';
 import OfferSection from './sections/offer-section';
+import { ShippingSection } from './sections/shipping-section';
 
 type CompletionProps = {
   orderId: any;
   orderItems: OrderItems[];
+  shipments: any;
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedItem: React.Dispatch<React.SetStateAction<OrderItems>>;
 };
@@ -17,10 +20,13 @@ type CompletionProps = {
 const Completion = ({
   orderId,
   orderItems,
+  shipments,
   setStatusModal,
   setSelectedItem,
 }: CompletionProps) => {
   const { hasUpdateOrderItemStatusPermission } = usePermission();
+  const { state } = useOrder();
+  const { isFetchingShipments } = state;
 
   const formatQuestion = (question: string) => {
     return question?.replace('-', ' ');
@@ -57,6 +63,11 @@ const Completion = ({
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
             <DeviceSection orderItem={item} orderId={orderId} />
             <OfferSection orderItem={item} />
+            <ShippingSection
+              isLoading={isFetchingShipments}
+              orderItem={item}
+              shipments={shipments}
+            />
             <hr />
             <div>
               <h4>Validation</h4>

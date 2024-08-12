@@ -10,10 +10,12 @@ import {
 import { CardDetail, DeviceSection } from './sections';
 import OfferSection from './sections/offer-section';
 import { capitalize } from 'lodash';
+import { ShippingSection } from './sections/shipping-section';
 
 type ValidationOfferProps = {
   orderId: any;
   orderItems: OrderItems[];
+  shipments: any;
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setGenericModal: React.Dispatch<React.SetStateAction<string>>;
   setSelectedItem: React.Dispatch<React.SetStateAction<OrderItems>>;
@@ -22,6 +24,7 @@ type ValidationOfferProps = {
 const ValidationOffer = ({
   orderId,
   orderItems,
+  shipments,
   setStatusModal,
   setGenericModal,
   setSelectedItem,
@@ -29,7 +32,7 @@ const ValidationOffer = ({
   const { state, printOutboundLabel, patchOrderItemById } = useOrder();
   const { hasUpdateOrderItemStatusPermission, hasPrintLabelPermission } =
     usePermission();
-  const { isGeneratingLabels } = state;
+  const { isGeneratingLabels, isFetchingShipments } = state;
   const { state: authState } = useAuth();
   const { userDetails } = authState;
 
@@ -109,6 +112,11 @@ const ValidationOffer = ({
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
             <DeviceSection orderItem={item} orderId={orderId} />
             <OfferSection orderItem={item} />
+            <ShippingSection
+              isLoading={isFetchingShipments}
+              orderItem={item}
+              shipments={shipments}
+            />
             <hr />
             <div>
               <h4>Validation</h4>

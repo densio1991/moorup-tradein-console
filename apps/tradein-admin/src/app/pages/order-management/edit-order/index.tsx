@@ -413,6 +413,7 @@ export const EditOrderPage = () => {
                   <ValidationOffer
                     orderId={orderId}
                     orderItems={validationOrderItems}
+                    shipments={parsedShipments}
                     setStatusModal={setStatusModal}
                     setSelectedItem={setSelectedItem}
                     setGenericModal={(type) => handleToggleModal(type, true)}
@@ -442,6 +443,7 @@ export const EditOrderPage = () => {
                   <Completion
                     orderId={orderId}
                     orderItems={completionOrderItems}
+                    shipments={parsedShipments}
                     setStatusModal={setStatusModal}
                     setSelectedItem={setSelectedItem}
                   />
