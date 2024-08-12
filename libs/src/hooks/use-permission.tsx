@@ -38,6 +38,19 @@ export function usePermission() {
   const hasProcessPromotionClaimPaymentPermission = permissions.includes(PermissionCodes.PROCESS_PROMOTION_CLAIM_PAYMENT);
   const hasViewPlatformConfigsPermissions = permissions.includes(PermissionCodes.VIEW_PLATFORM_CONFIGS);
   const hasEditPlatformConfigsPermissions = permissions.includes(PermissionCodes.EDIT_PLATFORM_CONFIGS);
+  const hasViewPaymentsPermission = permissions.includes(PermissionCodes.VIEW_PAYMENTS);
+  const hasViewOrderLogsPermission = permissions.includes(PermissionCodes.VIEW_ORDER_LOGS);
+  const hasViewOrderNotesPermission = permissions.includes(PermissionCodes.VIEW_ORDER_NOTES);
+  const hasAddOrderNotePermission = permissions.includes(PermissionCodes.ADD_ORDER_NOTE);
+  const hasAddZendeskLinkPermission = permissions.includes(PermissionCodes.ADD_ZENDESK_LINK);
+  const hasResendEmailNotificationPermission = permissions.includes(PermissionCodes.RESEND_EMAIL_NOTIFICATION);
+  const hasViewActionablesFollowUpDeviceNotSentPermission = permissions.includes(PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_DEVICE_NOT_SENT);
+  const hasViewActionablesFollowUpRecycleOfferPermission = permissions.includes(PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_RECYCLE_OFFER);
+  const hasViewActionablesFollowUpRevisionOfferPermission = permissions.includes(PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_REVISION_OFFER);
+  const hasViewActionablesForRecyclePermission = permissions.includes(PermissionCodes.VIEW_ACTIONABLES_DEVICES_FOR_RECYCLE);
+  const hasViewActionablesForReturnPermission = permissions.includes(PermissionCodes.VIEW_ACTIONABLES_DEVICES_FOR_RETURN);
+  const hasViewActionablesLockedDevicesForRetestPermission = permissions.includes(PermissionCodes.VIEW_ACTIONABLES_LOCKED_DEVICES_FOR_RETEST);
+  const hasViewActionablesLockedDevicesCurrentLockPermission = permissions.includes(PermissionCodes.VIEW_ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK);
 
   return {
     hasViewDashboardPermission,
@@ -72,5 +85,18 @@ export function usePermission() {
     hasProcessPromotionClaimPaymentPermission,
     hasViewPlatformConfigsPermissions,
     hasEditPlatformConfigsPermissions,
+    hasViewPaymentsPermission,
+    hasViewOrderLogsPermission,
+    hasViewOrderNotesPermission,
+    hasAddOrderNotePermission,
+    hasAddZendeskLinkPermission,
+    hasResendEmailNotificationPermission,
+    hasViewActionablesFollowUpDeviceNotSentPermission,
+    hasViewActionablesFollowUpRecycleOfferPermission,
+    hasViewActionablesFollowUpRevisionOfferPermission,
+    hasViewActionablesForRecyclePermission,
+    hasViewActionablesForReturnPermission,
+    hasViewActionablesLockedDevicesForRetestPermission,
+    hasViewActionablesLockedDevicesCurrentLockPermission,
   };
 }

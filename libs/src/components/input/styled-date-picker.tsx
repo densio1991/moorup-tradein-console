@@ -138,6 +138,7 @@ interface StyledDatePickerProps extends ReactDatePickerProps {
   };
   label?: string;
   disabled?: boolean;
+  minDate?: Date | null;
 }
 
 export function StyledDatePicker({
@@ -152,6 +153,7 @@ export function StyledDatePicker({
   },
   label,
   disabled,
+  minDate,
 }: StyledDatePickerProps) {
   const setDate = (date: Date | null) => {
     if (date) {
@@ -181,6 +183,7 @@ export function StyledDatePicker({
           onChange={setDate}
           selectsStart
           startDate={dateValue}
+          minDate={minDate}
           name={dateName}
           value={formattedDateValue || ''}
           onCalendarClose={() => dateOnBlur()}

@@ -11,6 +11,7 @@ import {
   ClaimStatus,
   CreditTypes,
   DefaultStatus,
+  LogTypes,
   OrderPaymentStatus,
   OrderStatus,
   OrderTypes,
@@ -21,6 +22,7 @@ import {
   PromotionStatus,
   TIMEZONE,
 } from '../constants';
+import { formatToReadable } from './form';
 import { defaultTheme } from './theme';
 
 dayjs.extend(utc);
@@ -409,7 +411,7 @@ export const formatDate = (date: Date, format = 'DD/MM/YYYY') => {
   return dayjs(date).tz(TIMEZONE).format(format);
 };
 
-export const parseStatus = (value: string) => {
+export const parseStatus = (value: string, width: string = '100px') => {
   let text = value;
   let textColor = defaultTheme.disabled.text;
   let bgColor = defaultTheme.disabled.background;
@@ -558,11 +560,12 @@ export const parseStatus = (value: string) => {
     default:
       textColor = defaultTheme.default.text;
       bgColor = defaultTheme.default.background;
+      text = capitalizeFirstLetters(formatToReadable(text));
       break;
   }
 
   return (
-    <Chip value={text} textColor={textColor} bgColor={bgColor} width="100px" />
+    <Chip value={text} textColor={textColor} bgColor={bgColor} width={width} />
   );
 };
 
@@ -630,6 +633,16 @@ export const parseTypes = (type: string, disableFormatting?: boolean) => {
       text = 'Pricing';
       break;
 
+    case LogTypes.SYSTEM:
+      color = defaultTheme.default.text;
+      text = 'System';
+      break;
+
+    case LogTypes.USER:
+      color = defaultTheme.default.text;
+      text = 'User';
+      break;
+
     default:
       break;
   }
@@ -683,4 +696,9 @@ export const parsePromotionStatus = (promotion: Promotion) => {
 
 export const isNullOrEmpty = (value: any): boolean => {
   return value === null || value === '';
+};
+
+export const openInNewTab = (url: string): void => {
+  const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+  if (newWindow) newWindow.opener = null;
 };

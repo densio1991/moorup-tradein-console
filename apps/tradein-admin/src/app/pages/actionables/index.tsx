@@ -14,7 +14,7 @@ import {
   usePermission,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export function ActionablesPage() {
@@ -29,7 +29,9 @@ export function ActionablesPage() {
   } = useOrder();
   const { state: authState } = useAuth();
   const { orderItems, isFetchingOrderItems } = state;
-  const { activePlatform } = authState;
+  const { activePlatform, userDetails } = authState;
+
+  const [shippingStatus, setShippingStatus] = useState('todo');
 
   const headers = [
     ...ACTIONABLES_MANAGEMENT_COLUMNS,
@@ -40,6 +42,7 @@ export function ActionablesPage() {
     status: [OrderItemStatus.CREATED, OrderItemStatus.REVISION_REJECTED]?.join(
       ',',
     ),
+    shipping_status: shippingStatus,
   };
 
   const addPrintLabelAction = (orderItems: any) => {
@@ -51,16 +54,32 @@ export function ActionablesPage() {
       )
       .map((orderItem: any) => ({
         ...orderItem,
-        action: () => printLabels({ item_id: orderItem?.order_items?._id }),
-        printLabelAction: () =>
-          printLabels({ item_id: orderItem?.order_items?._id }),
+        action: () =>
+          printLabels({
+            item_id: orderItem?.order_items?._id,
+            admin_id: userDetails?._id,
+          }),
+        printLabelAction: () => {
+          printLabels({
+            item_id: orderItem?.order_items?._id,
+            admin_id: userDetails?._id,
+          });
+          clearOrderItems({});
+          const controller = new AbortController();
+          const signal = controller.signal;
+          getOrderItems(filters, signal);
+        },
         returnDeviceAction: () => {
           toast.info('Make sure to Download or Save a copy on your device.', {
             onClose: async () => {
               await updateOrderItemsStatus(orderItem?.order_items?._id, {
-                status: OrderItemStatus.DEVICE_RETURED,
+                status: OrderItemStatus.DEVICE_RETURNED,
+                admin_id: userDetails?._id,
               });
-              printOutboundLabel({ item_id: orderItem?.order_items?._id });
+              printOutboundLabel({
+                item_id: orderItem?.order_items?._id,
+                admin_id: userDetails?._id,
+              });
               clearOrderItems({});
 
               const controller = new AbortController();
@@ -90,7 +109,7 @@ export function ActionablesPage() {
   //       toast.info('Make sure to Download or Save a copy on your device.', {
   //         onClose: async () => {
   //           await updateOrderItemsStatus(orderItem?.order_items?._id, {
-  //             status: OrderItemStatus.DEVICE_RETURED,
+  //             status: OrderItemStatus.DEVICE_RETURNED,
   //           });
   //           printOutboundLabel({ item_id: orderItem?.order_items?._id });
   //           clearOrderItems({});
@@ -120,7 +139,7 @@ export function ActionablesPage() {
       // Clear data on unmount
       clearOrderItems({});
     };
-  }, [activePlatform]);
+  }, [activePlatform, shippingStatus]);
 
   return (
     <>
@@ -131,6 +150,22 @@ export function ActionablesPage() {
         headers={headers}
         rows={formattedOrderItems || []}
         parsingConfig={actionablesManagementParsingConfig}
+        filterControls={
+          <div className="flex gap-2">
+            <button
+              className={`px-4 py-1 rounded-md font-medium text-sm ${shippingStatus === 'todo' ? 'bg-emerald-800 text-white' : 'bg-green-100 text-green-600'}`}
+              onClick={() => setShippingStatus('todo')}
+            >
+              TODO
+            </button>
+            <button
+              className={`px-4 py-1 rounded-md font-medium text-sm ${shippingStatus === 'done' ? 'bg-emerald-800 text-white' : 'bg-green-100 text-green-600'} `}
+              onClick={() => setShippingStatus('done')}
+            >
+              DONE
+            </button>
+          </div>
+        }
       />
     </>
   );

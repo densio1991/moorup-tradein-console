@@ -8,8 +8,14 @@ import {
   EditOrderPage,
   EditProductPage,
   EmailTemplatesPage,
+  FollowUpRecycleOfferPage,
+  FollowUpRevisionOfferPage,
+  FollowUpUnsentDevicePage,
+  LockedDevicesCurrentLockPage,
+  LockedDevicesForRetestPage,
   LoginPage,
   OrderManagementPage,
+  PaymentPage,
   ProductManagementPage,
   ProductUploadLogsPage,
   PromotionClaimsPage,
@@ -18,6 +24,7 @@ import {
   SmsTemplatesPage,
   TemplateApprovalByIdPage,
   TemplateApprovalPage,
+  UploadPaymentErrorPage,
   UploadProductErrorPage,
   UploadProductPricingErrorPage,
   UserManagementPage,
@@ -63,6 +70,31 @@ export function App() {
           <Route
             path="/dashboard/order/actionables"
             element={<ActionablesPage />}
+          />
+          <Route path="/dashboard/order/payments" element={<PaymentPage />} />
+          <Route
+            path="/dashboard/order/payments-upload-details"
+            element={<UploadPaymentErrorPage />}
+          />
+          <Route
+            path="/dashboard/actionables/follow-up-device-not-sent"
+            element={<FollowUpUnsentDevicePage />}
+          />
+          <Route
+            path="/dashboard/actionables/follow-up-revision-offer"
+            element={<FollowUpRevisionOfferPage />}
+          />
+          <Route
+            path="/dashboard/actionables/follow-up-recycle-offer"
+            element={<FollowUpRecycleOfferPage />}
+          />
+          <Route
+            path="/dashboard/actionables/locked-devices-current-lock"
+            element={<LockedDevicesCurrentLockPage />}
+          />
+          <Route
+            path="/dashboard/actionables/locked-devices-for-retest"
+            element={<LockedDevicesForRetestPage />}
           />
           <Route path="/dashboard/user" element={<UserManagementPage />} />
           <Route

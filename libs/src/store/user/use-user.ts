@@ -7,10 +7,11 @@ export const useUser = () => {
   const { state, dispatch } = useContext(RootContext);
   const {
     activePlatform,
+    token,
   } = state.auth;
 
   const getUsers = (payload: any, signal: AbortSignal) => {
-    actions.getUsers(payload, activePlatform, signal)(dispatch);
+    actions.getUsers(payload, activePlatform, signal)(dispatch, token);
   }
 
   const clearUsers = (payload: any) => {
@@ -18,11 +19,11 @@ export const useUser = () => {
   }
 
   const createUser = (payload: any, currentUserId: string) => {
-    actions.createUser(payload, currentUserId, activePlatform)(dispatch);
+    actions.createUser(payload, currentUserId, activePlatform)(dispatch, token);
   }
 
   const updateUser = (id: string, currentUserId: string, payload: any) => {
-    actions.updateUser(id, currentUserId, activePlatform, payload)(dispatch);
+    actions.updateUser(id, currentUserId, activePlatform, payload)(dispatch, token);
   }
 
   const setUpdateUserDetailsPayload = (payload: any) => {

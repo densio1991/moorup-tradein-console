@@ -8,10 +8,11 @@ export const useProduct = () => {
   const {
     activePlatform,
     userDetails,
+    token,
   } = state.auth;
 
   const getProducts = (payload: any, signal: AbortSignal) => {
-    actions.getProducts(activePlatform, payload, signal)(dispatch);
+    actions.getProducts(activePlatform, payload, signal)(dispatch, token);
   }
 
   const clearProducts = (payload: any) => {
@@ -19,19 +20,19 @@ export const useProduct = () => {
   }
 
   const getProductTypes = (signal: AbortSignal) => {
-    actions.getProductTypes(signal)(dispatch);
+    actions.getProductTypes(signal)(dispatch, token);
   }
 
   const getProductCategories = (payload: any) => {
-    actions.getProductCategories(activePlatform, payload)(dispatch);
+    actions.getProductCategories(activePlatform, payload)(dispatch, token);
   }
 
   const getProductBrands = (payload: any) => {
-    actions.getProductBrands(activePlatform, payload)(dispatch);
+    actions.getProductBrands(activePlatform, payload)(dispatch, token);
   }
 
   const getProductStatuses = (signal: AbortSignal) => {
-    actions.getProductStatuses(signal)(dispatch);
+    actions.getProductStatuses(signal)(dispatch, token);
   }
 
   const setAddProductPayload = (payload: any) => {
@@ -43,11 +44,11 @@ export const useProduct = () => {
   }
 
   const addProduct = (payload: any) => {
-    actions.addProduct(payload, activePlatform)(dispatch);
+    actions.addProduct(payload, activePlatform)(dispatch, token);
   }
 
   const getProduct = (payload: any, signal: AbortSignal) => {
-    actions.getProduct(payload, signal)(dispatch);
+    actions.getProduct(payload, signal)(dispatch, token);
   }
 
   const clearProduct = (payload: any) => {
@@ -55,19 +56,19 @@ export const useProduct = () => {
   }
 
   const updateProduct = (id: string, payload: any) => {
-    actions.updateProduct(id, payload)(dispatch);
+    actions.updateProduct(id, payload)(dispatch, token);
   }
 
   const addProductVariant = (id: string, payload: any) => {
-    actions.addProductVariant(id, payload)(dispatch);
+    actions.addProductVariant(id, payload)(dispatch, token);
   }
 
   const updateProductVariant = (id: string, productId: string, payload: any) => {
-    actions.updateProductVariant(id, productId, payload)(dispatch);
+    actions.updateProductVariant(id, productId, payload)(dispatch, token);
   }
 
   const uploadProductsExcelFile = (payload: any) => {
-    actions.uploadProductsExcelFile(payload, userDetails._id, activePlatform)(dispatch);
+    actions.uploadProductsExcelFile(payload, userDetails._id, activePlatform)(dispatch, token);
   }
 
   const clearUploadProductsErrors = (payload: any) => {
@@ -75,11 +76,11 @@ export const useProduct = () => {
   }
 
   const downloadProductPricingRevisionTemplate = () => {
-    actions.downloadProductPricingRevisionTemplate(activePlatform)(dispatch);
+    actions.downloadProductPricingRevisionTemplate(activePlatform)(dispatch, token);
   }
 
   const uploadProductsPricingTemplate = (payload: any) => {
-    actions.uploadProductsPricingTemplate(payload, userDetails._id, activePlatform)(dispatch);
+    actions.uploadProductsPricingTemplate(payload, userDetails._id, activePlatform)(dispatch, token);
   }
 
   const clearUploadProductsPricingTemplateErrors = (payload: any) => {
@@ -87,7 +88,7 @@ export const useProduct = () => {
   }
 
   const getProductUploadLogs = (payload: any, signal: AbortSignal) => {
-    actions.getProductUploadLogs(payload, activePlatform, signal)(dispatch);
+    actions.getProductUploadLogs(payload, activePlatform, signal)(dispatch, token);
   }
 
   const clearProductUploadLogs = (payload: any) => {
@@ -95,7 +96,7 @@ export const useProduct = () => {
   }
 
   const downloadProductUploadTemplate = () => {
-    actions.downloadProductUploadTemplate(activePlatform)(dispatch);
+    actions.downloadProductUploadTemplate(activePlatform)(dispatch, token);
   }
 
   return {

@@ -2,11 +2,12 @@
 import {
   DetailCardContainer,
   Loader,
-  OrderItems,
-  useOrder,
-  PRODUCT_TYPES,
-  usePermission,
   OrderItemStatus,
+  OrderItems,
+  PRODUCT_TYPES,
+  useAuth,
+  useOrder,
+  usePermission,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
 import { CardDetail, DeviceSection } from './sections';
@@ -43,6 +44,8 @@ const Collection = ({
     hasResendLabelPermission,
     hasPrintLabelPermission,
   } = usePermission();
+  const { state: authState } = useAuth();
+  const { userDetails } = authState;
 
   const {
     isResendingLabel,
@@ -51,11 +54,14 @@ const Collection = ({
   } = state;
 
   const handleReceiveOrderItem = (orderItemId: string) => {
-    receiveOrderItemById(orderItemId);
+    receiveOrderItemById(orderItemId, { admin_id: userDetails?._id });
   };
 
   const handleSendBox = (orderItemId: string) => {
-    sendBox(orderId, { item_id: orderItemId });
+    sendBox(orderId, {
+      item_id: orderItemId,
+      admin_id: userDetails?._id,
+    });
   };
 
   const handleResendLabel = (orderItemId: any) => {

@@ -45,10 +45,6 @@ const ProductChipsContainer = styled.div`
 
 export const promotionClaimsManagementParsingConfig = {
   'Order Number': ({ row }: ParsingFunctionParams) => {
-    // const orderDetails = row ? row['order_id'] : null;
-    // if (!orderDetails || isEmpty(orderDetails['order_number'])) return '--';
-    // return orderDetails['order_number'];
-
     if (!row || isEmpty(row['order_number'])) return '--';
     return row['order_number'];
   },

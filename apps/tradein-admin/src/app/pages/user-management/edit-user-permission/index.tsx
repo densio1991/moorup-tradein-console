@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  ACTIONABLES_ITEMS,
   AppButton,
   Checkbox,
   DASHBOARD_MANAGEMENT_ITEMS,
@@ -218,6 +219,11 @@ export function EditUserPermissionForm({ data }: any) {
                       PermissionCodes.VIEW_DISCREPANCIES,
                       PermissionCodes.VIEW_ACTIONABLES,
                       PermissionCodes.PRINT_LABEL,
+                      PermissionCodes.VIEW_PAYMENTS,
+                      PermissionCodes.VIEW_ORDER_LOGS,
+                      PermissionCodes.VIEW_ORDER_NOTES,
+                      PermissionCodes.ADD_ORDER_NOTE,
+                      PermissionCodes.ADD_ZENDESK_LINK,
                     ]),
                   ],
                 });
@@ -238,6 +244,11 @@ export function EditUserPermissionForm({ data }: any) {
                       PermissionCodes.VIEW_DISCREPANCIES,
                       PermissionCodes.VIEW_ACTIONABLES,
                       PermissionCodes.PRINT_LABEL,
+                      PermissionCodes.VIEW_PAYMENTS,
+                      PermissionCodes.VIEW_ORDER_LOGS,
+                      PermissionCodes.VIEW_ORDER_NOTES,
+                      PermissionCodes.ADD_ORDER_NOTE,
+                      PermissionCodes.ADD_ZENDESK_LINK,
                     ]),
                   ],
                 });
@@ -245,6 +256,60 @@ export function EditUserPermissionForm({ data }: any) {
             }}
           >
             {ORDER_MANAGEMENT_ITEMS.map(
+              (item: { label: string; value: string }, index: number) => {
+                return (
+                  <Checkbox
+                    key={index}
+                    label={item.label}
+                    checked={formik.values.permissions?.includes(item.value)}
+                    onChange={(checked: boolean) =>
+                      handleCheckboxChange(item.value, checked)
+                    }
+                  />
+                );
+              },
+            )}
+          </ParentCheckbox>
+        </FormGroup>
+        <FormGroup flexDirection="column" marginBottom="10px" withBottomHr>
+          <ParentCheckbox
+            sectionLabel="Actionables Management"
+            label="Manage Actionables"
+            onChange={(checked: boolean) => {
+              if (checked) {
+                formik.setValues({
+                  ...formik.values,
+                  permissions: [
+                    ...addPermissions([
+                      PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_DEVICE_NOT_SENT,
+                      PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_RECYCLE_OFFER,
+                      PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_REVISION_OFFER,
+                      PermissionCodes.VIEW_ACTIONABLES_DEVICES_FOR_RECYCLE,
+                      PermissionCodes.VIEW_ACTIONABLES_DEVICES_FOR_RETURN,
+                      PermissionCodes.VIEW_ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK,
+                      PermissionCodes.VIEW_ACTIONABLES_LOCKED_DEVICES_FOR_RETEST,
+                    ]),
+                  ],
+                });
+              } else {
+                formik.setValues({
+                  ...formik.values,
+                  permissions: [
+                    ...removePermissions([
+                      PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_DEVICE_NOT_SENT,
+                      PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_RECYCLE_OFFER,
+                      PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_REVISION_OFFER,
+                      PermissionCodes.VIEW_ACTIONABLES_DEVICES_FOR_RECYCLE,
+                      PermissionCodes.VIEW_ACTIONABLES_DEVICES_FOR_RETURN,
+                      PermissionCodes.VIEW_ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK,
+                      PermissionCodes.VIEW_ACTIONABLES_LOCKED_DEVICES_FOR_RETEST,
+                    ]),
+                  ],
+                });
+              }
+            }}
+          >
+            {ACTIONABLES_ITEMS.map(
               (item: { label: string; value: string }, index: number) => {
                 return (
                   <Checkbox

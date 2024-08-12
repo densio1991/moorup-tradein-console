@@ -3,16 +3,19 @@ import {
   DetailCardContainer,
   OrderItems,
   OrderItemStatus,
+  useAuth,
   useOrder,
   usePermission,
 } from '@tradein-admin/libs';
 import { CardDetail, DeviceSection } from './sections';
 import OfferSection from './sections/offer-section';
+import { capitalize } from 'lodash';
 
 type ValidationOfferProps = {
   orderId: any;
   orderItems: OrderItems[];
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setGenericModal: React.Dispatch<React.SetStateAction<string>>;
   setSelectedItem: React.Dispatch<React.SetStateAction<OrderItems>>;
 };
 
@@ -20,19 +23,30 @@ const ValidationOffer = ({
   orderId,
   orderItems,
   setStatusModal,
+  setGenericModal,
   setSelectedItem,
 }: ValidationOfferProps) => {
   const { state, printOutboundLabel } = useOrder();
   const { hasUpdateOrderItemStatusPermission, hasPrintLabelPermission } =
     usePermission();
   const { isGeneratingLabels } = state;
+  const { state: authState } = useAuth();
+  const { userDetails } = authState;
 
   const handlePrintLabel = (orderItemId: any) => {
-    printOutboundLabel({ item_id: orderItemId });
+    printOutboundLabel({
+      item_id: orderItemId,
+      admin_id: userDetails?._id,
+    });
   };
 
   const handleStatus = (item: OrderItems) => {
     setStatusModal(true);
+    setSelectedItem(item);
+  };
+
+  const handleSetLockType = (item: OrderItems) => {
+    setGenericModal('set-lock-type');
     setSelectedItem(item);
   };
 
@@ -120,10 +134,36 @@ const ValidationOffer = ({
                 })}
               </div>
             </div>
+            {item?.lock && (
+              <>
+                <hr />
+                <div>
+                  <h4>Lock Details</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                    <CardDetail
+                      key={idx}
+                      label="Lock Status"
+                      value={capitalize(item?.lock?.status)}
+                    />
+                    <CardDetail
+                      key={idx}
+                      label="Lock Type"
+                      value={capitalize(item?.lock?.type)}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
             {orderItemActions.length > 0 && (
               <>
                 <hr />
                 {orderItemActions}
+                <button
+                  onClick={() => handleSetLockType(item)}
+                  className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
+                >
+                  Set Lock Type
+                </button>
               </>
             )}
           </DetailCardContainer>

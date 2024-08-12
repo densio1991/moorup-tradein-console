@@ -40,6 +40,14 @@ export function PrivateRoute(): JSX.Element {
     hasViewPlatformConfigsPermissions,
     hasViewOrderDetailsPermission,
     hasEditProductPermission,
+    hasViewPaymentsPermission,
+    hasViewActionablesFollowUpDeviceNotSentPermission,
+    hasViewActionablesFollowUpRecycleOfferPermission,
+    hasViewActionablesFollowUpRevisionOfferPermission,
+    hasViewActionablesForRecyclePermission,
+    hasViewActionablesForReturnPermission,
+    hasViewActionablesLockedDevicesCurrentLockPermission,
+    hasViewActionablesLockedDevicesForRetestPermission,
   } = usePermission();
 
   useEffect(() => {
@@ -50,6 +58,12 @@ export function PrivateRoute(): JSX.Element {
         '/dashboard/order/list': hasViewOrdersPermission,
         '/dashboard/order/discrepancy': hasViewDiscrepanciesPermission,
         '/dashboard/order/actionables': hasViewActionablesPermission,
+        '/dashboard/actionables/follow-up-device-not-sent': hasViewActionablesFollowUpDeviceNotSentPermission,
+        '/dashboard/actionables/follow-up-revision-offer': hasViewActionablesFollowUpRevisionOfferPermission,
+        '/dashboard/actionables/follow-up-recycle-offer': hasViewActionablesFollowUpRecycleOfferPermission,
+        '/dashboard/actionables/locked-devices-current-lock': hasViewActionablesLockedDevicesCurrentLockPermission,
+        '/dashboard/actionables/locked-devices-for-retest': hasViewActionablesLockedDevicesForRetestPermission,
+        '/dashboard/order/payments': hasViewPaymentsPermission,
         '/dashboard/promotion/list': hasViewPromotionsPermission,
         '/dashboard/promotion/claims': hasViewPromotionClaimsPermission,
         '/dashboard/promotion/payment': hasViewPromotionClaimsPaymentPermission,
@@ -60,12 +74,12 @@ export function PrivateRoute(): JSX.Element {
         '/dashboard/templates/approvals': hasViewPlatformConfigsPermissions,
         // There should be no static entry for dynamic paths in the permissions object
       };
-  
+
       let redirectTo = null;
-  
+
       // Remove possible trailing slash from pathname
       const cleanPathname = pathname.replace(/\/$/, '');
-  
+
       const checkPermission = (path: string) => {
         if (permissions[path] !== undefined) {
           return permissions[path];
@@ -76,7 +90,7 @@ export function PrivateRoute(): JSX.Element {
           { pattern: /^\/dashboard\/product\/[^/]+$/, permission: hasEditProductPermission },
           { pattern: /^\/dashboard\/templates\/approvals\/[^/]+$/, permission: hasViewPlatformConfigsPermissions },
         ];
-        
+
         for (const { pattern, permission } of dynamicPaths) {
           if (pattern.test(path)) {
             return permission;
@@ -84,7 +98,7 @@ export function PrivateRoute(): JSX.Element {
         }
         return null;
       };
-  
+
       // Check if user has permission for the current path
       if (!checkPermission(cleanPathname)) {
         // If user doesn't have permission for the current path, find the first path with permissions
@@ -98,12 +112,12 @@ export function PrivateRoute(): JSX.Element {
       } else {
         redirectTo = cleanPathname;
       }
-  
+
       if (!redirectTo) {
         // If no path with permissions found, default to '/404'
         redirectTo = '/404';
       }
-  
+
       setLoading(false);
       navigate(redirectTo);
     }
@@ -112,7 +126,7 @@ export function PrivateRoute(): JSX.Element {
   if (!validateExpiry(expiry)) {
     return <Navigate to="/" />;
   }
-  
+
   return (
     <ComponentWrapper>
       <PageContainer>

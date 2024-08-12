@@ -4,13 +4,13 @@ import { CANCELLED_AXIOS } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
-export const getUsers = (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any) => {
+export const getUsers = (payload: any, platform: string, signal?: AbortSignal) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.FETCH_USERS.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .get(`/api/admins?platform=${platform}&exclude=${payload}`, { signal: signal })
     .then((response) => {
       dispatch({
@@ -40,13 +40,13 @@ export const clearUsers = (payload: any) => (dispatch: any) => {
   });
 };
 
-export const createUser = (payload: any, currentUserId: string, platform: string) => (dispatch: any) => {
+export const createUser = (payload: any, currentUserId: string, platform: string) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.CREATE_USER.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .post('/api/admins', payload)
     .then((response) => {
       dispatch({
@@ -68,13 +68,13 @@ export const createUser = (payload: any, currentUserId: string, platform: string
     });
 };
 
-export const updateUser = (id: string, currentUserId: string, platform: string, payload: any) => (dispatch: any) => {
+export const updateUser = (id: string, currentUserId: string, platform: string, payload: any) => (dispatch: any, token?: string) => {
   dispatch({
     type: types.UPDATE_USER.baseType,
     payload,
   });
 
-  axiosInstance()
+  axiosInstance(token)
     .patch(`/api/admins/${id}`, payload)
     .then((response) => {
       dispatch({

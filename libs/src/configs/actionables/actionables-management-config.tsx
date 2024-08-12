@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faPrint, faBoxesPacking } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty } from 'lodash';
-import { AppButton } from '../components';
-import { capitalizeFirstLetter, formatDate, parseStatus } from '../helpers';
-import { OrderItemStatus } from '../constants';
+import { AppButton } from '../../components';
+import { capitalizeFirstLetter, formatDate, parseStatus } from '../../helpers';
+import { OrderItemStatus } from '../../constants';
 
 interface ParsingFunctionParams {
   row: { [key: string]: any };
@@ -15,6 +15,11 @@ export const actionablesManagementParsingConfig = {
   'Order Number': ({ row }: ParsingFunctionParams) => {
     if (!row || isEmpty(row['order_number'])) return '--';
     return row['order_number'];
+  },
+  'Device Number': ({ row }: ParsingFunctionParams) => {
+    const orderItem = row ? row['order_items'] : null;
+    if (!orderItem || isEmpty(orderItem['line_item_number'])) return '--';
+    return orderItem['line_item_number'];
   },
   Name: ({ row }: ParsingFunctionParams) => {
     const userDetails = row ? row['user_details'] : null;

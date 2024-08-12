@@ -3,20 +3,30 @@ import { faEnvelope, faMessage } from '@fortawesome/free-regular-svg-icons';
 import {
   faBullhorn,
   faCheckToSlot,
+  faCircleExclamation,
   faCreditCard,
   faCube,
   faEnvelopeCircleCheck,
   faEnvelopesBulk,
   faFileCircleExclamation,
+  faFileCircleXmark,
+  faFileEdit,
   faFileInvoice,
   faFileLines,
   faGears,
   faHouse,
   faList,
+  faLock,
+  faMoneyBill,
   faPenToSquare,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
-import { ClaimStatus, OrderItemStatus, PermissionCodes } from './enums';
+import {
+  ClaimStatus,
+  LockTypes,
+  OrderItemStatus,
+  PermissionCodes,
+} from './enums';
 import { PlatformType } from './interfaces';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
@@ -90,10 +100,61 @@ export const SIDENAV_ITEMS = [
         disabled: false,
       },
       {
+        title: 'Payments',
+        url: '/dashboard/order/payments',
+        activeUrl: /^\/dashboard\/order\/payments/,
+        icon: faMoneyBill,
+        disabled: false,
+      },
+      {
         title: 'Actionables',
         url: '/dashboard/order/actionables',
         activeUrl: /^\/dashboard\/order\/actionables/,
+        icon: faCircleExclamation,
+        disabled: false,
+      },
+    ],
+  },
+  {
+    title: 'Actionables',
+    url: '/dashboard/actionables',
+    activeUrl: /\/dashboard\/actionables/,
+    icon: faCircleExclamation,
+    disabled: false,
+    submenu: [
+      {
+        title: 'Follow-Up Device Not Sent',
+        url: '/dashboard/actionables/follow-up-device-not-sent',
+        activeUrl: /^\/dashboard\/actionables\/follow-up-device-not-sent/,
         icon: faFileCircleExclamation,
+        disabled: false,
+      },
+      {
+        title: 'Follow-Up Revision Offer',
+        url: '/dashboard/actionables/follow-up-revision-offer',
+        activeUrl: /^\/dashboard\/actionables\/follow-up-revision-offer/,
+        icon: faFileEdit,
+        disabled: false,
+      },
+      {
+        title: 'Follow-Up Recycle Offer',
+        url: '/dashboard/actionables/follow-up-recycle-offer',
+        activeUrl: /^\/dashboard\/actionables\/follow-up-recycle-offer/,
+        icon: faFileCircleXmark,
+        disabled: false,
+      },
+      {
+        title: 'Locked Devices - Current Lock',
+        url: '/dashboard/actionables/locked-devices-current-lock',
+        activeUrl: /^\/dashboard\/actionables\/locked-devices-current-lock/,
+        icon: faLock,
+        disabled: false,
+      },
+      {
+        title: 'Locked Devices - For Retest',
+        url: '/dashboard/actionables/locked-devices-for-retest',
+        activeUrl: /^\/dashboard\/actionables\/locked-devices-for-retest/,
+        icon: faLock,
         disabled: false,
       },
     ],
@@ -175,7 +236,7 @@ export const SIDENAV_ITEMS_SETTINGS = [
       },
     ],
   },
-]
+];
 
 export const DEFAULT_COLUMN = [
   {
@@ -922,6 +983,7 @@ export interface OrderItems {
   reason: string[];
   questions_answered: QuestionAnswered[];
   revision: any;
+  lock: any;
 }
 
 export interface Addresses {
@@ -1165,7 +1227,7 @@ export const CURRENCIES = [
   { value: 'TJS', label: 'Tajikistani Somoni (TJS)' },
   { value: 'TMT', label: 'Turkmenistani Manat (TMT)' },
   { value: 'TND', label: 'Tunisian Dinar (TND)' },
-  { value: 'TOP', label: 'Tongan Pa\'anga (TOP)' },
+  { value: 'TOP', label: "Tongan Pa'anga (TOP)" },
   { value: 'TRY', label: 'Turkish Lira (TRY)' },
   { value: 'TTD', label: 'Trinidad and Tobago Dollar (TTD)' },
   { value: 'TVD', label: 'Tuvaluan Dollar (TVD)' },
@@ -1442,6 +1504,9 @@ export const MODAL_TYPES = {
   BULK_OVERRIDE_CLAIM_STATUS: 'BULK_OVERRIDE_CLAIM_STATUS',
   EXPORT_PRODUCTS: 'EXPORT_PRODUCTS',
   IMPORT_PRODUCTS: 'IMPORT_PRODUCTS',
+  DOWNLOAD_FLAT_FILE: 'DOWNLOAD_FLAT_FILE',
+  FILTER_LOCKED_DEVICES_CURRENT_LOCK: 'FILTER_LOCKED_DEVICES_CURRENT_LOCK',
+  FILTER_LOCKED_DEVICES_FOR_RETEST: 'FILTER_LOCKED_DEVICES_FOR_RETEST',
 };
 
 export const PROMOTION_STATUS = [
@@ -1558,14 +1623,15 @@ export interface Promotion {
 export const COLLECTION_ORDER_ITEM_STATUS = [
   OrderItemStatus.CREATED,
   OrderItemStatus.CANCELLED,
-  OrderItemStatus.HOLD,
 ];
 
 export const VALIDATION_ORDER_ITEM_STATUS = [
   OrderItemStatus.RECEIVED,
   OrderItemStatus.LABEL_SENT,
   OrderItemStatus.FOR_REVISION,
+  OrderItemStatus.FOR_RETURN,
   OrderItemStatus.REVISION_REJECTED,
+  OrderItemStatus.HOLD,
 ];
 
 export const COMPLETION_ORDER_ITEM_STATUS = [
@@ -1601,6 +1667,15 @@ export const MOORUP_CLAIM_STATUSES = [
   { value: ClaimStatus.PENDING, label: 'Pending' },
   { value: ClaimStatus.PROCESSING, label: 'Processing Payment' },
   { value: ClaimStatus.REJECTED, label: 'Rejected' },
+];
+
+export const LOCK_TYPES = [
+  { value: LockTypes.GOOGLE, label: 'Google' },
+  { value: LockTypes.ICLOUD, label: 'iCloud' },
+  { value: LockTypes.MDM, label: 'MDM' },
+  { value: LockTypes.PASSCODE, label: 'Passcode' },
+  { value: LockTypes.SAMSUNG, label: 'Samsung' },
+  { value: LockTypes.OTHERS, label: 'Others' },
 ];
 
 export const PAGE_SIZES = [
@@ -1654,6 +1729,11 @@ export const ORDER_MANAGEMENT_ITEMS = [
   { value: PermissionCodes.VIEW_DISCREPANCIES, label: 'View Discrepancies' },
   { value: PermissionCodes.VIEW_ACTIONABLES, label: 'View Actionables' },
   { value: PermissionCodes.PRINT_LABEL, label: 'Print Label' },
+  { value: PermissionCodes.VIEW_PAYMENTS, label: 'View Payments' },
+  { value: PermissionCodes.VIEW_ORDER_LOGS, label: 'View Order Logs' },
+  { value: PermissionCodes.VIEW_ORDER_NOTES, label: 'View Order Notes' },
+  { value: PermissionCodes.ADD_ORDER_NOTE, label: 'Add Order Note' },
+  { value: PermissionCodes.ADD_ZENDESK_LINK, label: 'Add Zendesk Link' },
 ];
 
 export const USER_MANAGEMENT_ITEMS = [
@@ -1681,6 +1761,37 @@ export const PROMOTION_MANAGEMENT_ITEMS = [
   {
     value: PermissionCodes.PROCESS_PROMOTION_CLAIM_PAYMENT,
     label: 'Process Promotion Claim Payment',
+  },
+];
+
+export const ACTIONABLES_ITEMS = [
+  {
+    value: PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_DEVICE_NOT_SENT,
+    label: 'View Follow-Up Device Not Sent',
+  },
+  {
+    value: PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_REVISION_OFFER,
+    label: 'View Follow-Up Revision Offer',
+  },
+  {
+    value: PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_RECYCLE_OFFER,
+    label: 'View Follow-Up Recycle Offer',
+  },
+  {
+    value: PermissionCodes.VIEW_ACTIONABLES_DEVICES_FOR_RECYCLE,
+    label: 'View Devices For Recycle',
+  },
+  {
+    value: PermissionCodes.VIEW_ACTIONABLES_DEVICES_FOR_RETURN,
+    label: 'View Devices For Return',
+  },
+  {
+    value: PermissionCodes.VIEW_ACTIONABLES_LOCKED_DEVICES_FOR_RETEST,
+    label: 'View Locked Devices - For Retest',
+  },
+  {
+    value: PermissionCodes.VIEW_ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK,
+    label: 'View Locked Devices - Current Lock',
   },
 ];
 
