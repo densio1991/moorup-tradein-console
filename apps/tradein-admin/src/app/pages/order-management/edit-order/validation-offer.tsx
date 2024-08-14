@@ -154,16 +154,18 @@ const ValidationOffer = ({
                 </div>
               </>
             )}
+
             {orderItemActions.length > 0 && (
               <>
                 <hr />
                 {orderItemActions}
-                <button
+                {/*  HIDING THIS FOR NOW. TODO: Re-enable once deployed
+                 <button
                   onClick={() => handleSetLockType(item)}
                   className="px-3 py-1 text-white bg-emerald-800 hover:bg-emerald-900 rounded-md"
                 >
                   Set Lock Type
-                </button>
+                </button> */}
               </>
             )}
           </DetailCardContainer>
