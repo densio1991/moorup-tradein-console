@@ -585,7 +585,7 @@ export const updateOrderItemLockType =
     axiosInstance(token)
       .patch(
         `/api/orders/items/lock-devices/${orderItemId}/lock-status`,
-        payload
+        payload,
       )
       .then((response) => {
         dispatch({
@@ -670,7 +670,7 @@ export const generateLabels =
     axiosInstance(token)
       .post(
         '/api/shipments/generate-labels?label=return,outbound&update_status=true',
-        payload
+        payload,
       )
       .then((response) => {
         dispatch({
@@ -744,7 +744,7 @@ export const updateOrderItemImeiSerial =
     });
 
     axiosInstance(token)
-      .patch(`/api/orders/items/${orderItemId}/imei-serial`, payload)
+      .patch(`/api/orders/items/${orderItemId}/imei`, payload)
       .then((response) => {
         dispatch({
           type: types.UPDATE_ORDER_ITEM_IMEI_SERIAL.SUCCESS,
@@ -799,7 +799,7 @@ export const cancelGiftCard =
     axiosInstance(token)
       .patch(
         `/api/payments/cancel-voucher-by-query/${orderId}?voucherPan=${voucherPan}`,
-        { signal: signal }
+        { signal: signal },
       )
       .then((response) => {
         dispatch({
@@ -951,7 +951,7 @@ export const downloadOrderPaymentFile =
           });
 
           toast.error(
-            'No data available for the selected date; no file generated for export. Please choose another date.'
+            'No data available for the selected date; no file generated for export. Please choose another date.',
           );
         } else {
           dispatch({
@@ -1141,7 +1141,7 @@ export const setLockedDeviceLockStatus =
     axiosInstance(token)
       .patch(
         `/api/orders/items/lock-devices/${orderItemId}/lock-status`,
-        payload
+        payload,
       )
       .then((response) => {
         dispatch({
@@ -1174,7 +1174,7 @@ export const setLockedDeviceStatus =
     axiosInstance(token)
       .patch(
         `/api/orders/items/lock-devices/${orderItemId}/device-status`,
-        payload
+        payload,
       )
       .then((response) => {
         dispatch({
