@@ -189,3 +189,8 @@ export enum PaymentStatus {
   FAILED = 'failed',
   CHARGED = 'charged'
 }
+
+export enum ShippingStatuses {
+  TODO = 'todo',
+  DONE = 'done',
+}

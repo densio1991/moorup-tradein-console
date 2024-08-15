@@ -25,7 +25,7 @@ import {
   faRotateLeft,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
-import { ClaimStatus, LockTypes, OrderItemStatus, PermissionCodes } from './enums';
+import { ClaimStatus, LockTypes, OrderItemStatus, PermissionCodes, ShippingStatuses } from './enums';
 import { PlatformType } from './interfaces';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
@@ -862,6 +862,7 @@ export const MODAL_TYPES = {
   DOWNLOAD_FLAT_FILE: 'DOWNLOAD_FLAT_FILE',
   FILTER_LOCKED_DEVICES_CURRENT_LOCK: 'FILTER_LOCKED_DEVICES_CURRENT_LOCK',
   FILTER_LOCKED_DEVICES_FOR_RETEST: 'FILTER_LOCKED_DEVICES_FOR_RETEST',
+  FILTER_DEVICES_WITH_BOX: 'FILTER_DEVICES_WITH_BOX',
 };
 
 export const PROMOTION_STATUS = [
@@ -1132,3 +1133,8 @@ export const ACTIONABLES_ITEMS = [
 
 export const ENCRYPTION_KEY = 'mDv8pK79066huHFdlQ2CPKbXxC0rjXRt';
 export const INITIALIZATION_VECTOR = 'ey';
+
+export const SHIPPING_STATUSES = [
+  { value: ShippingStatuses.TODO, label: 'To Do' },
+  { value: ShippingStatuses.DONE, label: 'Done' },
+];

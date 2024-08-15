@@ -1,20 +1,31 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react-hooks/exhaustive-deps */
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import {
   ACTIONABLES_MANAGEMENT_COLUMNS,
   ACTIONS_COLUMN,
+  AppButton,
+  Divider,
+  FormGroup,
+  FormWrapper,
+  IconButton,
+  MODAL_TYPES,
   OrderItemStatus,
   PageSubHeader,
   ProductTypes,
+  SHIPPING_STATUSES,
+  SideModal,
+  StyledReactSelect,
   // ProductTypes,
   Table,
   actionablesManagementParsingConfig,
   useAuth,
+  useCommon,
   useOrder,
   usePermission,
 } from '@tradein-admin/libs';
 import { isEmpty } from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 export function DevicesWithBoxPage() {
@@ -30,6 +41,8 @@ export function DevicesWithBoxPage() {
   const { state: authState } = useAuth();
   const { orderItems, isFetchingOrderItems } = state;
   const { activePlatform, userDetails } = authState;
+  const { state: commonState, setSideModalState, setSearchTerm } = useCommon();
+  const { sideModalState } = commonState;
 
   const headers = [
     ...ACTIONABLES_MANAGEMENT_COLUMNS,
@@ -87,39 +100,15 @@ export function DevicesWithBoxPage() {
       }));
   };
 
-  // const addPrintLabelAction = (orderItems: any) => {
-  //   const filteredOrderItems = orderItems.filter(
-  //     (orderItem: any) =>
-  //       orderItem?.order_items?.status === OrderItemStatus.REVISION_REJECTED,
-  //     //  ||
-  //     // ((orderItem?.order_items?.product_type === ProductTypes.TABLETS ||
-  //     //   orderItem?.order_items?.product_type === ProductTypes.LAPTOPS) &&
-  //     //   orderItem?.order_items?.status === OrderItemStatus.CREATED),
-  //   );
-  //   return filteredOrderItems.map((orderItem: any) => ({
-  //     ...orderItem,
-  //     action: () => printLabels({ item_id: orderItem?.order_items?._id }),
-  //     printLabelAction: () =>
-  //       printLabels({ item_id: orderItem?.order_items?._id }),
-  //     returnDeviceAction: () => {
-  //       toast.info('Make sure to Download or Save a copy on your device.', {
-  //         onClose: async () => {
-  //           await updateOrderItemsStatus(orderItem?.order_items?._id, {
-  //             status: OrderItemStatus.DEVICE_RETURNED,
-  //           });
-  //           printOutboundLabel({ item_id: orderItem?.order_items?._id });
-  //           clearOrderItems({});
-
-  //           const controller = new AbortController();
-  //           const signal = controller.signal;
-  //           getOrderItems(filters, signal);
-  //         },
-  //       });
-  //     },
-  //   }));
-  // };
-
   const formattedOrderItems = addPrintLabelAction(orderItems || []);
+
+  const [selectedShippingStatus, setSelectedShippingStatus] = useState<
+    string[]
+  >([]);
+
+  const cancelFilters = () => {
+    setSelectedShippingStatus([]);
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -134,12 +123,114 @@ export function DevicesWithBoxPage() {
 
       // Clear data on unmount
       clearOrderItems({});
+      setSearchTerm('');
     };
   }, [activePlatform]);
 
+  const renderSideModalContent = () => {
+    switch (sideModalState.view) {
+      case MODAL_TYPES.FILTER_DEVICES_WITH_BOX:
+        return (
+          <FormWrapper formTitle="Filter By">
+            <FormGroup marginBottom="20px">
+              <StyledReactSelect
+                label="Shipping Status"
+                name="type"
+                isMulti={true}
+                options={SHIPPING_STATUSES}
+                placeholder="Select shipping status"
+                value={selectedShippingStatus}
+                onChange={(selected) => {
+                  const shippingStatusValues = selected?.map(
+                    (option: any) => option.value,
+                  );
+
+                  setSelectedShippingStatus(shippingStatusValues);
+                }}
+              />
+            </FormGroup>
+            <FormGroup>
+              <AppButton
+                type="button"
+                variant="outlined"
+                width="fit-content"
+                onClick={() => cancelFilters()}
+              >
+                Reset
+              </AppButton>
+              <FormGroup>
+                <AppButton
+                  type="button"
+                  variant="outlined"
+                  width="fit-content"
+                  onClick={() => {
+                    setSideModalState({
+                      ...sideModalState,
+                      open: false,
+                      view: null,
+                    });
+                  }}
+                >
+                  Cancel
+                </AppButton>
+                <AppButton
+                  type="button"
+                  width="fit-content"
+                  onClick={() => {
+                    const filter = {
+                      status: [
+                        OrderItemStatus.CREATED,
+                        OrderItemStatus.REVISION_REJECTED,
+                      ]?.join(','),
+                      ...(selectedShippingStatus?.length
+                        ? {
+                            shipping_status: selectedShippingStatus.join(','),
+                          }
+                        : {}),
+                    };
+
+                    getOrderItems(filter);
+
+                    setSideModalState({
+                      ...sideModalState,
+                      open: false,
+                      view: null,
+                    });
+                  }}
+                >
+                  Apply
+                </AppButton>
+              </FormGroup>
+            </FormGroup>
+          </FormWrapper>
+        );
+
+      default:
+        return;
+    }
+  };
+
   return (
     <>
-      <PageSubHeader withSearch />
+      <PageSubHeader
+        withSearch
+        rightControls={
+          <>
+            <IconButton
+              tooltipLabel="Filter"
+              icon={faFilter}
+              onClick={() => {
+                setSideModalState({
+                  ...sideModalState,
+                  open: true,
+                  view: MODAL_TYPES.FILTER_DEVICES_WITH_BOX,
+                });
+              }}
+            />
+            <Divider />
+          </>
+        }
+      />
       <Table
         label="Devices With Box"
         isLoading={isFetchingOrderItems}
@@ -147,6 +238,18 @@ export function DevicesWithBoxPage() {
         rows={formattedOrderItems || []}
         parsingConfig={actionablesManagementParsingConfig}
       />
+      <SideModal
+        isOpen={sideModalState?.open}
+        onClose={() => {
+          setSideModalState({
+            ...sideModalState,
+            open: false,
+            view: null,
+          });
+        }}
+      >
+        {renderSideModalContent()}
+      </SideModal>
     </>
   );
 }
