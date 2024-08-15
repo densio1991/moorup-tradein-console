@@ -1638,6 +1638,7 @@ export const COMPLETION_ORDER_ITEM_STATUS = [
   OrderItemStatus.EVALUATED,
   OrderItemStatus.REVISED,
   OrderItemStatus.COMPLETED,
+  OrderItemStatus.DEVICE_RETURNED,
 ];
 
 export const TIMEZONE = 'Australia/Sydney';
