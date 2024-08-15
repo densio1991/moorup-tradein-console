@@ -26,7 +26,7 @@ const ValidationOffer = ({
   setGenericModal,
   setSelectedItem,
 }: ValidationOfferProps) => {
-  const { state, printOutboundLabel } = useOrder();
+  const { state, printOutboundLabel, patchOrderItemById } = useOrder();
   const { hasUpdateOrderItemStatusPermission, hasPrintLabelPermission } =
     usePermission();
   const { isGeneratingLabels } = state;
@@ -36,6 +36,11 @@ const ValidationOffer = ({
   const handlePrintLabel = (orderItemId: any) => {
     printOutboundLabel({
       item_id: orderItemId,
+      admin_id: userDetails?._id,
+    });
+
+    patchOrderItemById(orderItemId, {
+      status: OrderItemStatus.DEVICE_RETURNED,
       admin_id: userDetails?._id,
     });
   };
