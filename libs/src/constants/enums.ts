@@ -21,6 +21,7 @@ export enum OrderItemStatus {
   DEVICE_RETURNED = 'device-returned',
   FOR_RETURN = 'for-return',
   FOR_RECYCLE = 'for-recycle',
+  RETURNED = 'returned',
 }
 
 export enum DropdownOrderItemStatus {
@@ -41,7 +42,7 @@ export enum ClaimStatus {
   CANCELLED = 'cancelled',
   FAILED = 'failed',
   COMPLETED = 'completed',
-  PROCESSING = 'processing'
+  PROCESSING = 'processing',
 }
 
 export enum DefaultStatus {
@@ -61,7 +62,7 @@ export enum PromotionStatus {
 export enum OrderTypes {
   ONLINE = 'online',
   INSTORE = 'in-store',
-  IN_STORE = 'in_store'
+  IN_STORE = 'in_store',
 }
 
 export enum CreditTypes {

@@ -40,7 +40,7 @@ const ValidationOffer = ({
     });
 
     patchOrderItemById(orderItemId, {
-      status: OrderItemStatus.DEVICE_RETURNED,
+      status: OrderItemStatus.RETURNED,
       admin_id: userDetails?._id,
     });
   };
