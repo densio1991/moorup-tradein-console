@@ -819,9 +819,8 @@ export const cancelGiftCard =
       });
   };
 
-export const updateOrderItemsStatus =
-  (orderItemId: any, payload: any, onSuccess: any = false) =>
-  (dispatch: any, token?: string) => {
+  export const updateOrderItemsStatus =
+  (orderItemId: any, payload: any, filter: any, platform: string) => (dispatch: any, token?: string) => {
     dispatch({
       type: types.UPDATE_ORDER_ITEM_BY_ID.baseType,
       payload,
@@ -834,12 +833,18 @@ export const updateOrderItemsStatus =
           type: types.UPDATE_ORDER_ITEM_BY_ID.SUCCESS,
           payload: response?.data,
         });
+
+        getOrderItems(filter, platform)(dispatch, token)
+        toast.success('Order item status successfully updated!');
       })
       .catch((error) => {
         dispatch({
           type: types.UPDATE_ORDER_ITEM_BY_ID.FAILED,
           payload: error,
         });
+
+        getOrderItems(filter, platform)(dispatch, token)
+        toast.error('Failed to update Order item status!');
       });
   };
 
@@ -1174,7 +1179,7 @@ export const setLockedDeviceStatus =
     axiosInstance(token)
       .patch(
         `/api/orders/items/lock-devices/${orderItemId}/device-status`,
-        payload
+        payload,
       )
       .then((response) => {
         dispatch({
@@ -1193,5 +1198,35 @@ export const setLockedDeviceStatus =
 
         getLockedDevices(filter, platform)(dispatch, token);
         toast.error('Failed to update device status.');
+      });
+  };
+
+export const updateOrderItemsPaymentStatus =
+  (orderItemId: any, payload: any, filter: any, platform: string) =>
+  (dispatch: any, token?: string) => {
+    dispatch({
+      type: types.UPDATE_ORDER_ITEM_PAYMENT_STATUS.baseType,
+      payload,
+    });
+
+    axiosInstance(token)
+      .patch(`/api/orders/items/${orderItemId}/payment-status`, payload)
+      .then((response) => {
+        dispatch({
+          type: types.UPDATE_ORDER_ITEM_PAYMENT_STATUS.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderItems(filter, platform)(dispatch, token);
+        toast.success('Order item payment status successfully updated!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.UPDATE_ORDER_ITEM_PAYMENT_STATUS.FAILED,
+          payload: error,
+        });
+
+        getOrderItems(filter, platform)(dispatch, token);
+        toast.error('Failed to update order item payment status!');
       });
   };

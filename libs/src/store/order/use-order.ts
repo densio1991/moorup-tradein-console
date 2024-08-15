@@ -157,8 +157,8 @@ export const useOrder = () => {
     actions.getGiftCardStatus(id, payload, signal)(dispatch, token);
   };
 
-  const updateOrderItemsStatus = (orderItemId: any, payload: any, signal?: AbortSignal) => {
-    actions.updateOrderItemsStatus(orderItemId, payload)(dispatch, token);
+  const updateOrderItemsStatus = (orderItemId: any, payload: any, filter: any) => {
+    actions.updateOrderItemsStatus(orderItemId, payload, filter, activePlatform)(dispatch, token);
   };
 
   const cancelGiftCard = (id: any, payload: any, signal?: AbortSignal) => {
@@ -213,6 +213,10 @@ export const useOrder = () => {
     actions.setLockedDeviceStatus(orderItemId, payload, filter, activePlatform)(dispatch, token);
   }
 
+  const updateOrderItemsPaymentStatus = (orderItemId: any, payload: any, filter: any) => {
+    actions.updateOrderItemsPaymentStatus(orderItemId, payload, filter, activePlatform)(dispatch, token);
+  };
+
   return {
     state: state.order,
     getOrderItems,
@@ -261,5 +265,6 @@ export const useOrder = () => {
     clearLockedDevices,
     setLockedDeviceLockStatus,
     setLockedDeviceStatus,
+    updateOrderItemsPaymentStatus,
   };
 };
