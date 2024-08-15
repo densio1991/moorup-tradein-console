@@ -17,7 +17,7 @@ import { isEmpty } from 'lodash';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-export function ActionablesPage() {
+export function DevicesWithBoxPage() {
   const { hasPrintLabelPermission } = usePermission();
   const {
     state,
@@ -56,23 +56,22 @@ export function ActionablesPage() {
             item_id: orderItem?.order_items?._id,
             admin_id: userDetails?._id,
           }),
-        printLabelAction: () => {
+        printLabelAction: () =>
           printLabels({
             item_id: orderItem?.order_items?._id,
             admin_id: userDetails?._id,
-          });
-          clearOrderItems({});
-          const controller = new AbortController();
-          const signal = controller.signal;
-          getOrderItems(filters, signal);
-        },
+          }),
         returnDeviceAction: () => {
           toast.info('Make sure to Download or Save a copy on your device.', {
             onClose: async () => {
-              await updateOrderItemsStatus(orderItem?.order_items?._id, {
-                status: OrderItemStatus.DEVICE_RETURNED,
-                admin_id: userDetails?._id,
-              });
+              await updateOrderItemsStatus(
+                orderItem?.order_items?._id,
+                {
+                  status: OrderItemStatus.CANCELLED,
+                  admin_id: userDetails?._id,
+                },
+                filters,
+              );
               printOutboundLabel({
                 item_id: orderItem?.order_items?._id,
                 admin_id: userDetails?._id,
@@ -142,7 +141,7 @@ export function ActionablesPage() {
     <>
       <PageSubHeader withSearch />
       <Table
-        label="Actionables"
+        label="Devices With Box"
         isLoading={isFetchingOrderItems}
         headers={headers}
         rows={formattedOrderItems || []}
