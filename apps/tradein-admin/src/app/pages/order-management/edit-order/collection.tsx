@@ -16,7 +16,6 @@ import { ShippingSection } from './sections/shipping-section';
 type CollectionProps = {
   orderId: string;
   orderItems: OrderItems[];
-  shipments: any;
   isSingleOrderFlow: boolean;
   setStatusModal: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedItem: React.Dispatch<React.SetStateAction<OrderItems>>;
@@ -25,7 +24,6 @@ type CollectionProps = {
 const Collection = ({
   orderId,
   orderItems,
-  shipments,
   isSingleOrderFlow,
   setStatusModal,
   setSelectedItem,
@@ -50,7 +48,6 @@ const Collection = ({
   const {
     isResendingLabel,
     // isUpdatingOrderItem,
-    isFetchingShipments,
   } = state;
 
   const handleReceiveOrderItem = (orderItemId: string) => {
@@ -81,16 +78,16 @@ const Collection = ({
     return [PRODUCT_TYPES.LAPTOPS, PRODUCT_TYPES.TABLETS].includes(productType);
   };
 
-  const getItemShipment = (orderItemId: string) => {
-    const itemShipments = shipments[orderItemId] || {};
+  const getItemShipment = (orderItem: OrderItems) => {
+    const shipments = orderItem?.shipment_details || [];
 
-    return itemShipments['return'];
+    return shipments?.find((shipment) => shipment?.direction === 'return');
   };
 
   return (
     <div className="flex gap-2 p-2.5 items-start">
       {orderItems?.map((item: OrderItems, idx) => {
-        const shipment = getItemShipment(item._id);
+        const shipment = getItemShipment(item);
         const isCancelled = item.status === OrderItemStatus.CANCELLED;
 
         // Shipment-related Actions
@@ -157,11 +154,7 @@ const Collection = ({
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
             <DeviceSection orderItem={item} orderId={orderId} />
             <OfferSection orderItem={item} />
-            <ShippingSection
-              isLoading={isFetchingShipments}
-              orderItem={item}
-              shipments={shipments}
-            />
+            <ShippingSection orderItem={item} />
             {shipmentActions.length > 0 && !isCancelled && (
               <>
                 <hr />

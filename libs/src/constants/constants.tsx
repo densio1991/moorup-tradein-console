@@ -310,6 +310,7 @@ export interface OrderItems {
   line_item_number: string;
   reason: string[];
   questions_answered: QuestionAnswered[];
+  shipment_details: Shipments[];
   revision: any;
   lock: any;
 }
