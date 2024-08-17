@@ -10,6 +10,7 @@ import {
 import { CardDetail, DeviceSection } from './sections';
 import OfferSection from './sections/offer-section';
 import { capitalize } from 'lodash';
+import { ShippingSection } from './sections/shipping-section';
 
 type ValidationOfferProps = {
   orderId: any;
@@ -109,6 +110,7 @@ const ValidationOffer = ({
           <DetailCardContainer key={idx} className="min-w-fit flex gap-2">
             <DeviceSection orderItem={item} orderId={orderId} />
             <OfferSection orderItem={item} />
+            <ShippingSection orderItem={item} />
             <hr />
             <div>
               <h4>Validation</h4>
