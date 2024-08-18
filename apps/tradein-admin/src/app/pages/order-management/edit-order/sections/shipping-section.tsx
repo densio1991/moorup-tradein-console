@@ -29,6 +29,8 @@ export const ShippingSection = ({ orderItem }: ShippingSectionProps) => {
             label="Inbound Tracking #"
             value={shipment?.tracking_number}
             copy
+            isLink
+            linkUrl={shipment?.tracking_link}
           />
         </div>
       </div>

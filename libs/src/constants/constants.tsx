@@ -349,6 +349,7 @@ export interface Shipments {
   status: string;
   direction: string;
   pdf_url: string;
+  tracking_link?: string;
 }
 
 export interface BankDetails {
