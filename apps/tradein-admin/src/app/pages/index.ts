@@ -1,4 +1,7 @@
-export { ActionablesPage } from './actionables';
+export { DeviceCreditChargeNeededPage } from './actionables/device-credit-charge-needed';
+export { DevicesForRecyclePage } from './actionables/devices-for-recycle';
+export { DevicesForReturnPage } from './actionables/devices-for-return';
+export { DevicesWithBoxPage } from './actionables/devices-with-box';
 export { FollowUpRecycleOfferPage } from './actionables/followup-recycle-offer';
 export { FollowUpRevisionOfferPage } from './actionables/followup-revision-offer';
 export { FollowUpUnsentDevicePage } from './actionables/followup-unsent-device';

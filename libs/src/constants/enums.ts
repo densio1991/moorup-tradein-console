@@ -8,7 +8,8 @@ export enum OrderStatus {
 
 export enum OrderItemStatus {
   CREATED = 'created',
-  CANCELLED = 'cancelled',
+  CANCELLED = 'cancelled', // Returned
+  RECYCLED = 'recycled', // Recycled
   RECEIVED = 'received',
   LABEL_SENT = 'label-sent',
   EVALUATED = 'evaluated',
@@ -18,7 +19,6 @@ export enum OrderItemStatus {
   REVISED = 'revised',
   REVISION_REJECTED = 'revision-rejected',
   HOLD = 'hold',
-  DEVICE_RETURNED = 'device-returned',
   FOR_RETURN = 'for-return',
   FOR_RECYCLE = 'for-recycle',
 }
@@ -141,6 +141,8 @@ export enum PermissionCodes {
   VIEW_ACTIONABLES_DEVICES_FOR_RETURN = 'VIEW_ACTIONABLES_DEVICES_FOR_RETURN',
   VIEW_ACTIONABLES_LOCKED_DEVICES_FOR_RETEST = 'VIEW_ACTIONABLES_LOCKED_DEVICES_FOR_RETEST',
   VIEW_ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK = 'VIEW_ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK',
+  VIEW_ACTIONABLES_PAYMENT_ACTION_NEEDED = 'VIEW_ACTIONABLES_PAYMENT_ACTION_NEEDED',
+  VIEW_ACTIONABLES_DEVICES_WITH_BOX = 'VIEW_ACTIONABLES_DEVICES_WITH_BOX',
 }
 
 export enum ProductUploadLogsStatus {
@@ -176,4 +178,19 @@ export enum LockStatus {
   LOCKED = 'locked',
   UNLOCKED = 'unlocked',
   RETEST = 'retest',
+}
+
+export enum PaymentStatus {
+  PENDING = 'pending',
+  ISSUED = 'issued',
+  NOT_YET_ISSUED = 'not_yet_issued',
+  PAID = 'paid',
+  CANCELLED = 'cancelled',
+  FAILED = 'failed',
+  CHARGED = 'charged'
+}
+
+export enum ShippingStatuses {
+  TODO = 'todo',
+  DONE = 'done',
 }

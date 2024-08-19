@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { faEnvelope, faMessage } from '@fortawesome/free-regular-svg-icons';
 import {
+  faBoxesPacking,
   faBullhorn,
+  faCashRegister,
   faCheckToSlot,
   faCircleExclamation,
   faCreditCard,
@@ -19,9 +21,11 @@ import {
   faLock,
   faMoneyBill,
   faPenToSquare,
+  faRecycle,
+  faRotateLeft,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
-import { ClaimStatus, LockTypes, OrderItemStatus, PermissionCodes } from './enums';
+import { ClaimStatus, LockTypes, OrderItemStatus, PermissionCodes, ShippingStatuses } from './enums';
 import { PlatformType } from './interfaces';
 
 export const BASE_URL = import.meta.env.VITE_REACT_APP_API_URL;
@@ -151,7 +155,35 @@ export const SIDENAV_ITEMS = [
         activeUrl: /^\/dashboard\/actionables\/locked-devices-for-retest/,
         icon: faLock,
         disabled: false,
-      }
+      },
+      {
+        title: 'Payment Action Needed',
+        url: '/dashboard/actionables/payment-action-needed',
+        activeUrl: /^\/dashboard\/actionables\/payment-action-needed/,
+        icon: faCashRegister,
+        disabled: false,
+      },
+      {
+        title: 'Devices With Box',
+        url: '/dashboard/actionables/devices-with-box',
+        activeUrl: /^\/dashboard\/actionables\/devices-with-box/,
+        icon: faBoxesPacking,
+        disabled: false,
+      },
+      {
+        title: 'Devices For Return',
+        url: '/dashboard/actionables/devices-for-return',
+        activeUrl: /^\/dashboard\/actionables\/devices-for-return/,
+        icon: faRotateLeft,
+        disabled: false,
+      },
+      {
+        title: 'Devices For Recycle',
+        url: '/dashboard/actionables/devices-for-recycle',
+        activeUrl: /^\/dashboard\/actionables\/devices-for-recycle/,
+        icon: faRecycle,
+        disabled: false,
+      },
     ],
   },
   {
@@ -830,6 +862,7 @@ export const MODAL_TYPES = {
   DOWNLOAD_FLAT_FILE: 'DOWNLOAD_FLAT_FILE',
   FILTER_LOCKED_DEVICES_CURRENT_LOCK: 'FILTER_LOCKED_DEVICES_CURRENT_LOCK',
   FILTER_LOCKED_DEVICES_FOR_RETEST: 'FILTER_LOCKED_DEVICES_FOR_RETEST',
+  FILTER_DEVICES_WITH_BOX: 'FILTER_DEVICES_WITH_BOX',
 };
 
 export const PROMOTION_STATUS = [
@@ -1090,11 +1123,18 @@ export const ACTIONABLES_ITEMS = [
   { value: PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_DEVICE_NOT_SENT, label: 'View Follow-Up Device Not Sent' },
   { value: PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_REVISION_OFFER, label: 'View Follow-Up Revision Offer' },
   { value: PermissionCodes.VIEW_ACTIONABLES_FOLLOW_UP_RECYCLE_OFFER, label: 'View Follow-Up Recycle Offer' },
+  { value: PermissionCodes.VIEW_ACTIONABLES_DEVICES_WITH_BOX, label: 'View Devices With Box' },
   { value: PermissionCodes.VIEW_ACTIONABLES_DEVICES_FOR_RECYCLE, label: 'View Devices For Recycle' },
   { value: PermissionCodes.VIEW_ACTIONABLES_DEVICES_FOR_RETURN, label: 'View Devices For Return' },
+  { value: PermissionCodes.VIEW_ACTIONABLES_PAYMENT_ACTION_NEEDED, label: 'View Payment Action Needed' },
   { value: PermissionCodes.VIEW_ACTIONABLES_LOCKED_DEVICES_FOR_RETEST, label: 'View Locked Devices - For Retest' },
   { value: PermissionCodes.VIEW_ACTIONABLES_LOCKED_DEVICES_CURRENT_LOCK, label: 'View Locked Devices - Current Lock' },
 ];
 
 export const ENCRYPTION_KEY = 'mDv8pK79066huHFdlQ2CPKbXxC0rjXRt';
 export const INITIALIZATION_VECTOR = 'ey';
+
+export const SHIPPING_STATUSES = [
+  { value: ShippingStatuses.TODO, label: 'To Do' },
+  { value: ShippingStatuses.DONE, label: 'Done' },
+];
