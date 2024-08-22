@@ -243,6 +243,10 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
     );
   };
 
+  const isPreviouslyExtended = order?.order_items?.some(
+    (item: any) => item?.send_in_deadline_date,
+  );
+
   return (
     <div className="flex flex-col">
       <div className="px-5 flex flex-col gap-4 pb-4">
@@ -259,7 +263,7 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
           <DetailLine label="Order Date" value={formatDate(order?.createdAt)} />
           <DetailLine
             label="Previously Extended"
-            value={order?.isExtended ? 'Yes' : 'No'}
+            value={isPreviouslyExtended ? 'Yes' : 'No'}
           />
         </div>
         <hr />
