@@ -37,9 +37,9 @@ export const actionablesDeviceCreditChargeNeededParsingConfig = {
     if (!orderItem || isEmpty(orderItem['payment'])) return '--';
 
     const payment = orderItem ? orderItem['payment'] : null;
-    if (!payment || isEmpty(payment['payment_status'])) return '--';
+    if (!payment || isEmpty(payment['status'])) return '--';
 
-    return parseStatus(payment['payment_status']);
+    return parseStatus(payment['status']);
   },
   'Remarks': ({ row }: ParsingFunctionParams) => {
     const orderItem = row ? row['order_items'] : null;
@@ -72,8 +72,8 @@ export const actionablesDeviceCreditChargeNeededParsingConfig = {
     let disableFailedAction = true;
 
     const payment = orderItem ? orderItem['payment'] : null;
-    if (payment || !isEmpty(payment['payment_status'])) {
-      switch (payment['payment_status']) {
+    if (payment || !isEmpty(payment['status'])) {
+      switch (payment['status']) {
         case PaymentStatus.PENDING:
           disableChargedAction = false;
           disableFailedAction = false;
