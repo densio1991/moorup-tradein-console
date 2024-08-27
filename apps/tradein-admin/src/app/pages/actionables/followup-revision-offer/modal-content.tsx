@@ -267,7 +267,7 @@ export function FollowUpRevisionOfferModal({ order }: Props) {
         </div>
       </div>
       <Table
-        label="Devices Awaiting"
+        label="Devices Revised"
         isLoading={!order}
         headers={headers}
         rows={filteredOrderItems || []}

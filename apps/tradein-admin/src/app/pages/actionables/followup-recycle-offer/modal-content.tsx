@@ -55,8 +55,8 @@ export function FollowUpRecycleOfferModal({ order }: Props) {
         setModalData({
           open: true,
           view: ConfirmationModalTypes.ACCEPT_REVISION,
-          title: 'Accept Revision',
-          subtitle: `Do you wish to mark revision for ${orderItem?.line_item_number} as accepted?`,
+          title: 'Mark Device for Recycling',
+          subtitle: `Do you wish to mark device ${orderItem?.line_item_number} for recycling?`,
         }),
       returnDeviceAction: () => {
         setSelectedRow(orderItem);
@@ -82,7 +82,7 @@ export function FollowUpRecycleOfferModal({ order }: Props) {
       const payload = [
         {
           orderItemId: selectedRow._id,
-          followupType: 'for-revision',
+          followupType: 'for-recycle',
           action: 'accept',
         },
       ];
@@ -91,7 +91,7 @@ export function FollowUpRecycleOfferModal({ order }: Props) {
       const payload = filteredOrderItems.map((orderItem: any) => {
         return {
           orderItemId: orderItem._id,
-          followupType: 'for-revision',
+          followupType: 'for-recycle',
           action: 'accept',
         };
       });
@@ -99,13 +99,13 @@ export function FollowUpRecycleOfferModal({ order }: Props) {
     }
   };
 
-  const generateBulkReturnPayload = (orderItems: any[], remarks: any) => {
+  const generateBulkActionPayload = (orderItems: any[], remarks: any) => {
     const payload: any[] = [];
 
     orderItems?.forEach((orderItem: any) => {
       payload.push({
         orderItemId: orderItem?._id,
-        followupType: 'for-revision',
+        followupType: 'for-recycle',
         action: 'return',
         remarks: remarks,
       });
@@ -122,7 +122,7 @@ export function FollowUpRecycleOfferModal({ order }: Props) {
       const payload = [
         {
           orderItemId: selectedRow._id,
-          followupType: 'for-revision',
+          followupType: 'for-recycle',
           action: 'return',
         },
       ];
@@ -130,13 +130,13 @@ export function FollowUpRecycleOfferModal({ order }: Props) {
     } else if (
       modalData.view === ConfirmationModalTypes.RETURN_ORDER_NON_CONTACTABLE
     ) {
-      const payload = generateBulkReturnPayload(
+      const payload = generateBulkActionPayload(
         order?.order_items,
         'Customer Not Contactable',
       );
       updateOrderFollowups(order?._id, payload);
     } else {
-      const payload = generateBulkReturnPayload(
+      const payload = generateBulkActionPayload(
         order?.order_items,
         'Return all devices',
       );
@@ -267,7 +267,7 @@ export function FollowUpRecycleOfferModal({ order }: Props) {
         </div>
       </div>
       <Table
-        label="Devices Awaiting"
+        label="Devices Revised"
         isLoading={!order}
         headers={headers}
         rows={filteredOrderItems || []}
@@ -282,9 +282,8 @@ export function FollowUpRecycleOfferModal({ order }: Props) {
             setModalData({
               open: true,
               view: ConfirmationModalTypes.ACCEPT_ALL_REVISION,
-              title: 'Accept All Revisions',
-              subtitle:
-                'Do you wish to mark all devices revisions as accepted?',
+              title: 'Mark All Devices for Recycling',
+              subtitle: 'Do you wish to mark all devices for recycling?',
             })
           }
         >
