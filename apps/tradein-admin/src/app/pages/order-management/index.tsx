@@ -19,14 +19,11 @@ export function OrderManagementPage() {
   const { state: authState } = useAuth();
   const { activePlatform } = authState;
   const { state, fetchOrders, clearOrders } = useOrder();
-  const { orders, isFetchingOrders } = state;
+  const { orders, isFetchingOrders, shipcode } = state;
   const { setSearchTerm } = useCommon();
   const { hasViewOrderDetailsPermission } = usePermission();
 
-  const headers = [
-    ...ORDER_MANAGEMENT_COLUMNS,
-    // ...(hasViewOrderDetailsPermission ? ACTIONS_COLUMN : []),
-  ];
+  const headers = [...ORDER_MANAGEMENT_COLUMNS];
 
   const addViewUrlToOrders = (orders: any) => {
     return orders.map((order: any) => ({
@@ -58,7 +55,7 @@ export function OrderManagementPage() {
 
   return (
     <>
-      <PageSubHeader withSearch />
+      <PageSubHeader withSearch specificString={shipcode} />
       <Table
         label="Orders"
         isLoading={isFetchingOrders}

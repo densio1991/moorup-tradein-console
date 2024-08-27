@@ -59,6 +59,7 @@ interface PageSubHeaderProps {
   marginBottom?: string;
   marginLeft?: string;
   marginRight?: string;
+  specificString?: string;
 }
 
 export function PageSubHeader({ 
@@ -72,9 +73,30 @@ export function PageSubHeader({
   marginBottom,
   marginLeft,
   marginRight,
+  specificString,
 }: PageSubHeaderProps) {
   const { state: commonState, setSearchTerm } = useCommon();
   const { searchTerm } = commonState;
+
+  const handlePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    const clipboardData = event.clipboardData.getData('text');
+
+    let modifiedText = clipboardData;
+
+    if (specificString) {
+      console.log('SHIPCODE: ', specificString);
+      // Find the position of the specific string
+      const index = clipboardData.indexOf(specificString);
+
+      if (index !== -1) {
+        // Keep the part of the text from the specific string onward
+        modifiedText = clipboardData.slice(index);
+      }
+    }
+
+    setSearchTerm(modifiedText);
+  };
 
   return (
     <div className="card">
@@ -98,6 +120,7 @@ export function PageSubHeader({
             name="search"
             placeholder="Search..."
             onChange={(e) => setSearchTerm(e.target.value)}
+            onPaste={handlePaste}
             value={searchTerm}
           />
           }
