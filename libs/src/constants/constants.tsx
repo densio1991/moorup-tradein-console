@@ -1135,6 +1135,6 @@ export const ENCRYPTION_KEY = 'mDv8pK79066huHFdlQ2CPKbXxC0rjXRt';
 export const INITIALIZATION_VECTOR = 'ey';
 
 export const SHIPPING_STATUSES = [
-  { value: ShippingStatuses.TODO, label: 'To Do' },
-  { value: ShippingStatuses.DONE, label: 'Done' },
+  { value: ShippingStatuses.TODO, label: 'To Print' },
+  { value: ShippingStatuses.DONE, label: 'Prior Print' },
 ];
