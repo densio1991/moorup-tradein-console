@@ -75,13 +75,15 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
       ) || [];
     return filteredOrderItems.map((orderItem: any) => ({
       ...orderItem,
-      extendDeadlineAction: () =>
+      extendDeadlineAction: () => {
+        setSelectedRow(orderItem);
         setModalData({
           open: true,
           view: ConfirmationModalTypes.EXTEND_SENDIN_DEADLINE,
-          title: 'Extend All',
+          title: 'Extend Device',
           subtitle: `Do you wish to extend ${orderItem?.line_item_number}?`,
-        }),
+        });
+      },
       cancelOrderItemAction: () => {
         setSelectedRow(orderItem);
         setModalData({
@@ -110,7 +112,9 @@ export function FollowUpUnsentDeviceModal({ order }: Props) {
         },
       ];
       extendSendinDeadline(order?._id, payload);
-    } else {
+    } else if (
+      modalData.view === ConfirmationModalTypes.EXTEND_ALL_SENDIN_DEADLINE
+    ) {
       const payload = filteredOrderItems.map((orderItem: any) => {
         return {
           sendInDeadlineDate: moment(newDeadline).format('YYYY-MM-DD'),
