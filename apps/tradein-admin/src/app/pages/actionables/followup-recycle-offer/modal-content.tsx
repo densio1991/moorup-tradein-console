@@ -51,13 +51,15 @@ export function FollowUpRecycleOfferModal({ order }: Props) {
       ) || [];
     return filteredOrderItems.map((orderItem: any) => ({
       ...orderItem,
-      acceptRevisionAction: () =>
+      acceptRevisionAction: () => {
+        setSelectedRow(orderItem);
         setModalData({
           open: true,
           view: ConfirmationModalTypes.ACCEPT_REVISION,
           title: 'Mark Device for Recycling',
           subtitle: `Do you wish to mark device ${orderItem?.line_item_number} for recycling?`,
-        }),
+        });
+      },
       returnDeviceAction: () => {
         setSelectedRow(orderItem);
         setModalData({
@@ -87,7 +89,7 @@ export function FollowUpRecycleOfferModal({ order }: Props) {
         },
       ];
       updateOrderFollowups(order?._id, payload);
-    } else {
+    } else if (modalData.view === ConfirmationModalTypes.ACCEPT_ALL_REVISION) {
       const payload = filteredOrderItems.map((orderItem: any) => {
         return {
           orderItemId: orderItem._id,
