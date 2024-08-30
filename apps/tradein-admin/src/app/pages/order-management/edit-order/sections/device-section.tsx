@@ -1,4 +1,8 @@
-import { CopyToClipboardButton, OrderItems } from '@tradein-admin/libs';
+import {
+  CopyToClipboardButton,
+  formatSlug,
+  OrderItems,
+} from '@tradein-admin/libs';
 import { CardDetail } from './card-detail';
 
 export const DeviceSection = ({
@@ -47,7 +51,10 @@ export const DeviceSection = ({
             value={orderItem?.line_item_number}
             copy
           />
-          <CardDetail label="Device Status" value={orderItem?.status} />
+          <CardDetail
+            label="Device Status"
+            value={formatSlug(orderItem?.status)}
+          />
         </div>
       </div>
     </div>
