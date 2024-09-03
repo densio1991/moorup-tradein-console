@@ -44,6 +44,7 @@ const orderState = {
   isUpdatingLockedDeviceStatus: false,
   isUpdatingOrderItemPaymentStatus: false,
   shipcode: '' || undefined,
+  isRequestingOrderItemPayment: false,
 };
 
 const orderReducer = (state = orderState, action: any) => {
@@ -798,6 +799,27 @@ const orderReducer = (state = orderState, action: any) => {
       return {
         ...state,
         isUpdatingOrderItemPaymentStatus: false,
+      };
+    }
+
+    case types.REQUEST_ORDER_ITEM_PAYMENT.baseType: {
+      return {
+        ...state,
+        isRequestingOrderItemPayment: true,
+        isFetchingOrderItems: true,
+        orderItems: [],
+      };
+    }
+    case types.REQUEST_ORDER_ITEM_PAYMENT.SUCCESS: {
+      return {
+        ...state,
+        isRequestingOrderItemPayment: false,
+      };
+    }
+    case types.REQUEST_ORDER_ITEM_PAYMENT.FAILED: {
+      return {
+        ...state,
+        isRequestingOrderItemPayment: false,
       };
     }
 

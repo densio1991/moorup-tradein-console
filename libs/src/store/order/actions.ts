@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from 'react-toastify';
-import { BAD_REQUEST, CANCELLED_AXIOS } from '../../constants';
+import { BAD_REQUEST, CANCELLED_AXIOS, StripeErrorCodes } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
@@ -1228,5 +1228,58 @@ export const updateOrderItemsPaymentStatus =
 
         getOrderItems(filter, platform)(dispatch, token);
         toast.error('Failed to update order item payment status!');
+      });
+  };
+
+export const requestOrderItemPayment =
+  (payload: any, filter: any, platform: string) =>
+  (dispatch: any, token?: string) => {
+    dispatch({
+      type: types.REQUEST_ORDER_ITEM_PAYMENT.baseType,
+      payload,
+    });
+
+    axiosInstance(token)
+      .post('/api/stripe/capture-payment-intent', payload)
+      .then((response) => {
+        dispatch({
+          type: types.REQUEST_ORDER_ITEM_PAYMENT.SUCCESS,
+          payload: response?.data,
+        });
+
+        getOrderItems(filter, platform)(dispatch, token);
+        toast.success('Order item payment successfully processed!');
+      })
+      .catch((error) => {
+        dispatch({
+          type: types.REQUEST_ORDER_ITEM_PAYMENT.FAILED,
+          payload: error,
+        });
+
+        const errorMessage = 'Something went wrong while processing your payment request.';
+        const errorCode = error?.response?.data?.error?.code || 'unknown_error';
+        
+        switch (errorCode) {
+          case StripeErrorCodes.PARAMETER_INVALID_INTEGER:
+            toast.error('There was an issue with the payment amount. Please try again, or contact support if the issue persists.');
+            break;
+          case StripeErrorCodes.NOT_FOUND:
+            toast.error('We couldn’t find the order. Please try again, or contact support if the issue persists.');
+            break;
+          case StripeErrorCodes.AMOUNT_TOO_LARGE:
+            toast.error('The payment could not be processed because the amount is higher than expected. Please try again, or contact support if the issue persists.');
+            break;
+          case StripeErrorCodes.PAYMENT_INTENT_UNEXPECTED_STATE:
+            toast.error('The payment has already been processed or cancelled. Please refresh the page and check the order details again.');
+            break;
+          case StripeErrorCodes.RESOURCE_MISSING:
+            toast.error('We couldn’t find the payment information. Please refresh the page and try again.');
+            break;
+          default:
+            toast.error(errorMessage);
+            break;
+        }
+
+        getOrderItems(filter, platform)(dispatch, token);
       });
   };
