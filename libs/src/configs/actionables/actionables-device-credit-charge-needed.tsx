@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { faCheck, faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faReceipt } from '@fortawesome/free-solid-svg-icons';
 import { isEmpty, isUndefined } from 'lodash';
 import { AppButton } from '../../components';
 import { PaymentStatus } from '../../constants';
@@ -41,15 +41,6 @@ export const actionablesDeviceCreditChargeNeededParsingConfig = {
 
     return parseStatus(payment['status']);
   },
-  'Remarks': ({ row }: ParsingFunctionParams) => {
-    const orderItem = row ? row['order_items'] : null;
-    if (!orderItem || isEmpty(orderItem['payment'])) return '--';
-
-    const payment = orderItem ? orderItem['payment'] : null;
-    if (!payment || isEmpty(payment['remarks'])) return '--';
-
-    return payment['remarks'];
-  },
   'Order Date': ({ row }: ParsingFunctionParams) => {
     const orderItem = row ? row['order_items'] : null;
     if (!orderItem || isEmpty(orderItem['createdAt'])) return '--';
@@ -61,33 +52,39 @@ export const actionablesDeviceCreditChargeNeededParsingConfig = {
     return orderItem['original_offer'];
   },
   'Charge Amount': ({ row }: ParsingFunctionParams) => {
-    if (!row || isEmpty(row['charge_amount'])) return '--';
-    return row['charge_amount'];
+    const orderItem = row ? row['order_items'] : null;
+    if (!orderItem || isEmpty(orderItem['payment'])) return '--';
+
+    const payment = orderItem ? orderItem['payment'] : null;
+    if (!payment || isUndefined(payment['charge_amount'])) return '--';
+
+    return payment['charge_amount'];
   },
   Actions: ({ row }: ParsingFunctionParams) => {
     const orderItem = row ? row['order_items'] : null;
     if (!orderItem || isEmpty(orderItem['_id'])) return '--';
-
-    let disableChargedAction = true;
-    let disableFailedAction = true;
-
+  
+    let disableRequestPayment = true;
+  
     const payment = orderItem ? orderItem['payment'] : null;
-    if (payment || !isEmpty(payment['status'])) {
-      switch (payment['status']) {
-        case PaymentStatus.PENDING:
-          disableChargedAction = false;
-          disableFailedAction = false;
-          break;
-
-        case PaymentStatus.FAILED:
-          disableChargedAction = false;
-          disableFailedAction = true;
-          break;
-      
-        default:
-          disableChargedAction = true;
-          disableFailedAction = true;
-          break;
+    if (payment && !isEmpty(payment['status'])) {
+      const chargeAmount = payment['charge_amount'];
+      const isChargeAmountInvalid = isUndefined(chargeAmount) || isNaN(chargeAmount) || chargeAmount === 0;
+  
+      if (!isChargeAmountInvalid) {
+        switch (payment['status']) {
+          case PaymentStatus.FOR_CHARGE:
+            disableRequestPayment = false;
+            break;
+  
+          case PaymentStatus.FAILED:
+            disableRequestPayment = false;
+            break;
+  
+          default:
+            disableRequestPayment = true;
+            break;
+        }
       }
     }
 
@@ -98,22 +95,11 @@ export const actionablesDeviceCreditChargeNeededParsingConfig = {
           variant="fill"
           width="fit-content"
           padding="4px 20px"
-          icon={faCheck}
-          onClick={() => row.chargedAction()}
-          disabled={disableChargedAction}
+          icon={faReceipt}
+          onClick={() => row.requestPayment()}
+          disabled={disableRequestPayment}
         >
-          Charged
-        </AppButton>
-        <AppButton
-          type="button"
-          variant="fill"
-          width="fit-content"
-          padding="4px 20px"
-          icon={faXmark}
-          onClick={() => row.failedAction()}
-          disabled={disableFailedAction}
-        >
-          Failed
+          Request Payment
         </AppButton>
       </div>
     );
