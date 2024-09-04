@@ -181,7 +181,7 @@ export enum LockStatus {
 }
 
 export enum PaymentStatus {
-  PENDING = 'pending',
+  FOR_CHARGE = 'for-charge',
   ISSUED = 'issued',
   NOT_YET_ISSUED = 'not_yet_issued',
   PAID = 'paid',
@@ -193,4 +193,13 @@ export enum PaymentStatus {
 export enum ShippingStatuses {
   TODO = 'todo',
   DONE = 'done',
+}
+
+export enum StripeErrorCodes {
+  PARAMETER_INVALID_INTEGER = 'parameter_invalid_integer',
+  NOT_FOUND = 'not_found',
+  AMOUNT_TOO_LARGE = 'amount_too_large',
+  PAYMENT_INTENT_UNEXPECTED_STATE = 'payment_intent_unexpected_state',
+  RESOURCE_MISSING = 'resource_missing',
+  UNKNOWN_ERROR = 'unknown_error'
 }

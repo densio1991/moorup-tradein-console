@@ -3,7 +3,6 @@
 import {
   ACTIONABLES_DEVICE_CREDIT_CHARGE_NEEDED,
   ACTIONS_COLUMN,
-  OrderItemStatus,
   PageSubHeader,
   PaymentStatus,
   Table,
@@ -20,7 +19,7 @@ export function DeviceCreditChargeNeededPage() {
     state: orderState,
     getOrderItems,
     clearOrderItems,
-    updateOrderItemsPaymentStatus,
+    requestOrderItemPayment,
   } = useOrder();
   const { isFetchingOrderItems, orderItems, isUpdatingOrderItemPaymentStatus } =
     orderState;
@@ -35,28 +34,17 @@ export function DeviceCreditChargeNeededPage() {
 
   const addActions = (orderItems: any) => {
     const filters = {
-      status: [OrderItemStatus.FOR_RETURN, OrderItemStatus.FOR_RECYCLE]?.join(
+      payment_status: [PaymentStatus.FOR_CHARGE, PaymentStatus.FAILED]?.join(
         ',',
       ),
-      payment_status: [PaymentStatus.PENDING, PaymentStatus.FAILED]?.join(','),
     };
 
     return orderItems.map((orderItem: any) => ({
       ...orderItem,
-      chargedAction: () =>
-        updateOrderItemsPaymentStatus(
-          orderItem?.order_items?._id,
+      requestPayment: () =>
+        requestOrderItemPayment(
           {
-            payment_status: 'charged',
-            admin_id: userDetails?._id,
-          },
-          filters,
-        ),
-      failedAction: () =>
-        updateOrderItemsPaymentStatus(
-          orderItem?.order_items?._id,
-          {
-            payment_status: PaymentStatus.FAILED,
+            item_id: orderItem?.order_items?._id,
             admin_id: userDetails?._id,
           },
           filters,
@@ -72,10 +60,7 @@ export function DeviceCreditChargeNeededPage() {
 
     if (!isEmpty(activePlatform)) {
       const filters = {
-        status: [OrderItemStatus.FOR_RETURN, OrderItemStatus.FOR_RECYCLE]?.join(
-          ',',
-        ),
-        payment_status: [PaymentStatus.PENDING, PaymentStatus.FAILED]?.join(
+        payment_status: [PaymentStatus.FOR_CHARGE, PaymentStatus.FAILED]?.join(
           ',',
         ),
       };
