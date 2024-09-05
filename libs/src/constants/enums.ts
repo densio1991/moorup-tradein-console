@@ -203,3 +203,8 @@ export enum StripeErrorCodes {
   RESOURCE_MISSING = 'resource_missing',
   UNKNOWN_ERROR = 'unknown_error'
 }
+
+export enum CourierCodes {
+  SHIP_ENGINE = 'shipengine',
+  NZ_POST = 'nzpost'
+}
