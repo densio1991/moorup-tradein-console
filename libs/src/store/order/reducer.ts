@@ -43,7 +43,6 @@ const orderState = {
   isUpdatingDeviceLockStatus: false,
   isUpdatingLockedDeviceStatus: false,
   isUpdatingOrderItemPaymentStatus: false,
-  shipcode: '' || undefined,
   isRequestingOrderItemPayment: false,
 };
 
@@ -61,7 +60,6 @@ const orderReducer = (state = orderState, action: any) => {
         ...state,
         isFetchingOrders: false,
         orders: action.payload?.data,
-        shipcode: action.payload?.shipcode || undefined,
       };
     }
     case types.FETCH_ORDERS.FAILED: {
