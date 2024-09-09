@@ -224,12 +224,29 @@ export const EditOrderPage = () => {
 
   const onUpdateStatus = (newValue: any, orderItem: OrderItems) => {
     if (newValue.status === OrderItemStatus.FOR_REVISION) {
-      const payload = {
-        platform: activePlatform,
-        revision_price: newValue.revised_offer,
-        revision_reasons: newValue.reason?.split(','),
-        admin_id: userDetails?._id,
-      };
+      const payload: any = {};
+      if (newValue?.revision_details === 'change-model') {
+        payload.platform = activePlatform;
+        payload.revision_price = newValue.newDevicePrice;
+        payload.revision_reasons = 'Wrong model';
+        payload.admin_id = userDetails?._id;
+        payload.additional_information = {
+          deviceSku: newValue?.deviceSku,
+        };
+      } else {
+        payload.platform = activePlatform;
+        payload.revision_price = newValue.revised_offer;
+        payload.revision_reasons = newValue.reason?.split(',');
+        payload.admin_id = userDetails?._id;
+      }
+      // const payload = {
+      //   platform: activePlatform,
+      //   revision_price: newValue.revised_offer,
+      //   revision_reasons: newValue.reason?.split(','),
+      //   admin_id: userDetails?._id,
+      // };
+      console.log('newValue', newValue);
+      console.log('payload', payload);
       reviseOfferByItemId(orderItem?._id, payload);
     } else if (newValue.status === OrderItemStatus.EVALUATED) {
       evaluateOrderItemById(orderItem.line_item_number, {
