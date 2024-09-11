@@ -1049,7 +1049,7 @@ export const importPaymentsFlatFile =
     formData.append('platform', activePlatform);
 
     axiosInstance(token)
-      .patch('/api/payments/bulk-manual-payment', formData, {
+      .post('/api/payments/bulk-manual-payment', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
