@@ -232,6 +232,9 @@ export const EditOrderPage = () => {
         payload.admin_id = userDetails?._id;
         payload.additional_information = {
           deviceSku: newValue?.deviceSku,
+          functionalAssessmentPassed: newValue?.functionalAssessmentPassed,
+          screenAssessmentPassed: newValue?.screenAssessmentPassed,
+          withAccessories: newValue?.accessoriesAssessmentPassed,
         };
       } else {
         payload.platform = activePlatform;
