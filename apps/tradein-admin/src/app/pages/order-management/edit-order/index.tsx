@@ -230,6 +230,21 @@ export const EditOrderPage = () => {
         payload.revision_price = newValue.newDevicePrice;
         payload.revision_reasons = 'Wrong model';
         payload.admin_id = userDetails?._id;
+        payload.product_variant_id = newValue.variant;
+        payload.question_answered = [
+          {
+            question: 'functional-assessment',
+            answer: newValue?.functionalAssessmentPassed,
+          },
+          {
+            question: 'screen-assessment',
+            answer: newValue?.screenAssessmentPassed,
+          },
+          newValue?.accessoriesAssessmentPassed && {
+            question: 'has-charger',
+            answer: newValue?.accessoriesAssessmentPassed,
+          },
+        ];
         payload.additional_information = {
           deviceSku: newValue?.deviceSku,
         };

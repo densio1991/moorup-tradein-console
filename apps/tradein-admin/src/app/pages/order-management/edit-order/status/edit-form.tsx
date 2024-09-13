@@ -15,6 +15,7 @@ import {
   useProduct,
   useAuth,
   amountFormatter,
+  Typography,
 } from '@tradein-admin/libs';
 import { CardDetail } from '../sections';
 
@@ -81,6 +82,9 @@ interface FormValues {
   variant: string;
   deviceSku: string;
   newDevicePrice: string;
+  functionalAssessmentPassed: any;
+  screenAssessmentPassed: any;
+  accessoriesAssessmentPassed: any;
 }
 
 type FormProps = {
@@ -114,11 +118,29 @@ export const EditForm = ({
     value: item,
   }));
 
+  const getAssessmentAnswer = (assessment: any, question: string) => {
+    return (
+      assessment?.find((qa: any) => qa?.question === question)?.answer || null
+    );
+  };
+
   const formik = useFormik<FormValues>({
     initialValues: {
       ...DEFAULT_VALUES,
       _id: orderItem?._id,
       status: orderItem?.status,
+      functionalAssessmentPassed: getAssessmentAnswer(
+        orderItem?.questions_answered,
+        'functional-assessment',
+      ),
+      screenAssessmentPassed: getAssessmentAnswer(
+        orderItem?.questions_answered,
+        'screen-assessment',
+      ),
+      accessoriesAssessmentPassed: getAssessmentAnswer(
+        orderItem?.questions_answered,
+        'accessories-assessment',
+      ),
     },
     onSubmit: () => {
       const {
@@ -155,7 +177,7 @@ export const EditForm = ({
       }
       if (isEmpty(errors)) {
         updateStatus(formik.values, orderItem);
-        setStatusModal(false);
+        resetFormAndCloseModal();
       }
     },
   });
@@ -226,54 +248,109 @@ export const EditForm = ({
     return {};
   }, [variants, formik.values.variant]);
 
-  function getNewPricing(
-    orderItem: any,
+  useEffect(() => {
+    if (!formik.values.variant) return;
+    setNewPricing(newVariant);
+  }, [
+    formik.values.variant,
+    formik.values.functionalAssessmentPassed,
+    formik.values.screenAssessmentPassed,
+    formik.values.accessoriesAssessmentPassed,
+  ]);
+
+  const getNewPricing = (
+    functionalAssessment: string,
+    screenAssessment: string,
+    hasCharger: string,
     newVariant: any,
     platform: string,
-  ): number | 0 {
-    // Check the conditions for the order item
-    const assessmentAnswers = orderItem.questions_answered;
-    const functionalAssessment = assessmentAnswers.find(
-      (qa: any) => qa.question === 'functional-assessment',
-    );
-    const screenAssessment = assessmentAnswers.find(
-      (qa: any) => qa.question === 'screen-assessment',
-    );
+  ): number | 0 => {
     const platformPricing = newVariant?.pricing?.find(
       (p: any) => p.platform === platform,
     );
-    if (
-      functionalAssessment?.answer === 'yes' &&
-      screenAssessment?.answer === 'no'
-    ) {
+    const deductChargerPrice = hasCharger === 'no' ? 40 : 0;
+    let price = 0;
+    if (functionalAssessment === 'yes' && screenAssessment === 'no') {
       if (platformPricing) {
         //fully functional
-        return platformPricing.working; // Return the 'working' value
+        price = platformPricing.working ? Number(platformPricing.working) : 0;
+        if (hasCharger === 'no' && price > 0) {
+          price = Math.max(0, price - deductChargerPrice);
+        }
+        return price; // Return the 'working' value
       }
-    } else if (
-      functionalAssessment?.answer === 'yes' &&
-      screenAssessment?.answer === 'yes'
-    ) {
+    } else if (functionalAssessment === 'yes' && screenAssessment === 'yes') {
       // damaged screen
       if (platformPricing) {
-        return platformPricing.working_damaged; // Return the 'working_damage' value
+        price = platformPricing.working_damaged
+          ? Number(platformPricing.working_damaged)
+          : 0;
+        if (hasCharger === 'no' && price > 0) {
+          price = Math.max(0, price - deductChargerPrice);
+        }
+        return price; // Return the 'working_damaged' value
       }
-    } else if (
-      functionalAssessment?.answer === 'no' &&
-      screenAssessment?.answer === 'no'
-    ) {
+    } else if (functionalAssessment === 'no' && screenAssessment === 'no') {
       // not functional
       if (platformPricing) {
-        return platformPricing.not_working;
+        price = platformPricing.not_working
+          ? Number(platformPricing.not_working)
+          : 0;
+        if (hasCharger === 'no' && price > 0) {
+          price = Math.max(0, price - deductChargerPrice);
+        }
+        return price; // Return the 'not_working' value
       }
     } else {
       // not functional damage
       if (platformPricing) {
-        return platformPricing.not_working_damaged;
+        price = platformPricing.not_working_damaged
+          ? Number(platformPricing.not_working_damaged)
+          : 0;
+        if (hasCharger === 'no' && price > 0) {
+          price = Math.max(0, price - deductChargerPrice);
+        }
+        return price; // Return the 'not_working_damaged' value
       }
     }
     return 0; // Return 0 if conditions are not met or pricing is not found
-  }
+  };
+
+  const deviceValidation = (item: string, chooseNo: any, chooseYes: any) => (
+    <div className="flex flex-row gap-2">
+      <div
+        className={`text-sm px-2 rounded-md border-[1px] border-gray-400 cursor-pointer
+        ${item === 'no' ? 'bg-red-500 text-white' : 'bg-white'}`}
+        onClick={() => chooseNo()}
+      >
+        No
+      </div>
+      <div
+        className={`text-sm px-2 rounded-md border-[1px] border-gray-400 cursor-pointer
+        ${item === 'yes' ? 'bg-green-500 text-white' : 'bg-white'}`}
+        onClick={() => chooseYes()}
+      >
+        Yes
+      </div>
+    </div>
+  );
+
+  const setNewPricing = (selectedVariant: any) => {
+    const newPrice = getNewPricing(
+      formik.values.functionalAssessmentPassed,
+      formik.values.screenAssessmentPassed,
+      formik.values.accessoriesAssessmentPassed,
+      selectedVariant,
+      activePlatform,
+    );
+    formik.setFieldValue('newDevicePrice', newPrice);
+  };
+
+  const resetFormAndCloseModal = () => {
+    formik.resetForm(); // Reset the form values
+    setStatusModal(false); // Close the modal
+  };
+
   return (
     <ModalBody>
       <ModalTitle>Update Order Item</ModalTitle>
@@ -383,12 +460,7 @@ export const EditForm = ({
                   onChange={(selected) => {
                     formik.setFieldValue('variant', selected.value, true);
                     formik.setFieldValue('deviceSku', selected?.sku);
-                    const newPrice = getNewPricing(
-                      orderItem,
-                      selected,
-                      activePlatform,
-                    );
-                    formik.setFieldValue('newDevicePrice', newPrice);
+                    setNewPricing(selected);
                   }}
                   disabled={
                     isEmpty(formik.values.model) || isFetchingModelByCategory
@@ -397,19 +469,85 @@ export const EditForm = ({
                   errorMessage={formik.errors?.variant}
                 />
               </FormGroup>
+
               {formik?.values?.variant && (
                 <>
+                  <hr className="my-2" />
+                  <FormGroup>
+                    <Typography variant="body2" fontWeight={700}>
+                      Is Device functional ?
+                    </Typography>
+                    {deviceValidation(
+                      formik.values.functionalAssessmentPassed,
+                      () =>
+                        formik.setFieldValue(
+                          'functionalAssessmentPassed',
+                          'no',
+                        ),
+                      () =>
+                        formik.setFieldValue(
+                          'functionalAssessmentPassed',
+                          'yes',
+                        ),
+                    )}
+                  </FormGroup>
+                  <FormGroup>
+                    <Typography variant="body2" fontWeight={700}>
+                      Is Screen Damage ?
+                    </Typography>
+                    {deviceValidation(
+                      formik.values.screenAssessmentPassed,
+                      () =>
+                        formik.setFieldValue('screenAssessmentPassed', 'no'),
+                      () =>
+                        formik.setFieldValue('screenAssessmentPassed', 'yes'),
+                    )}
+                  </FormGroup>
+                  {orderItem?.product_type === 'laptops' && (
+                    <FormGroup>
+                      <Typography variant="body2" fontWeight={700}>
+                        Does device has charger ?
+                      </Typography>
+                      {deviceValidation(
+                        formik.values.accessoriesAssessmentPassed,
+                        () =>
+                          formik.setFieldValue(
+                            'accessoriesAssessmentPassed',
+                            'no',
+                          ),
+                        () =>
+                          formik.setFieldValue(
+                            'accessoriesAssessmentPassed',
+                            'yes',
+                          ),
+                      )}
+                    </FormGroup>
+                  )}
+
                   <hr />
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 sm:gap-2 my-2">
                     <CardDetail
-                      label="Original Quote"
+                      label={
+                        <Typography variant="body2">Original Quote</Typography>
+                      }
                       value={`$ ${amountFormatter(orderItem?.original_offer)}`}
                     />
                     <CardDetail
-                      label="New Quote"
-                      value={`$ ${amountFormatter(
-                        getNewPricing(orderItem, newVariant, activePlatform),
-                      )}`}
+                      label={<Typography variant="body2">New Quote</Typography>}
+                      value={
+                        <Typography fontSize={'14px'} fontWeight={700}>
+                          $
+                          {amountFormatter(
+                            getNewPricing(
+                              formik.values.functionalAssessmentPassed,
+                              formik.values.screenAssessmentPassed,
+                              formik.values.accessoriesAssessmentPassed,
+                              newVariant,
+                              activePlatform,
+                            ),
+                          )}
+                        </Typography>
+                      }
                     />
                   </div>
                 </>
@@ -419,7 +557,9 @@ export const EditForm = ({
         </>
       )}
       <ModalButtonDiv>
-        <ModalButton onClick={() => setStatusModal(false)}>Cancel</ModalButton>
+        <ModalButton onClick={() => resetFormAndCloseModal()}>
+          Cancel
+        </ModalButton>
         <ModalSubmitButton type="submit" onClick={() => formik.handleSubmit()}>
           Submit
         </ModalSubmitButton>
