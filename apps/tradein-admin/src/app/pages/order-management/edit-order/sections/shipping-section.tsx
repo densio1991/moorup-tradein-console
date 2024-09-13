@@ -8,32 +8,64 @@ interface ShippingSectionProps {
 }
 
 export const ShippingSection = ({ orderItem }: ShippingSectionProps) => {
-  const getItemShipment = () => {
+  const getItemShipment = (direction: string) => {
     const shipments = orderItem?.shipment_details || [];
 
-    return shipments?.find((shipment) => shipment?.direction === 'return');
+    return shipments?.find((shipment) => shipment?.direction === direction);
   };
 
-  const shipment = getItemShipment();
+  const inboundShipment = getItemShipment('return');
+  const outboundShipment = getItemShipment('outbound');
 
   return (
     <>
       <hr />
       <div className="flex flex-col mb-2">
-        <h4>Shipping</h4>
+        <h4>Inbound Shipping</h4>
         <div className="grid grid-cols-1 sm:grid-cols-dataEntry sm:gap-2">
-          <CardDetail label="Courier" value={shipment?.slug} />
-          <CardDetail label="Shipping Status" value={shipment?.status} />
-          <CardDetail label="Direction #" value={shipment?.direction} copy />
+          <CardDetail label="Courier" value={inboundShipment?.slug} />
+          <CardDetail label="Shipping Status" value={inboundShipment?.status} />
           <CardDetail
-            label="Inbound Tracking #"
-            value={shipment?.tracking_number}
+            label="Direction #"
+            value={inboundShipment?.direction}
+            copy
+          />
+          <CardDetail
+            label="Tracking #"
+            value={inboundShipment?.tracking_number}
             copy
             isLink
-            linkUrl={shipment?.tracking_link}
+            linkUrl={inboundShipment?.tracking_link}
           />
         </div>
       </div>
+      {outboundShipment && (
+        <>
+          <hr />
+          <div className="flex flex-col mb-2">
+            <h4>Outbound Shipping</h4>
+            <div className="grid grid-cols-1 sm:grid-cols-dataEntry sm:gap-2">
+              <CardDetail label="Courier" value={outboundShipment?.slug} />
+              <CardDetail
+                label="Shipping Status"
+                value={outboundShipment?.status}
+              />
+              <CardDetail
+                label="Direction #"
+                value={outboundShipment?.direction}
+                copy
+              />
+              <CardDetail
+                label="Tracking #"
+                value={outboundShipment?.tracking_number}
+                copy
+                isLink
+                linkUrl={outboundShipment?.tracking_link}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };
