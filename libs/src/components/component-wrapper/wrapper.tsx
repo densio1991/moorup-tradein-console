@@ -3,7 +3,12 @@ import { isEmpty } from 'lodash';
 import { ReactNode, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { ACCESS_TOKEN, ACCESS_TOKEN_EXPIRY, ACTIVE_PLATFORM } from '../../constants';
+import {
+  ACCESS_TOKEN,
+  ACCESS_TOKEN_EXPIRY,
+  ACTIVE_PLATFORM,
+  IS_VERIFIED,
+} from '../../constants';
 import { decodeJWT, validateExpiry } from '../../helpers';
 import { useAuth } from '../../store';
 import { LoaderContainer } from '../loader';
@@ -13,25 +18,19 @@ interface ComponentWrapperProps {
 }
 
 const StyledApp = styled.div`
-  background-color: #F4F4F5;
+  background-color: #f4f4f5;
   display: flex;
   flex-direction: column;
 `;
 
-export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Element {
+export function ComponentWrapper({
+  children,
+}: ComponentWrapperProps): JSX.Element {
   const navigate = useNavigate();
-  const { 
-    state, 
-    getUserDetailsById,
-  } = useAuth();
+  const { state, getUserDetailsById } = useAuth();
 
-  const {
-    expiry,
-    token,
-    userDetails,
-    isFetchingUserDetails,
-    isPageLoading,
-  } = state;
+  const { expiry, token, userDetails, isFetchingUserDetails, isPageLoading } =
+    state;
 
   const shouldRun = useRef(false);
 
@@ -39,11 +38,11 @@ export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Eleme
     localStorage.removeItem(ACCESS_TOKEN);
     localStorage.removeItem(ACCESS_TOKEN_EXPIRY);
     localStorage.removeItem(ACTIVE_PLATFORM);
+    localStorage.removeItem(IS_VERIFIED);
   };
 
   // Token validation function
   const validateToken = () => {
-    
     try {
       if (!validateExpiry(expiry)) {
         clearStorage();
@@ -68,12 +67,11 @@ export function ComponentWrapper({ children }: ComponentWrapperProps): JSX.Eleme
   }, [token, validateToken, userDetails]);
 
   useEffect(() => {
-    if ((token && isEmpty(userDetails) && !shouldRun.current)) {
+    if (token && isEmpty(userDetails) && !shouldRun.current) {
       const decodedToken = decodeJWT(token);
       getUserDetailsById(decodedToken?.id);
       shouldRun.current = true;
     }
-
   }, [token]);
 
   return (
