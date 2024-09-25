@@ -46,6 +46,7 @@ export const PLATFORMS: PlatformType = {
   birite: 'Bi-Rite',
   officeworks: 'Officeworks',
   '2degrees': '2degrees',
+  retravision: 'Retravision',
 };
 
 export const SIDENAV_ITEMS = [
