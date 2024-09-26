@@ -559,7 +559,7 @@ export const CURRENCIES = [
   { value: 'TJS', label: 'Tajikistani Somoni (TJS)' },
   { value: 'TMT', label: 'Turkmenistani Manat (TMT)' },
   { value: 'TND', label: 'Tunisian Dinar (TND)' },
-  { value: 'TOP', label: "Tongan Pa'anga (TOP)" },
+  { value: 'TOP', label: 'Tongan Pa\'anga (TOP)' },
   { value: 'TRY', label: 'Turkish Lira (TRY)' },
   { value: 'TTD', label: 'Trinidad and Tobago Dollar (TTD)' },
   { value: 'TVD', label: 'Tuvaluan Dollar (TVD)' },
@@ -782,6 +782,7 @@ export const REGULAR = 'regular';
 export const WAREHOUSE = 'warehouse';
 export const PRODUCTS = 'products-team';
 export const CUSTOMER_SERVICE = 'customer-service';
+export const CONSOLE = 'console';
 
 export const ROLES = [
   { value: SUPERADMIN, label: 'Super Admin' },
@@ -790,6 +791,7 @@ export const ROLES = [
   { value: WAREHOUSE, label: 'Warehouse' },
   { value: PRODUCTS, label: 'Products' },
   { value: CUSTOMER_SERVICE, label: 'Customer Service' },
+  { value: CONSOLE, label: 'Console' },
 ];
 
 export const CANCELLED_AXIOS = 'ERR_CANCELED';
