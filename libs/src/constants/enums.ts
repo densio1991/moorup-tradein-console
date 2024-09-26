@@ -76,6 +76,7 @@ export enum ProductTypes {
   TABLETS = 'tablets',
   PHONES = 'phones',
   WATCHES = 'watches',
+  CONSOLES = 'consoles',
 }
 
 export enum ConfirmationModalTypes {
