@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { toast } from 'react-toastify';
-import { BAD_REQUEST, CANCELLED_AXIOS } from '../../constants';
+import { BAD_REQUEST, CANCELLED_AXIOS, CONSOLE, ProductTypes } from '../../constants';
 import axiosInstance from '../axios';
 import * as types from './action-types';
 
@@ -46,14 +46,26 @@ export const clearOrderItems = (payload: any) => (dispatch: any) => {
 };
 
 export const getAllOrders =
-  (platform: any, signal?: AbortSignal) => (dispatch: any, token?: string) => {
+  (platform: any, signal?: AbortSignal) => (dispatch: any, token?: string, userDetails?: any) => {
     dispatch({
       type: types.FETCH_ORDERS.baseType,
       platform,
     });
 
+    let params = {};
+    switch (userDetails?.role) {
+      case CONSOLE:
+        params = {
+          product_type: ProductTypes.CONSOLES,
+        }
+        break;
+    
+      default:
+        break;
+    }
+
     axiosInstance(token)
-      .get(`/api/orders?platform=${platform}`, { signal: signal })
+      .get(`/api/orders?platform=${platform}`, { signal: signal, params: params })
       .then((response) => {
         dispatch({
           type: types.FETCH_ORDERS.SUCCESS,
