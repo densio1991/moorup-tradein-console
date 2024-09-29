@@ -34,6 +34,7 @@ export const TEMPLATE_LINK = import.meta.env.VITE_REACT_APP_TEMPLATE_LINK;
 export const ACCESS_TOKEN = 'FTK';
 export const ACCESS_TOKEN_EXPIRY = 'FTKX';
 export const ACTIVE_PLATFORM = 'AP';
+export const IS_VERIFIED = 'VOTP';
 
 export const PLATFORMS: PlatformType = {
   binglee: 'Bing Lee',
@@ -45,6 +46,7 @@ export const PLATFORMS: PlatformType = {
   birite: 'Bi-Rite',
   officeworks: 'Officeworks',
   '2degrees': '2degrees',
+  retravision: 'Retravision',
 };
 
 export const SIDENAV_ITEMS = [
@@ -557,7 +559,7 @@ export const CURRENCIES = [
   { value: 'TJS', label: 'Tajikistani Somoni (TJS)' },
   { value: 'TMT', label: 'Turkmenistani Manat (TMT)' },
   { value: 'TND', label: 'Tunisian Dinar (TND)' },
-  { value: 'TOP', label: "Tongan Pa'anga (TOP)" },
+  { value: 'TOP', label: 'Tongan Pa\'anga (TOP)' },
   { value: 'TRY', label: 'Turkish Lira (TRY)' },
   { value: 'TTD', label: 'Trinidad and Tobago Dollar (TTD)' },
   { value: 'TVD', label: 'Tuvaluan Dollar (TVD)' },
@@ -780,6 +782,7 @@ export const REGULAR = 'regular';
 export const WAREHOUSE = 'warehouse';
 export const PRODUCTS = 'products-team';
 export const CUSTOMER_SERVICE = 'customer-service';
+export const CONSOLE = 'console';
 
 export const ROLES = [
   { value: SUPERADMIN, label: 'Super Admin' },
@@ -788,6 +791,7 @@ export const ROLES = [
   { value: WAREHOUSE, label: 'Warehouse' },
   { value: PRODUCTS, label: 'Products' },
   { value: CUSTOMER_SERVICE, label: 'Customer Service' },
+  { value: CONSOLE, label: 'Console' },
 ];
 
 export const CANCELLED_AXIOS = 'ERR_CANCELED';
@@ -960,6 +964,7 @@ export const VALIDATION_ORDER_ITEM_STATUS = [
   OrderItemStatus.LABEL_SENT,
   OrderItemStatus.FOR_REVISION,
   OrderItemStatus.FOR_RETURN,
+  OrderItemStatus.FOR_RECYCLE,
   OrderItemStatus.REVISION_REJECTED,
   OrderItemStatus.HOLD,
 ];

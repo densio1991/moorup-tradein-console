@@ -22,7 +22,7 @@ export const useOrder = () => {
   }
 
   const fetchOrders = (signal?: AbortSignal) => {
-    actions.getAllOrders(activePlatform, signal)(dispatch, token);
+    actions.getAllOrders(activePlatform, signal)(dispatch, token, userDetails);
   };
 
   const fetchOrderById = (id: any, signal?: AbortSignal) => {
