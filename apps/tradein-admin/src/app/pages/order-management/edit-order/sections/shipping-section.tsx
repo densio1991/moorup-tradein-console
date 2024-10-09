@@ -30,13 +30,19 @@ export const ShippingSection = ({ orderItem }: ShippingSectionProps) => {
           <CardDetail label="Shipping Status" value={inboundShipment?.status} />
           <CardDetail
             label="Direction #"
-            value={inboundShipment?.direction}
+            value={
+              mailBagOptions?.haveMailBag
+                ? 'return'
+                : inboundShipment?.direction
+            }
             copy
           />
           <CardDetail
             label="Tracking #"
             value={
-              mailBagOptions?.haveMailBag ? mailBagOptions?.trackingNumber : ''
+              mailBagOptions?.haveMailBag
+                ? mailBagOptions?.trackingNumber
+                : inboundShipment?.tracking_number
             }
             copy
             isLink
